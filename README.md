@@ -16,10 +16,12 @@ Everything is free and runs in a web browser.
 ## What the app does
 
 - **Next** shows the one thing to do next, and why.
-- **Time today** (1, 2 or 4 hours) changes how much is on your plate.
-- **Path** lists every box. Ticks save in the browser by themselves.
+- **Time today** (1, 2 or 4 hours) sets how much is on your plate. Nothing is skipped at any setting: at 1 hour the course and the practice take turns.
+- **Path** lists every box, each with a link to its page. Ticks save in the browser by themselves.
 - **Copy my progress** gives a code you can load on another device.
-- **Audit** lists every claim in the app, whether it was checked against its source, and what was corrected.
+- **Words** explains about 40 terms in plain English, with a "Test me" switch that hides the meanings.
+- **Jobs** lists real job titles, posted pay, what the ads asked for and where to look. Ads were read on 16 and 17 Nov 2026.
+- **Info** holds the reasons for each place, the rules, a write-up template and the audit: every claim, whether it was checked against its source, and what was corrected.
 - Dark and light themes, and a streak counter.
 
 ## Put it on an iPhone home screen

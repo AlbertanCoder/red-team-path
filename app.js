@@ -122,7 +122,7 @@
       if (WRITEUP_ON[d]) {
         items.push(item("w" + WRITEUP_ON[d], "writeup", d === 21
           ? "Write-up 5: your final project report, if the course allows sharing it"
-          : "Write-up " + WRITEUP_ON[d] + ": write down one attack you did, using the template on the Why tab",
+          : "Write-up " + WRITEUP_ON[d] + ": write down one attack you did, using the template on the Info tab",
           "Write-ups are the proof employers and contest organisers ask to see.", ""));
       }
       return { label: "DAY " + (d < 10 ? "0" + d : d), items: items };
@@ -187,6 +187,125 @@
   ];
   var TEMPLATE = "Target: (site and challenge name)\nGoal: (what the AI was not supposed to do)\nWhat I tried: (numbered steps, with the exact prompts)\nWhat happened: (the result, plus a screenshot)\nDoes it repeat: (worked __ of 3 tries)\nHow bad is it: (low, medium or high, and why)\nHow to fix it: (one suggestion)";
 
+  // ---------- words: plain-English meanings. The tag says where the word comes up, and is left empty when no lesson title names it. ----------
+  var WORDS = [
+    ["The basics", [
+      ["AI model (LLM)", "VIDEO 2", "A large language model: software trained on huge amounts of text that writes by predicting the next words. Chatbots are built on these."],
+      ["Prompt", "VIDEO 2", "Whatever you type or send to the model."],
+      ["AI application", "DAY 2", "A product built around a model: the model plus hidden instructions, data, tools and filters. You attack the whole thing, not just the model."],
+      ["System prompt", "DAY 4", "Hidden instructions from the company that built the chatbot, telling the model how to behave. Users are not meant to see it."],
+      ["Context window", "", "Everything the model can see at one time: its hidden instructions, the chat so far, and any documents or tool results."],
+      ["Guardrail", "VIDEO 7 · DAY 9", "Any safety layer meant to stop bad behaviour: the model's training, its hidden instructions, or filters on what goes in and what comes out."],
+      ["Refusal", "DAY 6", "The model saying no. Most attacks are attempts to get past a refusal."],
+      ["Hallucination", "", "The model stating something false as if it were true. A reliability problem, not an attack."]
+    ]],
+    ["Attacks", [
+      ["AI red teaming", "VIDEO 1", "Attacking an AI system on purpose, with permission, to find its weak points before real attackers do."],
+      ["Jailbreak", "DAY 5", "Getting a model to break its own safety rules, such as producing content it is trained to refuse."],
+      ["Prompt injection", "VIDEO 3", "Slipping your own instructions into what the model reads, so it follows you instead of the company that built it."],
+      ["Direct prompt injection", "VIDEO 3 · DAY 4", "You type the attack yourself, straight into the chat."],
+      ["Indirect prompt injection", "VIDEO 4 · DAY 10", "The attack hides in something the AI reads later: a web page, an email, a document. The victim never types it."],
+      ["System prompt leak", "DAY 4", "Tricking a chatbot into revealing its hidden instructions."],
+      ["Role-play attack", "DAY 5", "Asking the model to play a character or tell a story in which the forbidden answer seems allowed."],
+      ["Refusal suppression", "DAY 6", "Wording a request so the model is steered away from saying no, for example by telling it never to apologise or warn."],
+      ["Encoding trick", "DAY 7", "Hiding a request from filters by changing its form: another language, code words, scrambled spelling."],
+      ["Single-turn attack", "VIDEO 5", "An attack that fits in one message."],
+      ["Multi-turn attack", "VIDEO 6 · DAY 8", "An attack spread over several messages, each step small enough to pass."],
+      ["Many-shot jailbreak", "DAY 8", "Packing one prompt with many made-up examples of the model answering forbidden questions, so it carries on the pattern."],
+      ["Hidden text", "DAY 12", "Instructions a person cannot see but the AI can: invisible characters, or text tucked inside an image."],
+      ["Universal jailbreak", "STEP 4", "One method that works across many different forbidden requests, not just one. Anthropic's bounty asks for these."]
+    ]],
+    ["Agents", [
+      ["Agent", "DAY 14", "An AI that takes actions, not just talks: it can browse, send email or run code by using tools."],
+      ["Tool call", "DAY 14", "A tool is something the agent is allowed to use, such as search or send-email. A tool call is the agent using one."],
+      ["Excessive agency", "DAY 14", "An agent with more power or access than its job needs, so one trick does real damage. The fix is to give it only what it needs."],
+      ["RAG", "DAY 11", "Retrieval-augmented generation: the AI looks things up in a store of documents and uses what it finds to answer."],
+      ["Knowledge-base poisoning", "DAY 11", "Planting a doctored document in that store, so the AI later repeats or obeys it."],
+      ["Agent hijack", "DAY 15 · DAY 18", "Taking control of what an agent does, usually through text it reads while working."],
+      ["MCP", "DAY 16", "Model Context Protocol: a common standard for plugging tools and data into AI agents. A rogue MCP server is a tool source set up to attack the agent."],
+      ["Tool poisoning", "DAY 16", "Hiding instructions inside a tool's description, so the agent obeys them."],
+      ["Memory poisoning", "DAY 17", "Getting a false instruction saved in an agent's long-term memory, so it keeps acting on it later."],
+      ["Data exfiltration", "DAY 17", "Getting the AI to send private data somewhere it should not go."],
+      ["Unsafe output handling", "DAY 19", "An app that trusts whatever the AI writes and runs or displays it without checking."]
+    ]],
+    ["The work", [
+      ["Threat model", "DAY 3", "A plain list of who might attack a system, what they want and how they could get it."],
+      ["OWASP LLM Top 10", "DAY 3 · DAY 20", "A well-known public list of the ten most serious weaknesses in AI applications. Job ads and reports refer to it."],
+      ["Scope", "STEP 4", "What a program allows you to test. Anything outside scope is off limits."],
+      ["Reproducible", "STEP 4", "It works again when someone else follows your steps. Bounties pay only for this."],
+      ["Attack success rate", "", "How often an attack works, such as 7 of 10 tries. Reports and tools use this number."],
+      ["Write-up", "DAY 20", "A short report of one attack: the target, what you tried, what happened, how bad it is and how to fix it."],
+      ["Bug bounty", "STEP 4", "A program that pays outsiders for reporting real flaws."],
+      ["Responsible disclosure", "", "Reporting a flaw privately to the owner, and giving them time to fix it before saying anything in public."],
+      ["PyRIT", "VIDEO 8", "Microsoft's free tool for running many attacks automatically. It needs Python."],
+      ["CTF", "", "Capture the flag: a security game you win by reaching a hidden goal. Gray Swan's training sets work this way."]
+    ]]
+  ];
+
+  // ---------- jobs: every ad below was read on 16 or 17 Nov 2026. [title, who, pay as posted, what it asked] ----------
+  var JOBS_DATE = "17 Nov 2026";
+  var HONEST = [
+    "Most work a beginner can get is contract work, paid by the hour through AI-training platforms. It comes project by project, and hours are not guaranteed.",
+    "Some ads are talent pools: you apply, pass a test or an AI interview, then wait for a project. A posted rate is not an offer.",
+    "Several contract ads asked for no degree and no technical background. Others asked for a degree or equal work experience.",
+    "Full-time jobs exist, but the engineer-level ads read for this page asked for experience in security, coding or machine learning.",
+    "Nobody can promise a job. This path builds proof you can show."
+  ];
+  var RUNGS = [
+    { name: "Contract red-team tester",
+      what: "You are paid by the hour to attack AI models for a client, log every attempt and write up what worked.",
+      when: "You can apply during step 2. Write-ups and Gray Swan results raise your odds.",
+      ads: [
+        ["AI Red Team Tester (General)", "Alignerr", "$40 to $120 an hour, currency not stated", "Said no technical background is required."],
+        ["Safety Testing Associate", "Clera", "US$30 to US$60 an hour", "Said earlier AI data work is not required."],
+        ["LLM Jailbreak Red Teamer", "Claru", "$55 to $100 an hour, currency not stated", "Wanted security people, CTF players, or anyone who has spent time stress-testing systems."],
+        ["AI Jailbreak & Prompt-Injection Security Expert", "micro1", "US$50 to US$90 an hour", "Preferred 2 or more years of LLM red teaming."],
+        ["AI Red-Teamer, Adversarial AI Testing", "Mercor", "US$50 to US$111 an hour", "Asked for a bachelor's degree or equal work experience. It had closed by 17 Nov."],
+        ["Generative AI Associate, Red Teaming", "Innodata", "about US$14 an hour, from older listings", "The low end. Nothing was open on its own job board on 17 Nov."]
+      ] },
+    { name: "Safety rater or evaluator",
+      what: "Not red teaming: you rate or label AI answers against safety rules. The same companies hire for it, so it can be a way in.",
+      when: "Open to try at any point.",
+      ads: [
+        ["Data Annotation Specialist, Safety", "Cohere", "CA$45 an hour", "A 12-month contract at 16 or more hours a week. Preferred a year of content moderation or similar. Involves disturbing text."],
+        ["Prompt & Response Evaluator", "micro1", "US$45 to US$70 an hour", "A short project of about 7.5 hours in total."]
+      ] },
+    { name: "Engineer-level red teamer",
+      what: "A full-time or senior role: you design attacks, build tests in code and report to the teams that fix them.",
+      when: "Worth applying once you have Python, public write-ups, and a contest placing or bounty credit.",
+      ads: [
+        ["AI Red Team Engineer", "White Circle, and Carnegie Mellon University", "pay not noted", "Both asked for Python."],
+        ["AI Security Red Team Engineer", "DataAnnotation", "US$40 or more an hour", "Required 2 or more years of hands-on cybersecurity, plus some coding."],
+        ["Red Team Engineer", "Gray Swan AI", "US$110,000 to US$290,000 a year, as listed on Remotive", "Senior, and open to people in the United States only."],
+        ["AI Red Teamer (Entry Level)", "10a Labs", "about US$60,000 to US$70,000 a year on job sites", "Closed: it was not on the company's own job board on 17 Nov. It is the only entry-level salaried ad that was found."]
+      ] }
+  ];
+  var SEARCH_WORDS = "AI red teamer, LLM red team, adversarial testing, jailbreak, prompt injection, AI safety tester";
+  var LOOK = [
+    ["Alignerr", "https://www.alignerr.com/jobs", "Contract AI testing and rating projects."],
+    ["Mercor", "https://work.mercor.com/explore", "Contract projects. Ads open and close quickly."],
+    ["micro1", "https://www.micro1.ai/experts/opportunities", "Contract projects, usually with an AI interview first."],
+    ["Clera", "https://jobs.ashbyhq.com/Clera", "Talent pools for safety testing and evaluation."],
+    ["Claru", "https://claru.ai/jobs", "Contract projects. You create a profile, then join projects as they open."],
+    ["OpenTrain", "https://www.opentrain.ai/jobs", "A job board for AI training work from many companies."],
+    ["aitraining.jobs", "https://aitraining.jobs/roles/red-teaming", "A job board with a red-teaming section."],
+    ["Gray Swan challenges", URLS.gsChallenges, "Prize contests. A placing counts as proof."]
+  ];
+  var PROOF = [
+    "The Microsoft series and the 21-day course, finished.",
+    "A Gray Swan profile with solved sets, and any contest placing.",
+    "3 to 5 public write-ups of your own attacks.",
+    "Basic Python: the freeCodeCamp sections, or its certificate.",
+    "A bounty credit, if you earn one."
+  ];
+  var APPLY_RULES = [
+    "Never pay to apply, for training or for onboarding. Real platforms pay you.",
+    "Do ID checks only inside a platform's own official sign-up, never by email or chat.",
+    "Answer screening questions truthfully. Most platforms test you, and a made-up claim fails there.",
+    "Some ads want trained experts in chemistry, biology or weapons. Skip them unless that is your real field.",
+    "If you receive government benefits, find out how gig income must be reported before you accept work."
+  ];
+
   // status: ok = checked, no = not checked, changed = corrected in this audit
   var AUDIT_DATE = "17 Nov 2026";
   var AUDIT = [
@@ -201,13 +320,18 @@
     ["changed", "The Python course was Python for Everybody.", "Changed to freeCodeCamp's Python Certification: it runs fully in the browser, the other starts with installing Python. Its official page shows 584 steps, 5 required projects and an exam."],
     ["ok", "Mozilla 0DIN pays US$500 to US$15,000 and asks for a short summary first.", "Read on 0DIN's policy page."],
     ["ok", "Anthropic's model safety bounty pays up to US$35,000, takes applications, and requires a confidentiality agreement.", "Read on Anthropic's help page."],
-    ["ok", "AI red-team job ads ask for Python.", "Several 2026 postings ask for Python or basic scripting, including an entry-level one. This is a sample of ads, not a survey."],
+    ["ok", "AI red-team job ads ask for Python.", "Several 2026 postings ask for Python or basic scripting. This is a sample of ads, not a survey."],
+    ["changed", "The Python sample above used to count an entry-level salaried ad.", "That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it now counts as closed. No other entry-level salaried ad was found."],
+    ["ok", "Every link in the app opens the right page.", "Opened on 17 Nov 2026: all 21 lesson pages, 9 Gray Swan pages, the Microsoft, freeCodeCamp, 0DIN and Anthropic pages, and the 7 job sites."],
+    ["ok", "The job titles, pay and asks on the Jobs tab come from real ads.", "Each ad was read on 16 or 17 Nov 2026. Ads close and pay changes, so they are examples, not offers."],
+    ["no", "A posted hourly rate is what you would earn.", "A range in an ad is not an offer, and contract platforms do not guarantee hours."],
+    ["no", "The Words tab is an official glossary.", "The meanings are plain-English summaries written for this app and matched to lesson titles. The courses are the authority."],
     ["no", "Finishing this path gets you hired.", "Nobody can promise that. The path builds the things a newcomer can show: write-ups, contest results, a known course and basic Python."]
   ];
 
   // ---------- saving ----------
   var STORE_KEY = "redTeamPath.v2";
-  var state = { done: {}, days: {}, best: 0, dial: 4, theme: "dark", open: {} };
+  var state = { done: {}, days: {}, best: 0, dial: 4, theme: "dark", open: {}, test: false };
   var storageOk = true;
 
   function storageFailed() {
@@ -231,6 +355,7 @@
     if (p.dial === 1 || p.dial === 2 || p.dial === 4) { state.dial = p.dial; }
     if (p.theme === "light" || p.theme === "dark") { state.theme = p.theme; }
     if (p.open && typeof p.open === "object") { state.open = p.open; }
+    if (p.test === true) { state.test = true; }
   }
   function save() {
     try { window.localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { storageFailed(); }
@@ -303,13 +428,13 @@
   }
 
   // ---------- views ----------
-  function card(it, groupLabel, stepWhy) {
+  function card(it, groupLabel) {
     var isDone = !!state.done[it.id];
     var box = h("input", { type: "checkbox", id: "next-" + it.id });
     box.checked = isDone;
     box.addEventListener("change", function () { setDone(it, box.checked); render("next-" + it.id); });
     var tag = [groupLabel, KIND[it.kind], timeFor(it)].filter(Boolean).join(" · ");
-    var why = it.why || stepWhy;
+    var why = it.why;
     return h("div", { class: "card" + (isDone ? " done" : "") }, [
       h("div", { class: "tag", text: tag }),
       h("div", { class: "title", text: it.title }),
@@ -337,7 +462,8 @@
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> NEXT · " + step.short }),
       h("h1", { text: step.title }),
-      h("p", { class: "lede", text: step.goal })
+      h("p", { class: "lede", text: step.goal }),
+      step.why ? h("p", { class: "why" }, [h("b", { text: "WHY " }), step.why]) : null
     ]));
     var due = group.items.filter(dueNow);
     var show = due;
@@ -353,7 +479,7 @@
       show = courseLeft ? course : due.filter(function (it) { return it.kind !== "course"; });
     }
     var cards = h("div", { class: "block" });
-    show.forEach(function (it) { cards.appendChild(card(it, group.label, step.why)); });
+    show.forEach(function (it) { cards.appendChild(card(it, group.label)); });
     v.appendChild(cards);
     if (step.short === "COURSE + PRACTICE" && state.dial === 1) {
       v.appendChild(h("p", { class: "note", text: "At 1 hour a day the course and Gray Swan take turns: the course day in one sitting, the practice in the next. Nothing is skipped; step 2 just takes about twice as many days. Stop Gray Swan when your hour is up, solved or not." }));
@@ -394,7 +520,8 @@
           box.addEventListener("change", function () { setDone(it, box.checked); render(id); });
           grp.appendChild(h("div", { class: "line" + (state.done[it.id] ? " done" : "") }, [
             box,
-            h("label", { for: id }, [h("span", { class: "k", text: KIND[it.kind] }), it.title])
+            h("label", { for: id }, [h("span", { class: "k", text: KIND[it.kind] }), it.title]),
+            it.url ? h("a", { href: it.url, target: "_blank", rel: "noopener", class: "go", "aria-label": "Open: " + it.title, text: "\u2197" }) : null
           ]));
         });
         body.appendChild(grp);
@@ -462,29 +589,121 @@
     } catch (e) { return false; }
   }
 
-  function renderWhy() {
-    var v = document.getElementById("view-why");
+  function bullets(items) {
+    var ul = h("ul", { class: "plain" });
+    items.forEach(function (x) { ul.appendChild(h("li", { text: x })); });
+    return ul;
+  }
+
+  function renderWords() {
+    var v = document.getElementById("view-words");
+    v.textContent = "";
+    var total = 0;
+    WORDS.forEach(function (g) { total += g[1].length; });
+    var toggle = h("button", { type: "button", id: "test-btn", "aria-pressed": state.test ? "true" : "false", text: state.test ? "Test me: ON" : "Test me: OFF" });
+    toggle.addEventListener("click", function () {
+      state.test = !state.test;
+      save();
+      renderWords();
+      document.getElementById("test-btn").focus({ preventScroll: true });
+    });
+    v.appendChild(h("div", { class: "block" }, [
+      h("div", { class: "eyebrow", text: "> WORDS · " + total }),
+      h("h1", { text: "The words you will hear" }),
+      h("p", { class: "lede", text: "Plain-English meanings. The tag shows the video or course day where the word comes up." }),
+      h("div", { class: "btnrow" }, [toggle, h("span", { class: "status-line", role: "status",
+        text: state.test ? "Say the meaning in your head, then tap the word to check." : "Turn this on to hide the meanings and check yourself." })])
+    ]));
+    WORDS.forEach(function (g) {
+      var list = h("div", { class: "rows" });
+      g[1].forEach(function (w) {
+        var det = h("details", { class: "word" });
+        det.open = !state.test;
+        det.appendChild(h("summary", null, [h("span", { class: "term", text: w[0] }), w[1] ? h("span", { class: "where", text: w[1] }) : null]));
+        det.appendChild(h("p", { text: w[2] }));
+        list.appendChild(det);
+      });
+      v.appendChild(h("div", { class: "block" }, [h("h2", { text: g[0] }), list]));
+    });
+  }
+
+  function renderJobs() {
+    var v = document.getElementById("view-jobs");
     v.textContent = "";
     v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "eyebrow", text: "> WHY" }),
-      h("h1", { text: "Four places, one job each" }),
-      h("p", { class: "lede", text: "All free. All run in a web browser. This list changes only when a fact changes, and the Audit tab says what changed." })
+      h("div", { class: "eyebrow", text: "> JOBS · ADS READ " + JOBS_DATE.toUpperCase() }),
+      h("h1", { text: "Where this can lead" }),
+      h("p", { class: "lede", text: "The job titles, pay and asks below come from real ads read on 16 and 17 Nov 2026. Ads close and pay changes, so treat every number as an example, not a promise." })
     ]));
-    var rows = h("div", { class: "rows" });
-    PLACES.forEach(function (p) {
-      rows.appendChild(h("div", { class: "row" }, [h("div", null, [link(p[0], p[1])]), h("div", { class: "meta", text: p[2] }), h("p", { text: p[3] })]));
+    v.appendChild(h("div", { class: "block" }, [h("h2", { text: "The honest picture" }), bullets(HONEST)]));
+
+    RUNGS.forEach(function (r, i) {
+      var ads = h("div", { class: "rows" });
+      r.ads.forEach(function (a) {
+        ads.appendChild(h("div", { class: "row" }, [
+          h("div", null, [h("strong", { text: a[0] })]),
+          h("div", { class: "meta", text: a[1] + " · " + a[2] }),
+          h("p", { text: a[3] })
+        ]));
+      });
+      v.appendChild(h("div", { class: "block rung" }, [
+        h("div", { class: "eyebrow", text: "RUNG " + (i + 1) + " OF " + RUNGS.length }),
+        h("h2", { text: r.name }),
+        h("p", { text: r.what }),
+        h("p", { class: "why" }, [h("b", { text: "WHEN " }), r.when]),
+        h("div", { class: "meta-line", text: "TITLES SEEN ON REAL ADS" }),
+        ads
+      ]));
     });
-    v.appendChild(rows);
+
+    v.appendChild(h("div", { class: "block" }, [
+      h("h2", { text: "What to show instead of a degree" }),
+      h("p", { class: "lede", text: "Each step of the path leaves you with one of these." }),
+      bullets(PROOF)
+    ]));
+
+    var look = h("div", { class: "rows" });
+    LOOK.forEach(function (l) {
+      look.appendChild(h("div", { class: "row" }, [h("div", null, [link(l[0], l[1])]), h("p", { text: l[2] })]));
+    });
+    v.appendChild(h("div", { class: "block" }, [
+      h("h2", { text: "Where to look" }),
+      h("p", { class: "lede", text: "Search words that work: " + SEARCH_WORDS + "." }),
+      look
+    ]));
 
     var money = h("div", { class: "rows" });
     MONEY.forEach(function (m, i) {
       money.appendChild(h("div", { class: "row" }, [h("div", { class: "meta", text: "ROUTE " + (i + 1) }), h("div", null, [h("strong", { text: m[0] })]), h("p", { text: m[1] })]));
     });
-    v.appendChild(h("div", { class: "block" }, [h("h2", { text: "How this can pay" }), h("p", { class: "lede", text: "Easiest first. Nobody can promise any of it." }), money]));
+    v.appendChild(h("div", { class: "block" }, [h("h2", { text: "Four ways this can pay" }), h("p", { class: "lede", text: "Easiest first. Nobody can promise any of it." }), money]));
 
-    var rules = h("ul", { class: "plain" });
-    RULES.forEach(function (r) { rules.appendChild(h("li", { text: r })); });
-    v.appendChild(h("div", { class: "block" }, [h("h2", { text: "Rules that keep you safe and hireable" }), rules]));
+    v.appendChild(h("div", { class: "block" }, [h("h2", { text: "Before you apply anywhere" }), bullets(APPLY_RULES)]));
+  }
+
+  function renderInfo() {
+    var v = document.getElementById("view-info");
+    v.textContent = "";
+    var jump = h("div", { class: "jump" });
+    [["Places", "info-places"], ["Rules", "info-rules"], ["Template", "info-template"], ["Audit", "info-audit"]].forEach(function (j) {
+      var b = h("button", { type: "button", text: j[0] });
+      b.addEventListener("click", function () { document.getElementById(j[1]).scrollIntoView({ block: "start" }); });
+      jump.appendChild(b);
+    });
+    v.appendChild(h("div", { class: "block" }, [
+      h("div", { class: "eyebrow", text: "> INFO" }),
+      h("h1", { text: "Why this path, and how it was checked" }),
+      h("p", { class: "lede", text: "Four places, one job each. All free, all in a web browser. The list changes only when a fact changes, and the audit below says what changed." }),
+      jump
+    ]));
+
+    var rows = h("div", { class: "rows" });
+    PLACES.forEach(function (p) {
+      rows.appendChild(h("div", { class: "row" }, [h("div", null, [link(p[0], p[1])]), h("div", { class: "meta", text: p[2] }), h("p", { text: p[3] })]));
+    });
+    v.appendChild(h("div", { class: "block", id: "info-places" }, [h("h2", { text: "The four places" }), rows]));
+
+    v.appendChild(h("div", { class: "block", id: "info-rules" }, [h("h2", { text: "Rules that keep you safe and hireable" }), bullets(RULES)]));
 
     var status = h("span", { class: "status-line", role: "status" });
     var pre = h("pre", { class: "template", id: "template", text: TEMPLATE });
@@ -502,34 +721,32 @@
         navigator.clipboard.writeText(TEMPLATE).then(function () { status.textContent = "Copied."; }, selectIt);
       } else { selectIt(); }
     });
-    v.appendChild(h("div", { class: "block" }, [h("h2", { text: "Write-up template" }), pre, h("div", { class: "btnrow" }, [copy, status])]));
-  }
+    v.appendChild(h("div", { class: "block", id: "info-template" }, [h("h2", { text: "Write-up template" }), pre, h("div", { class: "btnrow" }, [copy, status])]));
 
-  function renderAudit() {
-    var v = document.getElementById("view-audit");
-    v.textContent = "";
     var counts = { ok: 0, no: 0, changed: 0 };
     AUDIT.forEach(function (a) { counts[a[0]] += 1; });
-    v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "eyebrow", text: "> AUDIT · " + AUDIT_DATE.toUpperCase() }),
-      h("h1", { text: "What was checked, and what was not" }),
-      h("p", { class: "lede", text: counts.ok + " claims checked against their source, " + counts.changed + " corrected, " + counts.no + " that nobody can check or promise." })
-    ]));
     var label = { ok: "CHECKED", no: "NOT CHECKED", changed: "CORRECTED" };
-    var rows = h("div", { class: "rows" });
+    var audit = h("div", { class: "rows" });
     AUDIT.forEach(function (a) {
-      rows.appendChild(h("div", { class: "row" }, [
+      audit.appendChild(h("div", { class: "row" }, [
         h("div", null, [h("span", { class: "pill " + a[0], text: label[a[0]] }), a[1]]),
         h("p", { class: "dim", text: a[2] })
       ]));
     });
-    v.appendChild(rows);
+    v.appendChild(h("div", { class: "block", id: "info-audit" }, [
+      h("div", { class: "eyebrow", text: "> AUDIT · " + AUDIT_DATE.toUpperCase() }),
+      h("h2", { text: "What was checked, and what was not" }),
+      h("p", { class: "lede", text: counts.ok + " claims checked against their source, " + counts.changed + " corrected, " + counts.no + " that nobody can check or promise." }),
+      audit
+    ]));
   }
 
   // ---------- frame ----------
-  var TABS = ["next", "path", "why", "audit"];
+  var TABS = ["next", "path", "words", "jobs", "info"];
+  var OLD_TABS = { why: "info", audit: "info" }; // links saved before the tabs changed still land somewhere useful
   function currentTab() {
     var name = (window.location.hash || "#next").slice(1);
+    name = OLD_TABS[name] || name;
     return TABS.indexOf(name) === -1 ? "next" : name;
   }
   function showTab() {
@@ -580,8 +797,9 @@
   window.addEventListener("hashchange", function () { showTab(); window.scrollTo(0, 0); });
 
   load();
-  renderWhy();
-  renderAudit();
+  renderWords();
+  renderJobs();
+  renderInfo();
   render();
   showTab();
 })();
