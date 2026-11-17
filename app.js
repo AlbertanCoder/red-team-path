@@ -100,9 +100,8 @@
 
   var KIND = { video: "VIDEO", course: "COURSE + LAB", practice: "PRACTICE", writeup: "WRITE-UP", code: "PYTHON", bounty: "BOUNTY" };
 
-  // tier = the smallest time setting at which the item is part of your day
-  function item(id, kind, title, why, url, tier, extra) {
-    var it = { id: id, kind: kind, title: title, why: why || "", url: url || "", tier: tier || 1, optional: false };
+  function item(id, kind, title, why, url, extra) {
+    var it = { id: id, kind: kind, title: title, why: why || "", url: url || "", optional: false };
     if (extra) { Object.keys(extra).forEach(function (k) { it[k] = extra[k]; }); }
     return it;
   }
@@ -110,31 +109,31 @@
   function buildSteps() {
     var videos = VIDEOS.map(function (t, i) {
       return item("v" + (i + 1), "video", "Episode " + (i + 1) + ": " + t,
-        i >= 7 ? "This one shows an automation tool. Watch it, install nothing." : "", URLS.ms, 1);
+        i >= 7 ? "This one shows an automation tool. Watch it, install nothing." : "", URLS.ms);
     });
 
     var days = COURSE.map(function (c, i) {
       var d = i + 1;
-      var items = [item("c" + d, "course", "Course day " + d + ": " + c[0], c[1], URLS.se + SE_DAYS[i] + "/", 1)];
+      var items = [item("c" + d, "course", "Course day " + d + ": " + c[0], c[1], URLS.se + SE_DAYS[i] + "/")];
       var p = PRACTICE[i];
       items.push(p
-        ? item("g" + d, "practice", "Gray Swan: " + p.title, "You try on a scored target what today's course day taught.", URLS.gs + p.slug, 2)
-        : item("g" + d, "practice", "Gray Swan: a live prize contest if one is open, or your favourite set", "You finish the course by testing yourself where it counts.", URLS.gsChallenges, 2));
+        ? item("g" + d, "practice", "Gray Swan: " + p.title, "You try on a scored target what today's course day taught.", URLS.gs + p.slug)
+        : item("g" + d, "practice", "Gray Swan: a live prize contest if one is open, or your favourite set", "You finish the course by testing yourself where it counts.", URLS.gsChallenges));
       if (WRITEUP_ON[d]) {
         items.push(item("w" + WRITEUP_ON[d], "writeup", d === 21
           ? "Write-up 5: your final project report, if the course allows sharing it"
           : "Write-up " + WRITEUP_ON[d] + ": write down one attack you did, using the template on the Why tab",
-          "Write-ups are the proof employers and contest organisers ask to see.", "", 2));
+          "Write-ups are the proof employers and contest organisers ask to see.", ""));
       }
       return { label: "DAY " + (d < 10 ? "0" + d : d), items: items };
     });
 
     var python = PYTHON.map(function (s, i) {
       return item("py" + (i + 1), "code", s[0] + ", " + s[1] + " steps",
-        i === 0 ? "You learn to read and write simple Python. Skip the short 'Install Python' section: everything runs in the browser." : "", URLS.fcc, 1);
+        i === 0 ? "You learn to read and write simple Python. Skip the short 'Install Python' section: everything runs in the browser." : "", URLS.fcc);
     });
     python.push(item("py6", "code", "Optional: finish the rest, pass the 5 projects and the free exam for the certificate",
-      "The certificate is free, but the rest of the course is long. Do it only if you want the certificate.", URLS.fcc, 1, { optional: true }));
+      "The certificate is free, but the rest of the course is long. Do it only if you want the certificate.", URLS.fcc, { optional: true }));
 
     return [
       { title: "Step 1: Microsoft AI Red Teaming 101", short: "VIDEOS",
@@ -153,10 +152,10 @@
         goal: "Only real findings that work every time. Never send a guess.",
         why: "A paid or credited finding is the strongest proof there is.",
         groups: [{ label: "", items: [
-          item("b1", "bounty", "Read Mozilla 0DIN's rules fully. Note what pays and what does not.", "", URLS.odin, 1),
-          item("b2", "bounty", "Test 3 ideas, only inside 0DIN's rules. Save every prompt and result, and keep them private.", "", "", 1),
-          item("b3", "bounty", "Decide honestly whether one is a real, new finding. If yes, send 0DIN the short summary it asks for.", "", URLS.odin, 1),
-          item("b4", "bounty", "Apply to Anthropic's model safety bug bounty, using your write-ups and results.", "", URLS.anthropic, 1)
+          item("b1", "bounty", "Read Mozilla 0DIN's rules fully. Note what pays and what does not.", "", URLS.odin),
+          item("b2", "bounty", "Test 3 ideas, only inside 0DIN's rules. Save every prompt and result, and keep them private.", "", ""),
+          item("b3", "bounty", "Decide honestly whether one is a real, new finding. If yes, send 0DIN the short summary it asks for.", "", URLS.odin),
+          item("b4", "bounty", "Apply to Anthropic's model safety bug bounty, using your write-ups and results.", "", URLS.anthropic)
         ] }] }
     ];
   }
@@ -265,8 +264,8 @@
     STEPS.forEach(function (s) { all = all.concat(required(stepItems(s))); });
     return all;
   }
-  function dueNow(it) { return !it.optional && it.tier <= state.dial; }
-  // Where you are: the first group that still has an unticked box for today's time setting.
+  function dueNow(it) { return !it.optional; }
+  // Where you are: the first group that still has an unticked box.
   function current() {
     for (var s = 0; s < STEPS.length; s += 1) {
       for (var g = 0; g < STEPS[s].groups.length; g += 1) {
@@ -328,8 +327,8 @@
     if (!cur) {
       v.appendChild(h("div", { class: "block" }, [
         h("div", { class: "eyebrow", text: "> PATH COMPLETE" }),
-        h("h1", { text: "Every box for this time setting is ticked" }),
-        h("p", { class: "lede", text: state.dial < 4 ? "Turn the time setting up to see the practice you skipped." : "Keep entering Gray Swan contests and keep writing up what you find." })
+        h("h1", { text: "Every box is ticked" }),
+        h("p", { class: "lede", text: "Keep entering Gray Swan contests and keep writing up what you find." })
       ]));
       return;
     }
@@ -347,11 +346,17 @@
       var limit = step.short === "VIDEOS" ? (state.dial === 1 ? 2 : state.dial === 2 ? 3 : 5) : 1;
       show = due.filter(function (it) { return !state.done[it.id]; }).slice(0, limit);
     }
+    if (group.label && state.dial === 1) {
+      // 1 hour a day: the course day is one sitting, the practice (and any write-up) is the next.
+      var course = due.filter(function (it) { return it.kind === "course"; });
+      var courseLeft = course.some(function (it) { return !state.done[it.id]; });
+      show = courseLeft ? course : due.filter(function (it) { return it.kind !== "course"; });
+    }
     var cards = h("div", { class: "block" });
     show.forEach(function (it) { cards.appendChild(card(it, group.label, step.why)); });
     v.appendChild(cards);
     if (step.short === "COURSE + PRACTICE" && state.dial === 1) {
-      v.appendChild(h("p", { class: "note", text: "At 1 hour a day you do the course only. Gray Swan practice and write-ups wait, and come back when you turn the time setting up." }));
+      v.appendChild(h("p", { class: "note", text: "At 1 hour a day the course and Gray Swan take turns: the course day in one sitting, the practice in the next. Nothing is skipped; step 2 just takes about twice as many days. Stop Gray Swan when your hour is up, solved or not." }));
     }
     if (step.short === "COURSE + PRACTICE" && state.dial >= 2) {
       v.appendChild(h("p", { class: "note", text: "Stop Gray Swan when your time is up, solved or not. Unsolved is normal." }));
