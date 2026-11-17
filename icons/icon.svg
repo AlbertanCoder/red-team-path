@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#121417"/>
-  <circle cx="256" cy="256" r="150" fill="none" stroke="#ff5a36" stroke-width="34"/>
-  <path d="M256 64v96M256 352v96M64 256h96M352 256h96" stroke="#ff5a36" stroke-width="34" stroke-linecap="round"/>
-  <circle cx="256" cy="256" r="30" fill="#ece8df"/>
+  <!-- Red Team Path: a chat bubble (the AI) with a red crosshair locked on it. Full-bleed square so iOS can round the corners itself. -->
+  <rect width="512" height="512" fill="#0B0E13"/>
+  <path d="M148 112h216a56 56 0 0 1 56 56v124a56 56 0 0 1-56 56H238l-74 62a8 8 0 0 1-13-7l6-55h-9a56 56 0 0 1-56-56V168a56 56 0 0 1 56-56z" fill="#E6EBF2"/>
+  <circle cx="256" cy="230" r="70" fill="none" stroke="#E5233B" stroke-width="22"/>
+  <path d="M256 124v54M256 282v54M150 230h54M308 230h54" stroke="#E5233B" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="256" cy="230" r="15" fill="#E5233B"/>
 </svg>

@@ -1,13 +1,13 @@
 {
   "name": "Red Team Path",
-  "short_name": "Red Team Path",
-  "description": "A free study tracker for learning AI red teaming.",
+  "short_name": "Red Team",
+  "description": "A free, audited path into AI red teaming, with tick boxes that save.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0e1013",
-  "theme_color": "#0e1013",
+  "background_color": "#0B0E13",
+  "theme_color": "#0B0E13",
   "icons": [
     { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" },
     { "src": "icons/icon-180.png", "sizes": "180x180", "type": "image/png" },
