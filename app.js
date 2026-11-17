@@ -15,6 +15,32 @@
     anthropic: "https://support.claude.com/en/articles/12119250-model-safety-bug-bounty-program"
   };
 
+  // One lesson page per course day, copied from the course's own index on 17 Nov 2026.
+  // learn/check.py loads all 21; if the course renames a page, that check fails.
+  var SE_DAYS = [
+    "day-1-orientation-first-prompt-injection-win",
+    "day-2-how-an-ai-application-is-built",
+    "day-3-threat-thinking-owasp-llm-top-10",
+    "day-4-direct-prompt-injection-system-prompt-leak",
+    "day-5-jailbreaking-roleplay-bypass-lab",
+    "day-6-instruction-conflicts-refusal-suppression-labs",
+    "day-7-encoding-language-tricks-filter-gaps",
+    "day-8-multi-turn-many-shot-jailbreaks",
+    "day-9-output-filters-defences-jailbreak-test-plan",
+    "day-10-indirect-prompt-injection-document-summariser",
+    "day-11-rag-explained-knowledge-base-poisoning",
+    "day-12-hidden-text-images-invisible-characters",
+    "day-13-attacking-defending-document-pipeline-summariser",
+    "day-14-agents-tools-excessive-agency-least-privilege",
+    "day-15-hijack-coding-agent-poisoned-issue",
+    "day-16-tool-descriptions-rogue-mcp-servers",
+    "day-17-memory-poisoning-and-data-exfiltration",
+    "day-18-agent-hijack-indirect-tool-call-injection",
+    "day-19-unsafe-output-handling-fake-packages",
+    "day-20-defence-mapping-owasp-top-10-report-writing",
+    "day-21-capstone-assess-an-agent-report"
+  ];
+
   // ---------- the path ----------
   var VIDEOS = [
     "What is AI red teaming?",
@@ -89,7 +115,7 @@
 
     var days = COURSE.map(function (c, i) {
       var d = i + 1;
-      var items = [item("c" + d, "course", "Course day " + d + ": " + c[0], c[1], URLS.se, 1)];
+      var items = [item("c" + d, "course", "Course day " + d + ": " + c[0], c[1], URLS.se + SE_DAYS[i] + "/", 1)];
       var p = PRACTICE[i];
       items.push(p
         ? item("g" + d, "practice", "Gray Swan: " + p.title, "You try on a scored target what today's course day taught.", URLS.gs + p.slug, 2)
