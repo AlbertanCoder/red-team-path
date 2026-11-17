@@ -1,0 +1,204 @@
+/* Red Team Path: dark "field notebook" look, signal-orange accent */
+:root {
+  --bg: #0e1013;
+  --surface: #171a1f;
+  --surface-2: #1f232a;
+  --line: #2b3038;
+  --text: #ece8df;
+  --muted: #9a9890;
+  --accent: #ff5a36;
+  --accent-ink: #120805;
+  --good: #7bc47f;
+  --warn-bg: #3a1d12;
+  --warn-text: #ffcfbf;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius: 10px;
+  --tabbar-h: 64px;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f4f1ea;
+    --surface: #fffdf8;
+    --surface-2: #ece7dc;
+    --line: #d9d3c6;
+    --text: #1b1d21;
+    --muted: #5f5d57;
+    --accent: #c9381a;
+    --accent-ink: #ffffff;
+    --good: #2e7d32;
+    --warn-bg: #fde3d9;
+    --warn-text: #6b1d08;
+    color-scheme: light;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+/* ---------- layout: phone first ---------- */
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: calc(10px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 10px calc(16px + env(safe-area-inset-left));
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand-mark { width: 30px; height: 30px; color: var(--accent); flex: none; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.brand-sub { font-size: 18px; font-weight: 700; }
+
+.content {
+  padding: 20px calc(16px + env(safe-area-inset-right)) calc(var(--tabbar-h) + 32px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+  max-width: 760px;
+}
+
+h1 {
+  font-size: 28px;
+  line-height: 1.15;
+  margin: 0 0 12px;
+  letter-spacing: -.01em;
+}
+
+.placeholder {
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.warning {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--warn-bg);
+  color: var(--warn-text);
+  border-left: 4px solid var(--accent);
+  font-size: 15px;
+}
+
+/* ---------- bottom tab bar (phone) ---------- */
+.tabbar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+.tabbar a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: var(--tabbar-h);
+  min-width: 44px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 11px;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.tabbar svg { width: 24px; height: 24px; }
+.tabbar a[aria-current="page"] { color: var(--accent); }
+.tabbar a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  top: -1px; left: 25%; right: 25%;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 0 0 3px 3px;
+}
+.tabbar a:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+
+/* ---------- sidebar (wide screens) ---------- */
+@media (min-width: 900px) {
+  .app {
+    display: grid;
+    grid-template-columns: 232px 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+  .topbar {
+    grid-column: 1;
+    grid-row: 1;
+    border-bottom: 0;
+    padding: 24px 20px 20px;
+    background: var(--surface);
+  }
+  .tabbar {
+    position: sticky;
+    top: 0;
+    grid-column: 1;
+    grid-row: 2 / 4;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px 12px 24px;
+    border-top: 0;
+    min-height: calc(100vh - 82px);
+  }
+  .app::before {
+    /* keeps the sidebar colour running full height */
+    content: "";
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    width: 232px;
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    z-index: -1;
+  }
+  .topbar, .tabbar { background: transparent; }
+  .tabbar a {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+  .tabbar a:hover { background: var(--surface-2); color: var(--text); }
+  .tabbar a[aria-current="page"] { background: var(--surface-2); }
+  .tabbar a[aria-current="page"]::before {
+    top: 10px; bottom: 10px; left: 0; right: auto;
+    width: 3px; height: auto;
+    border-radius: 0 3px 3px 0;
+  }
+  .tabbar svg { width: 20px; height: 20px; }
+  .content { grid-column: 2; grid-row: 1 / 4; padding: 32px; }
+}
