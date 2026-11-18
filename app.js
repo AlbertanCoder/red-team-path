@@ -243,55 +243,31 @@
     ]]
   ];
 
-  // ---------- jobs: every ad below was read on 16 or 17 Nov 2026. [title, who, pay as posted, what it asked] ----------
-  var JOBS_DATE = "17 Nov 2026";
+  // ---------- jobs: the ads themselves live in jobs.js, which a daily check rewrites. ----------
+  var JOBS = window.RTP_JOBS && Array.isArray(window.RTP_JOBS.ads) ? window.RTP_JOBS : { updated: "", ads: [] };
   var HONEST = [
     "Most work a beginner can get is contract work, paid by the hour through AI-training platforms. It comes project by project, and hours are not guaranteed.",
     "Some ads are talent pools: you apply, pass a test or an AI interview, then wait for a project. A posted rate is not an offer.",
-    "Several contract ads asked for no degree and no technical background. Others asked for a degree or equal work experience.",
     "Full-time jobs exist, but the engineer-level ads read for this page asked for experience in security, coding or machine learning.",
     "Nobody can promise a job. This path builds proof you can show."
   ];
-  var RUNGS = [
-    { name: "Contract red-team tester",
-      what: "You are paid by the hour to attack AI models for a client, log every attempt and write up what worked.",
-      when: "You can apply during step 2. Write-ups and Gray Swan results raise your odds.",
-      ads: [
-        ["AI Red Team Tester (General)", "Alignerr", "$40 to $120 an hour, currency not stated", "Said no technical background is required."],
-        ["Safety Testing Associate", "Clera", "US$30 to US$60 an hour", "Said earlier AI data work is not required."],
-        ["LLM Jailbreak Red Teamer", "Claru", "$55 to $100 an hour, currency not stated", "Wanted security people, CTF players, or anyone who has spent time stress-testing systems."],
-        ["AI Jailbreak & Prompt-Injection Security Expert", "micro1", "US$50 to US$90 an hour", "Preferred 2 or more years of LLM red teaming."],
-        ["AI Red-Teamer, Adversarial AI Testing", "Mercor", "US$50 to US$111 an hour", "Asked for a bachelor's degree or equal work experience. It had closed by 17 Nov."],
-        ["Generative AI Associate, Red Teaming", "Innodata", "about US$14 an hour, from older listings", "The low end. Nothing was open on its own job board on 17 Nov."]
-      ] },
-    { name: "Safety rater or evaluator",
-      what: "Not red teaming: you rate or label AI answers against safety rules. The same companies hire for it, so it can be a way in.",
-      when: "Open to try at any point.",
-      ads: [
-        ["Data Annotation Specialist, Safety", "Cohere", "CA$45 an hour", "A 12-month contract at 16 or more hours a week. Preferred a year of content moderation or similar. Involves disturbing text."],
-        ["Prompt & Response Evaluator", "micro1", "US$45 to US$70 an hour", "A short project of about 7.5 hours in total."]
-      ] },
-    { name: "Engineer-level red teamer",
-      what: "A full-time or senior role: you design attacks, build tests in code and report to the teams that fix them.",
-      when: "Worth applying once you have Python, public write-ups, and a contest placing or bounty credit.",
-      ads: [
-        ["AI Red Team Engineer", "White Circle, and Carnegie Mellon University", "pay not noted", "Both asked for Python."],
-        ["AI Security Red Team Engineer", "DataAnnotation", "US$40 or more an hour", "Required 2 or more years of hands-on cybersecurity, plus some coding."],
-        ["Red Team Engineer", "Gray Swan AI", "US$110,000 to US$290,000 a year, as listed on Remotive", "Senior, and open to people in the United States only."],
-        ["AI Red Teamer (Entry Level)", "10a Labs", "about US$60,000 to US$70,000 a year on job sites", "Closed: it was not on the company's own job board on 17 Nov. It is the only entry-level salaried ad that was found."]
-      ] }
+  // Ready-made searches: these always show today's ads, whatever the list above says.
+  var SEARCHES = [
+    ["LinkedIn: \"AI red team\", remote", "https://www.linkedin.com/jobs/search/?keywords=%22AI%20red%20team%22&f_WT=2"],
+    ["Indeed Canada: \"AI red team\", remote", "https://ca.indeed.com/jobs?q=%22AI+red+team%22&l=Remote"],
+    ["Google: AI red teamer jobs, remote", "https://www.google.com/search?q=AI+red+teamer+jobs+remote"]
   ];
-  var SEARCH_WORDS = "AI red teamer, LLM red team, adversarial testing, jailbreak, prompt injection, AI safety tester";
-  var LOOK = [
+  var BOARDS = [
     ["Alignerr", "https://www.alignerr.com/jobs", "Contract AI testing and rating projects."],
-    ["Mercor", "https://work.mercor.com/explore", "Contract projects. Ads open and close quickly."],
-    ["micro1", "https://www.micro1.ai/experts/opportunities", "Contract projects, usually with an AI interview first."],
     ["Clera", "https://jobs.ashbyhq.com/Clera", "Talent pools for safety testing and evaluation."],
     ["Claru", "https://claru.ai/jobs", "Contract projects. You create a profile, then join projects as they open."],
+    ["micro1", "https://www.micro1.ai/experts/opportunities", "Contract projects, usually with an AI interview first."],
+    ["Mercor", "https://work.mercor.com/explore", "Contract projects. Ads open and close quickly."],
     ["OpenTrain", "https://www.opentrain.ai/jobs", "A job board for AI training work from many companies."],
     ["aitraining.jobs", "https://aitraining.jobs/roles/red-teaming", "A job board with a red-teaming section."],
-    ["Gray Swan challenges", URLS.gsChallenges, "Prize contests. A placing counts as proof."]
+    ["Gray Swan challenges", URLS.gsChallenges, "Prize contests, not jobs. A placing counts as proof."]
   ];
+  var SEARCH_WORDS = "AI red teamer, LLM red team, adversarial testing, jailbreak, prompt injection, AI safety tester";
   var PROOF = [
     "The Microsoft series and the 21-day course, finished.",
     "A Gray Swan profile with solved sets, and any contest placing.",
@@ -323,8 +299,10 @@
     ["ok", "Anthropic's model safety bounty pays up to US$35,000, takes applications, and requires a confidentiality agreement.", "Read on Anthropic's help page."],
     ["ok", "AI red-team job ads ask for Python.", "Several 2026 postings ask for Python or basic scripting. This is a sample of ads, not a survey."],
     ["changed", "The Python sample above used to count an entry-level salaried ad.", "That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it now counts as closed. No other entry-level salaried ad was found."],
-    ["ok", "Every link in the app opens the right page.", "Opened on 17 Nov 2026: all 21 lesson pages, 9 Gray Swan pages, the Microsoft, freeCodeCamp, 0DIN and Anthropic pages, and the 7 job sites."],
-    ["ok", "The job titles, pay and asks on the Jobs tab come from real ads.", "Each ad was read on 16 or 17 Nov 2026. Ads close and pay changes, so they are examples, not offers."],
+    ["ok", "Every link in the app opens the right page.", "Opened on 17 Nov 2026: all 21 lesson pages, 9 Gray Swan pages, the Microsoft, freeCodeCamp, 0DIN and Anthropic pages, the job sites and the job searches."],
+    ["ok", "The job titles, pay and asks on the Jobs tab come from real ads.", "Each ad was read on its own page on 17 Nov 2026. Pay is copied as the ad posted it. Ads close and pay changes, so they are examples, not offers."],
+    ["ok", "An ad on the Jobs tab has a working link.", "A free automatic check opens every ad once a day. If the page is gone, leads somewhere else or says it is closed, the ad is hidden. Each ad shows the date its link was last checked."],
+    ["no", "A listed ad still has work to give.", "The daily check only proves an ad is still posted. A talent pool can stay posted while no project is running."],
     ["no", "A posted hourly rate is what you would earn.", "A range in an ad is not an offer, and contract platforms do not guarantee hours."],
     ["no", "The Words tab is an official glossary.", "The meanings are plain-English summaries written for this app and matched to lesson titles. The courses are the authority."],
     ["ok", "Syncing stores ticks and streak days only, and a sync link reaches only its own ticks.", "Tested on 17 Nov 2026: reading the whole store, listing other people's links, and saving anything except numbers were all refused."],
@@ -847,58 +825,79 @@
   }
 
   // ---------- Jobs tab ----------
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  function niceDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    return m ? Number(m[3]) + " " + MONTHS[Number(m[2]) - 1] + " " + m[1] : "";
+  }
+  function daysSince(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    if (!m) { return 999; }
+    return Math.floor((Date.now() - new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])).getTime()) / 86400000);
+  }
+  function adCard(ad) {
+    var stale = daysSince(ad.checked) > 10;
+    return h("div", { class: "card ad", "data-id": ad.id }, [
+      h("div", { class: "tag", text: ad.who }),
+      h("div", { class: "title", text: ad.title }),
+      h("div", { class: "pay", text: ad.pay }),
+      h("p", { text: ad.ask }),
+      h("div", { class: "acts" }, [
+        link("Open the ad ↗", ad.url, "open"),
+        h("span", { class: "checked" + (stale ? " stale" : ""), text: (stale ? "Not re-checked since " : "Link checked ") + niceDate(ad.checked) })
+      ])
+    ]);
+  }
   function renderJobs() {
     var v = document.getElementById("view-jobs");
     v.textContent = "";
+    var open = JOBS.ads.filter(function (a) { return a.open !== false && /^https:\/\//.test(a.url || ""); });
+    var start = open.filter(function (a) { return a.level === "start"; });
+    var later = open.filter(function (a) { return a.level !== "start"; });
     v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "eyebrow", text: "> JOBS · ADS READ " + JOBS_DATE.toUpperCase() }),
+      h("div", { class: "eyebrow", text: "> JOBS" + (JOBS.updated ? " · LINKS CHECKED " + niceDate(JOBS.updated).toUpperCase() : "") }),
       h("h1", { text: "Where this can lead" }),
-      h("p", { class: "lede", text: "The job titles, pay and asks below come from real ads read on 16 and 17 Nov 2026. Ads close and pay changes, so treat every number as an example, not a promise." })
+      h("p", { class: "lede", text: "Real ads with real links. Pay is copied as each ad posted it: an example, not a promise. A daily check hides an ad when its link dies." })
     ]));
+
+    var startBlock = h("div", { class: "block", id: "jobs-start" }, [
+      h("h2", { text: "Open now for beginners" }),
+      h("p", { class: "lede", text: "You can apply to these during step 2. Write-ups and Gray Swan results raise your odds." })
+    ]);
+    if (start.length) { start.forEach(function (a) { startBlock.appendChild(adCard(a)); }); }
+    else { startBlock.appendChild(h("p", { class: "note", text: "No beginner ad is confirmed open today. Use the searches below: they always show today's ads." })); }
+    v.appendChild(startBlock);
+
+    var searches = h("div", { class: "block", id: "jobs-search" }, [
+      h("h2", { text: "Search for today's ads" }),
+      h("p", { class: "lede", text: "One tap opens a ready-made search. Other words that work: " + SEARCH_WORDS + "." })
+    ]);
+    SEARCHES.forEach(function (s) { searches.appendChild(link(s[0] + " ↗", s[1], "big open")); });
+    var boards = h("div", { class: "rows" });
+    BOARDS.forEach(function (b) {
+      boards.appendChild(h("div", { class: "row" }, [h("div", null, [link(b[0], b[1])]), h("p", { text: b[2] })]));
+    });
+    searches.appendChild(h("details", { class: "fold", id: "jobs-boards" }, [h("summary", { text: "Job boards to check yourself: " + BOARDS.length }), boards]));
+    v.appendChild(searches);
+
     v.appendChild(h("div", { class: "block" }, [h("h2", { text: "The honest picture" }), bullets(HONEST)]));
-
-    RUNGS.forEach(function (r, i) {
-      var ads = h("div", { class: "rows" });
-      r.ads.forEach(function (a) {
-        ads.appendChild(h("div", { class: "row" }, [
-          h("div", null, [h("strong", { text: a[0] })]),
-          h("div", { class: "meta", text: a[1] + " · " + a[2] }),
-          h("p", { text: a[3] })
-        ]));
-      });
-      v.appendChild(h("div", { class: "block rung" }, [
-        h("div", { class: "eyebrow", text: "RUNG " + (i + 1) + " OF " + RUNGS.length }),
-        h("h2", { text: r.name }),
-        h("p", { text: r.what }),
-        h("p", { class: "why" }, [h("b", { text: "WHEN " }), r.when]),
-        h("div", { class: "meta-line", text: "TITLES SEEN ON REAL ADS" }),
-        ads
-      ]));
-    });
-
-    v.appendChild(h("div", { class: "block" }, [
-      h("h2", { text: "What to show instead of a degree" }),
-      h("p", { class: "lede", text: "Each step of the path leaves you with one of these." }),
-      bullets(PROOF)
-    ]));
-
-    var look = h("div", { class: "rows" });
-    LOOK.forEach(function (l) {
-      look.appendChild(h("div", { class: "row" }, [h("div", null, [link(l[0], l[1])]), h("p", { text: l[2] })]));
-    });
-    v.appendChild(h("div", { class: "block" }, [
-      h("h2", { text: "Where to look" }),
-      h("p", { class: "lede", text: "Search words that work: " + SEARCH_WORDS + "." }),
-      look
-    ]));
-
-    var money = h("div", { class: "rows" });
-    MONEY.forEach(function (m, i) {
-      money.appendChild(h("div", { class: "row" }, [h("div", { class: "meta", text: "ROUTE " + (i + 1) }), h("div", null, [h("strong", { text: m[0] })]), h("p", { text: m[1] })]));
-    });
-    v.appendChild(h("div", { class: "block" }, [h("h2", { text: "Four ways this can pay" }), h("p", { class: "lede", text: "Easiest first. Nobody can promise any of it." }), money]));
-
     v.appendChild(h("div", { class: "block" }, [h("h2", { text: "Before you apply anywhere" }), bullets(APPLY_RULES)]));
+
+    var laterFold = h("details", { class: "fold", id: "jobs-later" }, [
+      h("summary", { text: "Later goals: ads that ask for experience (" + later.length + ")" }),
+      h("p", { class: "dim", text: "What the next rung is called, and what it asks for. Worth applying once you have Python, public write-ups, and a contest placing or bounty credit." })
+    ]);
+    later.forEach(function (a) { laterFold.appendChild(adCard(a)); });
+    var money = h("div", { class: "rows" });
+    MONEY.forEach(function (m) {
+      money.appendChild(h("div", { class: "row" }, [h("div", null, [h("strong", { text: m[0] })]), h("p", { text: m[1] })]));
+    });
+    v.appendChild(h("div", { class: "block" }, [
+      h("h2", { text: "More" }),
+      laterFold,
+      h("details", { class: "fold" }, [h("summary", { text: "What to show instead of a degree" }), bullets(PROOF)]),
+      h("details", { class: "fold" }, [h("summary", { text: "Four ways this can pay, easiest first" }), money])
+    ]));
   }
 
   // ---------- Menu: syncing, settings, and the reasons behind the path ----------

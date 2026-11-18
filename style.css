@@ -240,12 +240,13 @@ details.word[open] > summary::after { content: "\2013"; }
 #test-btn { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.06em; min-height: 40px; }
 #test-btn[aria-pressed="true"] { border-color: var(--ok); color: var(--ok); }
 
-/* Jobs tab: one panel per rung of the ladder. */
-.rung { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 14px; }
-.rung > .eyebrow { color: var(--muted); }
-.rung .rows { border-top: 0; }
-.rung .row:last-child { border-bottom: 0; padding-bottom: 0; }
-.meta-line { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; margin-top: 2px; }
+/* Jobs tab: one card per ad. */
+.card.ad { border-left-color: var(--line); }
+.card.ad .pay { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.02em; color: var(--ok); }
+.card.ad p { font-size: 0.93rem; }
+.card.ad .checked { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+.card.ad .checked.stale { color: var(--warn); }
+details.fold > .card { border-left-width: 1px; }
 
 /* Info tab: jump buttons, and sections that stop below the sticky header when jumped to. */
 .jump { display: flex; flex-wrap: wrap; gap: 8px; }
