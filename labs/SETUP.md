@@ -84,7 +84,9 @@ Tested on 18 Nov 2026, Windows 11, Docker Desktop 4.99:
 - A lab started and used about 50 MB of memory while idle.
 - With no OpenAI key in the settings file, a lab stayed on "Loading your challenge", and its log said the key was wrong.
 
-Not tested yet: chatting inside a lab with a working key, and the real cost of doing all 12.
+- With a working OpenAI key, lab 1 answered five chat messages in 2 to 3.5 seconds each.
+
+Not tested: the other 11 labs one by one (they run the same program), and the real cost of doing all 12.
 
 ## Four labs have a touchy goal
 
