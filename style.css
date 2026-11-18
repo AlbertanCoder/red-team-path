@@ -98,12 +98,12 @@ button.primary { background: var(--accent); color: var(--accent-ink); border-col
 .readout .bar { flex: 1 1 auto; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
 .readout .bar > span { display: block; height: 100%; width: 0; background: var(--ok); transition: width 0.25s ease; }
 @media (prefers-reduced-motion: reduce) { .readout .bar > span { transition: none; } }
-/* Menu button. Its dot shows syncing: grey = off, green = saved, amber = saving or no internet. */
-#menu-btn { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 4px 12px; min-height: 36px; display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; }
-#menu-btn::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
-#menu-btn[data-sync="ok"]::before { background: var(--ok); }
-#menu-btn[data-sync="saving"]::before, #menu-btn[data-sync="offline"]::before { background: var(--warn); }
+/* Menu button, and under the progress bar one line of words that says whether this device is linked and saved. */
+#menu-btn { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 4px 14px; min-height: 36px; display: inline-flex; align-items: center; flex: 0 0 auto; }
 #menu-btn[aria-current="page"] { border-color: var(--accent); }
+#sync-line { font-size: 0.78rem; color: var(--muted); }
+#sync-line[data-sync="ok"] { color: var(--ok); }
+#sync-line[data-sync="offline"] { color: var(--warn); }
 
 /* Views */
 main {
@@ -284,3 +284,13 @@ details.fold .row:last-child { border-bottom: 0; padding-bottom: 0; }
 .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 14px; }
 input[type="text"], input[type="search"] { width: 100%; font-family: var(--sans); font-size: 16px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; min-height: 44px; }
 .panel input[type="text"], .panel textarea { background: var(--bg); }
+
+/* Linking devices: the short code, shown big enough to read across a desk. */
+.pin { border: 1px dashed var(--line); border-radius: 4px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.pin-code { font-family: var(--mono); font-size: 1.9rem; font-weight: 700; letter-spacing: 0.12em; color: var(--ink); user-select: all; }
+#pair-box { font-family: var(--mono); font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase; max-width: 16rem; }
+.linkline { font-size: 0.9rem; color: var(--muted); }
+
+/* Path tab: "Untick this box?" sits under the row it belongs to. */
+.line .confirm { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 4px 0 6px; }
+.line .confirm button { min-height: 36px; padding: 4px 14px; }

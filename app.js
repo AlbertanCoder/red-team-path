@@ -1,6 +1,6 @@
 // Red Team Path: one fixed path into AI red teaming, with ticks that save in this browser and can sync between devices.
 // On the device everything is stored under one key (STORE_KEY). If saving fails, a warning shows and the app keeps working in memory.
-// Syncing is optional: a private code, kept on the device, names one spot in a small online store that holds ticks only.
+// Linking devices is optional: a private code, kept on the device, names one spot in a small online store that holds ticks only.
 (function () {
   "use strict";
 
@@ -306,7 +306,8 @@
     ["no", "A listed ad still has work to give.", "The link check only proves an ad is still posted. A talent pool can stay posted while no project is running."],
     ["no", "A posted hourly rate is what you would earn.", "A range in an ad is not an offer, and contract platforms do not guarantee hours."],
     ["no", "The Words tab is an official glossary.", "The meanings are plain-English summaries written for this app and matched to lesson titles. The courses are the authority."],
-    ["ok", "Syncing stores ticks and streak days only, and a sync link reaches only its own ticks.", "Tested on 17 Nov 2026: reading the whole store, listing other people's links, and saving anything except numbers were all refused."],
+    ["ok", "Linked devices store ticks and streak days only, under a private code that is never shown.", "Tested on 17 and 18 Nov 2026: reading the whole store, listing other people's codes, and saving anything except numbers were all refused."],
+    ["ok", "The short code used to link a device works once and runs out in 10 minutes.", "Tested on 18 Nov 2026: a used code, a made-up code, a backdated code and a list of all codes were all refused."],
     ["no", "Finishing this path gets you hired.", "Nobody can promise that. The path builds the things a newcomer can show: write-ups, contest results, a known course and basic Python."]
   ];
 
@@ -456,58 +457,63 @@
   }
 
   // ---------- syncing between devices ----------
-  // Each person has one private code. The ticks for that code live at DB + code, and every device holding the code reads and
-  // writes the same spot. Only ticks, streak days and two numbers are stored there: nothing that says who you are.
+  // Each person has one private code, kept on their devices and never shown. The ticks for that code live at DB + code,
+  // and every device holding it reads and writes the same spot. Only ticks, streak days and two numbers are stored there.
+  // To link a second device, the first one asks for a short pairing code (8 characters, good for 10 minutes, used once)
+  // that points at the private code. Typing the short code into the other device hands the private code over.
   var DB = "https://red-team-path-default-rtdb.firebaseio.com/sync/";
-  var sync = { status: "off", pending: {}, replace: false, busy: false, timer: 0, pullTimer: 0, retryTimer: 0, stream: null };
+  var PAIR = "https://red-team-path-default-rtdb.firebaseio.com/pair/";
+  var ABC = "abcdefghijkmnpqrstuvwxyz23456789"; // no l, o, 0 or 1: they are too easy to misread
+  var sync = { status: "off", pending: {}, replace: false, union: false, busy: false, timer: 0, pullTimer: 0, retryTimer: 0, stream: null };
   var STATUS_TEXT = {
-    off: "Syncing is off. Ticks are saved on this device only.",
-    saving: "Syncing is on. Saving…",
-    ok: "Syncing is on. Everything is saved.",
-    offline: "Syncing is on, but the internet can't be reached right now. Ticks are safe on this device and will be sent when it is back."
+    off: "Not linked: saved on this device only",
+    saving: "Linked · saving…",
+    ok: "Linked · saved",
+    offline: "No internet: saved here, will send later"
   };
 
-  function newCode() {
-    var abc = "abcdefghijkmnpqrstuvwxyz23456789";
-    var bytes = new Uint8Array(32);
+  function randomText(n) {
+    var bytes = new Uint8Array(n);
     window.crypto.getRandomValues(bytes);
     var out = "";
-    for (var i = 0; i < bytes.length; i += 1) { out += abc.charAt(bytes[i] % 32); }
+    for (var i = 0; i < bytes.length; i += 1) { out += ABC.charAt(bytes[i] % 32); }
     return out;
   }
   function findCode(text) {
     var m = /(?:^|[^a-z0-9])([a-z2-9]{32})(?![a-z0-9])/.exec(String(text || "").trim());
     return m ? m[1] : "";
   }
-  function syncLink() {
-    return window.location.href.split("#")[0] + "#sync=" + state.sync;
+  // What someone typed, tidied: any case, spaces and dashes ignored, and a typed "1" or "l" read as the "i" it must be.
+  function cleanPin(text) {
+    return String(text || "").toLowerCase().replace(/[^a-z0-9]/g, "").replace(/[1l]/g, "i");
   }
+  function showPin(pin) { return (pin.slice(0, 4) + "-" + pin.slice(4)).toUpperCase(); }
   function setStatus(s) {
     sync.status = s;
-    var line = document.getElementById("sync-status");
-    if (line) { line.textContent = STATUS_TEXT[s]; }
+    ["sync-line", "sync-status"].forEach(function (id) {
+      var line = document.getElementById(id);
+      if (line) { line.textContent = STATUS_TEXT[s]; line.setAttribute("data-sync", s); }
+    });
     var btn = document.getElementById("menu-btn");
-    if (btn) {
-      btn.setAttribute("data-sync", s);
-      btn.setAttribute("aria-label", "Menu: syncing, settings and info. " + STATUS_TEXT[s]);
-    }
+    if (btn) { btn.setAttribute("data-sync", s); }
   }
-  function request(method, body) {
+  function send(method, url, body) {
     var opts = { method: method };
     if (body !== undefined) { opts.body = JSON.stringify(body); }
     // Give up after 15 seconds, so one stuck request on a bad connection cannot block every later save.
     var stop = window.AbortController ? new window.AbortController() : null;
     var timer = 0;
     if (stop) { opts.signal = stop.signal; timer = window.setTimeout(function () { stop.abort(); }, 15000); }
-    return window.fetch(DB + state.sync + ".json", opts).then(function (res) {
+    return window.fetch(url, opts).then(function (res) {
       window.clearTimeout(timer);
-      if (!res.ok) { throw new Error("sync " + res.status); }
+      if (!res.ok) { throw new Error("refused " + res.status); }
       return res.json();
     }, function (err) {
       window.clearTimeout(timer);
       throw err;
     });
   }
+  function request(method, body) { return send(method, DB + state.sync + ".json", body); }
   function retryLater() {
     // After a failed save or fetch, try again by itself every 30 seconds until it works.
     window.clearTimeout(sync.retryTimer);
@@ -546,10 +552,32 @@
     });
   }
   // Folds what the other devices saved into this device. Returns what this device has that the others lack.
-  function mergeRemote(remote) {
+  // union = true on the first fetch after this device is linked: then every tick on either side is kept.
+  function mergeRemote(remote, union) {
     var changed = false;
     var rr = typeof remote.r === "number" ? remote.r : 0;
-    if (rr > state.r) {
+    var rm = remote.m && typeof remote.m === "object" ? remote.m : {};
+    var ry = remote.y && typeof remote.y === "object" ? remote.y : {};
+    if (union) {
+      // Stamp every tick, from both sides, as newer than any earlier untick or "clear all" on either side.
+      var top = Math.max(state.r, rr);
+      Object.keys(rm).forEach(function (id) {
+        if (KNOWN[id] && typeof rm[id] === "number" && rm[id] > 0 && !(state.m[id] > 0)) { state.m[id] = rm[id]; }
+      });
+      Object.keys(state.m).forEach(function (id) {
+        if (!(state.m[id] > 0)) { delete state.m[id]; return; }
+        var other = typeof rm[id] === "number" ? Math.abs(rm[id]) : 0;
+        state.m[id] = Math.max(state.m[id], rm[id] > 0 ? other : other + 1, top + 1);
+      });
+      Object.keys(ry).forEach(function (k) {
+        if (DAY_RE.test(k) && typeof ry[k] === "number" && !state.y[k]) { state.y[k] = ry[k]; }
+      });
+      Object.keys(state.y).forEach(function (k) { state.y[k] = Math.max(state.y[k], top + 1); });
+      if (typeof remote.b === "number" && remote.b > state.best) { state.best = remote.b; }
+      state.r = top;
+      changed = true;
+      if (rr < top) { return { replace: true, changed: true, change: {} }; } // the other side's "clear all" is older: write the merged ticks whole
+    } else if (rr > state.r) {
       // Another device cleared all ticks after this device last heard from it.
       Object.keys(state.m).forEach(function (id) { if (Math.abs(state.m[id]) <= rr) { delete state.m[id]; } });
       Object.keys(state.y).forEach(function (k) { if (state.y[k] <= rr) { delete state.y[k]; } });
@@ -558,8 +586,6 @@
       changed = true;
     }
     if (rr < state.r) { return { replace: true, changed: changed, change: {} }; } // this device cleared more recently
-    var rm = remote.m && typeof remote.m === "object" ? remote.m : {};
-    var ry = remote.y && typeof remote.y === "object" ? remote.y : {};
     var change = {};
     Object.keys(rm).forEach(function (id) {
       var ts = rm[id];
@@ -582,7 +608,8 @@
     var code = state.sync;
     request("GET").then(function (remote) {
       if (state.sync !== code) { return; }
-      var out = mergeRemote(remote && typeof remote === "object" ? remote : {});
+      var out = mergeRemote(remote && typeof remote === "object" ? remote : {}, sync.union);
+      sync.union = false;
       save();
       if (out.replace) { sync.replace = true; sync.pending = {}; }
       else { Object.keys(out.change).forEach(function (k) { if (!(k in sync.pending)) { sync.pending[k] = out.change[k]; } }); }
@@ -607,10 +634,12 @@
       sync.stream.addEventListener("patch", pullSoon);
     } catch (e) { sync.stream = null; }
   }
-  function startSync(code) {
+  // joining = true when this device is being linked to ticks that already exist somewhere else.
+  function startSync(code, joining) {
     state.sync = code;
     sync.pending = {};
     sync.replace = false;
+    sync.union = !!joining;
     save();
     setStatus("saving");
     pull();
@@ -620,6 +649,7 @@
     state.sync = "";
     sync.pending = {};
     sync.replace = false;
+    sync.union = false;
     save();
     stopListening();
     setStatus("off");
@@ -629,6 +659,25 @@
     if (!state.sync || document.visibilityState === "hidden") { return; }
     if (!sync.stream || sync.stream.readyState === 2) { listen(); }
     pull();
+  }
+  // Asks the store for a short code that points at this device's private code. done(pin), or done("") if it failed.
+  function makePin(done, tries) {
+    var pin = randomText(8);
+    send("PUT", PAIR + pin + ".json", { c: state.sync, t: { ".sv": "timestamp" } }).then(function () { done(pin); }, function (err) {
+      // "refused" means that code is already in use by someone else: pick another. Anything else is the internet.
+      if (tries > 1 && /^refused/.test(String(err && err.message))) { makePin(done, tries - 1); } else { done(""); }
+    });
+  }
+  // Links this device using a short code typed by the person. done("ok"), done("wrong") or done("offline").
+  function usePin(text, done) {
+    var pin = cleanPin(text);
+    if (pin.length !== 8) { done("wrong"); return; }
+    send("GET", PAIR + pin + ".json").then(function (got) {
+      if (!got || !SYNC_RE.test(String(got.c || ""))) { done("wrong"); return; }
+      startSync(got.c, true);
+      send("DELETE", PAIR + pin + ".json").then(function () {}, function () {}); // a code works once
+      done("ok");
+    }, function (err) { done(/^refused/.test(String(err && err.message)) ? "wrong" : "offline"); });
   }
 
   // ---------- words that belong to a lesson ----------
@@ -647,6 +696,7 @@
   var OPEN_LABEL = { video: "Open the video", course: "Open the lesson", practice: "Open the practice", code: "Open the course", bounty: "Open the page" };
   var lastDone = null; // the box ticked most recently on this screen, so one tap can undo it
   var tickedAt = 0;    // a fast double tap must not tick two boxes
+  var pairNote = "";   // one line shown in the menu right after this device is linked
 
   function tagFor(entry) {
     var it = entry.it;
@@ -732,7 +782,11 @@
     var after = idx + 1 < SEQ.length ? SEQ[idx + 1].it.title : "that was the last box.";
     v.appendChild(h("div", { class: "block" }, [
       h("p", { class: "after", id: "after-line" }, [h("b", { text: "AFTER THIS " }), after]),
-      undo
+      undo,
+      !state.sync ? h("p", { class: "linkline", id: "link-line" }, [
+        "Use this on your phone or computer too? ",
+        h("a", { href: "#menu", id: "link-go", text: "Link a device" })
+      ]) : null
     ]));
   }
 
@@ -767,9 +821,22 @@
           var box = h("input", { type: "checkbox", id: id });
           box.checked = isDone(it.id);
           box.addEventListener("change", function () {
-            if (!box.checked && lastDone && lastDone.id === it.id) { lastDone = null; }
-            setDone(it, box.checked);
-            render(id);
+            if (box.checked) { setDone(it, true); render(id); return; }
+            // Removing a tick asks first: a stray tap on a phone should not undo work.
+            box.checked = true;
+            var row = box.parentNode;
+            if (row.querySelector(".confirm")) { return; }
+            var yes = h("button", { type: "button", id: "untick-" + it.id, text: "Untick" });
+            var no = h("button", { type: "button", id: "keep-" + it.id, text: "Keep" });
+            var ask = h("div", { class: "confirm", role: "group", "aria-label": "Untick this box?" }, [h("span", { class: "status-line", text: "Untick this box?" }), yes, no]);
+            yes.addEventListener("click", function () {
+              if (lastDone && lastDone.id === it.id) { lastDone = null; }
+              setDone(it, false);
+              render(id);
+            });
+            no.addEventListener("click", function () { row.removeChild(ask); box.focus({ preventScroll: true }); });
+            row.appendChild(ask);
+            no.focus({ preventScroll: true });
           });
           grp.appendChild(h("div", { class: "line" + (isDone(it.id) ? " done" : "") + (isHere ? " here" : "") }, [
             box,
@@ -924,59 +991,68 @@
   function syncPanel() {
     var box = document.getElementById("menu-sync");
     box.textContent = "";
-    box.appendChild(h("h2", { text: "Sync my devices" }));
-    box.appendChild(h("p", { class: "status-line", id: "sync-status", role: "status", text: STATUS_TEXT[sync.status] }));
+    box.appendChild(h("h2", { text: "Link my devices" }));
+    box.appendChild(h("p", { class: "status-line", id: "sync-status", role: "status", "data-sync": sync.status, text: STATUS_TEXT[sync.status] }));
+    if (pairNote) { box.appendChild(h("p", { class: "ticked", id: "pair-note", role: "status", text: pairNote })); pairNote = ""; }
 
-    var joinStatus = h("span", { class: "status-line", role: "status", id: "join-status" });
-    var joinBox = h("input", { type: "text", id: "join-box", "aria-label": "Sync link from another device", placeholder: "Paste a sync link here", autocomplete: "off", autocapitalize: "off", spellcheck: "false" });
-    var joinBtn = h("button", { type: "button", id: "join-btn", text: "Use this link" });
-    joinBtn.addEventListener("click", function () {
-      var code = findCode(joinBox.value);
-      if (!code) { joinStatus.textContent = "That is not a sync link. Copy the whole link and try again."; return; }
-      startSync(code);
-      syncPanel();
+    var pinShow = h("div", { class: "pin", id: "pair-show", hidden: "" });
+    var getBtn = h("button", { type: "button", class: "primary", id: "link-start", text: state.sync ? "Get a code for another device" : "Get a code for my other device" });
+    var getStatus = h("span", { class: "status-line", role: "status", id: "link-status" });
+    getBtn.addEventListener("click", function () {
+      if (!state.sync) { startSync(randomText(32)); render(); syncPanel(); }
+      var show = document.getElementById("pair-show");
+      var status = document.getElementById("link-status");
+      status.textContent = "Getting a code…";
+      makePin(function (pin) {
+        if (!pin) { status.textContent = "Could not get a code. Check the internet and try again."; return; }
+        status.textContent = "";
+        show.textContent = "";
+        show.appendChild(h("div", { class: "pin-code", id: "pair-code", text: showPin(pin) }));
+        show.appendChild(h("p", { text: "Open this app on your other device. Tap MENU, type this code where it says \"I have a code\", and tap Link." }));
+        show.appendChild(h("p", { class: "dim", text: "The code works once and runs out in 10 minutes." }));
+        show.hidden = false;
+        // After 10 minutes the code no longer works, so stop showing it.
+        window.setTimeout(function () {
+          var shown = document.getElementById("pair-code");
+          if (shown && shown.textContent === showPin(pin)) { document.getElementById("pair-show").hidden = true; }
+        }, 600000);
+      }, 4);
     });
 
+    var pairStatus = h("span", { class: "status-line", role: "status", id: "pair-status" });
+    var pairBox = h("input", { type: "text", id: "pair-box", "aria-label": "Code from your other device", placeholder: "XXXX-XXXX", autocomplete: "off", autocapitalize: "characters", autocorrect: "off", spellcheck: "false", maxlength: "12" });
+    var pairBtn = h("button", { type: "button", id: "pair-btn", text: "Link" });
+    function link() {
+      document.getElementById("pair-status").textContent = "Linking…";
+      usePin(pairBox.value, function (result) {
+        if (result === "ok") {
+          pairNote = "Linked. Ticks from both devices are being combined.";
+          render();
+          syncPanel();
+          return;
+        }
+        document.getElementById("pair-status").textContent = result === "wrong"
+          ? "That code is not right, or it has run out. Get a new code on the other device and try again."
+          : "Could not reach the internet. Check the connection and try again.";
+      });
+    }
+    pairBtn.addEventListener("click", link);
+    pairBox.addEventListener("keydown", function (e) { if (e.key === "Enter") { link(); } });
+
     if (!state.sync) {
-      var onBtn = h("button", { type: "button", class: "primary", id: "sync-on", text: "Turn on syncing" });
-      onBtn.addEventListener("click", function () {
-        startSync(newCode());
-        syncPanel();
-      });
-      box.appendChild(h("p", { text: "Turn this on to see the same ticks on your phone, your computer and any other device, and to keep a safe copy if this browser is ever cleared. No account and no password." }));
-      box.appendChild(h("div", { class: "btnrow" }, [onBtn]));
-      box.appendChild(h("p", { class: "dim", text: "Already turned it on somewhere else? Paste that device's sync link:" }));
-      box.appendChild(joinBox);
-      box.appendChild(h("div", { class: "btnrow" }, [joinBtn, joinStatus]));
-      return;
+      box.appendChild(h("p", { text: "See the same ticks on your phone and your computer, and keep a safe copy if this one is ever cleared. No account, no password, no links to open." }));
     }
-
-    var linkStatus = h("span", { class: "status-line", role: "status", id: "link-status" });
-    var linkBox = h("input", { type: "text", id: "sync-link", readonly: "", "aria-label": "Your private sync link", value: syncLink() });
-    linkBox.value = syncLink();
-    var copyBtn = h("button", { type: "button", class: "primary", id: "sync-copy", text: "Copy my sync link" });
-    copyBtn.addEventListener("click", function () { copyText(syncLink(), linkStatus, linkBox); });
-    var shareBtn = null;
-    if (navigator.share) {
-      shareBtn = h("button", { type: "button", id: "sync-share", text: "Send it to myself" });
-      shareBtn.addEventListener("click", function () {
-        navigator.share({ title: "Red Team Path sync link", url: syncLink() }).catch(function () {});
-      });
+    box.appendChild(h("div", { class: "btnrow" }, [getBtn, getStatus]));
+    box.appendChild(pinShow);
+    box.appendChild(h("p", { class: "dim", id: "pair-label", text: "I have a code from my other device:" }));
+    box.appendChild(pairBox);
+    box.appendChild(h("div", { class: "btnrow" }, [pairBtn, pairStatus]));
+    if (state.sync) {
+      box.appendChild(h("p", { class: "note", text: "What is stored online: which boxes are ticked and on which days. No name, no email, nothing else about you." }));
+      var offBtn = h("button", { type: "button", class: "ghost", id: "sync-off", text: "UNLINK THIS DEVICE" });
+      offBtn.addEventListener("click", function () { stopSync(); render(); syncPanel(); });
+      box.appendChild(h("div", { class: "btnrow" }, [offBtn]));
     }
-    var offAsk = h("button", { type: "button", class: "ghost", id: "sync-off", text: "STOP SYNCING ON THIS DEVICE" });
-    offAsk.addEventListener("click", function () { stopSync(); syncPanel(); });
-
-    box.appendChild(h("p", { text: "To add a device: open this link on it once. On an iPhone home-screen app, paste the link into this same box there instead (the home-screen app and Safari keep separate ticks)." }));
-    box.appendChild(linkBox);
-    box.appendChild(h("div", { class: "btnrow" }, [copyBtn, shareBtn, linkStatus]));
-    box.appendChild(h("p", { class: "note", text: "Keep this link to yourself. Anyone who has it can see and change your ticks. It stores ticks only: no name, no email, nothing about you." }));
-    box.appendChild(h("details", { class: "fold" }, [
-      h("summary", { text: "Use a link from another device instead" }),
-      h("p", { class: "dim", text: "This device joins that link, and the ticks from both are combined." }),
-      joinBox,
-      h("div", { class: "btnrow" }, [joinBtn, joinStatus])
-    ]));
-    box.appendChild(h("div", { class: "btnrow" }, [offAsk]));
   }
 
   function settingsPanel() {
@@ -1012,7 +1088,7 @@
     var clearYes = h("button", { type: "button", id: "clear-yes", text: "Yes, clear them" });
     var clearNo = h("button", { type: "button", id: "clear-no", text: "Keep them" });
     var confirmRow = h("span", { class: "btnrow", hidden: "" }, [
-      h("span", { class: "status-line", text: state.sync ? "Clear every tick and the streak, on every synced device?" : "Clear every tick and the streak?" }), clearYes, clearNo]);
+      h("span", { class: "status-line", text: state.sync ? "Clear every tick and the streak, on every linked device?" : "Clear every tick and the streak?" }), clearYes, clearNo]);
     clearAsk.addEventListener("click", function () { confirmRow.hidden = false; clearAsk.hidden = true; });
     clearNo.addEventListener("click", function () { confirmRow.hidden = true; clearAsk.hidden = false; });
     clearYes.addEventListener("click", function () { lastDone = null; clearAll(); render(); });
@@ -1054,14 +1130,14 @@
     var v = document.getElementById("view-menu");
     v.textContent = "";
     var jump = h("div", { class: "jump" });
-    [["Sync", "menu-sync"], ["Settings", "menu-settings"], ["The four places", "menu-places"], ["Rules", "menu-rules"], ["Template", "menu-template"], ["Audit", "menu-audit"]].forEach(function (j) {
+    [["Link devices", "menu-sync"], ["Settings", "menu-settings"], ["The four places", "menu-places"], ["Rules", "menu-rules"], ["Template", "menu-template"], ["Audit", "menu-audit"]].forEach(function (j) {
       var b = h("button", { type: "button", text: j[0] });
       b.addEventListener("click", function () { document.getElementById(j[1]).scrollIntoView({ block: "start" }); });
       jump.appendChild(b);
     });
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> MENU" }),
-      h("h1", { text: "Syncing, settings and info" }),
+      h("h1", { text: "Link devices, settings and info" }),
       jump
     ]));
     v.appendChild(h("div", { class: "block panel", id: "menu-sync" }));
@@ -1146,17 +1222,18 @@
     }
   }
   function takeLink() {
-    // Opening a sync link (…#sync=code) joins that code, then removes the code from the address bar.
+    // An older version linked devices with a long link (…#sync=code). Such a link still works: it joins that code,
+    // keeping every tick, then removes the code from the address bar.
     var m = /^#sync=(.*)$/.exec(window.location.hash || "");
     if (!m) { return false; }
     var code = findCode(m[1]);
     window.history.replaceState(null, "", "#menu");
-    if (code) { startSync(code); }
+    if (code) { startSync(code, true); }
     return true;
   }
 
   window.addEventListener("hashchange", function () {
-    if (takeLink()) { syncPanel(); }
+    if (takeLink()) { render(); syncPanel(); }
     showTab();
     showPlace();
   });

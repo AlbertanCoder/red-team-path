@@ -19,20 +19,22 @@ Everything is free and runs in a web browser.
 - **Path** lists every box, each with a link to its page, and marks where you are.
 - **Words** explains about 40 terms in plain English, with search and a "Test me" switch. Each lesson shows its own new words.
 - **Jobs** lists real ads with real links, the pay each ad posted and what it asked for, plus ready-made searches. An automatic check opens every ad once a day: each ad shows when its link was last checked, and is hidden once the link dies.
-- **Menu** holds syncing, settings (dark or light, streak, backup code), the reasons for each place, the rules, a write-up template and the audit: every claim, whether it was checked against its source, and what was corrected.
+- **Menu** holds linking your devices, settings (dark or light, streak, backup code), the reasons for each place, the rules, a write-up template and the audit: every claim, whether it was checked against its source, and what was corrected.
 
-## Saving and syncing
+## Saving and linking devices
 
-Ticks save by themselves in the browser. To see the same ticks on a phone and a computer, open **Menu > Sync my devices** and turn syncing on. You get a private link: open it once on each other device. There is no account and no password.
+Ticks save by themselves in the browser. To see the same ticks on a phone and a computer, open **Menu > Link my devices** on one of them and tap **Get a code**. Type that short code into the same place in the app on the other device. That is the whole setup: no account, no password and no links to open. The code works once and runs out in 10 minutes.
 
-Syncing stores only which boxes are ticked, and on which days, under a random code. It holds no name, no email and nothing else about you. Keep the link to yourself: anyone who has it can see and change your ticks.
+The first time two devices are linked, every tick from both is kept. After that the newest change wins, and a device with no internet sends its ticks when it is back online.
+
+Linking stores only which boxes are ticked, and on which days, under a private code that is never shown. It holds no name, no email and nothing else about you.
 
 ## Put it on an iPhone home screen
 
 1. Open the link in Safari.
 2. Tap Share, then **Add to Home Screen**.
 
-The home-screen app and Safari keep separate ticks. To link the home-screen app, paste your sync link into **Menu > Sync my devices** inside it.
+The home-screen app and Safari keep separate ticks, so link the one you use.
 
 ## Files
 
