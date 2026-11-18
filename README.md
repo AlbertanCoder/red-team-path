@@ -15,7 +15,7 @@ Everything is free and runs in a web browser.
 
 ## What the app does
 
-- **Now** shows one thing at a time: the next box, a button to open it, and **I'm done**. Then the next one appears.
+- **Now** shows one thing at a time: the next box, a button to open it, and **I'm done**. Then the next one appears. The 10 videos play right there in the app.
 - **Path** lists every box, each with a link to its page, and marks where you are.
 - **Words** explains about 40 terms in plain English, with search and a "Test me" switch. Each lesson shows its own new words.
 - **Jobs** lists real ads with real links, the pay each ad posted and what it asked for, plus ready-made searches. An automatic check opens every ad once a day: each ad shows when its link was last checked, and is hidden once the link dies.

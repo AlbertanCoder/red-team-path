@@ -55,6 +55,26 @@
     "Automating single-turn attacks",
     "Automating multi-turn attacks"
   ];
+  // Where each episode plays, copied from the players on Microsoft's own training page on 18 Nov 2026, in episode order.
+  // "ms:" is Microsoft's own player, "yt:" is a YouTube video. learn/final_audit.py checks the page still lists these ten.
+  var PLAYERS = [
+    "ms:e2acb1fe-aab3-4b81-a0f9-ccd73542425b",
+    "ms:a619383f-621a-4463-b1b2-53c7e468d30e",
+    "ms:33675c36-62bb-44d3-b7ea-8cb16fad1736",
+    "ms:acd3e4be-daea-4b82-9f7e-13008a6f5f6f",
+    "yt:jle327dpdpw",
+    "yt:HQadhDsQKgY",
+    "ms:96f37319-2a2c-4c05-81a7-1cb296f8cd9d",
+    "ms:1ec47c63-de7b-4695-9394-192b5bff8c79",
+    "yt:B9A9X6XMXOI",
+    "yt:1lJLqtlhZOs"
+  ];
+  function playerUrl(i) {
+    var id = PLAYERS[i].slice(3);
+    return PLAYERS[i].slice(0, 2) === "yt"
+      ? "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&playsinline=1&rel=0"
+      : "https://learn-video.azurefd.net/vod/player?id=" + id;
+  }
 
   // [course day title, why you do it]
   var COURSE = [
@@ -110,7 +130,7 @@
   function buildSteps() {
     var videos = VIDEOS.map(function (t, i) {
       return item("v" + (i + 1), "video", "Episode " + (i + 1) + ": " + t,
-        i >= 7 ? "This one shows an automation tool. Watch it, install nothing." : "", URLS.ms);
+        i >= 7 ? "This one shows an automation tool. Watch it, install nothing." : "", URLS.ms, { play: playerUrl(i) });
     });
 
     var days = COURSE.map(function (c, i) {
@@ -300,6 +320,7 @@
     ["ok", "Anthropic's model safety bounty pays up to US$35,000, takes applications, and requires a confidentiality agreement.", "Read on Anthropic's help page."],
     ["ok", "AI red-team job ads ask for Python.", "Several 2026 postings ask for Python or basic scripting. This is a sample of ads, not a survey."],
     ["changed", "The Python sample above used to count an entry-level salaried ad.", "That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it now counts as closed. No other entry-level salaried ad was found."],
+    ["ok", "The 10 episodes play inside the app.", "Each one uses the same player Microsoft's own training page uses for that episode (6 on Microsoft's player, 4 on YouTube). Checked on 18 Nov 2026 in Chrome and in the Safari engine. If a video does not play, the card has a link to Microsoft's page."],
     ["ok", "Every link in the app opens the right page.", "Opened on 17 Nov 2026: all 21 lesson pages, 9 Gray Swan pages, the Microsoft, freeCodeCamp, 0DIN and Anthropic pages, the job sites and the job searches."],
     ["ok", "The job titles, pay and asks on the Jobs tab come from real ads.", "Each ad was read on its own page on 17 Nov 2026. Pay is copied as the ad posted it. Ads close and pay changes, so they are examples, not offers."],
     ["ok", "An ad on the Jobs tab has a working link.", "A free automatic check opens every ad's page once a day. If the page is gone, leads somewhere else or says it is closed, the ad is hidden. Each ad shows the date its link was last checked. A site that blocks the check keeps its older date."],
@@ -379,8 +400,8 @@
     (kids || []).forEach(function (k) { if (k) { n.appendChild(typeof k === "string" ? document.createTextNode(k) : k); } });
     return n;
   }
-  function link(text, url, cls) {
-    return h("a", { href: url, target: "_blank", rel: "noopener", class: cls || "", text: text });
+  function link(text, url, cls, id) {
+    return h("a", { href: url, target: "_blank", rel: "noopener", class: cls || "", id: id || null, text: text });
   }
   function bullets(items) {
     var ul = h("ul", { class: "plain" });
@@ -697,6 +718,7 @@
   var lastDone = null; // the box ticked most recently on this screen, so one tap can undo it
   var tickedAt = 0;    // a fast double tap must not tick two boxes
   var pairNote = "";   // one line shown in the menu right after this device is linked
+  var playing = "";    // the box whose video is open in the player, so a re-draw does not restart it
 
   function tagFor(entry) {
     var it = entry.it;
@@ -724,6 +746,9 @@
 
   function renderNow(idx) {
     var v = document.getElementById("view-now");
+    // A video is playing and it is still the next thing to do: leave the screen alone, or the video would start over.
+    if (playing && idx !== -1 && SEQ[idx].it.id === playing && document.getElementById("player")) { return; }
+    playing = "";
     v.textContent = "";
     var undo = null;
     if (lastDone && isDone(lastDone.id)) {
@@ -757,7 +782,23 @@
       doneBtn.disabled = true;
       window.setTimeout(function () { doneBtn.disabled = false; }, 700);
     }
+    // Videos play right here in the card. Everything else opens its own site.
+    // Microsoft's player hands over to a second Microsoft address, so the frame's permissions are given to any address (*).
+    var watch = null;
+    if (it.play) {
+      watch = h("div", { class: "player-box", id: "player-box" });
+      var watchBtn = h("button", { type: "button", class: "big open", id: "watch-btn", text: "▶ Watch it here" });
+      watchBtn.addEventListener("click", function () {
+        playing = it.id;
+        watch.textContent = "";
+        watch.appendChild(h("iframe", { id: "player", src: it.play, title: it.title, allowfullscreen: "",
+          allow: "autoplay *; encrypted-media *; picture-in-picture *; fullscreen *", referrerpolicy: "strict-origin-when-cross-origin" }));
+        watch.appendChild(h("p", { class: "linkline" }, ["Not playing? ", link("Open it on Microsoft's page ↗", it.url, "", "player-fallback")]));
+      });
+      watch.appendChild(watchBtn);
+    }
     doneBtn.addEventListener("click", function () {
+      playing = "";
       tickedAt = Date.now();
       lastDone = it;
       setDone(it, true);
@@ -767,7 +808,7 @@
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> " + step.title.toUpperCase() }),
       h("h1", { id: "now-title", tabindex: "-1", text: "Do this now" }),
-      idx === 0 ? h("p", { class: "lede", text: "One fixed path: 4 steps, " + SEQ.length + " boxes, all free. Open the card below, do it, then tap I'm done. The next one appears." }) : null,
+      idx === 0 ? h("p", { class: "lede", text: "One fixed path: 4 steps, " + SEQ.length + " boxes, all free. Do the card below, then tap I'm done. The next one appears." }) : null,
       stepStart && idx !== 0 ? h("p", { class: "lede", text: step.goal }) : null
     ]));
     v.appendChild(h("div", { class: "card now", id: "now-card", "data-id": it.id }, [
@@ -776,7 +817,7 @@
       why ? h("div", { class: "why" }, [h("b", { text: "WHY " }), why]) : null,
       words ? wordsFold(words) : null,
       it.kind === "writeup" ? templateFold() : null,
-      it.url ? link(OPEN_LABEL[it.kind] + " ↗", it.url, "big open") : null,
+      watch || (it.url ? link(OPEN_LABEL[it.kind] + " ↗", it.url, "big open") : null),
       doneBtn
     ]));
     var after = idx + 1 < SEQ.length ? SEQ[idx + 1].it.title : "that was the last box.";

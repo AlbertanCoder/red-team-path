@@ -294,3 +294,8 @@ input[type="text"], input[type="search"] { width: 100%; font-family: var(--sans)
 /* Path tab: "Untick this box?" sits under the row it belongs to. */
 .line .confirm { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 4px 0 6px; }
 .line .confirm button { min-height: 36px; padding: 4px 14px; }
+
+/* Videos play inside the Now card. */
+button.big.open { border: 1px solid var(--muted); background: var(--raised); color: var(--ink); }
+.player-box { display: flex; flex-direction: column; gap: 8px; }
+#player { display: block; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--line); border-radius: 6px; background: #000; }
