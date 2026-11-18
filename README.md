@@ -18,7 +18,7 @@ Everything is free and runs in a web browser.
 - **Now** shows one thing at a time: the next box, a button to open it, and **I'm done**. Then the next one appears.
 - **Path** lists every box, each with a link to its page, and marks where you are.
 - **Words** explains about 40 terms in plain English, with search and a "Test me" switch. Each lesson shows its own new words.
-- **Jobs** lists real ads with real links, the pay each ad posted and what it asked for, plus ready-made searches. Each ad shows when its link was last checked, and is hidden once the link dies.
+- **Jobs** lists real ads with real links, the pay each ad posted and what it asked for, plus ready-made searches. An automatic check opens every ad once a day: each ad shows when its link was last checked, and is hidden once the link dies.
 - **Menu** holds syncing, settings (dark or light, streak, backup code), the reasons for each place, the rules, a write-up template and the audit: every claim, whether it was checked against its source, and what was corrected.
 
 ## Saving and syncing
@@ -37,7 +37,7 @@ The home-screen app and Safari keep separate ticks. To link the home-screen app,
 ## Files
 
 - `index.html`, `style.css`, `app.js`: the whole app. No build step and no libraries.
-- `jobs.js`: the job ads. `tools/check_jobs.py` re-checks every link and rewrites this file.
+- `jobs.js`: the job ads. `tools/check_jobs.py` re-checks every link and rewrites this file. `.github/workflows/check-jobs.yml` runs it once a day and saves the result, so pull before editing.
 - `icons/`: the app icon.
 - The path, the reasons and the audit all live at the top of `app.js`.
 
