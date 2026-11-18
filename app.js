@@ -458,6 +458,112 @@
     "If you receive government benefits, find out how gig income must be reported before you accept work."
   ];
 
+  // The Tutor tab: a way of thinking, written for this app. Questions only: it must never hold a lab's answer.
+  var TUTOR = {
+    idea: "A chatbot has no lock. It has hidden instructions from whoever built it, plus your message, and every time it makes a judgment call about what to do. You are not picking a lock. You are finding out how that judgment works, then looking for a situation where saying yes looks right to it.",
+    steps: [
+      { title: "Pin down the goal",
+        why: "You cannot work backwards from a goal you cannot describe.",
+        ask: [
+          "What exact words must appear on the screen for me to win?",
+          "Do I need all of it, or does one piece count?",
+          "How will I know I won: does the lab tell me, or do I judge it myself?"
+        ],
+        then: "Write the goal down in one sentence before you type anything." },
+      { title: "Work backwards: what is in the way?",
+        why: "Three different things can say no, and each one gives way to a different kind of pressure.",
+        ask: [
+          "Is it the builder's hidden instructions, the AI's own training, or a separate filter that checks the messages?",
+          "Does it refuse in the same canned words every time, or in different words each time?",
+          "Does it refuse straight away, or does it start to answer and then stop?"
+        ],
+        then: "Guess which of the three you are facing. You will check that guess in the next step." },
+      { title: "Map the wall before you push on it",
+        why: "Harmless questions show you where the edge is, and they cost you nothing.",
+        ask: [
+          "Does it admit the thing exists?",
+          "Will it talk about the thing without giving it to me?",
+          "Where exactly does yes turn into no?"
+        ],
+        type: [
+          "What can you help me with?",
+          "What are you not allowed to help with?",
+          "Why can't you help with that?"
+        ],
+        then: "Keep asking smaller and smaller questions until you find the last one it answers." },
+      { title: "Find out what the rule is really about",
+        why: "A rule is usually narrower than it sounds. Change one thing at a time and watch what moves.",
+        ask: [
+          "Who: is there anyone it would say yes to?",
+          "Why: is there a reason that would make this okay?",
+          "Shape: is the rule about the information, or about the exact form it comes in?",
+          "Size: does it refuse the whole thing, or would it give a small piece?",
+          "Pace: does it refuse a cold ask, but follow along when the conversation gets there slowly?"
+        ],
+        then: "Each of those five is a lever. The videos each teach one or two of them." },
+      { title: "Read every refusal as a clue",
+        why: "A refusal tells you what the chatbot thinks you are doing. That is information.",
+        ask: [
+          "Did it name what it is protecting?",
+          "Did it say why?",
+          "Did it offer something else instead?",
+          "Did it give me part of it?",
+          "What does this refusal tell me that the last one did not?"
+        ],
+        then: "A softer no than last time means you moved the right lever." },
+      { title: "Test like a scientist",
+        why: "The same message can fail once and work the next time, so one try proves nothing.",
+        ask: [
+          "Did I change only one thing since my last try?",
+          "Have I sent this message three times?",
+          "Is this chat stuck on no? Would a fresh chat answer differently?"
+        ],
+        then: "Keep a log with three columns: what I tried, what it said, what I learned." },
+      { title: "Can I repeat it?",
+        why: "A trick that works once is luck. One that works three times out of three is a finding.",
+        ask: [
+          "In a fresh chat, how many times out of three do the same words work?",
+          "What is the shortest version that still works?",
+          "Which single part was doing the work?",
+          "Can I explain why it worked in one sentence?"
+        ],
+        then: "That one sentence is your finding. It is what goes in your write-up." }
+    ],
+    stuck: [
+      ["It says no in the same words every time", [
+        "A canned reply often comes from a filter, not from the chatbot. Which word or topic in my message might be setting it off?",
+        "What happens if I ask about something close by that is harmless?",
+        "Does the canned reply appear before the chatbot starts answering, or after?"
+      ]],
+      ["It says no in different words each time", [
+        "It is making a judgment call. What did it say it was worried about?",
+        "Which of who, why, shape, size and pace have I not changed yet?",
+        "Did one version get a softer no than the others? What was different about it?"
+      ]],
+      ["It gave me part of what I wanted", [
+        "What was different about the message that got a partial answer?",
+        "Was the missing part refused, or did the answer just stop?",
+        "What is the next smallest piece I could ask for?"
+      ]],
+      ["It worked once, then stopped working", [
+        "Was it the words, or the conversation that came before them?",
+        "Have I tried the same words three times in a fresh chat?",
+        "What else changed between the win and the loss?"
+      ]],
+      ["I have run out of ideas", [
+        "Am I trying the same idea again in different words?",
+        "Am I asking for everything in one go?",
+        "What is the smallest thing I could get it to say yes to?",
+        "Which video goes with this lab, and which technique from it have I not tried yet?"
+      ]]
+    ],
+    limits: [
+      "No method works on every chatbot. Microsoft's own note on one of its labs says nobody on the team found a solution.",
+      "45 minutes of honest tries is enough. Tick the lab unsolved, write down what you learned and move on.",
+      "Use this only on labs, contests and bounty programs that invite it."
+    ]
+  };
+
   // status: ok = checked, no = not checked, changed = corrected in this audit
   var AUDIT_DATE = "18 Nov 2026";
   var AUDIT = [
@@ -471,6 +577,7 @@
     ["ok", "The labs install and start on Windows with that fix.", "Done on one Windows 11 laptop on 18 Nov 2026 with Docker Desktop: both pieces built, the labs page listed all 12 labs and refused a visitor without the sign-in key, and a lab used about 50 MB while idle."],
     ["ok", "Chatting inside a lab works.", "On 18 Nov 2026, with a working OpenAI key in the settings file, lab 1 answered five messages in 2 to 3.5 seconds each. The other 11 labs run the same program but were not each tried. With no key, a lab stays on Loading your challenge."],
     ["no", "The labs run well on any computer.", "Tested on one laptop only. Building them pushed its processor to 94 C, so the build was slowed down and done in turns."],
+    ["no", "The Tutor tab's way of thinking gets you through every lab.", "It was written for this app from the techniques in Microsoft's videos. It is a set of questions, not a tested recipe, and it has not been tried lab by lab."],
     ["ok", "Microsoft Learn training is free.", "Microsoft's own help page says: \"Microsoft Learn training is free and available to anyone\"."],
     ["ok", "AI security fundamentals is 3 beginner modules, about 2 hours, each with a quiz.", "Read from Microsoft's course list on 18 Nov 2026: 53, 48 and 29 minutes, level \"beginner\", each ending in a module assessment."],
     ["ok", "Microsoft's Python course is 8 beginner modules, about 7 hours, each with a small project and a quiz.", "Read from Microsoft's course list on 18 Nov 2026: Get Started with Python Programming, parts 1 and 2, 402 minutes in all, last updated 28 Oct 2026. The third module has you install Python and Visual Studio Code. Not checked: where the first two modules have you run your code."],
@@ -992,7 +1099,12 @@
       words ? wordsFold(words) : null,
       it.kind === "writeup" ? templateFold() : null,
       watch || (it.url ? link((it.openLabel || OPEN_LABEL[it.kind]) + " ↗", it.url, "big open") : null),
-      doneBtn
+      doneBtn,
+      // Labs and practice sets are puzzles with no teacher. The Tutor tab gives a way to think, never the answer.
+      (it.kind === "lab" || it.kind === "practice") && it.id !== "m0" ? h("p", { class: "linkline", id: "tutor-line" }, [
+        "Stuck, or not sure where to start? ",
+        h("a", { href: "#tutor", id: "tutor-go", text: "Open the Tutor" })
+      ]) : null
     ]));
     // Microsoft's labs cost money and need installing, so one tap can skip the whole set.
     var skip = null;
@@ -1408,8 +1520,62 @@
     settingsPanel();
   }
 
+  // ---------- Tutor tab: how to think through a lab, one step at a time ----------
+  // The place in the tutor is remembered on this device only. It is a convenience, so it is not linked across devices.
+  var TUTOR_KEY = "redTeamPath.tutor";
+  var tutorAt = 0;
+  try { tutorAt = Math.min(TUTOR.steps.length - 1, Math.max(0, parseInt(window.localStorage.getItem(TUTOR_KEY), 10) || 0)); } catch (e) { tutorAt = 0; }
+  function renderTutor(focusId) {
+    var v = document.getElementById("view-tutor");
+    var n = TUTOR.steps.length;
+    var s = TUTOR.steps[tutorAt];
+    function goTo(at) {
+      tutorAt = Math.min(n - 1, Math.max(0, at));
+      try { window.localStorage.setItem(TUTOR_KEY, String(tutorAt)); } catch (e) { /* remembering the place is optional */ }
+      renderTutor("tutor-title");
+    }
+    v.textContent = "";
+    var back = h("button", { type: "button", id: "tutor-back", text: "← Back" });
+    back.disabled = tutorAt === 0;
+    back.addEventListener("click", function () { goTo(tutorAt - 1); });
+    var last = tutorAt === n - 1;
+    var next = h("button", { type: "button", class: "primary", id: "tutor-next", text: last ? "Start again ↺" : "Next step →" });
+    next.addEventListener("click", function () { goTo(last ? 0 : tutorAt + 1); });
+
+    v.appendChild(h("div", { class: "block" }, [
+      h("div", { class: "eyebrow", text: "> TUTOR · " + n + " THINKING STEPS" }),
+      h("h1", { text: "How to think through any lab" }),
+      h("p", { class: "lede", text: "No answers here, only questions. Start from the goal and work backwards." }),
+      h("p", { id: "tutor-idea", text: TUTOR.idea })
+    ]));
+    v.appendChild(h("div", { class: "card now", id: "tutor-card", "data-step": String(tutorAt + 1) }, [
+      h("div", { class: "tag", text: "Thinking step " + (tutorAt + 1) + " of " + n }),
+      h("div", { class: "title", id: "tutor-title", tabindex: "-1", text: s.title }),
+      h("div", { class: "why" }, [h("b", { text: "WHY " }), s.why]),
+      h("div", { class: "tag", text: "Ask yourself" }),
+      bullets(s.ask),
+      s.type ? h("div", { class: "tag", text: "Harmless things to type to the chatbot" }) : null,
+      s.type ? bullets(s.type) : null,
+      h("p", { class: "note", text: s.then }),
+      h("div", { class: "btnrow" }, [back, next])
+    ]));
+    var stuck = h("div", { class: "block", id: "tutor-stuck" }, [
+      h("h2", { text: "Stuck? Pick what just happened" }),
+      h("p", { class: "lede", text: "Each one opens questions to ask yourself next." })
+    ]);
+    TUTOR.stuck.forEach(function (row) {
+      stuck.appendChild(h("details", { class: "fold" }, [h("summary", { text: row[0] }), bullets(row[1])]));
+    });
+    v.appendChild(stuck);
+    v.appendChild(h("div", { class: "block", id: "tutor-limits" }, [h("h2", { text: "Honest limits" }), bullets(TUTOR.limits)]));
+    if (focusId) {
+      var again = document.getElementById(focusId);
+      if (again) { again.focus({ preventScroll: true }); }
+    }
+  }
+
   // ---------- frame ----------
-  var TABS = ["now", "path", "words", "jobs", "menu"];
+  var TABS = ["now", "path", "tutor", "words", "jobs", "menu"];
   var OLD_TABS = { next: "now", info: "menu", why: "menu", audit: "menu" }; // links saved before the tabs changed still land somewhere useful
   function currentTab() {
     var name = (window.location.hash || "#now").slice(1);
@@ -1470,6 +1636,7 @@
 
   load();
   var joined = takeLink();
+  renderTutor();
   renderWords();
   renderJobs();
   renderMenu();
