@@ -243,7 +243,7 @@
     ]]
   ];
 
-  // ---------- jobs: the ads themselves live in jobs.js, which a daily check rewrites. ----------
+  // ---------- jobs: the ads themselves live in jobs.js, which the link check (tools/check_jobs.py) rewrites. ----------
   var JOBS = window.RTP_JOBS && Array.isArray(window.RTP_JOBS.ads) ? window.RTP_JOBS : { updated: "", ads: [] };
   var HONEST = [
     "Most work a beginner can get is contract work, paid by the hour through AI-training platforms. It comes project by project, and hours are not guaranteed.",
@@ -301,8 +301,8 @@
     ["changed", "The Python sample above used to count an entry-level salaried ad.", "That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it now counts as closed. No other entry-level salaried ad was found."],
     ["ok", "Every link in the app opens the right page.", "Opened on 17 Nov 2026: all 21 lesson pages, 9 Gray Swan pages, the Microsoft, freeCodeCamp, 0DIN and Anthropic pages, the job sites and the job searches."],
     ["ok", "The job titles, pay and asks on the Jobs tab come from real ads.", "Each ad was read on its own page on 17 Nov 2026. Pay is copied as the ad posted it. Ads close and pay changes, so they are examples, not offers."],
-    ["ok", "An ad on the Jobs tab has a working link.", "A free automatic check opens every ad once a day. If the page is gone, leads somewhere else or says it is closed, the ad is hidden. Each ad shows the date its link was last checked."],
-    ["no", "A listed ad still has work to give.", "The daily check only proves an ad is still posted. A talent pool can stay posted while no project is running."],
+    ["ok", "An ad on the Jobs tab has a working link.", "A link check opens every ad's page. If the page is gone, leads somewhere else or says it is closed, the ad is hidden. Each ad shows the date its link was last checked."],
+    ["no", "A listed ad still has work to give.", "The link check only proves an ad is still posted. A talent pool can stay posted while no project is running."],
     ["no", "A posted hourly rate is what you would earn.", "A range in an ad is not an offer, and contract platforms do not guarantee hours."],
     ["no", "The Words tab is an official glossary.", "The meanings are plain-English summaries written for this app and matched to lesson titles. The courses are the authority."],
     ["ok", "Syncing stores ticks and streak days only, and a sync link reaches only its own ticks.", "Tested on 17 Nov 2026: reading the whole store, listing other people's links, and saving anything except numbers were all refused."],
@@ -857,7 +857,7 @@
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> JOBS" + (JOBS.updated ? " · LINKS CHECKED " + niceDate(JOBS.updated).toUpperCase() : "") }),
       h("h1", { text: "Where this can lead" }),
-      h("p", { class: "lede", text: "Real ads with real links. Pay is copied as each ad posted it: an example, not a promise. A daily check hides an ad when its link dies." })
+      h("p", { class: "lede", text: "Real ads with real links. Pay is copied as each ad posted it: an example, not a promise. Each ad shows when its link was last checked, and is hidden once the link dies." })
     ]));
 
     var startBlock = h("div", { class: "block", id: "jobs-start" }, [

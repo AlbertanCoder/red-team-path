@@ -1,4 +1,4 @@
-"""Daily check of the job ads on the Jobs tab (run from the repo root: python tools/check_jobs.py).
+"""Link check for the job ads on the Jobs tab (run from the repo root: python tools/check_jobs.py).
 
 Reads jobs.js, opens every ad's link, and rewrites jobs.js:
   - an ad whose page is gone, redirects away, or says it is closed is marked  "open": false  (the app hides it)
@@ -19,7 +19,7 @@ import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 FILE = ROOT / "jobs.js"
-HEAD = ("// Job ads for the Jobs tab. tools/check_jobs.py re-checks every link once a day and rewrites this file,\n"
+HEAD = ("// Job ads for the Jobs tab. tools/check_jobs.py re-checks every link and rewrites this file,\n"
         "// so edit it by hand only to add or remove an ad. Everything after the equals sign is plain JSON.\n"
         "window.RTP_JOBS = ")
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
