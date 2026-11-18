@@ -303,3 +303,17 @@ button.big.open { border: 1px solid var(--muted); background: var(--raised); col
 /* "How to do this": numbered steps inside a card. */
 ol.steps { margin: 0; padding-left: 1.35rem; display: flex; flex-direction: column; gap: 8px; font-size: 0.93rem; }
 ol.steps li::marker { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+
+/* Tutor: the three parts, lesson and lab rows, and quiz options. */
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button { flex: 1 1 auto; min-height: 44px; }
+.seg button[aria-pressed="true"] { border-color: var(--accent); font-weight: 600; }
+.rowbtn { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: space-between; gap: 10px; text-align: left; }
+.rowbtn.done { border-left: 3px solid var(--ok); }
+.rowbtn .mark-done { font-family: var(--mono); color: var(--muted); }
+.rowbtn.done .mark-done { color: var(--ok); }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt { width: 100%; min-height: 44px; text-align: left; }
+.opt.right { border-color: var(--ok); }
+.opt.wrong { border-color: var(--warn); }
+.note.hint { border-left-color: var(--warn); color: var(--ink); }
