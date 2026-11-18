@@ -1100,7 +1100,7 @@
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> WORDS · " + total }),
       h("h1", { text: "The words you will hear" }),
-      h("p", { class: "lede", text: "Plain-English meanings. The tag shows the video or course day where the word comes up." }),
+      h("p", { class: "lede", text: "Plain-English meanings. The tag shows the video, lab or module where the word comes up." }),
       search,
       h("div", { class: "btnrow" }, [toggle, h("span", { class: "status-line", role: "status",
         text: state.test ? "Say the meaning in your head, then tap the word to check." : "Turn this on to hide the meanings and check yourself." })]),
