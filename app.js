@@ -99,7 +99,7 @@
   // freeCodeCamp Python Certification sections: [title, steps]
   var PYTHON = [["Python Basics", 143], ["Loops and Sequences", 31], ["Dictionaries and Sets", 53], ["Error Handling", 7], ["Classes and Objects", 71]];
 
-  var KIND = { video: "VIDEO", course: "COURSE + LAB", practice: "PRACTICE", writeup: "WRITE-UP", code: "PYTHON", bounty: "BOUNTY" };
+  var KIND = { video: "VIDEO", course: "LESSON", practice: "PRACTICE", writeup: "WRITE-UP", code: "PYTHON", bounty: "BOUNTY" };
 
   function item(id, kind, title, why, url, extra) {
     var it = { id: id, kind: kind, title: title, why: why || "", url: url || "", optional: false };
@@ -168,7 +168,7 @@
     ["Microsoft AI Red Teaming 101", URLS.ms, "VIDEO · STEP 1 · 10 EPISODES",
       "From Microsoft's own AI red team. Episodes 1 to 7 teach the attacks. Episodes 8 to 10 show an automation tool called PyRIT."],
     ["SecurityElites: AI Red Teaming From Zero", URLS.se, "COURSE + LAB · STEP 2 · 21 DAYS · 45 TO 75 MIN A DAY",
-      "Written for people with no security background. Each day has a practice lab in the browser, and day 21 ends in a full report. It is new and has no outside reviews yet, so judge it yourself after 3 days. Pay for nothing there."],
+      "Written for people with no security background. Most days have a practice lab in the browser (days 2 and 3 are a diagram and a cheat sheet instead), and day 21 ends in a full report. It is new and has no outside reviews yet, so judge it yourself after 3 days. Pay for nothing there."],
     ["Gray Swan Arena", URLS.gsTraining, "PRACTICE · STEP 2 ONWARD · 11 TRAINING SETS",
       "Scored practice against real AI models: 3 beginner sets, 3 intermediate sets and the large Proving Ground sets, open any time. Prize contests come and go on the same site."],
     ["freeCodeCamp: Python Certification", URLS.fcc, "PYTHON · STEP 3 · IN THE BROWSER",
@@ -288,9 +288,10 @@
   var AUDIT = [
     ["ok", "Microsoft's series has 10 episodes; episodes 8 to 10 cover the PyRIT automation tool.", "Read on Microsoft's official training page."],
     ["ok", "The SecurityElites course has 21 days, all live, for beginners, 45 to 75 minutes a day, and asks only for a free account.", "Read on the course page."],
-    ["ok", "The course lessons can be read without paying.", "Opened days 2, 3, 10 and 21: each is over 2,900 words with no paywall text."],
+    ["ok", "The course lessons can be read without paying.", "All 21 lesson pages were read on 17 Nov 2026: each is 1,800 to 3,300 words, with no payment wording on any of them."],
+    ["changed", "An earlier version said every course day has a lab.", "Days 2 and 3 have none: day 2 is a diagram you draw and day 3 is a cheat sheet you write. The other 19 days have labs. The wording was corrected."],
     ["no", "Every course lab stays free.", "The day 1 lab page says it is a free lab. The other labs need a sign-in, so they could not be tested. If a day asks for money, stop."],
-    ["no", "The course is good.", "Nobody outside has reviewed it. Its pages were updated on 15 and 16 Nov 2026, so it is new, and the author uses a pen name. The lessons read well: clear goals, recall questions and a lab each day."],
+    ["no", "The course is good.", "Nobody outside has reviewed it. Its pages were updated on 15 and 16 Nov 2026, so it is new, and the author uses a pen name. The lessons read well: clear goals, recall questions, and a lab or a written task each day."],
     ["ok", "Gray Swan has 11 training sets that are open any time.", "Seen on its Training page in a signed-in free account."],
     ["changed", "An earlier version said Gray Swan posts new challenges every Wednesday.", "Not true now: that series is closed for judging and its sets live on the Training page. The claim was removed."],
     ["changed", "An earlier version said Gray Swan has paid out over US$1 million and brought 100 people into paid work.", "No source was found for those numbers, so they were removed. What is sourced: a US$300,000 contest sponsored by Anthropic, Meta, Google DeepMind and Reflection AI (Fortune, Oct 2026), and Gray Swan's own June 2025 post saying it had paid out over US$370,000 and hired from its players."],
