@@ -44,6 +44,7 @@ The home-screen app and Safari keep separate ticks, so link the one you use.
 
 - `index.html`, `style.css`, `app.js`: the whole app. No build step and no libraries.
 - `jobs.js`: the job ads. `tools/check_jobs.py` re-checks every link and rewrites this file. `.github/workflows/check-jobs.yml` runs it once a day and saves the result, so pull before editing.
+- `labs/`: how to install Microsoft's labs on Windows (`SETUP.md`), the one fix their files need (`Dockerfile.fixed`), a settings template and two small start and stop scripts.
 - `icons/`: the app icon.
 - The path, the reasons and the audit all live at the top of `app.js`.
 

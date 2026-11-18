@@ -12,7 +12,7 @@
   var URLS = {
     ms: "https://learn.microsoft.com/en-us/security/ai-red-team/training",
     msLabs: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs#challenges",
-    msLabsSetup: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs#getting-started",
+    msLabsSetup: "https://github.com/AlbertanCoder/red-team-path/blob/main/labs/SETUP.md",
     msNotebooks: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs/tree/main/notebooks",
     learn: LEARN + "/training/",
     learnSecurity: LEARN + "/training/paths/ai-security-fundamentals/",
@@ -136,11 +136,11 @@
   }
   function labSteps(l) {
     return [
-      "Start your labs and open the labs page, the way you set them up on the set-up card.",
-      "Open Lab " + l[0] + ": " + l[1] + ".",
+      "Double-click Start labs on your Desktop and type " + l[0] + ". The labs page opens in your browser.",
+      "Press Launch next to Lab " + l[0] + ": " + l[1] + ". It says Loading your challenge for a few seconds.",
       "Your goal: " + l[3],
       "Start with what Episode " + l[4] + " showed. Change one thing at a time, and keep a note of what you typed and what came back.",
-      "You are done when the lab says you solved it, or after 45 minutes of honest tries. Unsolved is normal: tick it and move on."
+      "You are done when the lab says you solved it, or after 45 minutes of honest tries. Unsolved is normal: tick it and move on. Then double-click Stop labs."
     ];
   }
   function writeupSteps(what) {
@@ -178,13 +178,14 @@
         { skip: n <= 4, how: writeupSteps(what) });
     }
     var setup = item("m0", "lab", "Set up Microsoft's labs on your computer",
-      "These are the practice chatbots from the videos. They run on your own computer, not in a browser, and every message you send is billed to your own OpenAI key: about US$5 of credit should cover all 12 labs (an estimate). If you would rather not install or pay, skip the labs: Gray Swan in step 3 is free practice of the same kind.",
-      URLS.msLabsSetup, { skip: true, how: [
-        "Install Docker Desktop. It is free. Restart your computer if it asks.",
-        "Make an account at platform.openai.com, add the smallest credit it allows (about US$5) and create an API key. Keep the key private: it is a password for your credit.",
-        "On Microsoft's lab guide, press the green Code button, choose Download ZIP, and unzip it.",
-        "Follow Getting Started in the guide, the part called \"Using Standard OpenAI API\": it tells you where your key goes and the one command that starts the labs. The first start is slow.",
-        "Open the address the guide gives you. It starts with http://localhost:5000. You are done when you see the list of labs."
+      "These are the practice chatbots from the videos. They run on your own computer, not in a browser, and every message you send is billed to your own OpenAI key: about US$5 of credit should cover all 12 labs (an estimate). Microsoft's files need one small fix before they will build, and the set-up guide has it. If you would rather not install or pay, skip the labs: Gray Swan in step 3 is free practice of the same kind.",
+      URLS.msLabsSetup, { skip: true, openLabel: "Open the set-up guide", how: [
+        "Install Docker Desktop. It is free. Choose Per-user installation, WSL 2 and Personal, and skip its sign-in.",
+        "Download Microsoft's labs as a ZIP and unzip them into a folder called ms-airt-labs in your user folder.",
+        "Apply the fix from the set-up guide: one file to replace. Without it the build stops with 404 Not Found.",
+        "Make an account at platform.openai.com, add the smallest credit it allows (about US$5), create an API key and put it in the settings file. Keep the key private: it is a password for your credit.",
+        "Build the labs once with the one command in the guide. It takes about 10 minutes and works the computer hard.",
+        "Double-click Start labs. You are done when the labs page opens and lists 12 labs."
       ] });
 
     var step1 = [
@@ -466,7 +467,10 @@
     ["ok", "Microsoft's labs are not free to run and not in a browser.", "Microsoft's page lists what they need: Docker, Python, and an OpenAI key or an Azure OpenAI endpoint. The lab code is free; the AI usage is billed to your own key."],
     ["ok", "Four labs have a goal an AI is meant to refuse.", "Labs 3, 9 and 10 ask for Molotov cocktail instructions and lab 4 for a toxin: Microsoft's page says so. The app marks them, and they can be skipped. They run on your own AI key, whose rules still apply."],
     ["no", "About US$5 covers all 12 labs.", "An estimate from OpenAI's price list on 18 Nov 2026 (under one US cent a message on the default model), not a measured cost. OpenAI shows the real minimum top-up before you pay."],
-    ["no", "The labs run well on any computer.", "They start a dozen small programs at once. The author of this app has read Microsoft's instructions but has not run the labs."],
+    ["changed", "An earlier version sent you to Microsoft's own instructions to install the labs.", "Following them on 18 Nov 2026, the build stopped with 404 Not Found: one step asks a retired download address for an update. Microsoft has an open report about it (issue 33, since September 2025). The app now links to a set-up guide that includes the fix."],
+    ["ok", "The labs install and start on Windows with that fix.", "Done on one Windows 11 laptop on 18 Nov 2026 with Docker Desktop: both pieces built, the labs page listed all 12 labs and refused a visitor without the sign-in key, and a lab used about 50 MB while idle."],
+    ["no", "Chatting inside a lab works.", "Not tested yet. With no OpenAI key in the settings file a lab stays on Loading your challenge, which is what Microsoft's code is written to do."],
+    ["no", "The labs run well on any computer.", "Tested on one laptop only. Building them pushed its processor to 94 C, so the build was slowed down and done in turns."],
     ["ok", "Microsoft Learn training is free.", "Microsoft's own help page says: \"Microsoft Learn training is free and available to anyone\"."],
     ["ok", "AI security fundamentals is 3 beginner modules, about 2 hours, each with a quiz.", "Read from Microsoft's course list on 18 Nov 2026: 53, 48 and 29 minutes, level \"beginner\", each ending in a module assessment."],
     ["ok", "Microsoft's Python course is 8 beginner modules, about 7 hours, each with a small project and a quiz.", "Read from Microsoft's course list on 18 Nov 2026: Get Started with Python Programming, parts 1 and 2, 402 minutes in all, last updated 28 Oct 2026. The third module has you install Python and Visual Studio Code. Not checked: where the first two modules have you run your code."],
@@ -987,7 +991,7 @@
       it.how ? howFold(it.how) : null,
       words ? wordsFold(words) : null,
       it.kind === "writeup" ? templateFold() : null,
-      watch || (it.url ? link(OPEN_LABEL[it.kind] + " ↗", it.url, "big open") : null),
+      watch || (it.url ? link((it.openLabel || OPEN_LABEL[it.kind]) + " ↗", it.url, "big open") : null),
       doneBtn
     ]));
     // Microsoft's labs cost money and need installing, so one tap can skip the whole set.
