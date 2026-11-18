@@ -1,0 +1,2 @@
+# Windows batch files must keep their Windows line endings, including when downloaded straight from GitHub.
+*.cmd -text
