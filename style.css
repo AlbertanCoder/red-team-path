@@ -41,7 +41,12 @@ body {
   font-size: 16px;
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
+  /* Stop a double-tap on text from zooming the page in and leaving it stuck zoomed.
+     Pinch-to-zoom still works for anyone who needs it. */
+  touch-action: manipulation;
 }
+/* Any field you can type into stays at 16px, so iOS never auto-zooms the page when it is tapped. */
+input, textarea, select { font-size: 16px; }
 [hidden] { display: none !important; }
 a { color: var(--accent); text-underline-offset: 3px; }
 a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible {
@@ -189,7 +194,7 @@ pre.template, textarea {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
-textarea { min-height: 84px; resize: vertical; }
+textarea { min-height: 84px; resize: vertical; font-size: 16px; }
 .btnrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
 .status-line { font-size: 0.9rem; color: var(--muted); }
 
