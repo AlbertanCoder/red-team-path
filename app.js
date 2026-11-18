@@ -1,4 +1,5 @@
 // Red Team Path: one fixed path into AI red teaming, with ticks that save in this browser and can sync between devices.
+// The path: Microsoft's 10 videos and 8 of its labs, a 21-day course with practice, Python, then bounties.
 // On the device everything is stored under one key (STORE_KEY). If saving fails, a warning shows and the app keeps working in memory.
 // Linking devices is optional: a private code, kept on the device, names one spot in a small online store that holds ticks only.
 (function () {
@@ -13,7 +14,9 @@
     gs: "https://app.grayswan.ai/arena/challenge/",
     fcc: "https://www.freecodecamp.org/learn/python-v9/",
     odin: "https://0din.ai/policy",
-    anthropic: "https://support.claude.com/en/articles/12119250-model-safety-bug-bounty-program"
+    anthropic: "https://support.claude.com/en/articles/12119250-model-safety-bug-bounty-program",
+    msLabs: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs#challenges",
+    msLabsSetup: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs#getting-started"
   };
 
   // One lesson page per course day, copied from the course's own index on 17 Nov 2026.
@@ -116,10 +119,24 @@
     PG_IND, PG_IND, PG_AGENT, PG_AGENT, PG_AGENT, PG_AGENT, PG_AGENT, PG_WEAK, PG_WEAK, null];
   var WRITEUP_ON = { 3: 1, 6: 2, 9: 3, 14: 4, 21: 5 };
 
+  // Microsoft's AI Red Teaming Playground Labs: the labs shown in the videos. [lab number, name, level, what you do, episode]
+  // Microsoft's page lists 12. Labs 3, 4, 9 and 10 ask for weapon or toxin instructions and are left out;
+  // lab 5 teaches the same attack with a harmless goal. Read from Microsoft's GitHub page on 18 Nov 2026.
+  var MS_LABS = [
+    [1, "Credential Exfiltration", "easy", "You talk the chatbot into showing the contents of a passwords file.", 3],
+    [2, "Extract a secret from the metaprompt", "easy", "You get the chatbot to give up a secret word from its hidden instructions, using encoding tricks.", 5],
+    [5, "Crescendo (Inflation)", "easy", "You push the chatbot a little further each turn until it breaks its own rule. The goal here is harmless: rude words about inflation.", 6],
+    [6, "Indirect Prompt Injection", "easy", "You change a practice web page so the chatbot that reads it follows your hidden instruction.", 4],
+    [7, "Credential Exfiltration", "medium", "The passwords file again, with a chatbot that is harder to fool. You combine several techniques.", 3],
+    [8, "Extract a secret from the metaprompt", "medium", "The secret word again, with stronger protection. You combine several techniques.", 5],
+    [11, "Indirect Prompt Injection", "medium", "The practice web page again, against a chatbot that is harder to steer.", 4],
+    [12, "Indirect Prompt Injection", "hard", "The hardest version of the web page attack.", 4]
+  ];
+
   // freeCodeCamp Python Certification sections: [title, steps]
   var PYTHON = [["Python Basics", 143], ["Loops and Sequences", 31], ["Dictionaries and Sets", 53], ["Error Handling", 7], ["Classes and Objects", 71]];
 
-  var KIND = { video: "VIDEO", course: "LESSON", practice: "PRACTICE", writeup: "WRITE-UP", code: "PYTHON", bounty: "BOUNTY" };
+  var KIND = { video: "VIDEO", lab: "LAB", course: "LESSON", practice: "PRACTICE", writeup: "WRITE-UP", code: "PYTHON", bounty: "BOUNTY" };
 
   function item(id, kind, title, why, url, extra) {
     var it = { id: id, kind: kind, title: title, why: why || "", url: url || "", optional: false };
@@ -156,11 +173,20 @@
     python.push(item("py6", "code", "Optional: finish the rest, pass the 5 projects and the free exam for the certificate",
       "The certificate is free, but the rest of the course is long. Do it only if you want the certificate.", URLS.fcc, { optional: true }));
 
+    // The labs can be skipped as a set: they are the one part of the path that costs money and needs installing.
+    var labs = [item("m0", "lab", "Set up Microsoft's labs on your computer",
+      "These are the labs you saw in the videos. They run on your own computer, not in a browser: you install Docker, and you need a paid OpenAI or Azure key, because every message you send in a lab is billed to it (about US$5 of credit should cover all 8 labs; that is an estimate). If you would rather not install or pay, skip them: Gray Swan in step 2 is free practice of the same kind.",
+      URLS.msLabsSetup, { skip: true })];
+    MS_LABS.forEach(function (l) {
+      labs.push(item("m" + l[0], "lab", "Microsoft lab " + l[0] + ": " + l[1] + " (" + l[2] + ")",
+        l[3] + " Goes with Episode " + l[4] + ".", URLS.msLabs, { skip: true }));
+    });
+
     return [
       { title: "Step 1: Microsoft AI Red Teaming 101", short: "VIDEOS",
-        goal: "Watch all 10 episodes. Watching them on YouTube is the same series.",
+        goal: "Watch all 10 episodes here in the app, then try Microsoft's own labs.",
         why: "The basics from Microsoft's own AI red team, and the best-known name to put on a resume.",
-        groups: [{ label: "", items: videos }] },
+        groups: [{ label: "", items: videos }, { label: "MICROSOFT LABS", items: labs }] },
       { title: "Step 2: one course day, then Gray Swan", short: "COURSE + PRACTICE",
         goal: "21 days. The SecurityElites course day first, then Gray Swan's training sets in the order below. Five write-ups along the way.",
         why: "",
@@ -185,8 +211,8 @@
 
   // ---------- reference content ----------
   var PLACES = [
-    ["Microsoft AI Red Teaming 101", URLS.ms, "VIDEO · STEP 1 · 10 EPISODES",
-      "From Microsoft's own AI red team. Episodes 1 to 7 teach the attacks. Episodes 8 to 10 show an automation tool called PyRIT."],
+    ["Microsoft AI Red Teaming 101", URLS.ms, "VIDEO + LABS · STEP 1 · 10 EPISODES, 8 LABS",
+      "From Microsoft's own AI red team. Episodes 1 to 7 teach the attacks. Episodes 8 to 10 show an automation tool called PyRIT. Microsoft's labs are the practice chatbots shown in the videos: they are the one part of this path that is not free and not in a browser (Docker on your own computer, plus about US$5 of paid AI usage), and they can be skipped."],
     ["SecurityElites: AI Red Teaming From Zero", URLS.se, "COURSE + LAB · STEP 2 · 21 DAYS · 45 TO 75 MIN A DAY",
       "Written for people with no security background. Most days have a practice lab in the browser (days 2 and 3 are a diagram and a cheat sheet instead), and day 21 ends in a full report. It is new and has no outside reviews yet, so judge it yourself after 3 days. Pay for nothing there."],
     ["Gray Swan Arena", URLS.gsTraining, "PRACTICE · STEP 2 ONWARD · 11 TRAINING SETS",
@@ -215,6 +241,7 @@
       ["Prompt", "VIDEO 2", "Whatever you type or send to the model."],
       ["AI application", "DAY 2", "A product built around a model: the model plus hidden instructions, data, tools and filters. You attack the whole thing, not just the model."],
       ["System prompt", "DAY 4", "Hidden instructions from the company that built the chatbot, telling the model how to behave. Users are not meant to see it."],
+      ["Metaprompt", "LAB 2", "Microsoft's word for a system prompt."],
       ["Context window", "", "Everything the model can see at one time: its hidden instructions, the chat so far, and any documents or tool results."],
       ["Guardrail", "VIDEO 7 · DAY 9", "Any safety layer meant to stop bad behaviour: the model's training, its hidden instructions, or filters on what goes in and what comes out."],
       ["Refusal", "DAY 6", "The model saying no. Most attacks are attempts to get past a refusal."],
@@ -232,6 +259,7 @@
       ["Encoding trick", "DAY 7", "Hiding a request from filters by changing its form: another language, code words, scrambled spelling."],
       ["Single-turn attack", "VIDEO 5", "An attack that fits in one message."],
       ["Multi-turn attack", "VIDEO 6 · DAY 8", "An attack spread over several messages, each step small enough to pass."],
+      ["Crescendo", "VIDEO 6 · LAB 5", "A multi-turn attack that starts with harmless questions and pushes a little further each turn until the model goes along."],
       ["Many-shot jailbreak", "DAY 8", "Packing one prompt with many made-up examples of the model answering forbidden questions, so it carries on the pattern."],
       ["Hidden text", "DAY 12", "Instructions a person cannot see but the AI can: invisible characters, or text tucked inside an image."],
       ["Universal jailbreak", "STEP 4", "One method that works across many different forbidden requests, not just one. Anthropic's bounty asks for these."]
@@ -320,6 +348,10 @@
     ["ok", "Anthropic's model safety bounty pays up to US$35,000, takes applications, and requires a confidentiality agreement.", "Read on Anthropic's help page."],
     ["ok", "AI red-team job ads ask for Python.", "Several 2026 postings ask for Python or basic scripting. This is a sample of ads, not a survey."],
     ["changed", "The Python sample above used to count an entry-level salaried ad.", "That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it now counts as closed. No other entry-level salaried ad was found."],
+    ["ok", "Microsoft's labs are the ones shown in the videos.", "Read on Microsoft's own GitHub page on 18 Nov 2026: 12 challenges from its red team, first taught at Black Hat USA 2024, each tied to an episode. The app lists 8. Labs 3, 4, 9 and 10 ask for weapon or toxin instructions and are left out; lab 5 teaches the same attack with a harmless goal."],
+    ["ok", "Microsoft's labs are not free to run and not in a browser.", "Microsoft's page lists what they need: Docker, Python, and an OpenAI or Azure OpenAI key. The lab code is free; the AI usage is billed to your own key."],
+    ["no", "About US$5 covers all 8 labs.", "An estimate from OpenAI's price list on 18 Nov 2026 (under one US cent a message on the default model), not a measured cost. OpenAI shows the real minimum top-up before you pay."],
+    ["no", "The labs run well on any computer.", "They start a dozen small programs at once. The author of this app has read the instructions but has not run the labs."],
     ["ok", "The 10 episodes play inside the app.", "Each one uses the same player Microsoft's own training page uses for that episode (6 on Microsoft's player, 4 on YouTube). Checked on 18 Nov 2026 in Chrome and in the Safari engine. If a video does not play, the card has a link to Microsoft's page."],
     ["ok", "Every link in the app opens the right page.", "Opened on 17 Nov 2026: all 21 lesson pages, 9 Gray Swan pages, the Microsoft, freeCodeCamp, 0DIN and Anthropic pages, the job sites and the job searches."],
     ["ok", "The job titles, pay and asks on the Jobs tab come from real ads.", "Each ad was read on its own page on 17 Nov 2026. Pay is copied as the ad posted it. Ads close and pay changes, so they are examples, not offers."],
@@ -702,19 +734,19 @@
   }
 
   // ---------- words that belong to a lesson ----------
-  // A word is "new" at the first lesson its tag names: VIDEO 3 -> box v3, DAY 4 -> box c4, STEP 4 -> box b1.
+  // A word is "new" at the first lesson its tag names: VIDEO 3 -> box v3, LAB 2 -> box m2, DAY 4 -> box c4, STEP 4 -> box b1.
   var WORDS_AT = {};
   WORDS.forEach(function (g) {
     g[1].forEach(function (w) {
-      var m = /^(VIDEO|DAY|STEP) (\d+)/.exec(w[1]);
+      var m = /^(VIDEO|LAB|DAY|STEP) (\d+)/.exec(w[1]);
       if (!m) { return; }
-      var id = m[1] === "VIDEO" ? "v" + m[2] : m[1] === "DAY" ? "c" + m[2] : "b1";
+      var id = m[1] === "VIDEO" ? "v" + m[2] : m[1] === "LAB" ? "m" + m[2] : m[1] === "DAY" ? "c" + m[2] : "b1";
       (WORDS_AT[id] = WORDS_AT[id] || []).push(w);
     });
   });
 
   // ---------- Now tab: one thing at a time ----------
-  var OPEN_LABEL = { video: "Open the video", course: "Open the lesson", practice: "Open the practice", code: "Open the course", bounty: "Open the page" };
+  var OPEN_LABEL = { video: "Open the video", lab: "Open Microsoft's lab guide", course: "Open the lesson", practice: "Open the practice", code: "Open the course", bounty: "Open the page" };
   var lastDone = null; // the box ticked most recently on this screen, so one tap can undo it
   var tickedAt = 0;    // a fast double tap must not tick two boxes
   var pairNote = "";   // one line shown in the menu right after this device is linked
@@ -808,7 +840,7 @@
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> " + step.title.toUpperCase() }),
       h("h1", { id: "now-title", tabindex: "-1", text: "Do this now" }),
-      idx === 0 ? h("p", { class: "lede", text: "One fixed path: 4 steps, " + SEQ.length + " boxes, all free. Do the card below, then tap I'm done. The next one appears." }) : null,
+      idx === 0 ? h("p", { class: "lede", text: "One fixed path: 4 steps, " + SEQ.length + " boxes. Everything is free except Microsoft's labs, which you can skip. Do the card below, then tap I'm done. The next one appears." }) : null,
       stepStart && idx !== 0 ? h("p", { class: "lede", text: step.goal }) : null
     ]));
     v.appendChild(h("div", { class: "card now", id: "now-card", "data-id": it.id }, [
@@ -820,9 +852,21 @@
       watch || (it.url ? link(OPEN_LABEL[it.kind] + " ↗", it.url, "big open") : null),
       doneBtn
     ]));
+    // Microsoft's labs cost money and need installing, so one tap can skip the whole set.
+    var skip = null;
+    if (it.skip) {
+      var skipBtn = h("button", { type: "button", class: "ghost", id: "skip-labs", text: "SKIP MICROSOFT'S LABS" });
+      skipBtn.addEventListener("click", function () {
+        lastDone = null;
+        SEQ.forEach(function (e) { if (e.it.skip && !isDone(e.it.id)) { setDone(e.it, true); } });
+        render("now-title");
+      });
+      skip = h("p", { class: "linkline" }, ["Not installing or paying for these? ", skipBtn]);
+    }
     var after = idx + 1 < SEQ.length ? SEQ[idx + 1].it.title : "that was the last box.";
     v.appendChild(h("div", { class: "block" }, [
       h("p", { class: "after", id: "after-line" }, [h("b", { text: "AFTER THIS " }), after]),
+      skip,
       undo,
       !state.sync ? h("p", { class: "linkline", id: "link-line" }, [
         "Use this on your phone or computer too? ",
@@ -1190,7 +1234,7 @@
     });
     v.appendChild(h("div", { class: "block", id: "menu-places" }, [
       h("h2", { text: "The four places, and why" }),
-      h("p", { class: "lede", text: "Four places, one job each. All free, all in a web browser. The list changes only when a fact changes, and the audit below says what changed." }),
+      h("p", { class: "lede", text: "Four places, one job each. All free and in a web browser, except Microsoft's labs. The list changes only when a fact changes, and the audit below says what changed." }),
       rows
     ]));
 

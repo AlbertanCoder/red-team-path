@@ -1,7 +1,7 @@
 {
   "name": "Red Team Path",
   "short_name": "Red Team",
-  "description": "A free, audited path into AI red teaming, with tick boxes that save.",
+  "description": "An audited path into AI red teaming, free apart from one optional set of labs, with tick boxes that save.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -1,17 +1,17 @@
 # Red Team Path
 
-A free, audited path into AI red teaming, as a small web app with tick boxes that save.
+An audited path into AI red teaming, as a small web app with tick boxes that save. Everything in it is free except one optional set of labs.
 
 **Open it:** https://albertancoder.github.io/red-team-path/
 
 ## The path
 
-1. **Microsoft AI Red Teaming 101**: 10 short videos.
+1. **Microsoft AI Red Teaming 101**: 10 short videos, then 8 of Microsoft's own labs (the practice chatbots shown in the videos). The labs are optional: they run on your own computer with Docker and need a paid OpenAI or Azure key, about US$5 of usage.
 2. **One course day, then practice, for 21 days**: the SecurityElites course "AI Red Teaming From Zero", then Gray Swan Arena's training sets. Five write-ups along the way.
 3. **Python**: the first five sections of freeCodeCamp's Python Certification.
 4. **Bounties**: Mozilla 0DIN, then an application to Anthropic's model safety bug bounty.
 
-Everything is free and runs in a web browser.
+Everything except Microsoft's labs is free and runs in a web browser.
 
 ## What the app does
 
