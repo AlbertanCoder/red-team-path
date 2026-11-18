@@ -1,0 +1,8 @@
+=== 2026-11-17T13:33:25.848339Z PASSED (session f0bb0e03-5e29-4326-9938-5507b9975753)
+test -z "$(git -C ~/red-team-path status --porcelain)"
+test -z "$(git -C ~/red-team-path log @{u}..HEAD 2>&1)"
+curl -fsS -m 15 https://albertancoder.github.io/red-team-path/ | grep -q "<title>Red Team Path</title>"
+curl -fsS -m 15 https://albertancoder.github.io/red-team-path/manifest.json | grep -q '"short_name": "Red Team Path"'
+test "$(curl -s -m 15 -o /dev/null -w '%{http_code}' https://albertancoder.github.io/red-team-path/icons/icon-180.png)" = "200"
+test "$(curl -s -m 15 -o /dev/null -w '%{http_code}' https://albertancoder.github.io/red-team-path/icons/icon-512.png)" = "200"
+
