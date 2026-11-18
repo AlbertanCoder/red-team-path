@@ -112,7 +112,8 @@ def main():
                 ad["closed"] = today
             ad["open"] = False
         print("%-8s %-28s %s" % (result, ad["id"], why))
-    data["updated"] = today
+    if counts["open"] or counts["closed"]:
+        data["updated"] = today  # the date at the top of the Jobs tab moves only when at least one ad was really checked
     print("open=%(open)d closed=%(closed)d unknown=%(unknown)d" % counts)
     if not dry:
         FILE.write_text(dump(data), encoding="utf-8", newline="\n")
