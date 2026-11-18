@@ -56,7 +56,15 @@ if errorlevel 1 (
 
 for /f "tokens=1,* delims==" %%a in ('findstr /B "AUTH_KEY=" .env') do set "AUTH=%%b"
 timeout /t 12 /nobreak >nul
-start "" "http://localhost:5000/login?auth=%AUTH%"
+rem Open the labs page in Chrome when Chrome is installed, otherwise in the default browser.
+set "PAGE=http://localhost:5000/login?auth=%AUTH%"
+reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe" >nul 2>&1 && goto :chrome
+reg query "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe" >nul 2>&1 && goto :chrome
+start "" "%PAGE%"
+goto :opened
+:chrome
+start "" chrome "%PAGE%"
+:opened
 echo.
 echo  The labs page is opening in your browser. Press Launch next to the lab you want.
 echo  A lab says "Loading your challenge" for a few seconds while it starts.
