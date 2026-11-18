@@ -120,7 +120,7 @@
   var LEARN_STEPS = [
     "Open the module and check you are signed in to Microsoft Learn (your picture shows at the top right). Signed out, it does not count.",
     "Do the units in order. They are short: most take 5 to 10 minutes.",
-    "Pass the Module assessment at the end. You can retake it.",
+    "Pass the Module assessment at the end.",
     "You are done when the module shows as completed and its badge is on your Microsoft Learn profile."
   ];
   function videoSteps(n) {
@@ -227,10 +227,10 @@
 
     var python = PYTHON.map(function (p, i) {
       var steps = LEARN_STEPS.slice();
-      steps.splice(1, 1, "Do the units in order, and type the code yourself instead of copying it.", "Do the Exercise near the end. It is a small project of your own.");
+      steps.splice(1, 1, "Do the units in order, and type the code yourself instead of copying it.", "At the Exercise unit, press Launch the exercise and follow its instructions. It is a small project of your own.");
       if (i === 2) { steps.splice(1, 0, "This module installs Python and Visual Studio Code on your computer. Both are free."); }
       return item("py" + (i + 1), "learn", "Python module " + (i + 1) + ": " + p[0],
-        i === 0 ? "You write your first lines of Python. Nothing to install yet." : i === 2 ? "You install the free code editor you will use from here on." : "",
+        i === 0 ? "You write your first lines of Python." : i === 2 ? "You install the free code editor you will use from here on." : "",
         LEARN + p[2], { mins: p[1], how: steps });
     });
 
@@ -241,7 +241,8 @@
           "In Visual Studio Code, choose File, then Open Folder, and pick the notebooks folder inside the labs you downloaded.",
           "Open the file named Lab 1 - Credential exfiltration.",
           "Visual Studio Code offers to install what notebooks need. Accept.",
-          "Read the notes at the top of the notebook: they say what to install and where your key and your lab address go.",
+          "Install Microsoft's tool PyRIT. The notebook does not say how: the install steps are on Microsoft's PyRIT site, microsoft.github.io/PyRIT.",
+          "Read the comments in the notebook's code. They list 7 steps for connecting it to your running lab. Follow them.",
           "You are done when the first piece of code runs without a red error."
         ] }),
       item("a2", "auto", "Run the Lab 1 notebook from top to bottom",
@@ -468,7 +469,7 @@
     ["no", "The labs run well on any computer.", "They start a dozen small programs at once. The author of this app has read Microsoft's instructions but has not run the labs."],
     ["ok", "Microsoft Learn training is free.", "Microsoft's own help page says: \"Microsoft Learn training is free and available to anyone\"."],
     ["ok", "AI security fundamentals is 3 beginner modules, about 2 hours, each with a quiz.", "Read from Microsoft's course list on 18 Nov 2026: 53, 48 and 29 minutes, level \"beginner\", each ending in a module assessment."],
-    ["ok", "Microsoft's Python course is 8 beginner modules, about 7 hours, each with a small project and a quiz.", "Read from Microsoft's course list on 18 Nov 2026: Get Started with Python Programming, parts 1 and 2, 402 minutes in all, last updated 28 Oct 2026. The third module has you install Python and Visual Studio Code."],
+    ["ok", "Microsoft's Python course is 8 beginner modules, about 7 hours, each with a small project and a quiz.", "Read from Microsoft's course list on 18 Nov 2026: Get Started with Python Programming, parts 1 and 2, 402 minutes in all, last updated 28 Oct 2026. The third module has you install Python and Visual Studio Code. Not checked: where the first two modules have you run your code."],
     ["ok", "Finishing a module adds a badge to your Microsoft Learn profile, and finishing a course adds a trophy.", "Microsoft's help page says both appear on your profile and can be shared. Its transcript page has a Share button that makes a link with an access code."],
     ["no", "These courses give you a Microsoft certificate.", "They give badges, trophies and a transcript. A Microsoft certification is a separate, paid exam and is not part of this path."],
     ["no", "Microsoft has practice for attacking AI agents.", "None was found: its labs cover chatbots and one practice web page. That is why Gray Swan is in the path."],
@@ -480,7 +481,7 @@
     ["changed", "An earlier version said Gray Swan has paid out over US$1 million and brought 100 people into paid work.", "No source was found for those numbers, so they were removed."],
     ["ok", "Mozilla 0DIN pays US$500 to US$15,000 and asks for a short summary first.", "Read on 0DIN's policy page."],
     ["ok", "Anthropic's model safety bounty pays up to US$35,000, takes applications, and requires a confidentiality agreement.", "Read on Anthropic's help page."],
-    ["no", "The notebooks in step 5 run as described.", "Microsoft's page lists them (Lab 1, Lab 5 and Lab 13) and says they use PyRIT. The author of this app has not run them."],
+    ["no", "The notebooks in step 5 run as described.", "Read on 18 Nov 2026: each notebook is one note and three pieces of code, uses PyRIT, and Lab 1's note says to follow steps 1 to 7 in its comments. They do not say how to install PyRIT. The author of this app has not run them."],
     ["ok", "Engineer-level AI red-team job ads ask for Python.", "Several 2026 postings ask for Python or basic scripting. This is a sample of ads, not a survey. The beginner contract ads read for the Jobs tab did not ask for it."],
     ["changed", "An earlier version counted an entry-level salaried ad as open.", "That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it counts as closed. No other entry-level salaried ad was found."],
     ["ok", "Every link in the app opens the right page.", "Opened on 18 Nov 2026: the Microsoft training page and lab pages, all 11 Microsoft Learn modules, the Gray Swan pages, the 0DIN and Anthropic pages, the job sites and the job searches."],
