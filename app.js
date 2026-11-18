@@ -1138,7 +1138,7 @@
     box.appendChild(h("div", { class: "btnrow" }, [themeBtn]));
     box.appendChild(h("p", { id: "streak-line", text: "Streak: " + run + (run === 1 ? " day" : " days") + " in a row with at least one box ticked. Best run: " + state.best + "." }));
     box.appendChild(h("details", { class: "fold", id: "backup-fold", open: foldOpen ? "" : null }, [
-      h("summary", { text: "Backup code (works without syncing)" }),
+      h("summary", { text: "Backup code (works without linking devices)" }),
       h("p", { class: "dim", text: "A code that holds your ticks. Copy it here and load it in this app on another device, or keep it somewhere safe." }),
       h("div", { class: "btnrow" }, [copyBtn, loadBtn, status]),
       area
