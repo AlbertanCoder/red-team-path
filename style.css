@@ -41,10 +41,10 @@ body {
   font-size: 16px;
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
-  /* Stop a double-tap on text from zooming the page in and leaving it stuck zoomed.
-     Pinch-to-zoom still works for anyone who needs it. */
-  touch-action: manipulation;
 }
+/* The app does not zoom on a phone. A stray pinch or double tap used to leave the page stuck zoomed in, with the
+   text cut off at the edge. Scrolling up, down and sideways still works; pinch and double-tap zoom are switched off. */
+html, body { touch-action: pan-x pan-y; }
 /* Any field you can type into stays at 16px, so iOS never auto-zooms the page when it is tapped. */
 input, textarea, select { font-size: 16px; }
 [hidden] { display: none !important; }

@@ -2259,6 +2259,11 @@
     showTab();
     showPlace();
   });
+  // Safari on iPhone and iPad reports a pinch as a "gesture". Cancelling it keeps the page from zooming and
+  // getting stuck zoomed in. The page's own settings (index.html and style.css) switch zoom off as well.
+  ["gesturestart", "gesturechange", "gestureend"].forEach(function (name) {
+    document.addEventListener(name, function (e) { e.preventDefault(); }, { passive: false });
+  });
   document.addEventListener("visibilitychange", wake);
   window.addEventListener("online", wake);
   window.addEventListener("pageshow", function (e) { if (e.persisted) { wake(); } });
