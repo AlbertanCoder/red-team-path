@@ -427,7 +427,8 @@
     return n;
   }
   function setDone(it, on) {
-    var now = Math.max(Date.now(), state.r + 1); // always newer than the last "clear all"
+    // A change made here must beat what every device already knows, even if another device's clock runs fast.
+    var now = Math.max(Date.now(), state.r + 1, Math.abs(state.m[it.id] || 0) + 1);
     var change = {};
     state.m[it.id] = on ? now : -now;
     change["m/" + it.id] = state.m[it.id];
@@ -441,11 +442,15 @@
     push(change);
   }
   function clearAll() {
+    // The clear must be newer than every tick it wipes, even one stamped by a device whose clock runs fast.
+    var newest = state.r;
+    Object.keys(state.m).forEach(function (id) { newest = Math.max(newest, Math.abs(state.m[id])); });
+    Object.keys(state.y).forEach(function (k) { newest = Math.max(newest, state.y[k]); });
     state.m = {};
     state.y = {};
     state.best = 0;
     state.open = {};
-    state.r = Date.now();
+    state.r = Math.max(Date.now(), newest + 1);
     save();
     if (state.sync) { sync.replace = true; sync.pending = {}; flushSoon(); }
   }
@@ -454,7 +459,7 @@
   // Each person has one private code. The ticks for that code live at DB + code, and every device holding the code reads and
   // writes the same spot. Only ticks, streak days and two numbers are stored there: nothing that says who you are.
   var DB = "https://red-team-path-default-rtdb.firebaseio.com/sync/";
-  var sync = { status: "off", pending: {}, replace: false, busy: false, timer: 0, pullTimer: 0, stream: null };
+  var sync = { status: "off", pending: {}, replace: false, busy: false, timer: 0, pullTimer: 0, retryTimer: 0, stream: null };
   var STATUS_TEXT = {
     off: "Syncing is off. Ticks are saved on this device only.",
     saving: "Syncing is on. Saving…",
@@ -490,10 +495,23 @@
   function request(method, body) {
     var opts = { method: method };
     if (body !== undefined) { opts.body = JSON.stringify(body); }
+    // Give up after 15 seconds, so one stuck request on a bad connection cannot block every later save.
+    var stop = window.AbortController ? new window.AbortController() : null;
+    var timer = 0;
+    if (stop) { opts.signal = stop.signal; timer = window.setTimeout(function () { stop.abort(); }, 15000); }
     return window.fetch(DB + state.sync + ".json", opts).then(function (res) {
+      window.clearTimeout(timer);
       if (!res.ok) { throw new Error("sync " + res.status); }
       return res.json();
+    }, function (err) {
+      window.clearTimeout(timer);
+      throw err;
     });
+  }
+  function retryLater() {
+    // After a failed save or fetch, try again by itself every 30 seconds until it works.
+    window.clearTimeout(sync.retryTimer);
+    sync.retryTimer = window.setTimeout(wake, 30000);
   }
   function push(change) {
     if (!state.sync) { return; }
@@ -524,6 +542,7 @@
       if (replace) { sync.replace = true; }
       else { Object.keys(body).forEach(function (k) { if (!(k in sync.pending)) { sync.pending[k] = body[k]; } }); }
       setStatus("offline");
+      retryLater();
     });
   }
   // Folds what the other devices saved into this device. Returns what this device has that the others lack.
@@ -569,7 +588,7 @@
       else { Object.keys(out.change).forEach(function (k) { if (!(k in sync.pending)) { sync.pending[k] = out.change[k]; } }); }
       if (sync.replace || Object.keys(sync.pending).length) { flush(); } else if (!sync.busy) { setStatus("ok"); }
       if (out.changed) { render(); }
-    }, function () { setStatus("offline"); });
+    }, function () { setStatus("offline"); retryLater(); });
   }
   function pullSoon() {
     window.clearTimeout(sync.pullTimer);
