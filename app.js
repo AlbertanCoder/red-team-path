@@ -1,49 +1,31 @@
 // Red Team Path: one fixed path into AI red teaming, with ticks that save in this browser and can sync between devices.
-// The path: Microsoft's 10 videos and 8 of its labs, a 21-day course with practice, Python, then bounties.
+// The path is built around one name, Microsoft: its 10 videos, each followed by its own lab, its AI security course,
+// its Python course and its automation tool. Two named extras cover what Microsoft does not offer: Gray Swan for scored
+// practice on agents, and the Mozilla and Anthropic bounty programs.
 // On the device everything is stored under one key (STORE_KEY). If saving fails, a warning shows and the app keeps working in memory.
 // Linking devices is optional: a private code, kept on the device, names one spot in a small online store that holds ticks only.
 (function () {
   "use strict";
 
   // ---------- links ----------
+  var LEARN = "https://learn.microsoft.com/en-us";
   var URLS = {
     ms: "https://learn.microsoft.com/en-us/security/ai-red-team/training",
-    se: "https://securityelites.com/academy/ai-red-teaming-from-zero/",
+    msLabs: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs#challenges",
+    msLabsSetup: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs#getting-started",
+    msNotebooks: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs/tree/main/notebooks",
+    learn: LEARN + "/training/",
+    learnSecurity: LEARN + "/training/paths/ai-security-fundamentals/",
+    learnPython1: LEARN + "/training/paths/get-started-with-python-fundamentals/",
+    learnPython2: LEARN + "/training/paths/get-started-with-python-programs/",
+    learnProfile: LEARN + "/users/me/achievements",
+    learnTranscript: LEARN + "/users/me/transcript",
     gsTraining: "https://app.grayswan.ai/training",
     gsChallenges: "https://app.grayswan.ai/challenges",
     gs: "https://app.grayswan.ai/arena/challenge/",
-    fcc: "https://www.freecodecamp.org/learn/python-v9/",
     odin: "https://0din.ai/policy",
-    anthropic: "https://support.claude.com/en/articles/12119250-model-safety-bug-bounty-program",
-    msLabs: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs#challenges",
-    msLabsSetup: "https://github.com/microsoft/AI-Red-Teaming-Playground-Labs#getting-started"
+    anthropic: "https://support.claude.com/en/articles/12119250-model-safety-bug-bounty-program"
   };
-
-  // One lesson page per course day, copied from the course's own index on 17 Nov 2026.
-  // learn/check.py loads all 21; if the course renames a page, that check fails.
-  var SE_DAYS = [
-    "day-1-orientation-first-prompt-injection-win",
-    "day-2-how-an-ai-application-is-built",
-    "day-3-threat-thinking-owasp-llm-top-10",
-    "day-4-direct-prompt-injection-system-prompt-leak",
-    "day-5-jailbreaking-roleplay-bypass-lab",
-    "day-6-instruction-conflicts-refusal-suppression-labs",
-    "day-7-encoding-language-tricks-filter-gaps",
-    "day-8-multi-turn-many-shot-jailbreaks",
-    "day-9-output-filters-defences-jailbreak-test-plan",
-    "day-10-indirect-prompt-injection-document-summariser",
-    "day-11-rag-explained-knowledge-base-poisoning",
-    "day-12-hidden-text-images-invisible-characters",
-    "day-13-attacking-defending-document-pipeline-summariser",
-    "day-14-agents-tools-excessive-agency-least-privilege",
-    "day-15-hijack-coding-agent-poisoned-issue",
-    "day-16-tool-descriptions-rogue-mcp-servers",
-    "day-17-memory-poisoning-and-data-exfiltration",
-    "day-18-agent-hijack-indirect-tool-call-injection",
-    "day-19-unsafe-output-handling-fake-packages",
-    "day-20-defence-mapping-owasp-top-10-report-writing",
-    "day-21-capstone-assess-an-agent-report"
-  ];
 
   // ---------- the path ----------
   var VIDEOS = [
@@ -79,64 +61,54 @@
       : "https://learn-video.azurefd.net/vod/player?id=" + id;
   }
 
-  // [course day title, why you do it]
-  var COURSE = [
-    ["Orientation and your first win", "You set up your notes and make a practice chatbot ignore its instructions."],
-    ["How an AI application is put together", "You learn the parts of an AI app, so you know where an attack can get in."],
-    ["Threat thinking and the OWASP LLM Top 10", "You learn the 10 named weaknesses that job ads and reports refer to."],
-    ["Direct prompt injection and system prompt leaks", "You pull a hidden system prompt out of a practice bot."],
-    ["Jailbreaking and the roleplay bypass", "You run a role-play jailbreak and learn how it differs from prompt injection."],
-    ["Instruction conflicts and refusal suppression", "You test whether a model keeps refusing when its rules conflict."],
-    ["Encoding and language tricks", "You use encoded text and another language to find gaps in a filter."],
-    ["Multi-turn and many-shot jailbreaks", "You use slow escalation and fake dialogue, the attacks that take several messages."],
-    ["Output filters, defences and a jailbreak test plan", "You get past a simple output filter and write a test plan someone else could repeat."],
-    ["Indirect prompt injection", "You hide an instruction in a document and watch an AI summariser obey it."],
-    ["RAG explained and knowledge base poisoning", "You learn how an AI looks things up in documents, and poison a practice knowledge base."],
-    ["Hidden text: images and invisible characters", "You hide instructions in images and in characters people cannot see."],
-    ["Attacking and defending a document pipeline", "You beat a document summariser with a crafted file and propose three fixes."],
-    ["Agents, tools and excessive agency", "You learn what an AI agent is and judge whether it has too much power."],
-    ["Hijacking an agent through a poisoned issue", "You steer a coding agent using hostile text in a ticket."],
-    ["Tool descriptions and rogue MCP servers", "You spot hostile instructions hidden in a tool's description."],
-    ["Memory poisoning and data exfiltration", "You plant an instruction in an agent's memory and trace how data leaks out."],
-    ["Agent hijack: apply and review", "You hijack an agent through its tools, then explain the fix."],
-    ["Unsafe output handling and fake packages", "You see how an app that trusts AI output gets attacked."],
-    ["Defence, remaining Top 10 items and report writing", "You match a defence to each of the 10 weaknesses and structure a finding."],
-    ["Capstone: assess an agent and plan your next steps", "You run a full assessment of a practice agent and write your first report."]
-  ];
-
-  // Gray Swan training sets, matched to the course day they follow. [title, challenge slug]
-  var LAB = { title: "The Labyrinth, 5 starter scenarios", slug: "onboarding-quest-1" };
-  var CHAT = { title: "Introduction to Red Teaming Chatbots, 5 scenarios", slug: "training-beginner-chatbot" };
-  var AGENT = { title: "Introduction to Red Teaming Agents, 5 scenarios", slug: "training-beginner-agent" };
-  var LAB2 = { title: "The Labyrinth: Challenge Edition, 4 scenarios", slug: "labyrinth-challenge-version" };
-  var LUCKY = { title: "Lucky Break: Level Up, 6 scenarios", slug: "lucky-break-level-up" };
-  var IPI = { title: "Introduction to Indirect Prompt Injection, 8 scenarios", slug: "training-intermediate-agent" };
-  var PG_CHAT = { title: "Proving Ground, the Chat set", slug: "proving-ground" };
-  var PG_IND = { title: "Proving Ground, the Indirect set", slug: "proving-ground" };
-  var PG_AGENT = { title: "Proving Ground, the Agent set", slug: "proving-ground" };
-  var PG_WEAK = { title: "Proving Ground, your weakest set", slug: "proving-ground" };
-  var PRACTICE = [LAB, CHAT, AGENT, LAB2, LUCKY, LUCKY, PG_CHAT, PG_CHAT, PG_CHAT, IPI, IPI,
-    PG_IND, PG_IND, PG_AGENT, PG_AGENT, PG_AGENT, PG_AGENT, PG_AGENT, PG_WEAK, PG_WEAK, null];
-  var WRITEUP_ON = { 3: 1, 6: 2, 9: 3, 14: 4, 21: 5 };
-
-  // Microsoft's AI Red Teaming Playground Labs: the labs shown in the videos. [lab number, name, level, what you do, episode]
-  // Microsoft's page lists 12. Labs 3, 4, 9 and 10 ask for weapon or toxin instructions and are left out;
-  // lab 5 teaches the same attack with a harmless goal. Read from Microsoft's GitHub page on 18 Nov 2026.
+  // Microsoft's AI Red Teaming Playground Labs: the 12 labs shown in the videos. Read from Microsoft's GitHub page on 18 Nov 2026.
+  // [lab number, name as Microsoft lists it, level, what you do, the episode it goes with, a note for labs with a touchy goal]
+  var TOUCHY = "Microsoft's goal for this lab is content an AI is meant to refuse, and it runs on your own AI key, whose rules still apply. Skip this one if you would rather not.";
   var MS_LABS = [
-    [1, "Credential Exfiltration", "easy", "You talk the chatbot into showing the contents of a passwords file.", 3],
-    [2, "Extract a secret from the metaprompt", "easy", "You get the chatbot to give up a secret word from its hidden instructions, using encoding tricks.", 5],
-    [5, "Crescendo (Inflation)", "easy", "You push the chatbot a little further each turn until it breaks its own rule. The goal here is harmless: rude words about inflation.", 6],
-    [6, "Indirect Prompt Injection", "easy", "You change a practice web page so the chatbot that reads it follows your hidden instruction.", 4],
-    [7, "Credential Exfiltration", "medium", "The passwords file again, with a chatbot that is harder to fool. You combine several techniques.", 3],
-    [8, "Extract a secret from the metaprompt", "medium", "The secret word again, with stronger protection. You combine several techniques.", 5],
-    [11, "Indirect Prompt Injection", "medium", "The practice web page again, against a chatbot that is harder to steer.", 4],
-    [12, "Indirect Prompt Injection", "hard", "The hardest version of the web page attack.", 4]
+    [1, "Credential Exfiltration", "easy", "Talk the chatbot into showing the contents of a file called passwords.txt.", 3, ""],
+    [2, "Extract a secret from the metaprompt", "easy", "Get the chatbot to give up a secret word from its hidden instructions, using encoding tricks.", 5, ""],
+    [3, "Crescendo (Molotov Cocktail)", "easy", "Use the Crescendo attack to get instructions for a Molotov cocktail. Safety filters are off.", 6, TOUCHY],
+    [4, "Crescendo (BoNT Instructions)", "easy", "Use the Crescendo attack to get instructions for producing a toxin. Safety filters are off.", 6, TOUCHY],
+    [5, "Crescendo (Inflation)", "easy", "Use the Crescendo attack: push a little further each turn until the chatbot writes rude words about inflation. A harmless goal.", 6, ""],
+    [6, "Indirect Prompt Injection", "easy", "Change a practice web page so the chatbot that reads it follows your hidden instruction.", 4, ""],
+    [7, "Credential Exfiltration", "medium", "The passwords file again, against a chatbot that is harder to fool. Combine several techniques.", 3, ""],
+    [8, "Extract a secret from the metaprompt", "medium", "The secret word again, with stronger protection. Combine several techniques.", 5, ""],
+    [9, "Crescendo (Molotov Cocktail)", "medium", "The Crescendo attack again, but now a guardrail tries to stop you.", 7, TOUCHY],
+    [10, "Crescendo (Molotov Cocktail)", "hard", "The same goal against a stronger guardrail.", 7, TOUCHY],
+    [11, "Indirect Prompt Injection", "medium", "The practice web page again, against a chatbot that is harder to steer.", 4, ""],
+    [12, "Indirect Prompt Injection", "hard", "The hardest version of the web page attack.", 4, ""]
   ];
 
-  // freeCodeCamp Python Certification sections: [title, steps]
-  var PYTHON = [["Python Basics", 143], ["Loops and Sequences", 31], ["Dictionaries and Sets", 53], ["Error Handling", 7], ["Classes and Objects", 71]];
+  // Microsoft Learn modules, copied from Microsoft's own course lists on 18 Nov 2026. [title, minutes, address]
+  var SECURITY = [
+    ["Fundamentals of AI security", 53, "/training/modules/fundamentals-ai-security/"],
+    ["AI security controls", 48, "/training/modules/ai-security-controls/"],
+    ["Introduction to AI security testing", 29, "/training/modules/introduction-ai-security-testing/"]
+  ];
+  var PYTHON = [
+    ["Write your first Python code", 39, "/training/modules/write-first-python-code/"],
+    ["Work with data in Python", 48, "/training/modules/work-with-data-python/"],
+    ["Install and configure Visual Studio Code", 54, "/training/modules/install-configure-visual-studio-code-python/"],
+    ["Add decision-making to your code", 51, "/training/modules/add-decision-making-python/"],
+    ["Repeat actions with loops", 47, "/training/modules/repeat-actions-loops-python/"],
+    ["Organize data with collections", 51, "/training/modules/organize-data-with-collections-python/"],
+    ["Read and write files", 55, "/training/modules/read-write-files-python/"],
+    ["Write reusable code", 57, "/training/modules/write-reusable-code-python/"]
+  ];
 
-  var KIND = { video: "VIDEO", lab: "LAB", course: "LESSON", practice: "PRACTICE", writeup: "WRITE-UP", code: "PYTHON", bounty: "BOUNTY" };
+  // Gray Swan Arena sets, easiest first. [title, challenge address ending, why]
+  var GRAYSWAN = [
+    ["The Labyrinth, 5 starter scenarios", "onboarding-quest-1", "A gentle start: the same kind of chatbot attack you did in Microsoft's labs, now scored."],
+    ["Introduction to Red Teaming Chatbots, 5 scenarios", "training-beginner-chatbot", "Chatbot attacks against real AI models."],
+    ["Introduction to Red Teaming Agents, 5 scenarios", "training-beginner-agent", "Your first agents: AIs that can take actions, which Microsoft's labs do not cover."],
+    ["Introduction to Indirect Prompt Injection, 8 scenarios", "training-intermediate-agent", "The web page attack from Episode 4, against agents."],
+    ["The Labyrinth: Challenge Edition, 4 scenarios", "labyrinth-challenge-version", "The starter set again, harder."],
+    ["Lucky Break: Level Up, 6 scenarios", "lucky-break-level-up", "A medium set that mixes techniques."],
+    ["Proving Ground: the Agent set", "proving-ground", "A large set of agent targets. Do as many as an hour allows."],
+    ["Proving Ground: the Indirect set", "proving-ground", "A large set of indirect prompt injection targets."]
+  ];
+
+  var KIND = { video: "VIDEO", lab: "LAB", writeup: "WRITE-UP", learn: "MICROSOFT LEARN", practice: "PRACTICE", auto: "AUTOMATION", proof: "PROOF", bounty: "BOUNTY" };
 
   function item(id, kind, title, why, url, extra) {
     var it = { id: id, kind: kind, title: title, why: why || "", url: url || "", optional: false };
@@ -144,66 +116,213 @@
     return it;
   }
 
+  // The numbered "How to do this" steps for each kind of box.
+  var LEARN_STEPS = [
+    "Open the module and check you are signed in to Microsoft Learn (your picture shows at the top right). Signed out, it does not count.",
+    "Do the units in order. They are short: most take 5 to 10 minutes.",
+    "Pass the Module assessment at the end. You can retake it.",
+    "You are done when the module shows as completed and its badge is on your Microsoft Learn profile."
+  ];
+  function videoSteps(n) {
+    var steps = [
+      "Tap Watch it here. If the video shows a play button, press it.",
+      "Watch it through. When a word is new, pause and look it up on the Words tab."
+    ];
+    if (n >= 3 && n <= 7) { steps.push("Write down one thing from the video you want to try. The lab for this episode is the next card."); }
+    else if (n >= 8) { steps.push("Just watch. These three episodes show Microsoft's tool PyRIT, which you will use yourself in step 5, after Python."); }
+    else { steps.push("Write down one thing that surprised you."); }
+    steps.push("Tap I'm done, and the next card appears.");
+    return steps;
+  }
+  function labSteps(l) {
+    return [
+      "Start your labs and open the labs page, the way you set them up on the set-up card.",
+      "Open Lab " + l[0] + ": " + l[1] + ".",
+      "Your goal: " + l[3],
+      "Start with what Episode " + l[4] + " showed. Change one thing at a time, and keep a note of what you typed and what came back.",
+      "You are done when the lab says you solved it, or after 45 minutes of honest tries. Unsolved is normal: tick it and move on."
+    ];
+  }
+  function writeupSteps(what) {
+    return [
+      "Open the write-up template on this card and copy it.",
+      "Fill it in for " + what + ": the goal, your exact prompts, and what came back.",
+      "Add a screenshot of the result.",
+      "Save it in a folder on your computer called write-ups. You will put them online in step 6."
+    ];
+  }
+  function graySwanSteps(title) {
+    return [
+      "Open the set and sign in to Gray Swan. An account is free.",
+      "Read the goal of the first scenario before you type anything.",
+      "Start with what worked in Microsoft's labs, then change one thing at a time.",
+      "Work through the scenarios in order. Stop after about an hour, solved or not.",
+      "You are done when you have tried every scenario in \"" + title + "\" at least once."
+    ];
+  }
+
   function buildSteps() {
-    var videos = VIDEOS.map(function (t, i) {
-      return item("v" + (i + 1), "video", "Episode " + (i + 1) + ": " + t,
-        i >= 7 ? "This one shows an automation tool. Watch it, install nothing." : "", URLS.ms, { play: playerUrl(i) });
+    function video(n) {
+      return item("v" + n, "video", "Episode " + n + ": " + VIDEOS[n - 1],
+        n >= 8 ? "This one shows an automation tool. Watch it, install nothing." : "", URLS.ms,
+        { play: playerUrl(n - 1), how: videoSteps(n) });
+    }
+    function lab(n) {
+      var l = MS_LABS.filter(function (x) { return x[0] === n; })[0];
+      return item("m" + n, "lab", "Microsoft lab " + n + ": " + l[1] + " (" + l[2] + ")",
+        l[3] + " Goes with Episode " + l[4] + "." + (l[5] ? " " + l[5] : ""), URLS.msLabs, { skip: true, how: labSteps(l) });
+    }
+    function writeup(n, what) {
+      return item("w" + n, "writeup", "Write-up " + n + ": " + what,
+        "A write-up is the proof employers and bounty programs ask to see. One per kind of lab is enough.", "",
+        { skip: n <= 4, how: writeupSteps(what) });
+    }
+    var setup = item("m0", "lab", "Set up Microsoft's labs on your computer",
+      "These are the practice chatbots from the videos. They run on your own computer, not in a browser, and every message you send is billed to your own OpenAI key: about US$5 of credit should cover all 12 labs (an estimate). If you would rather not install or pay, skip the labs: Gray Swan in step 3 is free practice of the same kind.",
+      URLS.msLabsSetup, { skip: true, how: [
+        "Install Docker Desktop. It is free. Restart your computer if it asks.",
+        "Make an account at platform.openai.com, add the smallest credit it allows (about US$5) and create an API key. Keep the key private: it is a password for your credit.",
+        "On Microsoft's lab guide, press the green Code button, choose Download ZIP, and unzip it.",
+        "Follow Getting Started in the guide, the part called \"Using Standard OpenAI API\": it tells you where your key goes and the one command that starts the labs. The first start is slow.",
+        "Open the address the guide gives you. It starts with http://localhost:5000. You are done when you see the list of labs."
+      ] });
+
+    var step1 = [
+      { label: "START HERE", items: [video(1), video(2)] },
+      { label: "SET-UP, ONCE", items: [setup] },
+      { label: "EPISODE 3", items: [video(3), lab(1), writeup(1, "your direct prompt injection (lab 1)")] },
+      { label: "EPISODE 4", items: [video(4), lab(6), writeup(2, "your indirect prompt injection (lab 6)")] },
+      { label: "EPISODE 5", items: [video(5), lab(2), writeup(3, "how you got the secret out (lab 2)")] },
+      { label: "EPISODE 6", items: [video(6), lab(5), writeup(4, "your Crescendo attack (lab 5)"), lab(3), lab(4)] },
+      { label: "EPISODE 7", items: [video(7), lab(7), lab(8), lab(11), lab(9), lab(12), lab(10)] },
+      { label: "EPISODES 8 TO 10, WATCH ONLY", items: [video(8), video(9), video(10)] }
+    ];
+
+    var security = [item("s0", "learn", "Create your free Microsoft Learn profile",
+      "Every Microsoft Learn module you finish from now on adds a badge to this profile. It is the page you will show employers.",
+      URLS.learn, { how: [
+        "Open Microsoft Learn and press Sign in at the top right.",
+        "Sign in with a Microsoft account. An Outlook, Hotmail or Xbox account works, or make one for free.",
+        "Open your profile and set the display name to one you are happy for an employer to see.",
+        "You are done when your profile page opens. Stay signed in from now on, so each module counts."
+      ] })];
+    SECURITY.forEach(function (s, i) {
+      security.push(item("s" + (i + 1), "learn", "AI security module " + (i + 1) + ": " + s[0],
+        i === 0 ? "The attacks you just did by hand, explained in plain language, with a quiz." : i === 1 ? "The defences: what a company can put in an attacker's way." : "How a real red-team test is planned.",
+        LEARN + s[2], { mins: s[1], how: LEARN_STEPS }));
     });
 
-    var days = COURSE.map(function (c, i) {
-      var d = i + 1;
-      var items = [item("c" + d, "course", "Course day " + d + ": " + c[0], c[1], URLS.se + SE_DAYS[i] + "/")];
-      var p = PRACTICE[i];
-      items.push(p
-        ? item("g" + d, "practice", "Gray Swan: " + p.title, "You try on a scored target what today's course day taught. Stop when your time is up, solved or not: unsolved is normal.", URLS.gs + p.slug)
-        : item("g" + d, "practice", "Gray Swan: a live prize contest if one is open, or your favourite set", "You finish the course by testing yourself where it counts. Stop when your time is up, solved or not.", URLS.gsChallenges));
-      if (WRITEUP_ON[d]) {
-        items.push(item("w" + WRITEUP_ON[d], "writeup", d === 21
-          ? "Write-up 5: your final project report, if the course allows sharing it"
-          : "Write-up " + WRITEUP_ON[d] + ": write down one attack you did, using the write-up template",
-          "Write-ups are the proof employers and contest organisers ask to see.", ""));
-      }
-      return { label: "DAY " + (d < 10 ? "0" + d : d), items: items };
+    var practice = GRAYSWAN.map(function (g, i) {
+      return item("g" + (i + 1), "practice", "Gray Swan: " + g[0], g[2] + " Stop when your time is up, solved or not: unsolved is normal.",
+        URLS.gs + g[1], { how: graySwanSteps(g[0]) });
+    });
+    practice.push(item("g9", "practice", "Gray Swan: a live prize contest if one is open, or your weakest set again",
+      "A placing in a contest is proof you can show. Prize money goes mostly to top finishers.", URLS.gsChallenges, { how: [
+        "Open the Challenges page and look for a contest marked open.",
+        "Read its rules before you start, especially what you may share afterwards.",
+        "If none is open, go back to the set you found hardest.",
+        "You are done after one honest session of about an hour."
+      ] }));
+    practice.push(writeup(5, "your best Gray Swan result, if its rules allow sharing"));
+
+    var python = PYTHON.map(function (p, i) {
+      var steps = LEARN_STEPS.slice();
+      steps.splice(1, 1, "Do the units in order, and type the code yourself instead of copying it.", "Do the Exercise near the end. It is a small project of your own.");
+      if (i === 2) { steps.splice(1, 0, "This module installs Python and Visual Studio Code on your computer. Both are free."); }
+      return item("py" + (i + 1), "learn", "Python module " + (i + 1) + ": " + p[0],
+        i === 0 ? "You write your first lines of Python. Nothing to install yet." : i === 2 ? "You install the free code editor you will use from here on." : "",
+        LEARN + p[2], { mins: p[1], how: steps });
     });
 
-    var python = PYTHON.map(function (s, i) {
-      return item("py" + (i + 1), "code", s[0] + ", " + s[1] + " steps",
-        i === 0 ? "You learn to read and write simple Python. Skip the short 'Install Python' section: everything runs in the browser." : "", URLS.fcc);
-    });
-    python.push(item("py6", "code", "Optional: finish the rest, pass the 5 projects and the free exam for the certificate",
-      "The certificate is free, but the rest of the course is long. Do it only if you want the certificate.", URLS.fcc, { optional: true }));
+    var auto = [
+      item("a1", "auto", "Open Microsoft's attack notebooks in Visual Studio Code",
+        "A notebook is a page that mixes notes with code you run one piece at a time. Microsoft wrote these to solve its own labs with its tool PyRIT.",
+        URLS.msNotebooks, { how: [
+          "In Visual Studio Code, choose File, then Open Folder, and pick the notebooks folder inside the labs you downloaded.",
+          "Open the file named Lab 1 - Credential exfiltration.",
+          "Visual Studio Code offers to install what notebooks need. Accept.",
+          "Read the notes at the top of the notebook: they say what to install and where your key and your lab address go.",
+          "You are done when the first piece of code runs without a red error."
+        ] }),
+      item("a2", "auto", "Run the Lab 1 notebook from top to bottom",
+        "You watch code do in seconds what you did by hand in lab 1.", URLS.msNotebooks, { how: [
+          "Start your labs first, the same way as before.",
+          "Run the notebook one piece at a time, top to bottom.",
+          "Before each piece, read the note above it and say in your own words what it will do.",
+          "You are done when the attack finishes and the notebook shows whether it worked."
+        ] }),
+      item("a3", "auto", "Run the Lab 5 notebook (Crescendo)",
+        "The multi-turn attack from Episode 6, run automatically.", URLS.msNotebooks, { how: [
+          "Open the file named Lab 5 - Crescendo and Inflation.",
+          "Run it one piece at a time, reading each note first.",
+          "Watch how the questions build up turn by turn.",
+          "You are done when it finishes and shows the result."
+        ] }),
+      item("a4", "auto", "Change one thing in a notebook, run it again, and write up what happened",
+        "Changing code and seeing what changes is how the Python you learned becomes a skill. This is your first automated attack of your own.", URLS.msNotebooks, { how: [
+          "Pick one thing to change in the Lab 5 notebook, such as the goal or the number of turns.",
+          "Change only that, and run the notebook again.",
+          "Compare the result with the first run.",
+          "Write it up with the template from the Menu: what you changed, and what happened."
+        ] })
+    ];
 
-    // The labs can be skipped as a set: they are the one part of the path that costs money and needs installing.
-    var labs = [item("m0", "lab", "Set up Microsoft's labs on your computer",
-      "These are the labs you saw in the videos. They run on your own computer, not in a browser: you install Docker, and you need a paid OpenAI or Azure key, because every message you send in a lab is billed to it (about US$5 of credit should cover all 8 labs; that is an estimate). If you would rather not install or pay, skip them: Gray Swan in step 2 is free practice of the same kind.",
-      URLS.msLabsSetup, { skip: true })];
-    MS_LABS.forEach(function (l) {
-      labs.push(item("m" + l[0], "lab", "Microsoft lab " + l[0] + ": " + l[1] + " (" + l[2] + ")",
-        l[3] + " Goes with Episode " + l[4] + ".", URLS.msLabs, { skip: true }));
-    });
+    var last = [
+      item("p1", "proof", "Put your proof in one place",
+        "An employer will not ask what you watched. They will ask what you can show.", URLS.learnTranscript, { how: [
+          "On Microsoft Learn, open your profile, then Transcript, then press Share. It asks you to set an access code, then gives you a link and a transcript ID.",
+          "Put your write-ups in a public GitHub repository. First remove anything a site's rules say to keep private.",
+          "Add the GitHub link, and the transcript link with its ID and code, to your resume and your LinkedIn profile.",
+          "You are done when a friend can open both from another device."
+        ] }),
+      item("b1", "bounty", "Read Mozilla 0DIN's rules fully. Note what pays and what does not.", "", URLS.odin, { how: [
+        "Open the policy page and read it to the end.",
+        "Write down which AI systems are in scope and which are not.",
+        "Write down what a report must include."
+      ] }),
+      item("b2", "bounty", "Test 3 ideas, only inside 0DIN's rules. Save every prompt and result, and keep them private.", "", "", { how: [
+        "Pick one technique that worked for you in the labs or on Gray Swan.",
+        "Try it against a system that 0DIN lists as in scope, and nowhere else.",
+        "Save every prompt and every answer. Share them with nobody.",
+        "Do this for 3 ideas. Most will not work, and that is normal."
+      ] }),
+      item("b3", "bounty", "Decide honestly whether one is a real, new finding. If yes, send 0DIN the short summary it asks for.", "", URLS.odin, { how: [
+        "Ask: does it work again when I repeat the same steps? Try it 3 times.",
+        "Ask: is it new, or a well-known trick?",
+        "If both are yes, send the short summary 0DIN asks for. If not, send nothing."
+      ] }),
+      item("b4", "bounty", "Apply to Anthropic's model safety bug bounty, using your write-ups and results.", "", URLS.anthropic, { how: [
+        "Open the program page and read who it is for.",
+        "Fill in the application, linking your write-ups and any Gray Swan or 0DIN result.",
+        "Answer every question truthfully. They choose who gets in."
+      ] })
+    ];
 
     return [
-      { title: "Step 1: Microsoft AI Red Teaming 101", short: "VIDEOS",
-        goal: "Watch all 10 episodes here in the app, then try Microsoft's own labs.",
+      { title: "Step 1: Microsoft's videos, each with its lab",
+        goal: "Watch an episode here in the app, then do Microsoft's own lab for it. Four short write-ups along the way.",
         why: "The basics from Microsoft's own AI red team, and the best-known name to put on a resume.",
-        groups: [{ label: "", items: videos }, { label: "MICROSOFT LABS", items: labs }] },
-      { title: "Step 2: one course day, then Gray Swan", short: "COURSE + PRACTICE",
-        goal: "21 days. The SecurityElites course day first, then Gray Swan's training sets in the order below. Five write-ups along the way.",
-        why: "",
-        groups: days },
-      { title: "Step 3: Python, on freeCodeCamp", short: "PYTHON",
-        goal: "Work through the first five sections in order. Keep one Gray Swan session a week so your skills stay sharp.",
+        groups: step1 },
+      { title: "Step 2: Microsoft Learn, AI security fundamentals",
+        goal: "Three short Microsoft modules, about 2 hours in all, each with a quiz and a badge.",
+        why: "The same ground in plain language, plus defences and how a real test is planned.",
+        groups: [{ label: "", items: security }] },
+      { title: "Step 3: Gray Swan, scored practice on chatbots and agents",
+        goal: "Free scored practice in your browser, easiest set first. One set a sitting.",
+        why: "Microsoft has no practice for attacking agents. Gray Swan does, keeps score, and runs contests sponsored by large AI labs.",
+        groups: [{ label: "", items: practice }] },
+      { title: "Step 4: Python, on Microsoft Learn",
+        goal: "Eight short Microsoft modules, about 7 hours in all, each with a small project and a quiz.",
         why: "The engineer-level job ads ask for Python, and the tools that automate attacks need it. The beginner contract ads do not.",
         groups: [{ label: "", items: python }] },
-      { title: "Step 4: bounties", short: "BOUNTIES",
-        goal: "Only real findings that work every time. Never send a guess.",
+      { title: "Step 5: automate an attack with Microsoft's PyRIT",
+        goal: "Run Microsoft's own attack notebooks against your labs, then change one.",
+        why: "This is what Episodes 8 to 10 showed, now in your hands.",
+        groups: [{ label: "", items: auto }] },
+      { title: "Step 6: proof and bounties",
+        goal: "Gather what you can show, then try for a paid, credited finding. Only real findings that work every time.",
         why: "A paid or credited finding is the strongest proof there is.",
-        groups: [{ label: "", items: [
-          item("b1", "bounty", "Read Mozilla 0DIN's rules fully. Note what pays and what does not.", "", URLS.odin),
-          item("b2", "bounty", "Test 3 ideas, only inside 0DIN's rules. Save every prompt and result, and keep them private.", "", ""),
-          item("b3", "bounty", "Decide honestly whether one is a real, new finding. If yes, send 0DIN the short summary it asks for.", "", URLS.odin),
-          item("b4", "bounty", "Apply to Anthropic's model safety bug bounty, using your write-ups and results.", "", URLS.anthropic)
-        ] }] }
+        groups: [{ label: "", items: last }] }
     ];
   }
 
@@ -211,14 +330,14 @@
 
   // ---------- reference content ----------
   var PLACES = [
-    ["Microsoft AI Red Teaming 101", URLS.ms, "VIDEO + LABS · STEP 1 · 10 EPISODES, 8 LABS",
-      "From Microsoft's own AI red team. Episodes 1 to 7 teach the attacks. Episodes 8 to 10 show an automation tool called PyRIT. Microsoft's labs are the practice chatbots shown in the videos: they are the one part of this path that is not free and not in a browser (Docker on your own computer, plus about US$5 of paid AI usage), and they can be skipped."],
-    ["SecurityElites: AI Red Teaming From Zero", URLS.se, "COURSE + LAB · STEP 2 · 21 DAYS · 45 TO 75 MIN A DAY",
-      "Written for people with no security background. Most days have a practice lab in the browser (days 2 and 3 are a diagram and a cheat sheet instead), and day 21 ends in a full report. It is new and has no outside reviews yet, so judge it yourself after 3 days. Pay for nothing there."],
-    ["Gray Swan Arena", URLS.gsTraining, "PRACTICE · STEP 2 ONWARD · 11 TRAINING SETS",
-      "Scored practice against real AI models: 3 beginner sets, 3 intermediate sets and the large Proving Ground sets, open any time. Prize contests come and go on the same site."],
-    ["freeCodeCamp: Python Certification", URLS.fcc, "PYTHON · STEP 3 · IN THE BROWSER",
-      "Reading and doing, one small step at a time, with nothing to install. The certificate at the end is free."]
+    ["Microsoft AI Red Teaming 101, and its labs", URLS.ms, "VIDEO + LAB · STEP 1 · 10 EPISODES, 12 LABS",
+      "From Microsoft's own AI red team. Episodes 1 to 7 teach the attacks and Episodes 8 to 10 show its automation tool, PyRIT. The labs are the practice chatbots shown in the videos. They are the one part of this path that is not free and not in a browser: Docker on your own computer, plus about US$5 of paid AI usage. They can be skipped."],
+    ["Microsoft Learn", URLS.learn, "COURSES · STEPS 2 AND 4 · 11 MODULES, ABOUT 9 HOURS",
+      "Microsoft's own free training site. Two courses from it are in this path: AI security fundamentals, and Get Started with Python Programming, parts 1 and 2. Each module ends in a quiz and adds a badge to a profile you can share."],
+    ["Gray Swan Arena", URLS.gsTraining, "PRACTICE · STEP 3 · NOT MICROSOFT",
+      "Scored practice against real AI models, free and in a browser, with beginner sets for chatbots and for agents. It is here because Microsoft has no practice for attacking agents. Prize contests come and go on the same site."],
+    ["Mozilla 0DIN and Anthropic", URLS.odin, "BOUNTIES · STEP 6 · NOT MICROSOFT",
+      "Two programs that pay for real findings. They are here because Microsoft runs no bounty a beginner can enter for this work."]
   ];
   var MONEY = [
     ["Hourly AI testing and rating platforms", "The quickest money when an application lands. Pay and acceptance vary a lot, and nobody can promise either."],
@@ -228,66 +347,71 @@
   ];
   var RULES = [
     "Only attack sites built for it, or programs that invite it in writing. Never test a company's live product outside its bounty rules.",
-    "Weapons topics only inside an official program that asks for that testing. Never anywhere else.",
+    "Weapons topics only inside an official lab or program that asks for that testing. Never anywhere else.",
+    "A lab that runs on your own AI key falls under that provider's rules. If a lab asks for content the provider forbids, the risk to your account is yours.",
     "Check a site's sharing rules before posting a write-up. Live contests and bounties often require you to keep details private.",
     "Every write-up is your own real attempt. Never claim something you did not do."
   ];
   var TEMPLATE = "Target: (site and challenge name)\nGoal: (what the AI was not supposed to do)\nWhat I tried: (numbered steps, with the exact prompts)\nWhat happened: (the result, plus a screenshot)\nDoes it repeat: (worked __ of 3 tries)\nHow bad is it: (low, medium or high, and why)\nHow to fix it: (one suggestion)";
 
-  // ---------- words: plain-English meanings. The tag says where the word comes up, and is left empty when no lesson title names it. ----------
+  // ---------- words: plain-English meanings. [word, where it comes up, meaning, box it is new at (only when the tag cannot say)] ----------
+  // A tag is given only where a video, lab or module names the topic itself. VIDEO 3 -> box v3, LAB 2 -> box m2, MODULE 1 -> box s1.
   var WORDS = [
     ["The basics", [
       ["AI model (LLM)", "VIDEO 2", "A large language model: software trained on huge amounts of text that writes by predicting the next words. Chatbots are built on these."],
       ["Prompt", "VIDEO 2", "Whatever you type or send to the model."],
-      ["AI application", "DAY 2", "A product built around a model: the model plus hidden instructions, data, tools and filters. You attack the whole thing, not just the model."],
-      ["System prompt", "DAY 4", "Hidden instructions from the company that built the chatbot, telling the model how to behave. Users are not meant to see it."],
-      ["Metaprompt", "LAB 2", "Microsoft's word for a system prompt."],
+      ["AI application", "", "A product built around a model: the model plus hidden instructions, data, tools and filters. You attack the whole thing, not just the model."],
+      ["System prompt (metaprompt)", "LAB 2", "Hidden instructions from the company that built the chatbot, telling the model how to behave. Users are not meant to see it. Microsoft calls it a metaprompt."],
       ["Context window", "", "Everything the model can see at one time: its hidden instructions, the chat so far, and any documents or tool results."],
-      ["Guardrail", "VIDEO 7 · DAY 9", "Any safety layer meant to stop bad behaviour: the model's training, its hidden instructions, or filters on what goes in and what comes out."],
-      ["Refusal", "DAY 6", "The model saying no. Most attacks are attempts to get past a refusal."],
-      ["Hallucination", "", "The model stating something false as if it were true. A reliability problem, not an attack."]
+      ["Guardrail", "VIDEO 7", "Any safety layer meant to stop bad behaviour: the model's training, its hidden instructions, or filters on what goes in and what comes out."],
+      ["Content filter", "MODULE 2", "A separate check that blocks harmful text on its way into or out of a model."],
+      ["Grounding", "MODULE 2", "Giving the model trusted documents to answer from, so it makes less up."],
+      ["Refusal", "", "The model saying no. Most attacks are attempts to get past a refusal."],
+      ["Hallucination", "", "The model stating something false as if it were true. A reliability problem, not an attack."],
+      ["Overreliance", "MODULE 1", "People trusting an AI's answer without checking it."]
     ]],
     ["Attacks", [
       ["AI red teaming", "VIDEO 1", "Attacking an AI system on purpose, with permission, to find its weak points before real attackers do."],
-      ["Jailbreak", "DAY 5", "Getting a model to break its own safety rules, such as producing content it is trained to refuse."],
+      ["Jailbreak", "MODULE 1", "Getting a model to break its own safety rules, such as producing content it is trained to refuse."],
       ["Prompt injection", "VIDEO 3", "Slipping your own instructions into what the model reads, so it follows you instead of the company that built it."],
-      ["Direct prompt injection", "VIDEO 3 · DAY 4", "You type the attack yourself, straight into the chat."],
-      ["Indirect prompt injection", "VIDEO 4 · DAY 10", "The attack hides in something the AI reads later: a web page, an email, a document. The victim never types it."],
-      ["System prompt leak", "DAY 4", "Tricking a chatbot into revealing its hidden instructions."],
-      ["Role-play attack", "DAY 5", "Asking the model to play a character or tell a story in which the forbidden answer seems allowed."],
-      ["Refusal suppression", "DAY 6", "Wording a request so the model is steered away from saying no, for example by telling it never to apologise or warn."],
-      ["Encoding trick", "DAY 7", "Hiding a request from filters by changing its form: another language, code words, scrambled spelling."],
+      ["Direct prompt injection", "VIDEO 3", "You type the attack yourself, straight into the chat."],
+      ["Indirect prompt injection", "VIDEO 4", "The attack hides in something the AI reads later: a web page, an email, a document. The victim never types it."],
+      ["System prompt leak", "LAB 2", "Tricking a chatbot into revealing its hidden instructions. Microsoft calls this metaprompt extraction."],
+      ["Encoding trick", "LAB 2", "Hiding a request from filters by changing its form: another language, code words, scrambled spelling."],
+      ["Role-play attack", "", "Asking the model to play a character or tell a story in which the forbidden answer seems allowed."],
+      ["Refusal suppression", "", "Wording a request so the model is steered away from saying no, for example by telling it never to apologise or warn."],
       ["Single-turn attack", "VIDEO 5", "An attack that fits in one message."],
-      ["Multi-turn attack", "VIDEO 6 · DAY 8", "An attack spread over several messages, each step small enough to pass."],
+      ["Multi-turn attack", "VIDEO 6", "An attack spread over several messages, each step small enough to pass."],
       ["Crescendo", "VIDEO 6 · LAB 5", "A multi-turn attack that starts with harmless questions and pushes a little further each turn until the model goes along."],
-      ["Many-shot jailbreak", "DAY 8", "Packing one prompt with many made-up examples of the model answering forbidden questions, so it carries on the pattern."],
-      ["Hidden text", "DAY 12", "Instructions a person cannot see but the AI can: invisible characters, or text tucked inside an image."],
-      ["Universal jailbreak", "STEP 4", "One method that works across many different forbidden requests, not just one. Anthropic's bounty asks for these."]
+      ["Many-shot jailbreak", "", "Packing one prompt with many made-up examples of the model answering forbidden questions, so it carries on the pattern."],
+      ["Hidden text", "", "Instructions a person cannot see but the AI can: invisible characters, or text tucked inside an image."],
+      ["Universal jailbreak", "STEP 6", "One method that works across many different forbidden requests, not just one. Anthropic's bounty asks for these.", "b4"]
     ]],
     ["Agents", [
-      ["Agent", "DAY 14", "An AI that takes actions, not just talks: it can browse, send email or run code by using tools."],
-      ["Tool call", "DAY 14", "A tool is something the agent is allowed to use, such as search or send-email. A tool call is the agent using one."],
-      ["Excessive agency", "DAY 14", "An agent with more power or access than its job needs, so one trick does real damage. The fix is to give it only what it needs."],
-      ["RAG", "DAY 11", "Retrieval-augmented generation: the AI looks things up in a store of documents and uses what it finds to answer."],
-      ["Knowledge-base poisoning", "DAY 11", "Planting a doctored document in that store, so the AI later repeats or obeys it."],
-      ["Agent hijack", "DAY 15 · DAY 18", "Taking control of what an agent does, usually through text it reads while working."],
-      ["MCP", "DAY 16", "Model Context Protocol: a common standard for plugging tools and data into AI agents. A rogue MCP server is a tool source set up to attack the agent."],
-      ["Tool poisoning", "DAY 16", "Hiding instructions inside a tool's description, so the agent obeys them."],
-      ["Memory poisoning", "DAY 17", "Getting a false instruction saved in an agent's long-term memory, so it keeps acting on it later."],
-      ["Data exfiltration", "DAY 17", "Getting the AI to send private data somewhere it should not go."],
-      ["Unsafe output handling", "DAY 19", "An app that trusts whatever the AI writes and runs or displays it without checking."]
+      ["Agent", "GRAY SWAN", "An AI that takes actions, not just talks: it can browse, send email or run code by using tools.", "g3"],
+      ["Tool call", "GRAY SWAN", "A tool is something the agent is allowed to use, such as search or send-email. A tool call is the agent using one.", "g3"],
+      ["Agent hijack", "GRAY SWAN", "Taking control of what an agent does, usually through text it reads while working.", "g4"],
+      ["Excessive agency", "", "An agent with more power or access than its job needs, so one trick does real damage. The fix is to give it only what it needs."],
+      ["Data exfiltration", "MODULE 1", "Getting the AI to send private data somewhere it should not go."],
+      ["RAG", "", "Retrieval-augmented generation: the AI looks things up in a store of documents and uses what it finds to answer."],
+      ["Knowledge-base poisoning", "", "Planting a doctored document in that store, so the AI later repeats or obeys it."],
+      ["MCP", "", "Model Context Protocol: a common standard for plugging tools and data into AI agents."],
+      ["Tool poisoning", "", "Hiding instructions inside a tool's description, so the agent obeys them."],
+      ["Memory poisoning", "", "Getting a false instruction saved in an agent's long-term memory, so it keeps acting on it later."],
+      ["Unsafe output handling", "", "An app that trusts whatever the AI writes and runs or displays it without checking."]
     ]],
     ["The work", [
-      ["Threat model", "DAY 3", "A plain list of who might attack a system, what they want and how they could get it."],
-      ["OWASP LLM Top 10", "DAY 3 · DAY 20", "A well-known public list of the ten most serious weaknesses in AI applications. Job ads and reports refer to it."],
-      ["Scope", "STEP 4", "What a program allows you to test. Anything outside scope is off limits."],
-      ["Reproducible", "STEP 4", "It works again when someone else follows your steps. Bounties pay only for this."],
-      ["Attack success rate", "", "How often an attack works, such as 7 of 10 tries. Reports and tools use this number."],
-      ["Write-up", "DAY 20", "A short report of one attack: the target, what you tried, what happened, how bad it is and how to fix it."],
-      ["Bug bounty", "STEP 4", "A program that pays outsiders for reporting real flaws."],
-      ["Responsible disclosure", "", "Reporting a flaw privately to the owner, and giving them time to fix it before saying anything in public."],
+      ["Threat model", "", "A plain list of who might attack a system, what they want and how they could get it."],
+      ["OWASP LLM Top 10", "", "A well-known public list of the ten most serious weaknesses in AI applications. Job ads and reports refer to it."],
+      ["Write-up", "STEP 1", "A short report of one attack: the target, what you tried, what happened, how bad it is and how to fix it.", "w1"],
       ["PyRIT", "VIDEO 8", "Microsoft's free tool for running many attacks automatically. It needs Python."],
-      ["CTF", "", "Capture the flag: a security game you win by reaching a hidden goal. Gray Swan's training sets work this way."]
+      ["Notebook", "STEP 5", "A page that mixes notes with code you run one piece at a time.", "a1"],
+      ["Scope", "STEP 6", "What a program allows you to test. Anything outside scope is off limits.", "b1"],
+      ["Reproducible", "STEP 6", "It works again when someone else follows your steps. Bounties pay only for this.", "b3"],
+      ["Bug bounty", "STEP 6", "A program that pays outsiders for reporting real flaws.", "b1"],
+      ["Attack success rate", "", "How often an attack works, such as 7 of 10 tries. Reports and tools use this number."],
+      ["Responsible disclosure", "", "Reporting a flaw privately to the owner, and giving them time to fix it before saying anything in public."],
+      ["CTF", "", "Capture the flag: a security game you win by reaching a hidden goal. Gray Swan's sets work this way."]
     ]]
   ];
 
@@ -317,10 +441,11 @@
   ];
   var SEARCH_WORDS = "AI red teamer, LLM red team, adversarial testing, jailbreak, prompt injection, AI safety tester";
   var PROOF = [
-    "The Microsoft series and the 21-day course, finished.",
+    "Microsoft's AI Red Teaming 101 series and its labs, done.",
+    "A Microsoft Learn profile showing AI security fundamentals and Python, with a transcript you can share.",
     "A Gray Swan profile with solved sets, and any contest placing.",
-    "3 to 5 public write-ups of your own attacks.",
-    "Basic Python: the freeCodeCamp sections, or its certificate.",
+    "4 to 6 write-ups of your own attacks.",
+    "One automated attack run with Microsoft's PyRIT.",
     "A bounty credit, if you earn one."
   ];
   var APPLY_RULES = [
@@ -332,36 +457,41 @@
   ];
 
   // status: ok = checked, no = not checked, changed = corrected in this audit
-  var AUDIT_DATE = "17 Nov 2026";
+  var AUDIT_DATE = "18 Nov 2026";
   var AUDIT = [
     ["ok", "Microsoft's series has 10 episodes; episodes 8 to 10 cover the PyRIT automation tool.", "Read on Microsoft's official training page."],
-    ["ok", "The SecurityElites course has 21 days, all live, for beginners, 45 to 75 minutes a day, and asks only for a free account.", "Read on the course page."],
-    ["ok", "The course lessons can be read without paying.", "All 21 lesson pages were read on 17 Nov 2026: each is 1,800 to 3,300 words, with no payment wording on any of them."],
-    ["changed", "An earlier version said every course day has a lab.", "Days 2 and 3 have none: day 2 is a diagram you draw and day 3 is a cheat sheet you write. The other 19 days have labs. The wording was corrected."],
-    ["no", "Every course lab stays free.", "The day 1 lab page says it is a free lab. The other labs need a sign-in, so they could not be tested. If a day asks for money, stop."],
-    ["no", "The course is good.", "Nobody outside has reviewed it. Its pages were updated on 15 and 16 Nov 2026, so it is new, and the author uses a pen name. The lessons read well: clear goals, recall questions, and a lab or a written task each day."],
-    ["ok", "Gray Swan has 11 training sets that are open any time.", "Seen on its Training page in a signed-in free account."],
+    ["ok", "The 10 episodes play inside the app.", "Each one uses the same player Microsoft's own training page uses for that episode (6 on Microsoft's player, 4 on YouTube). All 10 were played on the live site on 18 Nov 2026 in Chrome. If a video does not play, the card has a link to Microsoft's page."],
+    ["ok", "Microsoft's labs are the ones shown in the videos, and each goes with an episode.", "Read on Microsoft's own GitHub page on 18 Nov 2026: 12 challenges from its red team, first taught at Black Hat USA 2024, each listed against an episode. All 12 are in this path, each placed after its episode."],
+    ["ok", "Microsoft's labs are not free to run and not in a browser.", "Microsoft's page lists what they need: Docker, Python, and an OpenAI key or an Azure OpenAI endpoint. The lab code is free; the AI usage is billed to your own key."],
+    ["ok", "Four labs have a goal an AI is meant to refuse.", "Labs 3, 9 and 10 ask for Molotov cocktail instructions and lab 4 for a toxin: Microsoft's page says so. The app marks them, and they can be skipped. They run on your own AI key, whose rules still apply."],
+    ["no", "About US$5 covers all 12 labs.", "An estimate from OpenAI's price list on 18 Nov 2026 (under one US cent a message on the default model), not a measured cost. OpenAI shows the real minimum top-up before you pay."],
+    ["no", "The labs run well on any computer.", "They start a dozen small programs at once. The author of this app has read Microsoft's instructions but has not run the labs."],
+    ["ok", "Microsoft Learn training is free.", "Microsoft's own help page says: \"Microsoft Learn training is free and available to anyone\"."],
+    ["ok", "AI security fundamentals is 3 beginner modules, about 2 hours, each with a quiz.", "Read from Microsoft's course list on 18 Nov 2026: 53, 48 and 29 minutes, level \"beginner\", each ending in a module assessment."],
+    ["ok", "Microsoft's Python course is 8 beginner modules, about 7 hours, each with a small project and a quiz.", "Read from Microsoft's course list on 18 Nov 2026: Get Started with Python Programming, parts 1 and 2, 402 minutes in all, last updated 28 Oct 2026. The third module has you install Python and Visual Studio Code."],
+    ["ok", "Finishing a module adds a badge to your Microsoft Learn profile, and finishing a course adds a trophy.", "Microsoft's help page says both appear on your profile and can be shared. Its transcript page has a Share button that makes a link with an access code."],
+    ["no", "These courses give you a Microsoft certificate.", "They give badges, trophies and a transcript. A Microsoft certification is a separate, paid exam and is not part of this path."],
+    ["no", "Microsoft has practice for attacking AI agents.", "None was found: its labs cover chatbots and one practice web page. That is why Gray Swan is in the path."],
+    ["ok", "Gray Swan has training sets that are open any time, for chatbots and for agents.", "Seen on its Training page in a signed-in free account on 18 Nov 2026: 3 beginner sets, 3 intermediate sets and 5 more. Every set in this path was opened."],
+    ["ok", "Gray Swan runs contests sponsored by large AI labs.", "A US$300,000 contest in October 2026 was sponsored by Anthropic, Meta, Google DeepMind and Reflection AI (Fortune, Oct 2026)."],
+    ["changed", "An earlier version used a 21-day course from SecurityElites as step 2.", "Removed on 18 Nov 2026. It is new, has no outside reviews, its author uses a pen name, and its labs could not be tested. Microsoft's labs and courses and Gray Swan's sets take its place."],
+    ["changed", "An earlier version taught Python with freeCodeCamp.", "Changed on 18 Nov 2026 to Microsoft Learn's course, so the path stays with one organization. freeCodeCamp's course is free and well regarded; it was not dropped for quality."],
     ["changed", "An earlier version said Gray Swan posts new challenges every Wednesday.", "Not true now: that series is closed for judging and its sets live on the Training page. The claim was removed."],
-    ["changed", "An earlier version said Gray Swan has paid out over US$1 million and brought 100 people into paid work.", "No source was found for those numbers, so they were removed. What is sourced: a US$300,000 contest sponsored by Anthropic, Meta, Google DeepMind and Reflection AI (Fortune, Oct 2026), and Gray Swan's own June 2025 post saying it had paid out over US$370,000 and hired from its players."],
-    ["changed", "The Python course was Python for Everybody.", "Changed to freeCodeCamp's Python Certification: it runs fully in the browser, the other starts with installing Python. Its official page shows 584 steps, 5 required projects and an exam."],
+    ["changed", "An earlier version said Gray Swan has paid out over US$1 million and brought 100 people into paid work.", "No source was found for those numbers, so they were removed."],
     ["ok", "Mozilla 0DIN pays US$500 to US$15,000 and asks for a short summary first.", "Read on 0DIN's policy page."],
     ["ok", "Anthropic's model safety bounty pays up to US$35,000, takes applications, and requires a confidentiality agreement.", "Read on Anthropic's help page."],
-    ["ok", "AI red-team job ads ask for Python.", "Several 2026 postings ask for Python or basic scripting. This is a sample of ads, not a survey."],
-    ["changed", "The Python sample above used to count an entry-level salaried ad.", "That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it now counts as closed. No other entry-level salaried ad was found."],
-    ["ok", "Microsoft's labs are the ones shown in the videos.", "Read on Microsoft's own GitHub page on 18 Nov 2026: 12 challenges from its red team, first taught at Black Hat USA 2024, each tied to an episode. The app lists 8. Labs 3, 4, 9 and 10 ask for weapon or toxin instructions and are left out; lab 5 teaches the same attack with a harmless goal."],
-    ["ok", "Microsoft's labs are not free to run and not in a browser.", "Microsoft's page lists what they need: Docker, Python, and an OpenAI or Azure OpenAI key. The lab code is free; the AI usage is billed to your own key."],
-    ["no", "About US$5 covers all 8 labs.", "An estimate from OpenAI's price list on 18 Nov 2026 (under one US cent a message on the default model), not a measured cost. OpenAI shows the real minimum top-up before you pay."],
-    ["no", "The labs run well on any computer.", "They start a dozen small programs at once. The author of this app has read the instructions but has not run the labs."],
-    ["ok", "The 10 episodes play inside the app.", "Each one uses the same player Microsoft's own training page uses for that episode (6 on Microsoft's player, 4 on YouTube). Checked on 18 Nov 2026 in Chrome and in the Safari engine. If a video does not play, the card has a link to Microsoft's page."],
-    ["ok", "Every link in the app opens the right page.", "Opened on 17 Nov 2026: all 21 lesson pages, 9 Gray Swan pages, the Microsoft, freeCodeCamp, 0DIN and Anthropic pages, the job sites and the job searches."],
+    ["no", "The notebooks in step 5 run as described.", "Microsoft's page lists them (Lab 1, Lab 5 and Lab 13) and says they use PyRIT. The author of this app has not run them."],
+    ["ok", "Engineer-level AI red-team job ads ask for Python.", "Several 2026 postings ask for Python or basic scripting. This is a sample of ads, not a survey. The beginner contract ads read for the Jobs tab did not ask for it."],
+    ["changed", "An earlier version counted an entry-level salaried ad as open.", "That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it counts as closed. No other entry-level salaried ad was found."],
+    ["ok", "Every link in the app opens the right page.", "Opened on 18 Nov 2026: the Microsoft training page and lab pages, all 11 Microsoft Learn modules, the Gray Swan pages, the 0DIN and Anthropic pages, the job sites and the job searches."],
     ["ok", "The job titles, pay and asks on the Jobs tab come from real ads.", "Each ad was read on its own page on 17 Nov 2026. Pay is copied as the ad posted it. Ads close and pay changes, so they are examples, not offers."],
     ["ok", "An ad on the Jobs tab has a working link.", "A free automatic check opens every ad's page once a day. If the page is gone, leads somewhere else or says it is closed, the ad is hidden. Each ad shows the date its link was last checked. A site that blocks the check keeps its older date."],
     ["no", "A listed ad still has work to give.", "The link check only proves an ad is still posted. A talent pool can stay posted while no project is running."],
     ["no", "A posted hourly rate is what you would earn.", "A range in an ad is not an offer, and contract platforms do not guarantee hours."],
-    ["no", "The Words tab is an official glossary.", "The meanings are plain-English summaries written for this app and matched to lesson titles. The courses are the authority."],
+    ["no", "The Words tab is an official glossary.", "The meanings are plain-English summaries written for this app. A word is tagged only where a video, lab or module names the topic itself. Microsoft's material is the authority."],
     ["ok", "Linked devices store ticks and streak days only, under a private code that is never shown.", "Tested on 17 and 18 Nov 2026: reading the whole store, listing other people's codes, and saving anything except numbers were all refused."],
     ["ok", "The short code used to link a device works once and runs out in 10 minutes.", "Tested on 18 Nov 2026: a used code, a made-up code, a backdated code and a list of all codes were all refused."],
-    ["no", "Finishing this path gets you hired.", "Nobody can promise that. The path builds the things a newcomer can show: write-ups, contest results, a known course and basic Python."]
+    ["no", "Finishing this path gets you hired.", "Nobody can promise that. The path builds the things a newcomer can show: Microsoft badges, write-ups, contest results and basic Python."]
   ];
 
   // ---------- saving on this device ----------
@@ -734,19 +864,20 @@
   }
 
   // ---------- words that belong to a lesson ----------
-  // A word is "new" at the first lesson its tag names: VIDEO 3 -> box v3, LAB 2 -> box m2, DAY 4 -> box c4, STEP 4 -> box b1.
+  // A word is "new" at the first box its tag names (VIDEO 3 -> v3, LAB 2 -> m2, MODULE 1 -> s1), or at the box the word itself names.
   var WORDS_AT = {};
   WORDS.forEach(function (g) {
     g[1].forEach(function (w) {
-      var m = /^(VIDEO|LAB|DAY|STEP) (\d+)/.exec(w[1]);
-      if (!m) { return; }
-      var id = m[1] === "VIDEO" ? "v" + m[2] : m[1] === "LAB" ? "m" + m[2] : m[1] === "DAY" ? "c" + m[2] : "b1";
+      var m = /^(VIDEO|LAB|MODULE) (\d+)/.exec(w[1]);
+      var id = w[3] || (m ? (m[1] === "VIDEO" ? "v" : m[1] === "LAB" ? "m" : "s") + m[2] : "");
+      if (!id) { return; }
       (WORDS_AT[id] = WORDS_AT[id] || []).push(w);
     });
   });
 
   // ---------- Now tab: one thing at a time ----------
-  var OPEN_LABEL = { video: "Open the video", lab: "Open Microsoft's lab guide", course: "Open the lesson", practice: "Open the practice", code: "Open the course", bounty: "Open the page" };
+  var OPEN_LABEL = { video: "Open the video", lab: "Open Microsoft's lab guide", learn: "Open it on Microsoft Learn", practice: "Open the practice",
+    auto: "Open Microsoft's notebooks", proof: "Open Microsoft Learn", bounty: "Open the page" };
   var lastDone = null; // the box ticked most recently on this screen, so one tap can undo it
   var tickedAt = 0;    // a fast double tap must not tick two boxes
   var pairNote = "";   // one line shown in the menu right after this device is linked
@@ -757,7 +888,7 @@
     var parts = [];
     if (entry.label) { parts.push(entry.label); }
     parts.push(KIND[it.kind]);
-    if (it.kind === "course") { parts.push("45 TO 75 MIN"); }
+    if (it.mins) { parts.push("ABOUT " + it.mins + " MIN"); }
     if (it.kind === "writeup") { parts.push("ABOUT 20 MIN"); }
     return parts.join(" · ");
   }
@@ -767,6 +898,11 @@
     var copy = h("button", { type: "button", text: "Copy template" });
     copy.addEventListener("click", function () { copyText(TEMPLATE, status, pre); });
     return h("details", { class: "fold" }, [h("summary", { text: "Show the write-up template" }), pre, h("div", { class: "btnrow" }, [copy, status])]);
+  }
+  function howFold(steps) {
+    var list = h("ol", { class: "steps" });
+    steps.forEach(function (s) { list.appendChild(h("li", { text: s })); });
+    return h("details", { class: "fold", id: "how-fold" }, [h("summary", { text: "How to do this: " + steps.length + " steps" }), list]);
   }
   function wordsFold(words) {
     var list = h("div", { class: "rows" });
@@ -840,13 +976,14 @@
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> " + step.title.toUpperCase() }),
       h("h1", { id: "now-title", tabindex: "-1", text: "Do this now" }),
-      idx === 0 ? h("p", { class: "lede", text: "One fixed path: 4 steps, " + SEQ.length + " boxes. Everything is free except Microsoft's labs, which you can skip. Do the card below, then tap I'm done. The next one appears." }) : null,
+      idx === 0 ? h("p", { class: "lede", text: "One fixed path: " + STEPS.length + " steps, " + SEQ.length + " boxes. Everything is free except Microsoft's labs (about US$5 of AI usage), which you can skip. Do the card below, then tap I'm done. The next one appears." }) : null,
       stepStart && idx !== 0 ? h("p", { class: "lede", text: step.goal }) : null
     ]));
     v.appendChild(h("div", { class: "card now", id: "now-card", "data-id": it.id }, [
       h("div", { class: "tag", text: tagFor(entry) }),
       h("div", { class: "title", text: it.title }),
       why ? h("div", { class: "why" }, [h("b", { text: "WHY " }), why]) : null,
+      it.how ? howFold(it.how) : null,
       words ? wordsFold(words) : null,
       it.kind === "writeup" ? templateFold() : null,
       watch || (it.url ? link(OPEN_LABEL[it.kind] + " ↗", it.url, "big open") : null),
@@ -882,7 +1019,7 @@
     var here = idx === -1 ? null : SEQ[idx];
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> PATH" }),
-      h("h1", { text: "Four steps, top to bottom" }),
+      h("h1", { text: "The whole path, top to bottom" }),
       h("p", { class: "lede", text: "The whole list. Days are not tied to dates. Tick or untick any box here." })
     ]));
     STEPS.forEach(function (step, s) {
@@ -1034,7 +1171,7 @@
 
     var startBlock = h("div", { class: "block", id: "jobs-start" }, [
       h("h2", { text: "Open now for beginners" }),
-      h("p", { class: "lede", text: "You can apply to these during step 2. Write-ups and Gray Swan results raise your odds." })
+      h("p", { class: "lede", text: "You can apply once you have a couple of lab write-ups. Gray Swan results raise your odds." })
     ]);
     if (start.length) { start.forEach(function (a) { startBlock.appendChild(adCard(a)); }); }
     else { startBlock.appendChild(h("p", { class: "note", text: "No beginner ad is confirmed open today. Use the searches below: they always show today's ads." })); }
@@ -1215,7 +1352,7 @@
     var v = document.getElementById("view-menu");
     v.textContent = "";
     var jump = h("div", { class: "jump" });
-    [["Link devices", "menu-sync"], ["Settings", "menu-settings"], ["The four places", "menu-places"], ["Rules", "menu-rules"], ["Template", "menu-template"], ["Audit", "menu-audit"]].forEach(function (j) {
+    [["Link devices", "menu-sync"], ["Settings", "menu-settings"], ["Where you learn", "menu-places"], ["Rules", "menu-rules"], ["Template", "menu-template"], ["Audit", "menu-audit"]].forEach(function (j) {
       var b = h("button", { type: "button", text: j[0] });
       b.addEventListener("click", function () { document.getElementById(j[1]).scrollIntoView({ block: "start" }); });
       jump.appendChild(b);
@@ -1233,8 +1370,8 @@
       rows.appendChild(h("div", { class: "row" }, [h("div", null, [link(p[0], p[1])]), h("div", { class: "meta", text: p[2] }), h("p", { text: p[3] })]));
     });
     v.appendChild(h("div", { class: "block", id: "menu-places" }, [
-      h("h2", { text: "The four places, and why" }),
-      h("p", { class: "lede", text: "Four places, one job each. All free and in a web browser, except Microsoft's labs. The list changes only when a fact changes, and the audit below says what changed." }),
+      h("h2", { text: "Where you learn, and why" }),
+      h("p", { class: "lede", text: "One main name, Microsoft, so you can say where you studied. Two named extras cover what Microsoft does not offer. Everything is free and in a web browser except Microsoft's labs. The list changes only when a fact changes, and the audit below says what changed." }),
       rows
     ]));
 

@@ -299,3 +299,7 @@ input[type="text"], input[type="search"] { width: 100%; font-family: var(--sans)
 button.big.open { border: 1px solid var(--muted); background: var(--raised); color: var(--ink); }
 .player-box { display: flex; flex-direction: column; gap: 8px; }
 #player { display: block; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--line); border-radius: 6px; background: #000; }
+
+/* "How to do this": numbered steps inside a card. */
+ol.steps { margin: 0; padding-left: 1.35rem; display: flex; flex-direction: column; gap: 8px; font-size: 0.93rem; }
+ol.steps li::marker { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }

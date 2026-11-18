@@ -6,12 +6,16 @@ An audited path into AI red teaming, as a small web app with tick boxes that sav
 
 ## The path
 
-1. **Microsoft AI Red Teaming 101**: 10 short videos, then 8 of Microsoft's own labs (the practice chatbots shown in the videos). The labs are optional: they run on your own computer with Docker and need a paid OpenAI or Azure key, about US$5 of usage.
-2. **One course day, then practice, for 21 days**: the SecurityElites course "AI Red Teaming From Zero", then Gray Swan Arena's training sets. Five write-ups along the way.
-3. **Python**: the first five sections of freeCodeCamp's Python Certification.
-4. **Bounties**: Mozilla 0DIN, then an application to Anthropic's model safety bug bounty.
+Built around one name, Microsoft, so you can say where you studied. Two named extras cover what Microsoft does not offer.
 
-Everything except Microsoft's labs is free and runs in a web browser.
+1. **Microsoft's videos, each with its lab**: the 10 episodes of AI Red Teaming 101, and after each attack episode the lab Microsoft built for it (12 labs). The labs are optional: they run on your own computer with Docker and need a paid OpenAI key, about US$5 of usage.
+2. **Microsoft Learn, AI security fundamentals**: 3 short modules with quizzes and badges.
+3. **Gray Swan Arena** (not Microsoft): free scored practice on chatbots and on agents, which Microsoft has no practice for.
+4. **Python, on Microsoft Learn**: 8 short modules with small projects.
+5. **Automation**: Microsoft's own PyRIT notebooks, run against the labs.
+6. **Proof and bounties** (not Microsoft): a Microsoft Learn transcript and your write-ups, then Mozilla 0DIN and an application to Anthropic's model safety bug bounty.
+
+Everything except Microsoft's labs is free. Every card has numbered "How to do this" steps.
 
 ## What the app does
 
