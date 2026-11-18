@@ -1,5 +1,5 @@
 /* Red Team Path: "mission console" look. Dark by default, light on request.
-   Layout: sticky status header (brand, streak, progress, time dial), one view at a time, fixed tab bar at the bottom. */
+   Layout: sticky header (brand, menu button, progress), one view at a time, fixed tab bar at the bottom. */
 :root {
   --bg: #0B0E13;
   --panel: #121722;
@@ -98,10 +98,12 @@ button.primary { background: var(--accent); color: var(--accent-ink); border-col
 .readout .bar { flex: 1 1 auto; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
 .readout .bar > span { display: block; height: 100%; width: 0; background: var(--ok); transition: width 0.25s ease; }
 @media (prefers-reduced-motion: reduce) { .readout .bar > span { transition: none; } }
-.dial { display: flex; margin-left: auto; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
-.dial button { border: 0; border-radius: 0; background: transparent; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; padding: 6px 14px; min-height: 36px; color: var(--muted); }
-.dial button + button { border-left: 1px solid var(--line); }
-.dial button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+/* Menu button. Its dot shows syncing: grey = off, green = saved, amber = saving or no internet. */
+#menu-btn { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 4px 12px; min-height: 36px; display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+#menu-btn::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+#menu-btn[data-sync="ok"]::before { background: var(--ok); }
+#menu-btn[data-sync="saving"]::before, #menu-btn[data-sync="offline"]::before { background: var(--warn); }
+#menu-btn[aria-current="page"] { border-color: var(--accent); }
 
 /* Views */
 main {
@@ -248,4 +250,36 @@ details.word[open] > summary::after { content: "\2013"; }
 /* Info tab: jump buttons, and sections that stop below the sticky header when jumped to. */
 .jump { display: flex; flex-wrap: wrap; gap: 8px; }
 .jump button { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; min-height: 36px; }
-.block[id] { scroll-margin-top: calc(150px + env(safe-area-inset-top, 0px)); }
+.block[id] { scroll-margin-top: calc(100px + env(safe-area-inset-top, 0px)); }
+
+/* Now tab: one card, two big buttons. */
+.card.now { padding: 16px; gap: 12px; }
+.card.now .title { font-size: 1.2rem; line-height: 1.3; }
+.big { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; padding: 8px 12px; font-family: var(--sans); font-size: 1.02rem; font-weight: 650; letter-spacing: 0; border-radius: 6px; text-decoration: none; text-align: center; }
+a.big.open { border: 1px solid var(--muted); background: var(--raised); color: var(--ink); }
+button.big:disabled { opacity: 0.6; cursor: default; }
+.after { font-size: 0.92rem; color: var(--muted); }
+.after b { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--ink); font-weight: 700; }
+.ticked { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 0.9rem; color: var(--ok); }
+h1:focus { outline: none; }
+
+/* Folded extras: a lesson's new words, the write-up template, the backup code. */
+details.fold { border: 1px solid var(--line); border-radius: 4px; padding: 0 12px; }
+details.fold > summary { cursor: pointer; padding: 10px 0; min-height: 44px; display: flex; align-items: center; font-size: 0.93rem; list-style: none; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::after { content: "+"; margin-left: auto; padding-left: 10px; font-family: var(--mono); color: var(--muted); }
+details.fold[open] > summary::after { content: "\2013"; }
+details.fold[open] { padding-bottom: 12px; }
+details.fold > :not(summary) + :not(summary) { margin-top: 10px; }
+details.fold .rows { border-top: 0; }
+details.fold .row:first-child { padding-top: 0; }
+details.fold .row:last-child { border-bottom: 0; padding-bottom: 0; }
+
+/* Path tab: where you are. */
+.line.here label { font-weight: 600; }
+.line .k.you { display: block; color: var(--accent); margin-bottom: 2px; }
+
+/* Menu: panels and text boxes. 16px text stops phones zooming in when a box is tapped. */
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 14px; }
+input[type="text"], input[type="search"] { width: 100%; font-family: var(--sans); font-size: 16px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; min-height: 44px; }
+.panel input[type="text"], .panel textarea { background: var(--bg); }

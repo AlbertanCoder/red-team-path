@@ -1,5 +1,6 @@
-// Red Team Path: one fixed path into AI red teaming, with ticks that save in this browser.
-// Everything is stored under one key (STORE_KEY). If saving fails, a warning shows and the app keeps working in memory.
+// Red Team Path: one fixed path into AI red teaming, with ticks that save in this browser and can sync between devices.
+// On the device everything is stored under one key (STORE_KEY). If saving fails, a warning shows and the app keeps working in memory.
+// Syncing is optional: a private code, kept on the device, names one spot in a small online store that holds ticks only.
 (function () {
   "use strict";
 
@@ -117,12 +118,12 @@
       var items = [item("c" + d, "course", "Course day " + d + ": " + c[0], c[1], URLS.se + SE_DAYS[i] + "/")];
       var p = PRACTICE[i];
       items.push(p
-        ? item("g" + d, "practice", "Gray Swan: " + p.title, "You try on a scored target what today's course day taught.", URLS.gs + p.slug)
-        : item("g" + d, "practice", "Gray Swan: a live prize contest if one is open, or your favourite set", "You finish the course by testing yourself where it counts.", URLS.gsChallenges));
+        ? item("g" + d, "practice", "Gray Swan: " + p.title, "You try on a scored target what today's course day taught. Stop when your time is up, solved or not: unsolved is normal.", URLS.gs + p.slug)
+        : item("g" + d, "practice", "Gray Swan: a live prize contest if one is open, or your favourite set", "You finish the course by testing yourself where it counts. Stop when your time is up, solved or not.", URLS.gsChallenges));
       if (WRITEUP_ON[d]) {
         items.push(item("w" + WRITEUP_ON[d], "writeup", d === 21
           ? "Write-up 5: your final project report, if the course allows sharing it"
-          : "Write-up " + WRITEUP_ON[d] + ": write down one attack you did, using the template on the Info tab",
+          : "Write-up " + WRITEUP_ON[d] + ": write down one attack you did, using the write-up template",
           "Write-ups are the proof employers and contest organisers ask to see.", ""));
       }
       return { label: "DAY " + (d < 10 ? "0" + d : d), items: items };
@@ -326,16 +327,29 @@
     ["ok", "The job titles, pay and asks on the Jobs tab come from real ads.", "Each ad was read on 16 or 17 Nov 2026. Ads close and pay changes, so they are examples, not offers."],
     ["no", "A posted hourly rate is what you would earn.", "A range in an ad is not an offer, and contract platforms do not guarantee hours."],
     ["no", "The Words tab is an official glossary.", "The meanings are plain-English summaries written for this app and matched to lesson titles. The courses are the authority."],
+    ["ok", "Syncing stores ticks and streak days only, and a sync link reaches only its own ticks.", "Tested on 17 Nov 2026: reading the whole store, listing other people's links, and saving anything except numbers were all refused."],
     ["no", "Finishing this path gets you hired.", "Nobody can promise that. The path builds the things a newcomer can show: write-ups, contest results, a known course and basic Python."]
   ];
 
-  // ---------- saving ----------
+  // ---------- saving on this device ----------
+  // m: box id -> the time it was ticked (positive) or unticked (negative). The newest time wins when two devices disagree.
+  // y: day -> time, for the streak. r: time of the last "clear all ticks". sync: this device's private sync code, or "".
   var STORE_KEY = "redTeamPath.v2";
-  var state = { done: {}, days: {}, best: 0, dial: 4, theme: "dark", open: {}, test: false };
-  var storageOk = true;
+  var SYNC_RE = /^[a-z2-9]{32}$/;
+  var DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+  var state = { m: {}, y: {}, r: 0, best: 0, theme: "dark", open: {}, test: false, sync: "" };
+  var KNOWN = {};
+  var SEQ = []; // every box that counts, in path order
+  STEPS.forEach(function (step, s) {
+    step.groups.forEach(function (group) {
+      group.items.forEach(function (it) {
+        KNOWN[it.id] = it;
+        if (!it.optional) { SEQ.push({ it: it, s: s, label: group.label }); }
+      });
+    });
+  });
 
   function storageFailed() {
-    storageOk = false;
     var w = document.getElementById("storage-warning");
     if (w) { w.hidden = false; }
   }
@@ -349,13 +363,24 @@
   }
   function adopt(p) {
     if (!p || typeof p !== "object") { return; }
-    if (p.done && typeof p.done === "object") { state.done = p.done; }
-    if (p.days && typeof p.days === "object") { state.days = p.days; }
+    var now = Date.now();
+    if (p.m && typeof p.m === "object") {
+      Object.keys(p.m).forEach(function (id) { if (KNOWN[id] && typeof p.m[id] === "number") { state.m[id] = p.m[id]; } });
+    } else if (p.done && typeof p.done === "object") {
+      // Saved by an earlier version of the app, which kept ticks without times.
+      Object.keys(p.done).forEach(function (id) { if (KNOWN[id]) { state.m[id] = now; } });
+    }
+    if (p.y && typeof p.y === "object") {
+      Object.keys(p.y).forEach(function (k) { if (DAY_RE.test(k) && typeof p.y[k] === "number") { state.y[k] = p.y[k]; } });
+    } else if (p.days && typeof p.days === "object") {
+      Object.keys(p.days).forEach(function (k) { if (DAY_RE.test(k)) { state.y[k] = now; } });
+    }
+    if (typeof p.r === "number") { state.r = p.r; }
     if (typeof p.best === "number") { state.best = p.best; }
-    if (p.dial === 1 || p.dial === 2 || p.dial === 4) { state.dial = p.dial; }
     if (p.theme === "light" || p.theme === "dark") { state.theme = p.theme; }
     if (p.open && typeof p.open === "object") { state.open = p.open; }
     if (p.test === true) { state.test = true; }
+    if (typeof p.sync === "string" && SYNC_RE.test(p.sync)) { state.sync = p.sync; }
   }
   function save() {
     try { window.localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { storageFailed(); }
@@ -377,131 +402,357 @@
   function link(text, url, cls) {
     return h("a", { href: url, target: "_blank", rel: "noopener", class: cls || "", text: text });
   }
+  function bullets(items) {
+    var ul = h("ul", { class: "plain" });
+    items.forEach(function (x) { ul.appendChild(h("li", { text: x })); });
+    return ul;
+  }
+  function copyText(text, status, node) {
+    // Copies to the clipboard; if the browser refuses, selects the text so it can be copied by hand.
+    function byHand() {
+      if (node.select) { node.focus(); node.select(); }
+      else {
+        var range = document.createRange();
+        range.selectNodeContents(node);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      status.textContent = "Selected. Copy it from here.";
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { status.textContent = "Copied."; }, byHand);
+    } else { byHand(); }
+  }
+  function isDone(id) { return state.m[id] > 0; }
   function stepItems(step) {
     var all = [];
     step.groups.forEach(function (g) { g.items.forEach(function (it) { all.push(it); }); });
     return all;
   }
   function required(items) { return items.filter(function (it) { return !it.optional; }); }
-  function doneCount(items) { return items.filter(function (it) { return !!state.done[it.id]; }).length; }
-  function allRequired() {
-    var all = [];
-    STEPS.forEach(function (s) { all = all.concat(required(stepItems(s))); });
-    return all;
-  }
-  function dueNow(it) { return !it.optional; }
-  // Where you are: the first group that still has an unticked box.
-  function current() {
-    for (var s = 0; s < STEPS.length; s += 1) {
-      for (var g = 0; g < STEPS[s].groups.length; g += 1) {
-        var left = STEPS[s].groups[g].items.filter(function (it) { return dueNow(it) && !state.done[it.id]; });
-        if (left.length) { return { s: s, g: g }; }
-      }
-    }
-    return null;
+  function doneCount(items) { return items.filter(function (it) { return isDone(it.id); }).length; }
+  // Where you are: the first box in path order that is not ticked. Returns its place in SEQ, or -1 when all are ticked.
+  function currentIndex() {
+    for (var i = 0; i < SEQ.length; i += 1) { if (!isDone(SEQ[i].it.id)) { return i; } }
+    return -1;
   }
   function dayKey(d) {
     return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
   }
   function streak() {
     var d = new Date();
-    if (!state.days[dayKey(d)]) { d.setDate(d.getDate() - 1); } // today not ticked yet: the run still counts through yesterday
+    if (!state.y[dayKey(d)]) { d.setDate(d.getDate() - 1); } // today not ticked yet: the run still counts through yesterday
     var n = 0;
-    while (state.days[dayKey(d)]) { n += 1; d.setDate(d.getDate() - 1); }
+    while (state.y[dayKey(d)]) { n += 1; d.setDate(d.getDate() - 1); }
     return n;
   }
-  function timeFor(it) {
-    if (it.kind === "course") { return "45 TO 75 MIN"; }
-    if (it.kind === "practice") { return state.dial >= 4 ? "ABOUT 2.5 H" : "ABOUT 45 MIN"; }
-    if (it.kind === "writeup") { return "ABOUT 20 MIN"; }
-    return "";
-  }
   function setDone(it, on) {
+    var now = Math.max(Date.now(), state.r + 1); // always newer than the last "clear all"
+    var change = {};
+    state.m[it.id] = on ? now : -now;
+    change["m/" + it.id] = state.m[it.id];
     if (on) {
-      state.done[it.id] = 1;
-      state.days[dayKey(new Date())] = 1;
-      state.best = Math.max(state.best, streak());
-    } else {
-      delete state.done[it.id];
+      var k = dayKey(new Date());
+      if (!state.y[k]) { state.y[k] = now; change["y/" + k] = now; }
+      var run = streak();
+      if (run > state.best) { state.best = run; change.b = run; }
     }
     save();
+    push(change);
+  }
+  function clearAll() {
+    state.m = {};
+    state.y = {};
+    state.best = 0;
+    state.open = {};
+    state.r = Date.now();
+    save();
+    if (state.sync) { sync.replace = true; sync.pending = {}; flushSoon(); }
   }
 
-  // ---------- views ----------
-  function card(it, groupLabel) {
-    var isDone = !!state.done[it.id];
-    var box = h("input", { type: "checkbox", id: "next-" + it.id });
-    box.checked = isDone;
-    box.addEventListener("change", function () { setDone(it, box.checked); render("next-" + it.id); });
-    var tag = [groupLabel, KIND[it.kind], timeFor(it)].filter(Boolean).join(" · ");
-    var why = it.why;
-    return h("div", { class: "card" + (isDone ? " done" : "") }, [
-      h("div", { class: "tag", text: tag }),
-      h("div", { class: "title", text: it.title }),
-      why ? h("div", { class: "why" }, [h("b", { text: "WHY " }), why]) : null,
-      h("div", { class: "acts" }, [
-        h("label", { class: "check", for: "next-" + it.id }, [box, "Mark done"]),
-        it.url ? link("OPEN ↗", it.url, "open") : null
-      ])
-    ]);
+  // ---------- syncing between devices ----------
+  // Each person has one private code. The ticks for that code live at DB + code, and every device holding the code reads and
+  // writes the same spot. Only ticks, streak days and two numbers are stored there: nothing that says who you are.
+  var DB = "https://red-team-path-default-rtdb.firebaseio.com/sync/";
+  var sync = { status: "off", pending: {}, replace: false, busy: false, timer: 0, pullTimer: 0, stream: null };
+  var STATUS_TEXT = {
+    off: "Syncing is off. Ticks are saved on this device only.",
+    saving: "Syncing is on. Saving…",
+    ok: "Syncing is on. Everything is saved.",
+    offline: "Syncing is on, but the internet can't be reached right now. Ticks are safe on this device and will be sent when it is back."
+  };
+
+  function newCode() {
+    var abc = "abcdefghijkmnpqrstuvwxyz23456789";
+    var bytes = new Uint8Array(32);
+    window.crypto.getRandomValues(bytes);
+    var out = "";
+    for (var i = 0; i < bytes.length; i += 1) { out += abc.charAt(bytes[i] % 32); }
+    return out;
+  }
+  function findCode(text) {
+    var m = /(?:^|[^a-z0-9])([a-z2-9]{32})(?![a-z0-9])/.exec(String(text || "").trim());
+    return m ? m[1] : "";
+  }
+  function syncLink() {
+    return window.location.href.split("#")[0] + "#sync=" + state.sync;
+  }
+  function setStatus(s) {
+    sync.status = s;
+    var line = document.getElementById("sync-status");
+    if (line) { line.textContent = STATUS_TEXT[s]; }
+    var btn = document.getElementById("menu-btn");
+    if (btn) {
+      btn.setAttribute("data-sync", s);
+      btn.setAttribute("aria-label", "Menu: syncing, settings and info. " + STATUS_TEXT[s]);
+    }
+  }
+  function request(method, body) {
+    var opts = { method: method };
+    if (body !== undefined) { opts.body = JSON.stringify(body); }
+    return window.fetch(DB + state.sync + ".json", opts).then(function (res) {
+      if (!res.ok) { throw new Error("sync " + res.status); }
+      return res.json();
+    });
+  }
+  function push(change) {
+    if (!state.sync) { return; }
+    Object.keys(change).forEach(function (k) { sync.pending[k] = change[k]; });
+    flushSoon();
+  }
+  function flushSoon() {
+    setStatus("saving");
+    window.clearTimeout(sync.timer);
+    sync.timer = window.setTimeout(flush, 400);
+  }
+  function flush() {
+    if (!state.sync || sync.busy) { return; }
+    var replace = sync.replace;
+    var body = sync.pending;
+    if (!replace && !Object.keys(body).length) { setStatus("ok"); return; }
+    sync.pending = {};
+    sync.replace = false;
+    sync.busy = true;
+    var sent = replace
+      ? request("PUT", { m: state.m, y: state.y, r: state.r, b: state.best })
+      : request("PATCH", body);
+    sent.then(function () {
+      sync.busy = false;
+      if (sync.replace || Object.keys(sync.pending).length) { flush(); } else { setStatus("ok"); }
+    }, function () {
+      sync.busy = false;
+      if (replace) { sync.replace = true; }
+      else { Object.keys(body).forEach(function (k) { if (!(k in sync.pending)) { sync.pending[k] = body[k]; } }); }
+      setStatus("offline");
+    });
+  }
+  // Folds what the other devices saved into this device. Returns what this device has that the others lack.
+  function mergeRemote(remote) {
+    var changed = false;
+    var rr = typeof remote.r === "number" ? remote.r : 0;
+    if (rr > state.r) {
+      // Another device cleared all ticks after this device last heard from it.
+      Object.keys(state.m).forEach(function (id) { if (Math.abs(state.m[id]) <= rr) { delete state.m[id]; } });
+      Object.keys(state.y).forEach(function (k) { if (state.y[k] <= rr) { delete state.y[k]; } });
+      state.best = 0;
+      state.r = rr;
+      changed = true;
+    }
+    if (rr < state.r) { return { replace: true, changed: changed, change: {} }; } // this device cleared more recently
+    var rm = remote.m && typeof remote.m === "object" ? remote.m : {};
+    var ry = remote.y && typeof remote.y === "object" ? remote.y : {};
+    var change = {};
+    Object.keys(rm).forEach(function (id) {
+      var ts = rm[id];
+      if (!KNOWN[id] || typeof ts !== "number" || Math.abs(ts) <= state.r) { return; }
+      if (Math.abs(ts) > Math.abs(state.m[id] || 0)) { state.m[id] = ts; changed = true; }
+    });
+    Object.keys(ry).forEach(function (k) {
+      var ts = ry[k];
+      if (!DAY_RE.test(k) || typeof ts !== "number" || ts <= state.r) { return; }
+      if (!state.y[k] || ts < state.y[k]) { state.y[k] = ts; changed = true; }
+    });
+    if (typeof remote.b === "number" && remote.b > state.best) { state.best = remote.b; changed = true; }
+    Object.keys(state.m).forEach(function (id) { if (rm[id] !== state.m[id]) { change["m/" + id] = state.m[id]; } });
+    Object.keys(state.y).forEach(function (k) { if (ry[k] !== state.y[k]) { change["y/" + k] = state.y[k]; } });
+    if ((typeof remote.b === "number" ? remote.b : 0) < state.best) { change.b = state.best; }
+    return { replace: false, changed: changed, change: change };
+  }
+  function pull() {
+    if (!state.sync) { return; }
+    var code = state.sync;
+    request("GET").then(function (remote) {
+      if (state.sync !== code) { return; }
+      var out = mergeRemote(remote && typeof remote === "object" ? remote : {});
+      save();
+      if (out.replace) { sync.replace = true; sync.pending = {}; }
+      else { Object.keys(out.change).forEach(function (k) { if (!(k in sync.pending)) { sync.pending[k] = out.change[k]; } }); }
+      if (sync.replace || Object.keys(sync.pending).length) { flush(); } else if (!sync.busy) { setStatus("ok"); }
+      if (out.changed) { render(); }
+    }, function () { setStatus("offline"); });
+  }
+  function pullSoon() {
+    window.clearTimeout(sync.pullTimer);
+    sync.pullTimer = window.setTimeout(pull, 250);
+  }
+  function stopListening() {
+    if (sync.stream) { sync.stream.close(); sync.stream = null; }
+  }
+  function listen() {
+    // A live line to the storage: when another device saves a tick, this one hears about it within a second or two.
+    stopListening();
+    if (!state.sync || !window.EventSource) { return; }
+    try {
+      sync.stream = new window.EventSource(DB + state.sync + ".json");
+      sync.stream.addEventListener("put", pullSoon);
+      sync.stream.addEventListener("patch", pullSoon);
+    } catch (e) { sync.stream = null; }
+  }
+  function startSync(code) {
+    state.sync = code;
+    sync.pending = {};
+    sync.replace = false;
+    save();
+    setStatus("saving");
+    pull();
+    listen();
+  }
+  function stopSync() {
+    state.sync = "";
+    sync.pending = {};
+    sync.replace = false;
+    save();
+    stopListening();
+    setStatus("off");
+  }
+  function wake() {
+    // Phones put pages to sleep. When the app comes back, reconnect and fetch what changed.
+    if (!state.sync || document.visibilityState === "hidden") { return; }
+    if (!sync.stream || sync.stream.readyState === 2) { listen(); }
+    pull();
   }
 
-  function renderNext(cur) {
-    var v = document.getElementById("view-next");
+  // ---------- words that belong to a lesson ----------
+  // A word is "new" at the first lesson its tag names: VIDEO 3 -> box v3, DAY 4 -> box c4, STEP 4 -> box b1.
+  var WORDS_AT = {};
+  WORDS.forEach(function (g) {
+    g[1].forEach(function (w) {
+      var m = /^(VIDEO|DAY|STEP) (\d+)/.exec(w[1]);
+      if (!m) { return; }
+      var id = m[1] === "VIDEO" ? "v" + m[2] : m[1] === "DAY" ? "c" + m[2] : "b1";
+      (WORDS_AT[id] = WORDS_AT[id] || []).push(w);
+    });
+  });
+
+  // ---------- Now tab: one thing at a time ----------
+  var OPEN_LABEL = { video: "Open the video", course: "Open the lesson", practice: "Open the practice", code: "Open the course", bounty: "Open the page" };
+  var lastDone = null; // the box ticked most recently on this screen, so one tap can undo it
+  var tickedAt = 0;    // a fast double tap must not tick two boxes
+
+  function tagFor(entry) {
+    var it = entry.it;
+    var parts = [];
+    if (entry.label) { parts.push(entry.label); }
+    parts.push(KIND[it.kind]);
+    if (it.kind === "course") { parts.push("45 TO 75 MIN"); }
+    if (it.kind === "writeup") { parts.push("ABOUT 20 MIN"); }
+    return parts.join(" · ");
+  }
+  function templateFold() {
+    var status = h("span", { class: "status-line", role: "status" });
+    var pre = h("pre", { class: "template", text: TEMPLATE });
+    var copy = h("button", { type: "button", text: "Copy template" });
+    copy.addEventListener("click", function () { copyText(TEMPLATE, status, pre); });
+    return h("details", { class: "fold" }, [h("summary", { text: "Show the write-up template" }), pre, h("div", { class: "btnrow" }, [copy, status])]);
+  }
+  function wordsFold(words) {
+    var list = h("div", { class: "rows" });
+    words.forEach(function (w) {
+      list.appendChild(h("div", { class: "row" }, [h("div", null, [h("strong", { text: w[0] })]), h("p", { text: w[2] })]));
+    });
+    return h("details", { class: "fold", id: "new-words" }, [h("summary", { text: "New words in this lesson: " + words.length }), list]);
+  }
+
+  function renderNow(idx) {
+    var v = document.getElementById("view-now");
     v.textContent = "";
-    if (!cur) {
+    var undo = null;
+    if (lastDone && isDone(lastDone.id)) {
+      var undoBtn = h("button", { type: "button", class: "ghost", id: "undo-btn", text: "UNDO" });
+      undoBtn.addEventListener("click", function () {
+        var it = lastDone;
+        lastDone = null;
+        setDone(it, false);
+        render("done-btn");
+      });
+      undo = h("p", { class: "ticked", role: "status" }, [h("span", { text: "Ticked: " + lastDone.title }), undoBtn]);
+    }
+    if (idx === -1) {
       v.appendChild(h("div", { class: "block" }, [
         h("div", { class: "eyebrow", text: "> PATH COMPLETE" }),
         h("h1", { text: "Every box is ticked" }),
-        h("p", { class: "lede", text: "Keep entering Gray Swan contests and keep writing up what you find." })
+        h("p", { class: "lede", text: "Keep entering Gray Swan contests and keep writing up what you find. The Jobs tab shows where to apply." }),
+        undo
       ]));
       return;
     }
-    var step = STEPS[cur.s];
-    var group = step.groups[cur.g];
+    var entry = SEQ[idx];
+    var it = entry.it;
+    var step = STEPS[entry.s];
+    var stepStart = idx === 0 || SEQ[idx - 1].s !== entry.s;
+    var words = WORDS_AT[it.id];
+    var why = it.why || (stepStart ? step.why : "");
+
+    var doneBtn = h("button", { type: "button", class: "big primary", id: "done-btn", text: "I'm done ✓" });
+    if (Date.now() - tickedAt < 700) {
+      doneBtn.disabled = true;
+      window.setTimeout(function () { doneBtn.disabled = false; }, 700);
+    }
+    doneBtn.addEventListener("click", function () {
+      tickedAt = Date.now();
+      lastDone = it;
+      setDone(it, true);
+      render("now-title");
+    });
+
     v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "eyebrow", text: "> NEXT · " + step.short }),
-      h("h1", { text: step.title }),
-      h("p", { class: "lede", text: step.goal }),
-      step.why ? h("p", { class: "why" }, [h("b", { text: "WHY " }), step.why]) : null
+      h("div", { class: "eyebrow", text: "> " + step.title.toUpperCase() }),
+      h("h1", { id: "now-title", tabindex: "-1", text: "Do this now" }),
+      idx === 0 ? h("p", { class: "lede", text: "One fixed path: 4 steps, " + SEQ.length + " boxes, all free. Open the card below, do it, then tap I'm done. The next one appears." }) : null,
+      stepStart && idx !== 0 ? h("p", { class: "lede", text: step.goal }) : null
     ]));
-    var due = group.items.filter(dueNow);
-    var show = due;
-    if (!group.label) {
-      // Long lists (videos, Python sections): show only the next few unticked boxes.
-      var limit = step.short === "VIDEOS" ? (state.dial === 1 ? 2 : state.dial === 2 ? 3 : 5) : 1;
-      show = due.filter(function (it) { return !state.done[it.id]; }).slice(0, limit);
-    }
-    if (group.label && state.dial === 1) {
-      // 1 hour a day: the course day is one sitting, the practice (and any write-up) is the next.
-      var course = due.filter(function (it) { return it.kind === "course"; });
-      var courseLeft = course.some(function (it) { return !state.done[it.id]; });
-      show = courseLeft ? course : due.filter(function (it) { return it.kind !== "course"; });
-    }
-    var cards = h("div", { class: "block" });
-    show.forEach(function (it) { cards.appendChild(card(it, group.label)); });
-    v.appendChild(cards);
-    if (step.short === "COURSE + PRACTICE" && state.dial === 1) {
-      v.appendChild(h("p", { class: "note", text: "At 1 hour a day the course and Gray Swan take turns: the course day in one sitting, the practice in the next. Nothing is skipped; step 2 just takes about twice as many days. Stop Gray Swan when your hour is up, solved or not." }));
-    }
-    if (step.short === "COURSE + PRACTICE" && state.dial >= 2) {
-      v.appendChild(h("p", { class: "note", text: "Stop Gray Swan when your time is up, solved or not. Unsolved is normal." }));
-    }
+    v.appendChild(h("div", { class: "card now", id: "now-card", "data-id": it.id }, [
+      h("div", { class: "tag", text: tagFor(entry) }),
+      h("div", { class: "title", text: it.title }),
+      why ? h("div", { class: "why" }, [h("b", { text: "WHY " }), why]) : null,
+      words ? wordsFold(words) : null,
+      it.kind === "writeup" ? templateFold() : null,
+      it.url ? link(OPEN_LABEL[it.kind] + " ↗", it.url, "big open") : null,
+      doneBtn
+    ]));
+    var after = idx + 1 < SEQ.length ? SEQ[idx + 1].it.title : "that was the last box.";
+    v.appendChild(h("div", { class: "block" }, [
+      h("p", { class: "after", id: "after-line" }, [h("b", { text: "AFTER THIS " }), after]),
+      undo
+    ]));
   }
 
-  function renderPath(cur) {
+  // ---------- Path tab: the whole list ----------
+  function renderPath(idx) {
     var v = document.getElementById("view-path");
     v.textContent = "";
+    var here = idx === -1 ? null : SEQ[idx];
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> PATH" }),
       h("h1", { text: "Four steps, top to bottom" }),
-      h("p", { class: "lede", text: "Days are not tied to dates. Tick a box when it is done." })
+      h("p", { class: "lede", text: "The whole list. Days are not tied to dates. Tick or untick any box here." })
     ]));
     STEPS.forEach(function (step, s) {
       var req = required(stepItems(step));
       var n = doneCount(req);
       var det = h("details", { class: "step" + (n === req.length ? " complete" : ""), id: "step-" + (s + 1) });
-      det.open = state.open[s] !== undefined ? !!state.open[s] : !!(cur && cur.s === s);
+      det.open = state.open[s] !== undefined ? !!state.open[s] : !!(here && here.s === s);
       det.addEventListener("toggle", function () { state.open[s] = det.open ? 1 : 0; save(); });
       det.appendChild(h("summary", null, [
         h("span", { class: "stitle", text: step.title }),
@@ -509,19 +760,27 @@
         h("span", { class: "sgoal", text: step.goal })
       ]));
       var body = h("div", { class: "sbody" });
-      step.groups.forEach(function (group, g) {
-        var isCur = !!(cur && cur.s === s && cur.g === g);
-        var grp = h("div", { class: "grp" + (isCur && group.label ? " current" : "") });
-        if (group.label) { grp.appendChild(h("div", { class: "glabel", text: group.label + (isCur ? " · YOU ARE HERE" : "") })); }
+      step.groups.forEach(function (group) {
+        var grp = h("div", { class: "grp" });
+        if (group.label) { grp.appendChild(h("div", { class: "glabel", text: group.label })); }
         group.items.forEach(function (it) {
           var id = "path-" + it.id;
+          var isHere = !!(here && here.it.id === it.id);
           var box = h("input", { type: "checkbox", id: id });
-          box.checked = !!state.done[it.id];
-          box.addEventListener("change", function () { setDone(it, box.checked); render(id); });
-          grp.appendChild(h("div", { class: "line" + (state.done[it.id] ? " done" : "") }, [
+          box.checked = isDone(it.id);
+          box.addEventListener("change", function () {
+            if (!box.checked && lastDone && lastDone.id === it.id) { lastDone = null; }
+            setDone(it, box.checked);
+            render(id);
+          });
+          grp.appendChild(h("div", { class: "line" + (isDone(it.id) ? " done" : "") + (isHere ? " here" : "") }, [
             box,
-            h("label", { for: id }, [h("span", { class: "k", text: KIND[it.kind] }), it.title]),
-            it.url ? h("a", { href: it.url, target: "_blank", rel: "noopener", class: "go", "aria-label": "Open: " + it.title, text: "\u2197" }) : null
+            h("label", { for: id }, [
+              isHere ? h("span", { class: "k you", text: "YOU ARE HERE" }) : null,
+              h("span", { class: "k", text: KIND[it.kind] }),
+              it.title
+            ]),
+            it.url ? h("a", { href: it.url, target: "_blank", rel: "noopener", class: "go", "aria-label": "Open: " + it.title, text: "↗" }) : null
           ]));
         });
         body.appendChild(grp);
@@ -529,72 +788,9 @@
       det.appendChild(body);
       v.appendChild(det);
     });
-    v.appendChild(backupPanel());
   }
 
-  function backupPanel() {
-    var status = h("span", { class: "status-line", role: "status", id: "backup-status" });
-    var area = h("textarea", { id: "backup-code", "aria-label": "Progress code", placeholder: "Paste a progress code here, then press Load this code." });
-    var copyBtn = h("button", { type: "button", id: "backup-copy", text: "Copy my progress" });
-    copyBtn.addEventListener("click", function () {
-      var code = makeCode();
-      area.value = code;
-      function fallback() { area.focus(); area.select(); status.textContent = "Code is in the box. Copy it from there."; }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(code).then(function () { status.textContent = "Copied. Paste it into this app on another device."; }, fallback);
-      } else { fallback(); }
-    });
-    var loadBtn = h("button", { type: "button", id: "backup-load", text: "Load this code" });
-    loadBtn.addEventListener("click", function () {
-      var ok = readCode(area.value);
-      if (ok) { save(); render(); document.getElementById("backup-status").textContent = "Loaded. Your ticks are back."; }
-      else { status.textContent = "That code did not work. Copy the whole code and try again."; }
-    });
-    var clearAsk = h("button", { type: "button", class: "ghost", id: "clear-ask", text: "CLEAR ALL TICKS" });
-    var clearYes = h("button", { type: "button", id: "clear-yes", text: "Yes, clear them" });
-    var clearNo = h("button", { type: "button", id: "clear-no", text: "Keep them" });
-    var confirmRow = h("span", { class: "btnrow", hidden: "" }, [h("span", { class: "status-line", text: "Clear every tick and the streak?" }), clearYes, clearNo]);
-    clearAsk.addEventListener("click", function () { confirmRow.hidden = false; clearAsk.hidden = true; });
-    clearNo.addEventListener("click", function () { confirmRow.hidden = true; clearAsk.hidden = false; });
-    clearYes.addEventListener("click", function () { state.done = {}; state.days = {}; state.best = 0; state.open = {}; save(); render(); });
-    return h("div", { class: "block" }, [
-      h("h2", { text: "Backup" }),
-      h("p", { class: "lede", text: "Ticks save by themselves on this device. To move them to another device, copy your progress here and load the code there." }),
-      h("div", { class: "btnrow" }, [copyBtn, loadBtn, status]),
-      area,
-      h("div", { class: "btnrow" }, [clearAsk, confirmRow])
-    ]);
-  }
-  function makeCode() {
-    var payload = { d: Object.keys(state.done), y: Object.keys(state.days), b: state.best, t: state.dial };
-    return "RTP1." + window.btoa(JSON.stringify(payload));
-  }
-  function readCode(text) {
-    try {
-      var raw = String(text || "").trim();
-      if (raw.indexOf("RTP1.") !== 0) { return false; }
-      var p = JSON.parse(window.atob(raw.slice(5)));
-      if (!p || !Array.isArray(p.d) || !Array.isArray(p.y)) { return false; }
-      var known = {};
-      STEPS.forEach(function (s) { stepItems(s).forEach(function (it) { known[it.id] = 1; }); });
-      var done = {};
-      p.d.forEach(function (id) { if (known[id]) { done[id] = 1; } });
-      var days = {};
-      p.y.forEach(function (k) { if (/^\d{4}-\d{2}-\d{2}$/.test(k)) { days[k] = 1; } });
-      state.done = done;
-      state.days = days;
-      state.best = typeof p.b === "number" ? p.b : 0;
-      if (p.t === 1 || p.t === 2 || p.t === 4) { state.dial = p.t; }
-      return true;
-    } catch (e) { return false; }
-  }
-
-  function bullets(items) {
-    var ul = h("ul", { class: "plain" });
-    items.forEach(function (x) { ul.appendChild(h("li", { text: x })); });
-    return ul;
-  }
-
+  // ---------- Words tab ----------
   function renderWords() {
     var v = document.getElementById("view-words");
     v.textContent = "";
@@ -607,26 +803,50 @@
       renderWords();
       document.getElementById("test-btn").focus({ preventScroll: true });
     });
+    var search = h("input", { type: "search", id: "word-search", placeholder: "Search the words", "aria-label": "Search the words", autocomplete: "off" });
+    var none = h("p", { class: "lede", id: "word-none", hidden: "", text: "No word matches. Try fewer letters." });
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> WORDS · " + total }),
       h("h1", { text: "The words you will hear" }),
       h("p", { class: "lede", text: "Plain-English meanings. The tag shows the video or course day where the word comes up." }),
+      search,
       h("div", { class: "btnrow" }, [toggle, h("span", { class: "status-line", role: "status",
-        text: state.test ? "Say the meaning in your head, then tap the word to check." : "Turn this on to hide the meanings and check yourself." })])
+        text: state.test ? "Say the meaning in your head, then tap the word to check." : "Turn this on to hide the meanings and check yourself." })]),
+      none
     ]));
+    var groups = [];
     WORDS.forEach(function (g) {
       var list = h("div", { class: "rows" });
+      var rows = [];
       g[1].forEach(function (w) {
         var det = h("details", { class: "word" });
         det.open = !state.test;
         det.appendChild(h("summary", null, [h("span", { class: "term", text: w[0] }), w[1] ? h("span", { class: "where", text: w[1] }) : null]));
         det.appendChild(h("p", { text: w[2] }));
         list.appendChild(det);
+        rows.push({ node: det, text: (w[0] + " " + w[2]).toLowerCase() });
       });
-      v.appendChild(h("div", { class: "block" }, [h("h2", { text: g[0] }), list]));
+      var block = h("div", { class: "block" }, [h("h2", { text: g[0] }), list]);
+      v.appendChild(block);
+      groups.push({ node: block, rows: rows });
+    });
+    search.addEventListener("input", function () {
+      var q = search.value.trim().toLowerCase();
+      var shown = 0;
+      groups.forEach(function (g) {
+        var any = false;
+        g.rows.forEach(function (r) {
+          var hit = !q || r.text.indexOf(q) !== -1;
+          r.node.hidden = !hit;
+          if (hit) { any = true; shown += 1; }
+        });
+        g.node.hidden = !any;
+      });
+      none.hidden = shown !== 0;
     });
   }
 
+  // ---------- Jobs tab ----------
   function renderJobs() {
     var v = document.getElementById("view-jobs");
     v.textContent = "";
@@ -681,47 +901,170 @@
     v.appendChild(h("div", { class: "block" }, [h("h2", { text: "Before you apply anywhere" }), bullets(APPLY_RULES)]));
   }
 
-  function renderInfo() {
-    var v = document.getElementById("view-info");
+  // ---------- Menu: syncing, settings, and the reasons behind the path ----------
+  function syncPanel() {
+    var box = document.getElementById("menu-sync");
+    box.textContent = "";
+    box.appendChild(h("h2", { text: "Sync my devices" }));
+    box.appendChild(h("p", { class: "status-line", id: "sync-status", role: "status", text: STATUS_TEXT[sync.status] }));
+
+    var joinStatus = h("span", { class: "status-line", role: "status", id: "join-status" });
+    var joinBox = h("input", { type: "text", id: "join-box", "aria-label": "Sync link from another device", placeholder: "Paste a sync link here", autocomplete: "off", autocapitalize: "off", spellcheck: "false" });
+    var joinBtn = h("button", { type: "button", id: "join-btn", text: "Use this link" });
+    joinBtn.addEventListener("click", function () {
+      var code = findCode(joinBox.value);
+      if (!code) { joinStatus.textContent = "That is not a sync link. Copy the whole link and try again."; return; }
+      startSync(code);
+      syncPanel();
+    });
+
+    if (!state.sync) {
+      var onBtn = h("button", { type: "button", class: "primary", id: "sync-on", text: "Turn on syncing" });
+      onBtn.addEventListener("click", function () {
+        startSync(newCode());
+        syncPanel();
+      });
+      box.appendChild(h("p", { text: "Turn this on to see the same ticks on your phone, your computer and any other device, and to keep a safe copy if this browser is ever cleared. No account and no password." }));
+      box.appendChild(h("div", { class: "btnrow" }, [onBtn]));
+      box.appendChild(h("p", { class: "dim", text: "Already turned it on somewhere else? Paste that device's sync link:" }));
+      box.appendChild(joinBox);
+      box.appendChild(h("div", { class: "btnrow" }, [joinBtn, joinStatus]));
+      return;
+    }
+
+    var linkStatus = h("span", { class: "status-line", role: "status", id: "link-status" });
+    var linkBox = h("input", { type: "text", id: "sync-link", readonly: "", "aria-label": "Your private sync link", value: syncLink() });
+    linkBox.value = syncLink();
+    var copyBtn = h("button", { type: "button", class: "primary", id: "sync-copy", text: "Copy my sync link" });
+    copyBtn.addEventListener("click", function () { copyText(syncLink(), linkStatus, linkBox); });
+    var shareBtn = null;
+    if (navigator.share) {
+      shareBtn = h("button", { type: "button", id: "sync-share", text: "Send it to myself" });
+      shareBtn.addEventListener("click", function () {
+        navigator.share({ title: "Red Team Path sync link", url: syncLink() }).catch(function () {});
+      });
+    }
+    var offAsk = h("button", { type: "button", class: "ghost", id: "sync-off", text: "STOP SYNCING ON THIS DEVICE" });
+    offAsk.addEventListener("click", function () { stopSync(); syncPanel(); });
+
+    box.appendChild(h("p", { text: "To add a device: open this link on it once. On an iPhone home-screen app, paste the link into this same box there instead (the home-screen app and Safari keep separate ticks)." }));
+    box.appendChild(linkBox);
+    box.appendChild(h("div", { class: "btnrow" }, [copyBtn, shareBtn, linkStatus]));
+    box.appendChild(h("p", { class: "note", text: "Keep this link to yourself. Anyone who has it can see and change your ticks. It stores ticks only: no name, no email, nothing about you." }));
+    box.appendChild(h("details", { class: "fold" }, [
+      h("summary", { text: "Use a link from another device instead" }),
+      h("p", { class: "dim", text: "This device joins that link, and the ticks from both are combined." }),
+      joinBox,
+      h("div", { class: "btnrow" }, [joinBtn, joinStatus])
+    ]));
+    box.appendChild(h("div", { class: "btnrow" }, [offAsk]));
+  }
+
+  function settingsPanel() {
+    var box = document.getElementById("menu-settings");
+    var oldFold = box.querySelector("details");
+    var foldOpen = !!(oldFold && oldFold.open);
+    var oldArea = document.getElementById("backup-code");
+    var typed = oldArea ? oldArea.value : "";
+    box.textContent = "";
+    var themeBtn = h("button", { type: "button", id: "theme-btn", text: state.theme === "dark" ? "Switch to light" : "Switch to dark" });
+    themeBtn.addEventListener("click", function () {
+      state.theme = state.theme === "dark" ? "light" : "dark";
+      save();
+      render("theme-btn");
+    });
+    var run = streak();
+
+    var status = h("span", { class: "status-line", role: "status", id: "backup-status" });
+    var area = h("textarea", { id: "backup-code", "aria-label": "Progress code", placeholder: "Paste a progress code here, then press Load this code." });
+    area.value = typed;
+    var copyBtn = h("button", { type: "button", id: "backup-copy", text: "Copy my progress" });
+    copyBtn.addEventListener("click", function () {
+      area.value = makeCode();
+      copyText(area.value, status, area);
+    });
+    var loadBtn = h("button", { type: "button", id: "backup-load", text: "Load this code" });
+    loadBtn.addEventListener("click", function () {
+      if (readCode(area.value)) { render(); document.getElementById("backup-status").textContent = "Loaded. Your ticks are back."; }
+      else { status.textContent = "That code did not work. Copy the whole code and try again."; }
+    });
+
+    var clearAsk = h("button", { type: "button", class: "ghost", id: "clear-ask", text: "CLEAR ALL TICKS" });
+    var clearYes = h("button", { type: "button", id: "clear-yes", text: "Yes, clear them" });
+    var clearNo = h("button", { type: "button", id: "clear-no", text: "Keep them" });
+    var confirmRow = h("span", { class: "btnrow", hidden: "" }, [
+      h("span", { class: "status-line", text: state.sync ? "Clear every tick and the streak, on every synced device?" : "Clear every tick and the streak?" }), clearYes, clearNo]);
+    clearAsk.addEventListener("click", function () { confirmRow.hidden = false; clearAsk.hidden = true; });
+    clearNo.addEventListener("click", function () { confirmRow.hidden = true; clearAsk.hidden = false; });
+    clearYes.addEventListener("click", function () { lastDone = null; clearAll(); render(); });
+
+    box.appendChild(h("h2", { text: "Settings" }));
+    box.appendChild(h("div", { class: "btnrow" }, [themeBtn]));
+    box.appendChild(h("p", { id: "streak-line", text: "Streak: " + run + (run === 1 ? " day" : " days") + " in a row with at least one box ticked. Best run: " + state.best + "." }));
+    box.appendChild(h("details", { class: "fold", id: "backup-fold", open: foldOpen ? "" : null }, [
+      h("summary", { text: "Backup code (works without syncing)" }),
+      h("p", { class: "dim", text: "A code that holds your ticks. Copy it here and load it in this app on another device, or keep it somewhere safe." }),
+      h("div", { class: "btnrow" }, [copyBtn, loadBtn, status]),
+      area
+    ]));
+    box.appendChild(h("div", { class: "btnrow" }, [clearAsk, confirmRow]));
+  }
+  function makeCode() {
+    var done = Object.keys(state.m).filter(isDone);
+    return "RTP1." + window.btoa(JSON.stringify({ d: done, y: Object.keys(state.y), b: state.best }));
+  }
+  function readCode(text) {
+    try {
+      var raw = String(text || "").trim();
+      if (raw.indexOf("RTP1.") !== 0) { return false; }
+      var p = JSON.parse(window.atob(raw.slice(5)));
+      if (!p || !Array.isArray(p.d) || !Array.isArray(p.y)) { return false; }
+      // A loaded code replaces what is here, the same as clearing and ticking again.
+      var best = typeof p.b === "number" ? p.b : 0;
+      clearAll();
+      var now = state.r + 1;
+      p.d.forEach(function (id) { if (KNOWN[id]) { state.m[id] = now; } });
+      p.y.forEach(function (k) { if (DAY_RE.test(k)) { state.y[k] = now; } });
+      state.best = best;
+      save();
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function renderMenu() {
+    var v = document.getElementById("view-menu");
     v.textContent = "";
     var jump = h("div", { class: "jump" });
-    [["Places", "info-places"], ["Rules", "info-rules"], ["Template", "info-template"], ["Audit", "info-audit"]].forEach(function (j) {
+    [["Sync", "menu-sync"], ["Settings", "menu-settings"], ["The four places", "menu-places"], ["Rules", "menu-rules"], ["Template", "menu-template"], ["Audit", "menu-audit"]].forEach(function (j) {
       var b = h("button", { type: "button", text: j[0] });
       b.addEventListener("click", function () { document.getElementById(j[1]).scrollIntoView({ block: "start" }); });
       jump.appendChild(b);
     });
     v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "eyebrow", text: "> INFO" }),
-      h("h1", { text: "Why this path, and how it was checked" }),
-      h("p", { class: "lede", text: "Four places, one job each. All free, all in a web browser. The list changes only when a fact changes, and the audit below says what changed." }),
+      h("div", { class: "eyebrow", text: "> MENU" }),
+      h("h1", { text: "Syncing, settings and info" }),
       jump
     ]));
+    v.appendChild(h("div", { class: "block panel", id: "menu-sync" }));
+    v.appendChild(h("div", { class: "block panel", id: "menu-settings" }));
 
     var rows = h("div", { class: "rows" });
     PLACES.forEach(function (p) {
       rows.appendChild(h("div", { class: "row" }, [h("div", null, [link(p[0], p[1])]), h("div", { class: "meta", text: p[2] }), h("p", { text: p[3] })]));
     });
-    v.appendChild(h("div", { class: "block", id: "info-places" }, [h("h2", { text: "The four places" }), rows]));
+    v.appendChild(h("div", { class: "block", id: "menu-places" }, [
+      h("h2", { text: "The four places, and why" }),
+      h("p", { class: "lede", text: "Four places, one job each. All free, all in a web browser. The list changes only when a fact changes, and the audit below says what changed." }),
+      rows
+    ]));
 
-    v.appendChild(h("div", { class: "block", id: "info-rules" }, [h("h2", { text: "Rules that keep you safe and hireable" }), bullets(RULES)]));
+    v.appendChild(h("div", { class: "block", id: "menu-rules" }, [h("h2", { text: "Rules that keep you safe and hireable" }), bullets(RULES)]));
 
     var status = h("span", { class: "status-line", role: "status" });
     var pre = h("pre", { class: "template", id: "template", text: TEMPLATE });
     var copy = h("button", { type: "button", id: "copy-template", text: "Copy template" });
-    copy.addEventListener("click", function () {
-      function selectIt() {
-        var range = document.createRange();
-        range.selectNodeContents(pre);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-        status.textContent = "Selected. Copy it from here.";
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(TEMPLATE).then(function () { status.textContent = "Copied."; }, selectIt);
-      } else { selectIt(); }
-    });
-    v.appendChild(h("div", { class: "block", id: "info-template" }, [h("h2", { text: "Write-up template" }), pre, h("div", { class: "btnrow" }, [copy, status])]));
+    copy.addEventListener("click", function () { copyText(TEMPLATE, status, pre); });
+    v.appendChild(h("div", { class: "block", id: "menu-template" }, [h("h2", { text: "Write-up template" }), pre, h("div", { class: "btnrow" }, [copy, status])]));
 
     var counts = { ok: 0, no: 0, changed: 0 };
     AUDIT.forEach(function (a) { counts[a[0]] += 1; });
@@ -733,73 +1076,81 @@
         h("p", { class: "dim", text: a[2] })
       ]));
     });
-    v.appendChild(h("div", { class: "block", id: "info-audit" }, [
+    v.appendChild(h("div", { class: "block", id: "menu-audit" }, [
       h("div", { class: "eyebrow", text: "> AUDIT · " + AUDIT_DATE.toUpperCase() }),
       h("h2", { text: "What was checked, and what was not" }),
       h("p", { class: "lede", text: counts.ok + " claims checked against their source, " + counts.changed + " corrected, " + counts.no + " that nobody can check or promise." }),
       audit
     ]));
+    syncPanel();
+    settingsPanel();
   }
 
   // ---------- frame ----------
-  var TABS = ["next", "path", "words", "jobs", "info"];
-  var OLD_TABS = { why: "info", audit: "info" }; // links saved before the tabs changed still land somewhere useful
+  var TABS = ["now", "path", "words", "jobs", "menu"];
+  var OLD_TABS = { next: "now", info: "menu", why: "menu", audit: "menu" }; // links saved before the tabs changed still land somewhere useful
   function currentTab() {
-    var name = (window.location.hash || "#next").slice(1);
+    var name = (window.location.hash || "#now").slice(1);
     name = OLD_TABS[name] || name;
-    return TABS.indexOf(name) === -1 ? "next" : name;
+    return TABS.indexOf(name) === -1 ? "now" : name;
   }
   function showTab() {
     var name = currentTab();
     TABS.forEach(function (t) { document.getElementById("view-" + t).hidden = t !== name; });
-    Array.prototype.forEach.call(document.querySelectorAll(".tabbar a"), function (a) {
+    Array.prototype.forEach.call(document.querySelectorAll(".tabbar a, #menu-btn"), function (a) {
       if (a.getAttribute("data-tab") === name) { a.setAttribute("aria-current", "page"); } else { a.removeAttribute("aria-current"); }
     });
   }
-  function renderStatus(cur) {
-    var req = allRequired();
-    var n = doneCount(req);
-    document.getElementById("barfill").style.width = (req.length ? (n / req.length) * 100 : 0) + "%";
-    document.getElementById("count-label").textContent = n + "/" + req.length;
-    document.getElementById("step-label").textContent = cur ? "STEP " + (cur.s + 1) + "/" + STEPS.length : "COMPLETE";
-    var run = streak();
-    var chip = document.getElementById("streak");
-    chip.textContent = "STREAK " + run + "D";
-    chip.className = "chip" + (run > 0 ? " live" : "");
-    chip.title = "Days in a row with at least one box ticked. Best run: " + state.best + " days.";
-    Array.prototype.forEach.call(document.querySelectorAll(".dial button"), function (b) {
-      b.setAttribute("aria-pressed", Number(b.getAttribute("data-dial")) === state.dial ? "true" : "false");
-    });
+  function showPlace() {
+    // On the Path tab, bring "you are here" into view.
+    var here = document.querySelector("#view-path .line.here");
+    if (currentTab() === "path" && here) { here.scrollIntoView({ block: "center" }); } else { window.scrollTo(0, 0); }
+  }
+  function renderStatus(idx) {
+    var n = SEQ.filter(function (e) { return isDone(e.it.id); }).length;
+    document.getElementById("barfill").style.width = (SEQ.length ? (n / SEQ.length) * 100 : 0) + "%";
+    document.getElementById("count-label").textContent = n + " OF " + SEQ.length + " DONE";
+    document.getElementById("step-label").textContent = idx === -1 ? "COMPLETE" : "STEP " + (SEQ[idx].s + 1) + " OF " + STEPS.length;
     document.documentElement.setAttribute("data-theme", state.theme);
-    document.getElementById("theme-btn").textContent = state.theme === "dark" ? "LIGHT" : "DARK";
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) { meta.setAttribute("content", state.theme === "dark" ? "#0B0E13" : "#EDF0F4"); }
   }
   function render(focusId) {
-    var cur = current();
-    renderStatus(cur);
-    renderNext(cur);
-    renderPath(cur);
+    var idx = currentIndex();
+    renderStatus(idx);
+    renderNow(idx);
+    renderPath(idx);
+    settingsPanel();
     if (focusId) {
       var again = document.getElementById(focusId);
       if (again) { again.focus({ preventScroll: true }); }
     }
   }
+  function takeLink() {
+    // Opening a sync link (…#sync=code) joins that code, then removes the code from the address bar.
+    var m = /^#sync=(.*)$/.exec(window.location.hash || "");
+    if (!m) { return false; }
+    var code = findCode(m[1]);
+    window.history.replaceState(null, "", "#menu");
+    if (code) { startSync(code); }
+    return true;
+  }
 
-  Array.prototype.forEach.call(document.querySelectorAll(".dial button"), function (b) {
-    b.addEventListener("click", function () { state.dial = Number(b.getAttribute("data-dial")); save(); render(); });
+  window.addEventListener("hashchange", function () {
+    if (takeLink()) { syncPanel(); }
+    showTab();
+    showPlace();
   });
-  document.getElementById("theme-btn").addEventListener("click", function () {
-    state.theme = state.theme === "dark" ? "light" : "dark";
-    save();
-    render();
-  });
-  window.addEventListener("hashchange", function () { showTab(); window.scrollTo(0, 0); });
+  document.addEventListener("visibilitychange", wake);
+  window.addEventListener("online", wake);
+  window.addEventListener("pageshow", function (e) { if (e.persisted) { wake(); } });
 
   load();
+  var joined = takeLink();
   renderWords();
   renderJobs();
-  renderInfo();
+  renderMenu();
   render();
   showTab();
+  if (!joined && state.sync) { setStatus("saving"); pull(); listen(); } else { setStatus(sync.status); }
 })();
