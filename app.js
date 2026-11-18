@@ -202,7 +202,7 @@
       "Every Microsoft Learn module you finish from now on adds a badge to this profile. It is the page you will show employers.",
       URLS.learn, { how: [
         "Open Microsoft Learn and press Sign in at the top right.",
-        "Sign in with a Microsoft account. An Outlook, Hotmail or Xbox account works, or make one for free.",
+        "Sign in with a Microsoft account. An Outlook or Xbox sign-in works, or make one for free.",
         "Open your profile and set the display name to one you are happy for an employer to see.",
         "You are done when your profile page opens. Stay signed in from now on, so each module counts."
       ] })];
