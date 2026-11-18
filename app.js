@@ -136,11 +136,11 @@
   }
   function labSteps(l) {
     return [
-      "Double-click Start labs on your Desktop and type " + l[0] + ". The labs page opens in your browser.",
-      "Press Launch next to Lab " + l[0] + ": " + l[1] + ". It says Loading your challenge for a few seconds.",
+      "If the labs are not running yet, double-click Start labs and press Enter. All the labs start together and the labs page opens. Once a day is enough.",
+      "On the labs page, press Launch next to Lab " + l[0] + ": " + l[1] + ". It says Loading your challenge for a few seconds. To change lab later, go back to the labs page.",
       "Your goal: " + l[3],
       "Start with what Episode " + l[4] + " showed. Change one thing at a time, and keep a note of what you typed and what came back.",
-      "You are done when the lab says you solved it, or after 45 minutes of honest tries. Unsolved is normal: tick it and move on. Then double-click Stop labs."
+      "You are done when the lab says you solved it, or after 45 minutes of honest tries. Unsolved is normal: tick it and move on. When you finish for the day, double-click Stop labs."
     ];
   }
   function writeupSteps(what) {
@@ -1926,6 +1926,18 @@
     a.remove();
     window.setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
   }
+  function chatFileText(raw) {
+    // Turns a chat downloaded from a Microsoft lab (its Download chat button gives a .json file) into plain lines.
+    var d = JSON.parse(raw);
+    if (!d || !Array.isArray(d.messages) || !d.messages.length) { throw new Error("no messages"); }
+    var lines = d.messages.map(function (m) {
+      if (typeof m.content !== "string") { throw new Error("not a chat"); }
+      return (m.authorRole === 0 ? "You: " : "Bot: ") + m.content.trim();
+    });
+    var when = new Date(d.messages[0].timestamp);
+    var stamp = isNaN(when.getTime()) ? "" : ", " + when.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+    return { count: lines.length, text: "--- Lab chat" + stamp + " (" + lines.length + " messages) ---\n" + lines.join("\n\n") + "\n--- end of chat ---" };
+  }
   function refreshNotes() {
     // The same note can be on screen in two places (the card and the My notes page). Boxes you are not typing in
     // are brought up to date, so an old copy can never overwrite newer text.
@@ -1952,7 +1964,26 @@
       saveFile("red-team-" + it.id + ".txt", it.title + "\n\n" + area.value + "\n");
       status.textContent = "Saved as a file. Look in your Downloads folder.";
     });
-    var row = [copy, file];
+    var pick = h("input", { type: "file", class: "note-chat-file", accept: ".json,application/json", hidden: "", "aria-label": "Chat file downloaded from a lab" });
+    pick.addEventListener("change", function () {
+      var f = pick.files && pick.files[0];
+      if (!f) { return; }
+      var reader = new FileReader();
+      reader.onload = function () {
+        try {
+          var chat = chatFileText(String(reader.result));
+          area.value = (area.value.trim() ? area.value.replace(/\s+$/, "") + "\n\n" : "") + chat.text + "\n";
+          status.textContent = saveNote(it.id, area.value) ? "Added " + chat.count + " messages from the chat file. Saved on this device." : "Could not save: this browser is blocking storage.";
+        } catch (e) {
+          status.textContent = "That file is not a chat downloaded from a lab. In the lab, use its Download chat button, then pick that file.";
+        }
+        pick.value = "";
+      };
+      reader.readAsText(f);
+    });
+    var add = h("button", { type: "button", class: "note-add-chat", text: "Add a lab chat file" });
+    add.addEventListener("click", function () { pick.click(); });
+    var row = [copy, file, add, pick];
     if (isWriteup) {
       var tmpl = h("button", { type: "button", class: "note-template", text: "Use the template" });
       tmpl.addEventListener("click", function () {
@@ -1972,7 +2003,7 @@
     var fold = h("details", { class: "fold", id: "note-fold" }, [
       h("summary", { text: (isWriteup ? "Write it here" : "Your notes for this one") + (n ? " · " + n + " words" : "") }),
       noteEditor(it, false),
-      h("p", { class: "note", text: "Kept on this device only. Every note is also listed under Tutor, My notes." })
+      h("p", { class: "note", text: "Kept on this device only. Every note is also listed under Tutor, My notes. Add a lab chat file puts a chat you downloaded from a lab into this box." })
     ]);
     if (isWriteup) { fold.open = true; }
     return fold;

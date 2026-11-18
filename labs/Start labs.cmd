@@ -1,7 +1,7 @@
 @echo off
 rem Starts Microsoft's AI Red Teaming labs on this PC and opens the labs page in Chrome.
-rem It starts the labs page plus the lab you pick. Each lab is its own small program (about 50 MB when idle).
-rem Type A to start all twelve at once if the computer has memory to spare.
+rem Press Enter and all twelve labs start together (about 80 MB each), so you can move between labs on the labs page.
+rem It never stops a lab that is already running. Run "Stop labs" when you are finished for the day.
 setlocal
 title Start Microsoft's AI red teaming labs
 cd /d "%USERPROFILE%\ms-airt-labs"
@@ -32,20 +32,21 @@ if errorlevel 1 (
 
 echo.
 set "LAB="
-set /p "LAB= Which lab do you want to do? Type a number from 1 to 12 (or A for all twelve) and press Enter: "
+echo  All twelve labs start together, so you can move between them on the labs page.
+set /p "LAB= Press Enter to start them. (To start only one lab and use less memory, type its number first.) "
 set "WHAT="
+if "%LAB%"=="" goto :start
 if /I "%LAB%"=="A" goto :start
 for %%n in (1 2 3 4 5 6 7 8 9 10 11 12) do if "%LAB%"=="%%n" set "WHAT=challenge-home chat-copilot-%%n"
 if not defined WHAT (
-  echo  That is not a number from 1 to 12, or the letter A. Run "Start labs" again.
+  echo  That is not a number from 1 to 12. Run "Start labs" again and just press Enter to start them all.
   pause
   exit /b 1
 )
 
 :start
 echo.
-echo  Stopping any lab that is still running, then starting. This takes about half a minute...
-"%DOCKER%" compose -f docker-compose-openai.yaml down >nul 2>&1
+echo  Starting. Labs that are already running are left alone. This takes about half a minute...
 "%DOCKER%" compose -f docker-compose-openai.yaml up -d --no-build %WHAT%
 if errorlevel 1 (
   echo.
@@ -55,7 +56,7 @@ if errorlevel 1 (
 )
 
 for /f "tokens=1,* delims==" %%a in ('findstr /B "AUTH_KEY=" .env') do set "AUTH=%%b"
-timeout /t 12 /nobreak >nul
+timeout /t 20 /nobreak >nul
 rem Open the labs page in Chrome when Chrome is installed, otherwise in the default browser.
 set "PAGE=http://localhost:5000/login?auth=%AUTH%"
 reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe" >nul 2>&1 && goto :chrome
@@ -67,9 +68,9 @@ start "" chrome "%PAGE%"
 :opened
 echo.
 echo  The labs page is opening in your browser. Press Launch next to the lab you want.
+echo  To change lab, go back to the labs page and press Launch on another one. You do not need this window again.
 echo  A lab says "Loading your challenge" for a few seconds while it starts.
 echo  If it never gets past that, your OpenAI key is missing, wrong or out of credit.
-echo  Labs you did not start will not open until you start them with this same shortcut.
-echo  When you are finished, run "Stop labs" to give the memory back.
+echo  When you are finished for the day, run "Stop labs" to give the memory back.
 echo.
 pause

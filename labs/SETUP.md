@@ -65,7 +65,7 @@ the build there was slowed down and done in turns. If it stops with "404 Not Fou
 ### 6. Start a lab
 
 1. Download [`Start labs.cmd`](Start%20labs.cmd) and [`Stop labs.cmd`](Stop%20labs.cmd) from this folder onto your Desktop.
-2. Double-click **Start labs**. Type the number of the lab you want (1 to 12), or `A` for all twelve.
+2. Double-click **Start labs** and press Enter. All twelve labs start together (about 80 MB of memory each), so you can move between labs on the labs page. To start only one lab, type its number first. It never stops a lab that is already running.
 3. The labs page opens in your browser. Press **Launch** next to your lab.
 4. The lab says "Loading your challenge" for a few seconds. If it never gets past that, your OpenAI key is missing,
    wrong or out of credit.
