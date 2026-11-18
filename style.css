@@ -322,3 +322,8 @@ ol.steps li::marker { font-family: var(--mono); font-size: 0.8rem; color: var(--
 .opt.right { border-color: var(--ok); }
 .opt.wrong { border-color: var(--warn); }
 .note.hint { border-left-color: var(--warn); color: var(--ink); }
+
+/* Notes and write-ups: a plain writing box that saves as you type. */
+.note-box { display: flex; flex-direction: column; gap: 8px; }
+.note-area { font-family: var(--sans); line-height: 1.5; min-height: 150px; }
+.note-area.big-note { min-height: 46vh; }

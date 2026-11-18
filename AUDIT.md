@@ -1,0 +1,53 @@
+# Audit record
+
+Last audited: 18 Nov 2026. This is what was checked in the Red Team Path app, what was corrected, and what nobody can check or promise. It used to be shown in the app's Menu.
+
+## Checked against its source (24)
+
+- **Microsoft's series has 10 episodes; episodes 8 to 10 cover the PyRIT automation tool.** Read on Microsoft's official training page.
+- **The 10 episodes play inside the app.** Each one uses the same player Microsoft's own training page uses for that episode (6 on Microsoft's player, 4 on YouTube). All 10 were played on the live site on 18 Nov 2026 in Chrome. If a video does not play, the card has a link to Microsoft's page.
+- **Microsoft's labs are the ones shown in the videos, and each goes with an episode.** Read on Microsoft's own GitHub page on 18 Nov 2026: 12 challenges from its red team, first taught at Black Hat USA 2024, each listed against an episode. All 12 are in this path, each placed after its episode.
+- **Microsoft's labs are not free to run and not in a browser.** Microsoft's page lists what they need: Docker, Python, and an OpenAI key or an Azure OpenAI endpoint. The lab code is free; the AI usage is billed to your own key.
+- **Four labs have a goal an AI is meant to refuse.** Labs 3, 9 and 10 ask for Molotov cocktail instructions and lab 4 for a toxin: Microsoft's page says so. The app marks them, and they can be skipped. They run on your own AI key, whose rules still apply.
+- **The labs install and start on Windows with that fix.** Done on one Windows 11 laptop on 18 Nov 2026 with Docker Desktop: both pieces built, the labs page listed all 12 labs and refused a visitor without the sign-in key, and a lab used about 50 MB while idle.
+- **Chatting inside a lab works.** On 18 Nov 2026, with a working OpenAI key in the settings file, lab 1 answered five messages in 2 to 3.5 seconds each. The other 11 labs run the same program but were not each tried. With no key, a lab stays on Loading your challenge.
+- **Each lesson's sources are real pages.** All 40 were opened on 18 Nov 2026. The newest is a survey from May 2026.
+- **The lab coach's last-resort answers were seen to work.** Each was sent three times on 18 Nov 2026 straight to the AI model gpt-4o with the lab's hidden instructions. Labs 1, 2, 6, 8 and 11 worked 3 times out of 3. Labs 5 and 7 worked 2 of 3. That is close to the lab, but it is not the lab page itself.
+- **The lessons were independently fact-checked.** On 18 Nov 2026, 37 separate agents re-read every lesson's cited sources and audited the whole repo. No factual errors were found; the structural checks (consistency, Microsoft facts, Learn modules, jobs, glossary) came back clean. Wording and source-fit fixes from that pass were applied, and the lab 10 note above was corrected.
+- **Microsoft Learn training is free.** Microsoft's own help page says: "Microsoft Learn training is free and available to anyone".
+- **AI security fundamentals is 3 beginner modules, about 2 hours, each with a quiz.** Read from Microsoft's course list on 18 Nov 2026: 53, 48 and 29 minutes, level "beginner", each ending in a module assessment.
+- **Microsoft's Python course is 8 beginner modules, about 7 hours, each with a small project and a quiz.** Read from Microsoft's course list on 18 Nov 2026: Get Started with Python Programming, parts 1 and 2, 402 minutes in all, last updated 28 Oct 2026. The third module has you install Python and Visual Studio Code. Not checked: where the first two modules have you run your code.
+- **Finishing a module adds a badge to your Microsoft Learn profile, and finishing a course adds a trophy.** Microsoft's help page says both appear on your profile and can be shared. Its transcript page has a Share button that makes a link with an access code.
+- **Gray Swan has training sets that are open any time, for chatbots and for agents.** Seen on its Training page in a signed-in free account on 18 Nov 2026: 3 beginner sets, 3 intermediate sets and 5 more. Every set in this path was opened.
+- **Gray Swan runs contests sponsored by large AI labs.** A US$300,000 contest in October 2026 was sponsored by Anthropic, Meta, Google DeepMind and Reflection AI (Fortune, Oct 2026).
+- **Mozilla 0DIN pays US$500 to US$15,000 and asks for a short summary first.** Read on 0DIN's policy page.
+- **Anthropic's model safety bounty pays up to US$35,000, takes applications, and requires a confidentiality agreement.** Read on Anthropic's help page.
+- **Engineer-level AI red-team job ads ask for Python.** Several 2026 postings ask for Python or basic scripting. This is a sample of ads, not a survey. The beginner contract ads read for the Jobs tab did not ask for it.
+- **Every link in the app opens the right page.** Opened on 18 Nov 2026: the Microsoft training page and lab pages, all 11 Microsoft Learn modules, the Gray Swan pages, the 0DIN and Anthropic pages, the job sites and the job searches.
+- **The job titles, pay and asks on the Jobs tab come from real ads.** Each ad was read on its own page on 17 Nov 2026. Pay is copied as the ad posted it. Ads close and pay changes, so they are examples, not offers.
+- **An ad on the Jobs tab has a working link.** A free automatic check opens every ad's page once a day. If the page is gone, leads somewhere else or says it is closed, the ad is hidden. Each ad shows the date its link was last checked. A site that blocks the check keeps its older date.
+- **Linked devices store ticks and streak days only, under a private code that is never shown.** Tested on 17 and 18 Nov 2026: reading the whole store, listing other people's codes, and saving anything except numbers were all refused.
+- **The short code used to link a device works once and runs out in 10 minutes.** Tested on 18 Nov 2026: a used code, a made-up code, a backdated code and a list of all codes were all refused.
+
+## Corrected (6)
+
+- **An earlier version sent you to Microsoft's own instructions to install the labs.** Following them on 18 Nov 2026, the build stopped with 404 Not Found: one step asks a retired download address for an update. Microsoft has an open report about it (issue 33, since September 2025). The app now links to a set-up guide that includes the fix.
+- **An earlier version used a 21-day course from SecurityElites as step 2.** Removed on 18 Nov 2026. It is new, has no outside reviews, its author uses a pen name, and its labs could not be tested. Microsoft's labs and courses and Gray Swan's sets take its place.
+- **An earlier version taught Python with freeCodeCamp.** Changed on 18 Nov 2026 to Microsoft Learn's course, so the path stays with one organization. freeCodeCamp's course is free and well regarded; it was not dropped for quality.
+- **An earlier version said Gray Swan posts new challenges every Wednesday.** Not true now: that series is closed for judging and its sets live on the Training page. The claim was removed.
+- **An earlier version said Gray Swan has paid out over US$1 million and brought 100 people into paid work.** No source was found for those numbers, so they were removed.
+- **An earlier version counted an entry-level salaried ad as open.** That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it counts as closed. No other entry-level salaried ad was found.
+
+## Not checked, or cannot be promised (11)
+
+- **About US$5 covers all 12 labs.** An estimate from OpenAI's price list on 18 Nov 2026 (under one US cent a message on the default model), not a measured cost. OpenAI shows the real minimum top-up before you pay.
+- **The labs run well on any computer.** Tested on one laptop only. Building them pushed its processor to 94 C, so the build was slowed down and done in turns.
+- **The Tutor's lessons and thinking steps get you through every lab.** They were written for this app. The lessons are summaries of published techniques, each with its source and year. Most were published from 2023 to 2025 and AI companies have trained against them since, so expect the ideas to hold better than the exact wording.
+- **Every lab has an answer in the coach.** Labs 3, 4, 9 and 10 have none on purpose: their goal is weapon or toxin instructions. Lab 12 has none because six approaches all failed. Microsoft first said lab 10 had no solution, then noted it has since had a few solves, so it is doable but very hard.
+- **These courses give you a Microsoft certificate.** They give badges, trophies and a transcript. A Microsoft certification is a separate, paid exam and is not part of this path.
+- **Microsoft has practice for attacking AI agents.** None was found: its labs cover chatbots and one practice web page. That is why Gray Swan is in the path.
+- **The notebooks in step 5 run as described.** Read on 18 Nov 2026: each notebook is one note and three pieces of code, uses PyRIT, and Lab 1's note says to follow steps 1 to 7 in its comments. They do not say how to install PyRIT. The author of this app has not run them.
+- **A listed ad still has work to give.** The link check only proves an ad is still posted. A talent pool can stay posted while no project is running.
+- **A posted hourly rate is what you would earn.** A range in an ad is not an offer, and contract platforms do not guarantee hours.
+- **The Words tab is an official glossary.** The meanings are plain-English summaries written for this app. A word is tagged only where a video, lab or module names the topic itself. Microsoft's material is the authority.
+- **Finishing this path gets you hired.** Nobody can promise that. The path builds the things a newcomer can show: Microsoft badges, write-ups, contest results and basic Python.

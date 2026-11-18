@@ -145,10 +145,10 @@
   }
   function writeupSteps(what) {
     return [
-      "Open the write-up template on this card and copy it.",
-      "Fill it in for " + what + ": the goal, your exact prompts, and what came back.",
-      "Add a screenshot of the result.",
-      "Save it in a folder on your computer called write-ups. You will put them online in step 6."
+      "Open Write it here on this card and press Use the template.",
+      "Fill it in for " + what + ": the goal, your exact prompts, and what came back. It saves on this device as you type.",
+      "Take a screenshot of the result and keep it in a folder on your computer called write-ups.",
+      "Press Save as a file and put that file in the same folder. You will put them online in step 6."
     ];
   }
   function graySwanSteps(title) {
@@ -987,51 +987,8 @@
     ]
   };
 
-  // status: ok = checked, no = not checked, changed = corrected in this audit
+  // The date the app's facts were last checked. The full record is in AUDIT.md.
   var AUDIT_DATE = "18 Nov 2026";
-  var AUDIT = [
-    ["ok", "Microsoft's series has 10 episodes; episodes 8 to 10 cover the PyRIT automation tool.", "Read on Microsoft's official training page."],
-    ["ok", "The 10 episodes play inside the app.", "Each one uses the same player Microsoft's own training page uses for that episode (6 on Microsoft's player, 4 on YouTube). All 10 were played on the live site on 18 Nov 2026 in Chrome. If a video does not play, the card has a link to Microsoft's page."],
-    ["ok", "Microsoft's labs are the ones shown in the videos, and each goes with an episode.", "Read on Microsoft's own GitHub page on 18 Nov 2026: 12 challenges from its red team, first taught at Black Hat USA 2024, each listed against an episode. All 12 are in this path, each placed after its episode."],
-    ["ok", "Microsoft's labs are not free to run and not in a browser.", "Microsoft's page lists what they need: Docker, Python, and an OpenAI key or an Azure OpenAI endpoint. The lab code is free; the AI usage is billed to your own key."],
-    ["ok", "Four labs have a goal an AI is meant to refuse.", "Labs 3, 9 and 10 ask for Molotov cocktail instructions and lab 4 for a toxin: Microsoft's page says so. The app marks them, and they can be skipped. They run on your own AI key, whose rules still apply."],
-    ["no", "About US$5 covers all 12 labs.", "An estimate from OpenAI's price list on 18 Nov 2026 (under one US cent a message on the default model), not a measured cost. OpenAI shows the real minimum top-up before you pay."],
-    ["changed", "An earlier version sent you to Microsoft's own instructions to install the labs.", "Following them on 18 Nov 2026, the build stopped with 404 Not Found: one step asks a retired download address for an update. Microsoft has an open report about it (issue 33, since September 2025). The app now links to a set-up guide that includes the fix."],
-    ["ok", "The labs install and start on Windows with that fix.", "Done on one Windows 11 laptop on 18 Nov 2026 with Docker Desktop: both pieces built, the labs page listed all 12 labs and refused a visitor without the sign-in key, and a lab used about 50 MB while idle."],
-    ["ok", "Chatting inside a lab works.", "On 18 Nov 2026, with a working OpenAI key in the settings file, lab 1 answered five messages in 2 to 3.5 seconds each. The other 11 labs run the same program but were not each tried. With no key, a lab stays on Loading your challenge."],
-    ["no", "The labs run well on any computer.", "Tested on one laptop only. Building them pushed its processor to 94 C, so the build was slowed down and done in turns."],
-    ["no", "The Tutor's lessons and thinking steps get you through every lab.", "They were written for this app. The lessons are summaries of published techniques, each with its source and year. Most were published from 2023 to 2025 and AI companies have trained against them since, so expect the ideas to hold better than the exact wording."],
-    ["ok", "Each lesson's sources are real pages.", "All 40 were opened on 18 Nov 2026. The newest is a survey from May 2026."],
-    ["ok", "The lab coach's last-resort answers were seen to work.", "Each was sent three times on 18 Nov 2026 straight to the AI model gpt-4o with the lab's hidden instructions. Labs 1, 2, 6, 8 and 11 worked 3 times out of 3. Labs 5 and 7 worked 2 of 3. That is close to the lab, but it is not the lab page itself."],
-    ["no", "Every lab has an answer in the coach.", "Labs 3, 4, 9 and 10 have none on purpose: their goal is weapon or toxin instructions. Lab 12 has none because six approaches all failed. Microsoft first said lab 10 had no solution, then noted it has since had a few solves, so it is doable but very hard."],
-    ["ok", "The lessons were independently fact-checked.", "On 18 Nov 2026, 37 separate agents re-read every lesson's cited sources and audited the whole repo. No factual errors were found; the structural checks (consistency, Microsoft facts, Learn modules, jobs, glossary) came back clean. Wording and source-fit fixes from that pass were applied, and the lab 10 note above was corrected."],
-    ["ok", "Microsoft Learn training is free.", "Microsoft's own help page says: \"Microsoft Learn training is free and available to anyone\"."],
-    ["ok", "AI security fundamentals is 3 beginner modules, about 2 hours, each with a quiz.", "Read from Microsoft's course list on 18 Nov 2026: 53, 48 and 29 minutes, level \"beginner\", each ending in a module assessment."],
-    ["ok", "Microsoft's Python course is 8 beginner modules, about 7 hours, each with a small project and a quiz.", "Read from Microsoft's course list on 18 Nov 2026: Get Started with Python Programming, parts 1 and 2, 402 minutes in all, last updated 28 Oct 2026. The third module has you install Python and Visual Studio Code. Not checked: where the first two modules have you run your code."],
-    ["ok", "Finishing a module adds a badge to your Microsoft Learn profile, and finishing a course adds a trophy.", "Microsoft's help page says both appear on your profile and can be shared. Its transcript page has a Share button that makes a link with an access code."],
-    ["no", "These courses give you a Microsoft certificate.", "They give badges, trophies and a transcript. A Microsoft certification is a separate, paid exam and is not part of this path."],
-    ["no", "Microsoft has practice for attacking AI agents.", "None was found: its labs cover chatbots and one practice web page. That is why Gray Swan is in the path."],
-    ["ok", "Gray Swan has training sets that are open any time, for chatbots and for agents.", "Seen on its Training page in a signed-in free account on 18 Nov 2026: 3 beginner sets, 3 intermediate sets and 5 more. Every set in this path was opened."],
-    ["ok", "Gray Swan runs contests sponsored by large AI labs.", "A US$300,000 contest in October 2026 was sponsored by Anthropic, Meta, Google DeepMind and Reflection AI (Fortune, Oct 2026)."],
-    ["changed", "An earlier version used a 21-day course from SecurityElites as step 2.", "Removed on 18 Nov 2026. It is new, has no outside reviews, its author uses a pen name, and its labs could not be tested. Microsoft's labs and courses and Gray Swan's sets take its place."],
-    ["changed", "An earlier version taught Python with freeCodeCamp.", "Changed on 18 Nov 2026 to Microsoft Learn's course, so the path stays with one organization. freeCodeCamp's course is free and well regarded; it was not dropped for quality."],
-    ["changed", "An earlier version said Gray Swan posts new challenges every Wednesday.", "Not true now: that series is closed for judging and its sets live on the Training page. The claim was removed."],
-    ["changed", "An earlier version said Gray Swan has paid out over US$1 million and brought 100 people into paid work.", "No source was found for those numbers, so they were removed."],
-    ["ok", "Mozilla 0DIN pays US$500 to US$15,000 and asks for a short summary first.", "Read on 0DIN's policy page."],
-    ["ok", "Anthropic's model safety bounty pays up to US$35,000, takes applications, and requires a confidentiality agreement.", "Read on Anthropic's help page."],
-    ["no", "The notebooks in step 5 run as described.", "Read on 18 Nov 2026: each notebook is one note and three pieces of code, uses PyRIT, and Lab 1's note says to follow steps 1 to 7 in its comments. They do not say how to install PyRIT. The author of this app has not run them."],
-    ["ok", "Engineer-level AI red-team job ads ask for Python.", "Several 2026 postings ask for Python or basic scripting. This is a sample of ads, not a survey. The beginner contract ads read for the Jobs tab did not ask for it."],
-    ["changed", "An earlier version counted an entry-level salaried ad as open.", "That ad (10a Labs) was not on the company's own job board on 17 Nov 2026, so it counts as closed. No other entry-level salaried ad was found."],
-    ["ok", "Every link in the app opens the right page.", "Opened on 18 Nov 2026: the Microsoft training page and lab pages, all 11 Microsoft Learn modules, the Gray Swan pages, the 0DIN and Anthropic pages, the job sites and the job searches."],
-    ["ok", "The job titles, pay and asks on the Jobs tab come from real ads.", "Each ad was read on its own page on 17 Nov 2026. Pay is copied as the ad posted it. Ads close and pay changes, so they are examples, not offers."],
-    ["ok", "An ad on the Jobs tab has a working link.", "A free automatic check opens every ad's page once a day. If the page is gone, leads somewhere else or says it is closed, the ad is hidden. Each ad shows the date its link was last checked. A site that blocks the check keeps its older date."],
-    ["no", "A listed ad still has work to give.", "The link check only proves an ad is still posted. A talent pool can stay posted while no project is running."],
-    ["no", "A posted hourly rate is what you would earn.", "A range in an ad is not an offer, and contract platforms do not guarantee hours."],
-    ["no", "The Words tab is an official glossary.", "The meanings are plain-English summaries written for this app. A word is tagged only where a video, lab or module names the topic itself. Microsoft's material is the authority."],
-    ["ok", "Linked devices store ticks and streak days only, under a private code that is never shown.", "Tested on 17 and 18 Nov 2026: reading the whole store, listing other people's codes, and saving anything except numbers were all refused."],
-    ["ok", "The short code used to link a device works once and runs out in 10 minutes.", "Tested on 18 Nov 2026: a used code, a made-up code, a backdated code and a list of all codes were all refused."],
-    ["no", "Finishing this path gets you hired.", "Nobody can promise that. The path builds the things a newcomer can show: Microsoft badges, write-ups, contest results and basic Python."]
-  ];
 
   // ---------- saving on this device ----------
   // m: box id -> the time it was ticked (positive) or unticked (negative). The newest time wins when two devices disagree.
@@ -1456,6 +1413,9 @@
     var v = document.getElementById("view-now");
     // A video is playing and it is still the next thing to do: leave the screen alone, or the video would start over.
     if (playing && idx !== -1 && SEQ[idx].it.id === playing && document.getElementById("player")) { return; }
+    // You are typing a note on this card and it is still the next thing to do: leave the screen alone.
+    var typing = document.activeElement;
+    if (typing && typing.classList && typing.classList.contains("note-area") && v.contains(typing) && idx !== -1 && SEQ[idx].it.id === typing.getAttribute("data-note")) { return; }
     playing = "";
     v.textContent = "";
     var undo = null;
@@ -1529,6 +1489,7 @@
       watch || (it.url ? link((it.openLabel || OPEN_LABEL[it.kind]) + " ↗", it.url, "big open") : null),
       doneBtn,
       // Labs and practice sets are puzzles with no teacher. The Tutor tab gives a way to think, never the answer.
+      takesNotes(it) ? noteFold(it) : null,
       (it.kind === "lab" || it.kind === "practice") && it.id !== "m0" ? tutorLine(it) : null
     ]));
     // Microsoft's labs cost money and need installing, so one tap can skip the whole set.
@@ -1894,7 +1855,7 @@
     var v = document.getElementById("view-menu");
     v.textContent = "";
     var jump = h("div", { class: "jump" });
-    [["Link devices", "menu-sync"], ["Settings", "menu-settings"], ["Where you learn", "menu-places"], ["Rules", "menu-rules"], ["Template", "menu-template"], ["Audit", "menu-audit"]].forEach(function (j) {
+    [["Link devices", "menu-sync"], ["Settings", "menu-settings"], ["Where you learn", "menu-places"], ["Rules", "menu-rules"], ["Template", "menu-template"]].forEach(function (j) {
       var b = h("button", { type: "button", text: j[0] });
       b.addEventListener("click", function () { document.getElementById(j[1]).scrollIntoView({ block: "start" }); });
       jump.appendChild(b);
@@ -1925,37 +1886,149 @@
     copy.addEventListener("click", function () { copyText(TEMPLATE, status, pre); });
     v.appendChild(h("div", { class: "block", id: "menu-template" }, [h("h2", { text: "Write-up template" }), pre, h("div", { class: "btnrow" }, [copy, status])]));
 
-    var counts = { ok: 0, no: 0, changed: 0 };
-    AUDIT.forEach(function (a) { counts[a[0]] += 1; });
-    var label = { ok: "CHECKED", no: "NOT CHECKED", changed: "CORRECTED" };
-    var audit = h("div", { class: "rows" });
-    AUDIT.forEach(function (a) {
-      audit.appendChild(h("div", { class: "row" }, [
-        h("div", null, [h("span", { class: "pill " + a[0], text: label[a[0]] }), a[1]]),
-        h("p", { class: "dim", text: a[2] })
-      ]));
-    });
-    v.appendChild(h("div", { class: "block", id: "menu-audit" }, [
-      h("div", { class: "eyebrow", text: "> AUDIT · " + AUDIT_DATE.toUpperCase() }),
-      h("h2", { text: "What was checked, and what was not" }),
-      h("p", { class: "lede", text: counts.ok + " claims checked against their source, " + counts.changed + " corrected, " + counts.no + " that nobody can check or promise." }),
-      audit
-    ]));
     syncPanel();
     settingsPanel();
   }
 
-  // ---------- Tutor tab: short lessons, a coach for each lab, and a way to think ----------
+  // ---------- Notes: your own lab notes and write-ups, saved on this device ----------
+  // Notes are kept apart from the ticks, so clearing your ticks never touches them. They are saved on this device
+  // only: they are not sent anywhere and do not follow you to a linked device.
+  var NOTES_KEY = "redTeamPath.notes";
+  var notes = {};
+  function readNotes() {
+    var fresh = {};
+    try {
+      var p = JSON.parse(window.localStorage.getItem(NOTES_KEY) || "{}");
+      if (p && typeof p === "object") {
+        Object.keys(p).forEach(function (k) { if (typeof p[k] === "string" && p[k]) { fresh[k] = p[k]; } });
+      }
+    } catch (e) { return; } // unreadable: keep what is in memory
+    notes = fresh;
+  }
+  readNotes();
+  function saveNote(id, text) {
+    if (text) { notes[id] = text; } else { delete notes[id]; }
+    try { window.localStorage.setItem(NOTES_KEY, JSON.stringify(notes)); return true; } catch (e) { storageFailed(); return false; }
+  }
+  function wordCount(text) {
+    var m = (text || "").match(/\S+/g);
+    return m ? m.length : 0;
+  }
+  function takesNotes(it) {
+    return (it.kind === "lab" || it.kind === "practice" || it.kind === "writeup") && it.id !== "m0";
+  }
+  function saveFile(name, text) {
+    var url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
+    var a = h("a", { href: url, download: name });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  }
+  function refreshNotes() {
+    // The same note can be on screen in two places (the card and the My notes page). Boxes you are not typing in
+    // are brought up to date, so an old copy can never overwrite newer text.
+    Array.prototype.forEach.call(document.querySelectorAll("textarea.note-area"), function (a) {
+      if (a !== document.activeElement) { a.value = notes[a.getAttribute("data-note")] || ""; }
+    });
+  }
+  function noteEditor(it, big) {
+    var isWriteup = it.kind === "writeup";
+    var status = h("span", { class: "status-line note-status", role: "status", text: "Saved on this device as you type." });
+    var area = h("textarea", { class: "note-area" + (big ? " big-note" : ""), "data-note": it.id,
+      "aria-label": (isWriteup ? "Your write-up: " : "Your notes: ") + it.title,
+      placeholder: isWriteup ? "Write your write-up here, or press Use the template." : "What I tried. What it said. What I learned." });
+    area.value = notes[it.id] || "";
+    area.addEventListener("input", function () {
+      status.textContent = saveNote(it.id, area.value)
+        ? "Saved on this device · " + wordCount(area.value) + " words"
+        : "Could not save: this browser is blocking storage. Copy your text somewhere safe.";
+    });
+    var copy = h("button", { type: "button", class: "note-copy", text: "Copy" });
+    copy.addEventListener("click", function () { copyText(area.value, status, area); });
+    var file = h("button", { type: "button", class: "note-file", text: "Save as a file" });
+    file.addEventListener("click", function () {
+      saveFile("red-team-" + it.id + ".txt", it.title + "\n\n" + area.value + "\n");
+      status.textContent = "Saved as a file. Look in your Downloads folder.";
+    });
+    var row = [copy, file];
+    if (isWriteup) {
+      var tmpl = h("button", { type: "button", class: "note-template", text: "Use the template" });
+      tmpl.addEventListener("click", function () {
+        if (area.value.trim()) { status.textContent = "Your write-up already has text. Empty the box first to start from the template."; return; }
+        area.value = TEMPLATE;
+        saveNote(it.id, area.value);
+        status.textContent = "Template added. Replace each part in brackets with your own words.";
+        area.focus();
+      });
+      row.unshift(tmpl);
+    }
+    return h("div", { class: "note-box" }, [area, h("div", { class: "btnrow" }, row), status]);
+  }
+  function noteFold(it) {
+    var isWriteup = it.kind === "writeup";
+    var n = wordCount(notes[it.id]);
+    var fold = h("details", { class: "fold", id: "note-fold" }, [
+      h("summary", { text: (isWriteup ? "Write it here" : "Your notes for this one") + (n ? " · " + n + " words" : "") }),
+      noteEditor(it, false),
+      h("p", { class: "note", text: "Kept on this device only. Every note is also listed under Tutor, My notes." })
+    ]);
+    if (isWriteup) { fold.open = true; }
+    return fold;
+  }
+  window.addEventListener("storage", function (e) {
+    if (e.key === NOTES_KEY) { readNotes(); refreshNotes(); }
+  });
+
+  function tutorNotes(v) {
+    var it = tutor.note ? KNOWN[tutor.note] : null;
+    if (it && takesNotes(it)) {
+      var all = h("button", { type: "button", id: "notes-back", text: "← All notes" });
+      all.addEventListener("click", function () { tutorGo({ note: "" }, "note-" + it.id); });
+      v.appendChild(h("div", { class: "card now", id: "note-card", "data-id": it.id }, [
+        h("div", { class: "tag", text: it.kind === "writeup" ? "Write-up" : "Notes" }),
+        h("div", { class: "title", id: "tutor-title", tabindex: "-1", text: it.title }),
+        noteEditor(it, true),
+        h("div", { class: "btnrow" }, [all])
+      ]));
+      return;
+    }
+    var withText = SEQ.filter(function (e) { return takesNotes(e.it) && notes[e.it.id]; });
+    var allBtn = h("button", { type: "button", id: "notes-all", text: "Save all notes as one file" });
+    allBtn.disabled = withText.length === 0;
+    allBtn.addEventListener("click", function () {
+      saveFile("red-team-notes.txt", withText.map(function (e) { return "== " + e.it.title + " ==\n\n" + notes[e.it.id]; }).join("\n\n\n") + "\n");
+    });
+    v.appendChild(h("div", { class: "block" }, [
+      h("p", { class: "lede", id: "notes-count", text: withText.length + " written so far. Your lab notes and write-ups are kept on this device only: they do not follow you to a linked device. Use Copy or Save as a file to keep a copy somewhere safe." }),
+      h("div", { class: "btnrow" }, [allBtn])
+    ]));
+    var list = h("div", { class: "block", id: "notes-list" });
+    [["writeup", "Write-ups"], ["lab", "Microsoft lab notes"], ["practice", "Gray Swan notes"]].forEach(function (g) {
+      list.appendChild(h("h2", { text: g[1] }));
+      SEQ.forEach(function (e) {
+        if (e.it.kind !== g[0] || !takesNotes(e.it)) { return; }
+        var n = wordCount(notes[e.it.id]);
+        var b = rowButton(e.it.title + " · " + (n ? n + " words" : "empty"), "note-" + e.it.id, n > 0);
+        b.addEventListener("click", function () { tutorGo({ note: e.it.id }, "tutor-title"); window.scrollTo(0, 0); });
+        list.appendChild(b);
+      });
+    });
+    v.appendChild(list);
+  }
+
+  // ---------- Tutor tab: short lessons, a coach for each lab, a way to think, and your notes ----------
   // Where you are in the tutor and which hints you have opened are remembered on this device only.
   // A lesson you pass is saved like a tick (t1, t2, ...), so it follows you to linked devices.
   var TUTOR_KEY = "redTeamPath.tutor";
-  var tutor = { view: "lessons", step: 0, lesson: "", lab: 0, hints: {} };
+  var tutor = { view: "lessons", step: 0, lesson: "", lab: 0, hints: {}, note: "" };
   (function () {
     try {
       var p = JSON.parse(window.localStorage.getItem(TUTOR_KEY) || "null");
       if (typeof p === "number") { tutor.step = p; } // an earlier version stored only the thinking step
       else if (p && typeof p === "object") {
-        if (p.view === "lessons" || p.view === "coach" || p.view === "think") { tutor.view = p.view; }
+        if (p.view === "lessons" || p.view === "coach" || p.view === "think" || p.view === "notes") { tutor.view = p.view; }
+        if (typeof p.note === "string") { tutor.note = p.note; }
         if (typeof p.step === "number") { tutor.step = p.step; }
         if (typeof p.lesson === "string") { tutor.lesson = p.lesson; }
         if (typeof p.lab === "number") { tutor.lab = p.lab; }
@@ -2132,6 +2205,8 @@
         h("p", { text: c.noAnswer })
       ]));
     }
+    kids.push(h("div", { class: "tag", text: "Your notes for this lab" }));
+    kids.push(noteEditor(KNOWN["m" + c.n], false));
     var all = h("button", { type: "button", id: "coach-all", text: "← All labs" });
     all.addEventListener("click", function () { tutorGo({ lab: 0 }, "coach-" + c.n); });
     kids.push(h("div", { class: "btnrow" }, [all]));
@@ -2173,7 +2248,7 @@
   function renderTutor(focusId) {
     var v = document.getElementById("view-tutor");
     v.textContent = "";
-    var views = [["lessons", "Lessons"], ["coach", "Lab coach"], ["think", "Think it through"]];
+    var views = [["lessons", "Lessons"], ["coach", "Lab coach"], ["think", "Think it through"], ["notes", "My notes"]];
     var seg = h("div", { class: "seg", role: "group", "aria-label": "Parts of the Tutor" });
     views.forEach(function (x) {
       var b = h("button", { type: "button", id: "tutor-tab-" + x[0], "aria-pressed": tutor.view === x[0] ? "true" : "false", text: x[1] });
@@ -2183,10 +2258,10 @@
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "eyebrow", text: "> TUTOR" }),
       h("h1", { text: "Learn it, then try it" }),
-      h("p", { class: "lede", text: "Short lessons on known techniques, a coach for each Microsoft lab, and a way to think when you are stuck. For labs, contests and bounty programs that invite it." }),
+      h("p", { class: "lede", text: "Short lessons on known techniques, a coach for each Microsoft lab, a way to think when you are stuck, and a place for your notes. For labs, contests and bounty programs that invite it." }),
       seg
     ]));
-    if (tutor.view === "coach") { tutorCoach(v); } else if (tutor.view === "think") { tutorThink(v); } else { tutorLessons(v); }
+    if (tutor.view === "coach") { tutorCoach(v); } else if (tutor.view === "think") { tutorThink(v); } else if (tutor.view === "notes") { tutorNotes(v); } else { tutorLessons(v); }
     if (focusId) {
       var again = document.getElementById(focusId);
       if (again) { again.focus({ preventScroll: true }); }
@@ -2256,6 +2331,7 @@
 
   window.addEventListener("hashchange", function () {
     if (takeLink()) { render(); syncPanel(); }
+    refreshNotes();
     showTab();
     showPlace();
   });
