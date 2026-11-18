@@ -254,7 +254,7 @@
   // Ready-made searches: these always show today's ads, whatever the list above says.
   var SEARCHES = [
     ["LinkedIn: \"AI red team\", remote", "https://www.linkedin.com/jobs/search/?keywords=%22AI%20red%20team%22&f_WT=2"],
-    ["Indeed Canada: \"AI red team\", remote", "https://ca.indeed.com/jobs?q=%22AI+red+team%22&l=Remote"],
+    ["Indeed Canada: AI red teaming, remote", "https://ca.indeed.com/jobs?q=AI+red+teaming&l=Remote"],
     ["Google: AI red teamer jobs, remote", "https://www.google.com/search?q=AI+red+teamer+jobs+remote"]
   ];
   var BOARDS = [
