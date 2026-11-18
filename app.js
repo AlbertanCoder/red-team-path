@@ -147,7 +147,7 @@
         groups: days },
       { title: "Step 3: Python, on freeCodeCamp", short: "PYTHON",
         goal: "Work through the first five sections in order. Keep one Gray Swan session a week so your skills stay sharp.",
-        why: "Most AI red-team job ads ask for basic Python scripting.",
+        why: "The engineer-level job ads ask for Python, and the tools that automate attacks need it. The beginner contract ads do not.",
         groups: [{ label: "", items: python }] },
       { title: "Step 4: bounties", short: "BOUNTIES",
         goal: "Only real findings that work every time. Never send a guess.",
@@ -178,7 +178,7 @@
     ["Hourly AI testing and rating platforms", "The quickest money when an application lands. Pay and acceptance vary a lot, and nobody can promise either."],
     ["Gray Swan prize contests", "Prize money goes mostly to top finishers. For a beginner the real payoff is a leaderboard placing you can show."],
     ["Bug bounties", "Mozilla 0DIN pays US$500 to US$15,000 for a new finding that works every time. Anthropic's program pays up to US$35,000, but you apply and they choose who gets in."],
-    ["A job", "Entry-level AI red-team jobs exist but are rare. Public write-ups, contest results and basic Python are what a newcomer can show instead of experience."]
+    ["A job", "Salaried entry-level AI red-team jobs are rare: none was open when this was last checked. Public write-ups, contest results and basic Python are what a newcomer can show instead of experience."]
   ];
   var RULES = [
     "Only attack sites built for it, or programs that invite it in writing. Never test a company's live product outside its bounty rules.",
