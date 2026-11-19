@@ -1,6 +1,18 @@
 # Audit record
 
-Last audited: 18 Nov 2026. This is what was checked in the Red Team Path app, what was corrected, and what nobody can check or promise. It used to be shown in the app's Menu.
+Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. This is what was checked in the Red Team Path app, what was corrected, and what nobody can check or promise.
+
+## Changed on 19 Nov 2026 (the rebuild)
+
+- **The app was rebuilt around one screen.** It opens on the step you are on. The tab bar, the Menu and the lab coach are gone. Where this record says "Tutor", "lab coach", "Menu" or "Words tab" below, read: the lab pages, the Library and Settings.
+- **Each lab has one tutor page, checked against Microsoft's own lab file** (`challenges/challenges.json` and the README table of `microsoft/AI-Red-Teaming-Playground-Labs`, read 19 Nov 2026): name, level, the episode it goes with, how it is scored, and what its hidden instructions say.
+- **The answers on the pages for labs 1, 2, 5, 6, 7, 8 and 11 were run again in the real labs on 19 Nov 2026.** Results: 3 of 3, 3 of 3, 3 of 3, 3 of 3, 3 of 5, 2 of 3, 3 of 3. See `PROOF.md`.
+- **Labs 3 and 9 now show an answer:** the three-message example Microsoft's researchers published in the Crescendo paper. It was not run for this app and the pages say so. Lab 4 (a toxin goal) still gives no message wording. Labs 10 and 12 have no known answer.
+- **Lab 10's printed key is not blocked on a set-up with an OpenAI key.** Tested 19 Nov 2026 with a harmless question: answered 3 of 3. So the Azure safety filter that Microsoft's page describes for labs 9 and 10 is not present on that set-up.
+- **The order changed.** Write-ups and labs 3, 4, 9 and 10 are optional. Labs 7, 8, 11 and 12 are grouped after Episode 7. Episodes 8 to 10 moved to step 5, each before the task it shows. 49 boxes count.
+- **Opened hints and lab results follow a linked device.** Tested 19 Nov 2026 with two browsers on the live site. The online store still refuses anything that is not a number.
+- **Jobs has a weekly scan for new ads.** It reads the public job feeds of 22 companies. Ads it finds are marked as not yet read by a person. First run 19 Nov 2026: 10 ads.
+- **Every link in the learning material was opened by script on 19 Nov 2026:** 86 links, none dead, 3 that refuse scripts (Indeed, OpenAI's platform page, aitraining.jobs).
 
 ## Checked against its source (24)
 
@@ -43,7 +55,7 @@ Last audited: 18 Nov 2026. This is what was checked in the Red Team Path app, wh
 - **About US$5 covers all 12 labs.** An estimate from OpenAI's price list on 18 Nov 2026 (under one US cent a message on the default model), not a measured cost. OpenAI shows the real minimum top-up before you pay.
 - **The labs run well on any computer.** Tested on one laptop only. Building them pushed its processor to 94 C, so the build was slowed down and done in turns.
 - **The Tutor's lessons and thinking steps get you through every lab.** They were written for this app. The lessons are summaries of published techniques, each with its source and year. Most were published from 2023 to 2025 and AI companies have trained against them since, so expect the ideas to hold better than the exact wording.
-- **Every lab has an answer in the coach.** Labs 3, 4, 9 and 10 have none on purpose: their goal is weapon or toxin instructions. Lab 12 has none because six approaches all failed. Microsoft first said lab 10 had no solution, then noted it has since had a few solves, so it is doable but very hard.
+- **Every lab has a tested answer.** Seven do (1, 2, 5, 6, 7, 8, 11). Labs 3 and 9 show Microsoft's published example, not run for this app. Lab 4 has none on purpose: its goal is toxin instructions. Lab 12 has none because ten approaches, 30 tries, all failed. Microsoft first said lab 10 had no solution, then noted it has since had a few solves, so it is doable but very hard.
 - **These courses give you a Microsoft certificate.** They give badges, trophies and a transcript. A Microsoft certification is a separate, paid exam and is not part of this path.
 - **Microsoft has practice for attacking AI agents.** None was found: its labs cover chatbots and one practice web page. That is why Gray Swan is in the path.
 - **The notebooks in step 5 run as described.** Read on 18 Nov 2026: each notebook is one note and three pieces of code, uses PyRIT, and Lab 1's note says to follow steps 1 to 7 in its comments. They do not say how to install PyRIT. The author of this app has not run them.
