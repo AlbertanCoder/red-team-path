@@ -129,7 +129,7 @@
       "Watch it through. When a word is new, pause and look it up: tap Path, then Words."
     ];
     if (n >= 3 && n <= 7) { steps.push("Write down one thing from the video you want to try. The lab for this episode comes next."); }
-    else if (n >= 8) { steps.push("Just watch. These three episodes show Microsoft's tool PyRIT, which you will use yourself in step 5, after Python."); }
+    else if (n >= 8) { steps.push("Watch what the tool does. You do it yourself in the next box."); }
     else { steps.push("Write down one thing that surprised you."); }
     steps.push("Tap I'm done at the bottom.");
     return steps;
@@ -164,18 +164,19 @@
   function buildSteps() {
     function video(n) {
       return item("v" + n, "video", "Episode " + n + ": " + VIDEOS[n - 1],
-        n >= 8 ? "This one shows an automation tool. Watch it, install nothing." : "", URLS.ms,
+        n >= 8 ? "It shows the automation task you do right after it." : "", URLS.ms,
         { play: playerUrl(n - 1), how: videoSteps(n) });
     }
     function lab(n) {
       var l = MS_LABS.filter(function (x) { return x[0] === n; })[0];
       return item("m" + n, "lab", "Microsoft lab " + n + ": " + l[1] + " (" + l[2] + ")",
-        l[3] + " Goes with Episode " + l[4] + "." + (l[5] ? " " + l[5] : ""), URLS.msLabs, { skip: true, how: labSteps(l) });
+        l[3] + " Goes with Episode " + l[4] + "." + (l[5] ? " " + l[5] : ""), URLS.msLabs,
+        { skip: true, how: labSteps(l), optional: [3, 4, 9, 10].indexOf(n) !== -1 }); // the four harmful-goal labs never block the path
     }
     function writeup(n, what) {
       return item("w" + n, "writeup", "Write-up " + n + ": " + what,
-        "A write-up is the proof employers and bounty programs ask to see. One per kind of lab is enough.", "",
-        { skip: n <= 4, how: writeupSteps(what) });
+        "A write-up is the proof employers and bounty programs ask to see. One per kind of lab is enough. It is optional and never blocks your next step.", "",
+        { skip: n <= 4, how: writeupSteps(what), optional: true });
     }
     var setup = item("m0", "lab", "Set up Microsoft's labs on your computer",
       "These are the practice chatbots from the videos. They run on your own computer, not in a browser, and every message you send is billed to your own OpenAI key: about US$5 of credit should cover all 12 labs (an estimate). Microsoft's files need one small fix before they will build, and the set-up guide has it. If you would rather not install or pay, skip the labs: Gray Swan in step 3 is free practice of the same kind.",
@@ -194,9 +195,10 @@
       { label: "EPISODE 3", items: [video(3), lab(1), writeup(1, "your direct prompt injection (lab 1)")] },
       { label: "EPISODE 4", items: [video(4), lab(6), writeup(2, "your indirect prompt injection (lab 6)")] },
       { label: "EPISODE 5", items: [video(5), lab(2), writeup(3, "how you got the secret out (lab 2)")] },
-      { label: "EPISODE 6", items: [video(6), lab(5), writeup(4, "your Crescendo attack (lab 5)"), lab(3), lab(4)] },
-      { label: "EPISODE 7", items: [video(7), lab(7), lab(8), lab(11), lab(9), lab(12), lab(10)] },
-      { label: "EPISODES 8 TO 10, WATCH ONLY", items: [video(8), video(9), video(10)] }
+      { label: "EPISODE 6", items: [video(6), lab(5), writeup(4, "your Crescendo attack (lab 5)")] },
+      { label: "EPISODE 7", items: [video(7)] },
+      { label: "HARDER VERSIONS", items: [lab(7), lab(8), lab(11), lab(12)] },
+      { label: "OPTIONAL: HARMFUL-GOAL LABS", items: [lab(3), lab(4), lab(9), lab(10)] }
     ];
 
     var security = [item("s0", "learn", "Create your free Microsoft Learn profile",
@@ -302,7 +304,7 @@
 
     return [
       { title: "Step 1: Microsoft's videos, each with its lab",
-        goal: "Watch an episode here in the app, then do Microsoft's own lab for it. Four short write-ups along the way.",
+        goal: "Watch an episode here in the app, then do Microsoft's own lab for it. Write-ups are optional.",
         why: "The basics from Microsoft's own AI red team, and the best-known name to put on a resume.",
         groups: step1 },
       { title: "Step 2: Microsoft Learn, AI security fundamentals",
@@ -318,9 +320,13 @@
         why: "The engineer-level job ads ask for Python, and the tools that automate attacks need it. The beginner contract ads do not.",
         groups: [{ label: "", items: python }] },
       { title: "Step 5: automate an attack with Microsoft's PyRIT",
-        goal: "Run Microsoft's own attack notebooks against your labs, then change one.",
-        why: "This is what Episodes 8 to 10 showed, now in your hands.",
-        groups: [{ label: "", items: auto }] },
+        goal: "Watch Episodes 8 to 10, each followed by the task it shows: run Microsoft's own attack notebooks against your labs, then change one.",
+        why: "Episodes 8 to 10 show Microsoft's tool PyRIT. Each one is followed by the task it shows, while it is fresh.",
+        groups: [
+          { label: "EPISODE 8", items: [video(8), auto[0]] },
+          { label: "EPISODE 9", items: [video(9), auto[1]] },
+          { label: "EPISODE 10", items: [video(10), auto[2], auto[3]] }
+        ] },
       { title: "Step 6: proof and bounties",
         goal: "Gather what you can show, then try for a paid, credited finding. Only real findings that work every time.",
         why: "A paid or credited finding is the strongest proof there is.",
@@ -1429,9 +1435,17 @@
 
   // Where every box sits: its step, and the label of its group. Boxes off the main line are here too.
   var PLACE = {};
+  var ALL = []; // every box in path order, optional ones included
   STEPS.forEach(function (step, s) {
-    step.groups.forEach(function (g) { g.items.forEach(function (it) { PLACE[it.id] = { s: s, label: g.label }; }); });
+    step.groups.forEach(function (g) { g.items.forEach(function (it) { PLACE[it.id] = { s: s, label: g.label }; ALL.push(it); }); });
   });
+  // An optional box that sits right after this one and is not done yet, or null.
+  function optionalAfter(id) {
+    for (var i = 0; i < ALL.length - 1; i += 1) {
+      if (ALL[i].id === id) { return ALL[i + 1].optional && !isDone(ALL[i + 1].id) ? ALL[i + 1] : null; }
+    }
+    return null;
+  }
   function $(id) { return document.getElementById(id); }
   function labNo(it) { var m = /^m([1-9]\d*)$/.exec(it.id); return m ? parseInt(m[1], 10) : 0; }
   function labRow(n) { return MS_LABS.filter(function (x) { return x[0] === n; })[0]; }
@@ -1561,7 +1575,9 @@
     v.appendChild(part("Hints", hints));
     v.appendChild(part("Full answer", [answerBox(n, pg, open, badge)]));
     var nx = nextAfter(it.id);
-    v.appendChild(part("What's next", [h("p", { id: "lab-next", text: nx ? shortTitle(nx) + ". " + nextReason(nx) : "That was the last box on the path." })]));
+    var extra = optionalAfter(it.id);
+    v.appendChild(part("What's next", [h("p", { id: "lab-next", text: (nx ? shortTitle(nx) + ". " + nextReason(nx) : "That was the last box on the path.") +
+      (extra ? " Optional first, if you want it: " + shortTitle(extra) + "." : "") })]));
   }
 
   // ----- a video, and everything else -----

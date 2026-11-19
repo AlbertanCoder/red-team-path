@@ -9,6 +9,8 @@ What it proves:
      until all three hints are open and one line has been typed.
   4. "I beat it" and "Moving on, not solved" both save and both lead to the next step.
   5. The Path list and the side screens (Library, Words, Jobs, Settings) open and come back.
+  6. The order: every video comes before its lab, optional boxes never block the way, and tapping through from the
+     first video reaches the end in exactly the planned order with one Next at every point.
 """
 import json
 import pathlib
@@ -25,11 +27,17 @@ T = 1795000000000  # a time in Nov 2026, as the old app would have saved it
 
 # What the old app (before 19 Nov 2026) left in the browser: 4 boxes ticked, one lesson passed, a note, and hints opened in the old lab coach.
 OLD = {
-    "redTeamPath.v2": json.dumps({"m": {"v1": T, "v2": T + 1, "m0": T + 2, "v3": T + 3, "t1": T + 4}, "y": {"2026-11-18": T}, "r": 0, "best": 1,
+    "redTeamPath.v2": json.dumps({"m": {"v1": T, "v2": T + 1, "m0": T + 2, "v3": T + 3, "t1": T + 4, "w5": T + 5}, "y": {"2026-11-18": T}, "r": 0, "best": 1,
                                   "theme": "dark", "open": {}, "test": False, "sync": ""}),
     "redTeamPath.notes": json.dumps({"m1": "my old note about lab 1"}),
     "redTeamPath.tutor": json.dumps({"view": "coach", "step": 0, "lesson": "", "lab": 1, "hints": {"1": 2, "2": 4}, "note": ""}),
 }
+# The planned order. Step 1 as the Path list shows it (optional boxes included), Step 5, and the required boxes from start to finish.
+STEP1 = "v1 v2 m0 v3 m1 w1 v4 m6 w2 v5 m2 w3 v6 m5 w4 v7 m7 m8 m11 m12 m3 m4 m9 m10".split()
+STEP5 = "v8 a1 v9 a2 v10 a3 a4".split()
+OPTIONAL = "w1 w2 w3 w4 w5 m3 m4 m9 m10".split()
+ROAD = ("v1 v2 m0 v3 m1 v4 m6 v5 m2 v6 m5 v7 m7 m8 m11 m12 s0 s1 s2 s3 g1 g2 g3 g4 g5 g6 g7 g8 g9 "
+        "py1 py2 py3 py4 py5 py6 py7 py8 v8 a1 v9 a2 v10 a3 a4 p1 b1 b2 b3 b4").split()
 PARTS = ["What this lab is", "The objective", "How to think about it", "Hints", "Full answer", "What's next"]
 
 
@@ -100,7 +108,7 @@ with sync_playwright() as p:
     # ---- 2 and 3. a returning visitor with progress saved by the old app ----
     ctx, page = new_page(b, OLD)
     m = ticks(page)
-    check(all(m.get(k, 0) > 0 for k in ("v1", "v2", "m0", "v3", "t1")), "old ticks are all still there (4 boxes and 1 lesson)")
+    check(all(m.get(k, 0) > 0 for k in ("v1", "v2", "m0", "v3", "t1", "w5")), "old ticks are all still there (4 boxes, 1 lesson, and 1 box that is now optional)")
     check(page.inner_text("#top-title") == "Lab 1: Credential Exfiltration", "returning visitor: opens straight on Lab 1")
     check(page.evaluate("JSON.parse(localStorage.getItem('redTeamPath.notes')).m1") == "my old note about lab 1", "the old note for lab 1 is still there")
     check(all(m.get(k, 0) > 0 for k in ("ha1", "hb1", "ha2", "hb2", "hc2", "tr2")) and not m.get("hc1", 0) > 0, "hints opened in the old lab coach carried over (lab 1: two, lab 2: all and the answer)")
@@ -123,8 +131,10 @@ with sync_playwright() as p:
     check(note.startswith("my old note about lab 1") and "Tried: I said I was a student" in note, "the typed line is added to the lab's note, under the old note")
     shot(page, "2-lab1-answer", full=True)
     no_side_scroll(page, "Lab 1 page")
-    nxt = page.inner_text("#next-line")
-    check(nxt.startswith("NEXT") and len(nxt) > 8, "the bottom bar says what is next: %s" % nxt)
+    nxt = page.inner_text("#next-line").upper()
+    check(nxt.startswith("NEXT") and "EPISODE 4" in nxt, "the bottom bar says what is next after Lab 1: Episode 4")
+    nx = page.inner_text("#lab-next")
+    check("Episode 4" in nx and "Lab 6" in nx and "Write-up 1" in nx and "ptional" in nx, "What's next names Episode 4, the lab it prepares for, and the optional write-up")
     check(page.locator("#beat-btn").is_visible() and page.locator("#moved-btn").is_visible(), "a lab shows I beat it and Moving on, not solved")
     page.click("#beat-btn")
     m = ticks(page)
@@ -149,6 +159,32 @@ with sync_playwright() as p:
     m = ticks(page)
     check(not m.get("m1", 0) > 0 and not m.get("un1", 0) > 0 and page.locator("#beat-btn").is_visible(), "Undo takes the mark back")
     check(not page.errors, "moving on: no page errors %s" % page.errors[:2])
+    ctx.close()
+
+    # ---- 6. the order of the path ----
+    ctx, page = new_page(b)
+    page.click("#path-btn")
+    rows = lambda step: page.evaluate("Array.from(document.querySelectorAll('#pstep-%d .prow')).map(function (r) { return r.id.slice(4); })" % step)
+    check(rows(1) == STEP1, "Step 1 order: each video, then its lab; harder versions after Episode 7; harmful-goal labs last")
+    check(rows(5) == STEP5, "Step 5 order: Episodes 8, 9 and 10 each sit right before the task they show")
+    check(page.inner_text("#sheet-count").endswith("0 OF 49 DONE"), "the count is out of 49 required boxes")
+    opt = page.evaluate("Array.from(document.querySelectorAll('#sheet .prow')).filter(function (r) { return /OPTIONAL/.test(r.textContent); }).map(function (r) { return r.id.slice(4); })")
+    check(sorted(opt) == sorted(OPTIONAL), "the 5 write-ups and labs 3, 4, 9, 10 are marked optional")
+    page.click("#row-m3")
+    check("OPTIONAL" in page.inner_text("#top-tag") and "EPISODE 1" in page.inner_text("#next-line").upper(), "an optional lab opens, and its Next still points at where you are")
+    page.click("#back-now")
+    walked = []
+    for _ in range(60):
+        box = page.get_attribute("#view-now", "data-id")
+        if not box:
+            break
+        walked.append(box)
+        page.click("#beat-btn" if page.locator("#beat-btn").count() else "#done-btn")
+        page.click("#next-btn")
+        page.wait_for_timeout(720)
+    check(walked == ROAD, "tapping through from the first video visits all 49 boxes in the planned order (got %d)" % len(walked))
+    check(page.inner_text("#top-title") == "Every box is ticked", "the path ends on the finish screen")
+    check(not page.errors, "walking the path: no page errors %s" % page.errors[:2])
     ctx.close()
     b.close()
 
