@@ -19,7 +19,7 @@
 ### Done checklist (each one needs proof)
 
 - [x] 1. Safety tag `before-fixup` pushed before any change. Proof: `git ls-remote --tags origin before-fixup` shows commit 018548c.
-- [ ] 2. Audit report given, and Shad's answers recorded in FIXUP-NOTES.md. Proof: the file, committed.
+- [x] 2. Audit report given, and Shad's answers recorded in FIXUP-NOTES.md. Proof: commits 1281899 (audit) and a1d7d46 (answers).
 - [ ] 3. Four layout previews live in a `preview/` folder, one picked by Shad. Proof: four live links answer 200; the pick is written in FIXUP-NOTES.md.
 - [ ] 4. Build plan approved by Shad before the app itself changes. Proof: the plan in FIXUP-NOTES.md with Shad's go-ahead noted.
 - [ ] 5. Every one of the 12 labs has one tutor page with exactly: what it is, objective, how to think, Hint 1/2/3 (one at a time), full answer (locked until 3 hints + "I tried"), what's next, and a verified/unverified label. Proof: a check script passes on the live site.

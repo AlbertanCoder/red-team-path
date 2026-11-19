@@ -10,8 +10,9 @@ A fresh session should be able to carry on from this file alone.
 - Session start: 07:28 Alberta, EPOCH 1795094890. Clock: `bash ~/scope-hq/alberta-now.sh` only.
 - Today is an exception day (see SCOPE.md top). Still on: weekly usage stop at 75%, wrap-up 9:45 pm, nothing after 10 pm, 60-minute check-ins.
 - Stop-gate file lives at `C:\Users\SHADHUNTER\Desktop\.claude\DONE` (the session's folder is Desktop, not the repo). It can only be rewritten at the start of a new turn.
-- **Current step: Step 2 (questions).** Steps done: set-up, Step 1 audit.
-- Weekly usage at start: (ask Shad; Chrome meter was not connected).
+- **Current step: Step 3, waiting for Shad to pick a layout (or a mix of two).** Steps done: set-up, Step 1 audit, Step 2 questions, four previews live (commit a1d7d46).
+- After his pick: write the plan (Step 4) into this file, show it, and wait for his go-ahead before touching index.html, app.js or style.css.
+- Weekly usage: 46% at about 07:40 (Shad's reading). Chrome extension not connected at 07:40; retry at check-ins.
 
 ## How to work with me (Shad's words, copied as they are)
 
@@ -189,7 +190,16 @@ Pattern to remember: he took the recommended answer on every multiple-choice que
 
 ## The layout I picked (Step 3)
 
-(not picked yet)
+Four previews, live since 08:0x Alberta on 19 Nov 2026, same content (home + Lab 1 tutor page), same colours, different ways of getting around. Files: `preview/index.html`, `1.html` to `4.html`, `shared.js` (the content and the hint/unlock logic), `p.css`. Test: `python tools/preview_test.py https://albertancoder.github.io/red-team-path/preview/ <folder>` (all passed on the live site).
+
+- https://albertancoder.github.io/red-team-path/preview/ (the list of all four)
+- 1. One road: home is the path as one scrolling list; tap the lab to open its page; Back to return. Best at showing where you are in the whole path. Gives up: one extra tap to reach the lab's help, and a long list.
+- 2. One thing per screen: no lists; each screen holds one thing and a Next button (8 small screens for a lab). Best at "too much text". Gives up: more taps, and you cannot see hints and the objective together.
+- 3. Three tabs and a lab grid: Today, Labs, More; all 12 labs on one grid; the lab page is fold-up rows that fit one screen. Best at jumping to any lab. Gives up: a bottom bar and a second place where "now" lives.
+- 4. Opens on your lab (recommended): no home screen; the app opens on the lab you are doing; bottom bar always shows Next and the two result buttons; everything else in one pull-up Path list. Best at his number one pain, finding the lab's help (zero taps). Gives up: a separate overview screen.
+- Natural mix if he wants one: 4's "opens on your lab" with 3's fold-up rows, so the page is one screen tall.
+
+**Shad's pick:** (waiting)
 
 ## The plan (Step 4)
 
