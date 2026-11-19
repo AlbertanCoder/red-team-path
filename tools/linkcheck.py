@@ -10,6 +10,7 @@ import concurrent.futures as cf
 import pathlib
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -17,6 +18,7 @@ UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3
       "Accept": "text/html,application/json,*/*", "Accept-Language": "en-US,en;q=0.9"}
 LEARN = "https://learn.microsoft.com/en-us"
 SKIP = ("firebaseio.com", "youtube-nocookie.com/embed/", "localhost")
+BLOCKED = (401, 403, 405, 429, 999)  # the site refuses scripts: could not tell
 
 
 def urls_from(repo):
@@ -57,10 +59,15 @@ def main():
     urls = urls_from(repo)
     with cf.ThreadPoolExecutor(8) as ex:
         res = list(ex.map(check, sorted(urls)))
-    # one more try for anything that failed: a slow site should not count as dead
-    res = [check(u) if code in (0, 500, 502, 503, 504) else (u, code) for u, code in res]
-    blocked = [(c, u) for u, c in res if c in (401, 403, 405, 429, 999)]
-    dead = [(c, u) for u, c in res if c != 200 and c not in (401, 403, 405, 429, 999)]
+    # A link is dead only if it fails three times in a row, a few seconds apart. One failed answer can be a busy site:
+    # on 19 Nov 2026 one run of this check failed and the next five passed with nothing changed.
+    for _ in range(2):
+        if all(code == 200 or code in BLOCKED for _, code in res):
+            break
+        time.sleep(4)
+        res = [(u, code) if code == 200 or code in BLOCKED else check(u) for u, code in res]
+    blocked = [(c, u) for u, c in res if c in BLOCKED]
+    dead = [(c, u) for u, c in res if c != 200 and c not in BLOCKED]
     print("links: %d  ok: %d  could not tell (site refuses scripts): %d  dead: %d" % (len(res), len(res) - len(blocked) - len(dead), len(blocked), len(dead)))
     for c, u in dead:
         print("DEAD  %s  %s  (in %s)" % (c, u, urls[u]))
