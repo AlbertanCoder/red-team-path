@@ -1093,7 +1093,7 @@
   var STORE_KEY = "redTeamPath.v2";
   var SYNC_RE = /^[a-z2-9]{32}$/;
   var DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
-  var state = { m: {}, y: {}, r: 0, best: 0, theme: "dark", open: {}, test: false, sync: "" };
+  var state = { m: {}, y: {}, r: 0, best: 0, theme: "dark", open: {}, test: false, sync: "", nolink: false };
   var KNOWN = {};
   var SEQ = []; // every box that counts, in path order
   STEPS.forEach(function (step, s) {
@@ -1140,6 +1140,7 @@
     if (p.theme === "light" || p.theme === "dark") { state.theme = p.theme; }
     if (p.open && typeof p.open === "object") { state.open = p.open; }
     if (p.test === true) { state.test = true; }
+    if (p.nolink === true) { state.nolink = true; } // "Not now" on the link prompt
     if (typeof p.sync === "string" && SYNC_RE.test(p.sync)) { state.sync = p.sync; }
   }
   function save() {
@@ -1795,6 +1796,16 @@
       h("div", { class: "sheet-head" }, [h("div", { class: "tag", id: "sheet-count", text: "THE WHOLE PATH · " + done + " OF " + SEQ.length + " DONE" }), close]),
       h("div", { class: "meter", "aria-hidden": "true" }, [h("span", { style: "width:" + (SEQ.length ? (done / SEQ.length) * 100 : 0) + "%" })])
     ]);
+    // Not linked yet: one prompt, here only, until this device is linked or you say not now.
+    if (!state.sync && !state.nolink) {
+      var linkGo = h("button", { type: "button", class: "primary", id: "link-go", text: "Link my devices" });
+      linkGo.addEventListener("click", function () { closeSheet(); go("#menu"); });
+      var linkNo = h("button", { type: "button", id: "link-no", text: "Not now" });
+      linkNo.addEventListener("click", function () { state.nolink = true; save(); buildSheet(); });
+      panel.appendChild(h("div", { class: "panel", id: "link-prompt" }, [
+        h("p", { text: "Using this on your phone and your computer? Link them once, and your ticks, opened hints and lab results follow you." }),
+        h("div", { class: "also" }, [linkGo, linkNo])]));
+    }
     // Labs you moved on from without solving, so they are not forgotten.
     var back = ALL.filter(function (it) { var n = labNo(it); return n && isDone(it.id) && isDone("un" + n); });
     if (back.length) {
@@ -2026,7 +2037,7 @@
     pairBox.addEventListener("keydown", function (e) { if (e.key === "Enter") { link(); } });
 
     if (!state.sync) {
-      box.appendChild(h("p", { text: "See the same ticks on your phone and your computer, and keep a safe copy if this one is ever cleared. No account, no password, no links to open." }));
+      box.appendChild(h("p", { text: "See the same ticks, opened hints and lab results on your phone and your computer, and keep a safe copy if this one is ever cleared. No account, no password. Notes you type stay on the device you typed them on." }));
     }
     box.appendChild(h("div", { class: "btnrow" }, [getBtn, getStatus]));
     box.appendChild(pinShow);
@@ -2034,7 +2045,7 @@
     box.appendChild(pairBox);
     box.appendChild(h("div", { class: "btnrow" }, [pairBtn, pairStatus]));
     if (state.sync) {
-      box.appendChild(h("p", { class: "note", text: "What is stored online: which boxes are ticked and on which days. No name, no email, nothing else about you." }));
+      box.appendChild(h("p", { class: "note", text: "What is stored online: which boxes are ticked, which hints are open, lab results, and on which days. No name, no email, no notes, nothing else about you." }));
       var offBtn = h("button", { type: "button", class: "ghost", id: "sync-off", text: "UNLINK THIS DEVICE" });
       offBtn.addEventListener("click", function () { stopSync(); render(); syncPanel(); });
       box.appendChild(h("div", { class: "btnrow" }, [offBtn]));

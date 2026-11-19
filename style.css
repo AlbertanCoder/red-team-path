@@ -289,3 +289,4 @@ details.pstep > summary::-webkit-details-marker { display: none; }
 .prow.now .pm, .prow.now .k { color: var(--accent); }
 .also { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .also button { min-height: 48px; border-radius: 6px; }
+#link-prompt { display: flex; flex-direction: column; gap: 10px; }
