@@ -1,5 +1,5 @@
 /* Red Team Path: "mission console" look. Dark by default, light on request.
-   Layout: sticky header (brand, menu button, progress), one view at a time, fixed tab bar at the bottom. */
+   Layout: a top strip (what you are on, and the Path button), one screen at a time, a bottom bar (what is next, and the buttons). */
 :root {
   --bg: #0B0E13;
   --panel: #121722;
@@ -14,7 +14,6 @@
   --focus: #7FB0FF;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  --tabbar-h: 60px;
   color-scheme: dark;
 }
 :root[data-theme="light"] {
@@ -59,35 +58,6 @@ h1, h2, h3, p { margin: 0; }
 
 .app { max-width: 44rem; margin: 0 auto; min-height: 100vh; }
 
-/* Status header */
-.status {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: var(--panel);
-  border-bottom: 1px solid var(--line);
-  padding-top: calc(10px + env(safe-area-inset-top, 0px));
-  padding-bottom: 10px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.status-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.mark { width: 26px; height: 26px; flex: 0 0 auto; color: var(--ink); }
-.brand { font-family: var(--mono); font-weight: 700; font-size: 0.86rem; letter-spacing: 0.14em; flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chip {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  padding: 3px 8px;
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.chip.live { color: var(--ok); border-color: var(--ok); }
 button {
   font: inherit;
   color: var(--ink);
@@ -100,16 +70,6 @@ button {
 button:hover { border-color: var(--muted); }
 button.ghost { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; padding: 4px 10px; min-height: 36px; background: transparent; }
 button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
-.readout .bar { flex: 1 1 auto; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
-.readout .bar > span { display: block; height: 100%; width: 0; background: var(--ok); transition: width 0.25s ease; }
-@media (prefers-reduced-motion: reduce) { .readout .bar > span { transition: none; } }
-/* Menu button, and under the progress bar one line of words that says whether this device is linked and saved. */
-#menu-btn { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 4px 14px; min-height: 36px; display: inline-flex; align-items: center; flex: 0 0 auto; }
-#menu-btn[aria-current="page"] { border-color: var(--accent); }
-#sync-line { font-size: 0.78rem; color: var(--muted); }
-#sync-line[data-sync="ok"] { color: var(--ok); }
-#sync-line[data-sync="offline"] { color: var(--warn); }
-
 /* Views */
 main {
   padding-top: 18px;
@@ -146,29 +106,9 @@ h2 { font-size: 1.05rem; line-height: 1.3; font-weight: 650; }
 .card .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
 .check { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.92rem; }
 .check input { width: 22px; height: 22px; margin: 0; accent-color: var(--ok); cursor: pointer; }
-.open { font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.06em; text-decoration: none; border: 1px solid var(--line); border-radius: 4px; padding: 5px 12px; min-height: 36px; display: inline-flex; align-items: center; color: var(--ink); }
+.open { font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.06em; text-decoration: none; border: 1px solid var(--line); border-radius: 4px; padding: 5px 12px; min-height: 44px; display: inline-flex; align-items: center; color: var(--ink); }
 .open:hover { border-color: var(--accent); }
 .note { font-size: 0.9rem; color: var(--muted); border-left: 2px solid var(--line); padding-left: 10px; }
-
-/* Path list */
-details.step { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; }
-details.step > summary { list-style: none; cursor: pointer; padding: 12px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline; }
-details.step > summary::-webkit-details-marker { display: none; }
-.step .stitle { font-weight: 650; }
-.step .scount { font-family: var(--mono); font-size: 0.76rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-.step.complete .scount { color: var(--ok); }
-.step .sgoal { grid-column: 1 / -1; font-size: 0.9rem; color: var(--muted); }
-.sbody { padding: 2px 14px 14px; display: flex; flex-direction: column; gap: 14px; }
-.grp { display: flex; flex-direction: column; gap: 6px; }
-.grp > .glabel { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--muted); }
-.grp.current > .glabel { color: var(--accent); }
-.line { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 8px; align-items: start; }
-.line .go { min-width: 36px; min-height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 4px; color: var(--ink); text-decoration: none; font-family: var(--mono); font-size: 0.9rem; }
-.line .go:hover { border-color: var(--accent); }
-.line input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--ok); cursor: pointer; }
-.line label { cursor: pointer; overflow-wrap: anywhere; }
-.line.done label { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
-.line .k { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; color: var(--muted); margin-right: 6px; }
 
 /* Reference rows */
 .rows { border-top: 1px solid var(--line); }
@@ -198,44 +138,9 @@ textarea { min-height: 84px; resize: vertical; font-size: 16px; }
 .btnrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
 .status-line { font-size: 0.9rem; color: var(--muted); }
 
-/* Tab bar */
-.tabbar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 6;
-  background: var(--panel);
-  border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: center;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  padding-left: env(safe-area-inset-left, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
-}
-.tabbar a {
-  flex: 1 1 0;
-  max-width: 11rem;
-  height: var(--tabbar-h);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  color: var(--muted);
-  text-decoration: none;
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border-top: 2px solid transparent;
-}
-.tabbar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.tabbar a[aria-current="page"] { color: var(--ink); border-top-color: var(--accent); }
-
 /* Words tab: one row per word. In "Test me" the meanings start closed. */
 details.word { padding: 10px 0; border-bottom: 1px solid var(--line); }
-details.word > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 10px; min-height: 28px; }
+details.word > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; min-height: 40px; }
 details.word > summary::-webkit-details-marker { display: none; }
 details.word > summary::after { content: "+"; flex: 0 0 auto; width: 1ch; font-family: var(--mono); color: var(--muted); }
 details.word[open] > summary::after { content: "\2013"; }
@@ -252,11 +157,6 @@ details.word[open] > summary::after { content: "\2013"; }
 .card.ad .checked { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
 .card.ad .checked.stale { color: var(--warn); }
 details.fold > .card { border-left-width: 1px; }
-
-/* Info tab: jump buttons, and sections that stop below the sticky header when jumped to. */
-.jump { display: flex; flex-wrap: wrap; gap: 8px; }
-.jump button { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; min-height: 36px; }
-.block[id] { scroll-margin-top: calc(100px + env(safe-area-inset-top, 0px)); }
 
 /* Now tab: one card, two big buttons. */
 .card.now { padding: 16px; gap: 12px; }
@@ -281,10 +181,6 @@ details.fold .rows { border-top: 0; }
 details.fold .row:first-child { padding-top: 0; }
 details.fold .row:last-child { border-bottom: 0; padding-bottom: 0; }
 
-/* Path tab: where you are. */
-.line.here label { font-weight: 600; }
-.line .k.you { display: block; color: var(--accent); margin-bottom: 2px; }
-
 /* Menu: panels and text boxes. 16px text stops phones zooming in when a box is tapped. */
 .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 14px; }
 input[type="text"], input[type="search"] { width: 100%; font-family: var(--sans); font-size: 16px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; min-height: 44px; }
@@ -295,10 +191,6 @@ input[type="text"], input[type="search"] { width: 100%; font-family: var(--sans)
 .pin-code { font-family: var(--mono); font-size: 1.9rem; font-weight: 700; letter-spacing: 0.12em; color: var(--ink); user-select: all; }
 #pair-box { font-family: var(--mono); font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase; max-width: 16rem; }
 .linkline { font-size: 0.9rem; color: var(--muted); }
-
-/* Path tab: "Untick this box?" sits under the row it belongs to. */
-.line .confirm { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 4px 0 6px; }
-.line .confirm button { min-height: 36px; padding: 4px 14px; }
 
 /* Videos play inside the Now card. */
 button.big.open { border: 1px solid var(--muted); background: var(--raised); color: var(--ink); }
@@ -378,7 +270,8 @@ pre.msg { margin: 0; font-family: var(--mono); font-size: 0.86rem; line-height: 
   display: flex; flex-direction: column; gap: 10px;
 }
 html.sheet-open, html.sheet-open body { overflow: hidden; }
-.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+/* The count and the Close button stay in view while the list scrolls. */
+.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; position: sticky; top: -14px; z-index: 1; background: var(--panel); padding: 6px 0; }
 .sheet-head button { min-height: 44px; padding: 6px 16px; border-radius: 6px; }
 .meter { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
 .meter > span { display: block; height: 100%; background: var(--ok); }

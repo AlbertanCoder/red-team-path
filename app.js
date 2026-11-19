@@ -126,7 +126,7 @@
   function videoSteps(n) {
     var steps = [
       "Tap Watch it here. If the video shows a play button, press it.",
-      "Watch it through. When a word is new, pause and look it up: tap Path, then Words."
+      "Watch it through. When a word is new, pause and look it up: tap Path, then Library, then Words."
     ];
     if (n >= 3 && n <= 7) { steps.push("Write down one thing from the video you want to try. The lab for this episode comes next."); }
     else if (n >= 8) { steps.push("Watch what the tool does. You do it yourself in the next box."); }
@@ -337,22 +337,6 @@
   var STEPS = buildSteps();
 
   // ---------- reference content ----------
-  var PLACES = [
-    ["Microsoft AI Red Teaming 101, and its labs", URLS.ms, "VIDEO + LAB · STEP 1 · 10 EPISODES, 12 LABS",
-      "From Microsoft's own AI red team. Episodes 1 to 7 teach the attacks and Episodes 8 to 10 show its automation tool, PyRIT. The labs are the practice chatbots shown in the videos. They are the one part of this path that is not free and not in a browser: Docker on your own computer, plus about US$5 of paid AI usage. They can be skipped."],
-    ["Microsoft Learn", URLS.learn, "COURSES · STEPS 2 AND 4 · 11 MODULES, ABOUT 9 HOURS",
-      "Microsoft's own free training site. Two courses from it are in this path: AI security fundamentals, and Get Started with Python Programming, parts 1 and 2. Each module ends in a quiz and adds a badge to a profile you can share."],
-    ["Gray Swan Arena", URLS.gsTraining, "PRACTICE · STEP 3 · NOT MICROSOFT",
-      "Scored practice against real AI models, free and in a browser, with beginner sets for chatbots and for agents. It is here because Microsoft has no practice for attacking agents. Prize contests come and go on the same site."],
-    ["Mozilla 0DIN and Anthropic", URLS.odin, "BOUNTIES · STEP 6 · NOT MICROSOFT",
-      "Two programs that pay for real findings. They are here because Microsoft runs no bounty a beginner can enter for this work."]
-  ];
-  var MONEY = [
-    ["Hourly AI testing and rating platforms", "The quickest money when an application lands. Pay and acceptance vary a lot, and nobody can promise either."],
-    ["Gray Swan prize contests", "Prize money goes mostly to top finishers. For a beginner the real payoff is a leaderboard placing you can show."],
-    ["Bug bounties", "Mozilla 0DIN pays US$500 to US$15,000 for a new finding that works every time. Anthropic's program pays up to US$35,000, but you apply and they choose who gets in."],
-    ["A job", "Salaried entry-level AI red-team jobs are rare: none was open when this was last checked. Public write-ups, contest results and basic Python are what a newcomer can show instead of experience."]
-  ];
   var RULES = [
     "Only attack sites built for it, or programs that invite it in writing. Never test a company's live product outside its bounty rules.",
     "Weapons topics only inside an official lab or program that asks for that testing. Never anywhere else.",
@@ -448,14 +432,6 @@
     ["Gray Swan challenges", URLS.gsChallenges, "Prize contests, not jobs. A placing counts as proof."]
   ];
   var SEARCH_WORDS = "AI red teamer, LLM red team, adversarial testing, jailbreak, prompt injection, AI safety tester";
-  var PROOF = [
-    "Microsoft's AI Red Teaming 101 series and its labs, done.",
-    "A Microsoft Learn profile showing AI security fundamentals and Python, with a transcript you can share.",
-    "A Gray Swan profile with solved sets, and any contest placing.",
-    "4 to 6 write-ups of your own attacks.",
-    "One automated attack run with Microsoft's PyRIT.",
-    "A bounty credit, if you earn one."
-  ];
   var APPLY_RULES = [
     "Never pay to apply, for training or for onboarding. Real platforms pay you.",
     "Do ID checks only inside a platform's own official sign-up, never by email or chat.",
@@ -746,7 +722,7 @@
         right: 1, because: "Proven, repeatable impact inside the agreed scope is what a bounty or an employer actually rewards." },
       src: ["agenticMisalign", "owaspAgentic"] },
     { id: "t25", group: "Getting paid", title: "The three ways this pays",
-      idea: "Three doors. Bug bounties: you join a program — many are open to anyone on the platform, some are invite-only — and you are paid for each accepted, in-scope flaw you find and prove. Gig and contract platforms: structured red-team tasks, paid by the hour or the task, which is most of the ads in your Jobs tab. Full-time roles: a salary to do this all day.",
+      idea: "Three doors. Bug bounties: you join a program — many are open to anyone on the platform, some are invite-only — and you are paid for each accepted, in-scope flaw you find and prove. Gig and contract platforms: structured red-team tasks, paid by the hour or the task, which is most of the ads under Jobs. Full-time roles: a salary to do this all day.",
       why: "They want different things. Bounties reward one strong proven finding. Gig platforms reward steady, careful work and pass a skills test first. Knowing which door you are at tells you what to show them.",
       when: "Now, as you practise, so you aim your proof at the door you want. Most people start with gig platforms and bounties, because neither asks for a degree up front.",
       stops: "Nothing, but be real: bounties are competitive, many reports earn nothing, and gig work comes and goes. This is a build-up, not a quick payout.",
@@ -782,7 +758,7 @@
         right: 1, because: "Authorisation and scope are what separate a researcher from an attacker, whatever you find." },
       src: ["discloseIo", "owaspDisclosure"] },
     { id: "t29", group: "Getting paid", title: "Where the real programs are",
-      idea: "AI-focused places to start: 0DIN, Mozilla's bug bounty for generative AI flaws, and Anthropic's own AI safety bounty. Broader platforms, HackerOne and Bugcrowd, list hundreds of programs, some with AI in scope. And the gig platforms are already in your Jobs tab.",
+      idea: "AI-focused places to start: 0DIN, Mozilla's bug bounty for generative AI flaws, and Anthropic's own AI safety bounty. Broader platforms, HackerOne and Bugcrowd, list hundreds of programs, some with AI in scope. And the gig platforms are already listed under Jobs.",
       why: "These are real, named, and current, each checked on 18 Nov 2026. Starting on an AI-specific program means your lab skills map straight onto what they want.",
       when: "When you have a few write-ups behind you. Start on one program, read its scope end to end, and send one careful report. One accepted finding changes everything.",
       stops: "Never pay to join a real program, and do ID checks only inside a platform's own official sign-up. Anything that asks you to pay to apply is not a real program.",
@@ -1715,7 +1691,7 @@
   }
 
   // ----- the top strip and the bottom bar -----
-  var SCREENS = { tutor: "Library", words: "Words", jobs: "Jobs", menu: "Settings" };
+  var SCREENS = { tutor: "Library", jobs: "Jobs", menu: "Settings" };
   function renderTop(idx, it, screen) {
     var tag = $("top-tag");
     var title = $("top-title");
@@ -1805,7 +1781,7 @@
     }
   }
 
-  // ----- Path: the whole list, pulled up from the top button. Library, Words, Jobs and Settings are at its end. -----
+  // ----- Path: the whole list, pulled up from the top button. Library, Jobs and Settings are at its end. -----
   function buildSheet() {
     var sheet = $("sheet");
     sheet.textContent = "";
@@ -1858,7 +1834,7 @@
       panel.appendChild(det);
     });
     var also = h("div", { class: "also" });
-    [["Library", "#tutor"], ["Words", "#words"], ["Jobs", "#jobs"], ["Settings", "#menu"]].forEach(function (a) {
+    [["Library", "#tutor"], ["Jobs", "#jobs"], ["Settings", "#menu"]].forEach(function (a) {
       var b = h("button", { type: "button", id: "also-" + a[1].slice(1), text: a[0] });
       b.addEventListener("click", function () { closeSheet(); go(a[1]); });
       also.appendChild(b);
@@ -1880,25 +1856,20 @@
     document.documentElement.classList.remove("sheet-open");
   }
 
-  // ---------- Words tab ----------
-  function renderWords() {
-    var v = document.getElementById("view-words");
-    v.textContent = "";
+  // ---------- Words: one part of the Library ----------
+  function tutorWords(v) {
     var total = 0;
     WORDS.forEach(function (g) { total += g[1].length; });
     var toggle = h("button", { type: "button", id: "test-btn", "aria-pressed": state.test ? "true" : "false", text: state.test ? "Test me: ON" : "Test me: OFF" });
     toggle.addEventListener("click", function () {
       state.test = !state.test;
       save();
-      renderWords();
-      document.getElementById("test-btn").focus({ preventScroll: true });
+      renderTutor("test-btn");
     });
     var search = h("input", { type: "search", id: "word-search", placeholder: "Search the words", "aria-label": "Search the words", autocomplete: "off" });
     var none = h("p", { class: "lede", id: "word-none", hidden: "", text: "No word matches. Try fewer letters." });
     v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "eyebrow", text: "> WORDS · " + total }),
-      h("h1", { text: "The words you will hear" }),
-      h("p", { class: "lede", text: "Plain-English meanings. The tag shows the video, lab or module where the word comes up." }),
+      h("p", { class: "lede", text: total + " words in plain English. The tag shows the video, lab or module where the word comes up." }),
       search,
       h("div", { class: "btnrow" }, [toggle, h("span", { class: "status-line", role: "status",
         text: state.test ? "Say the meaning in your head, then tap the word to check." : "Turn this on to hide the meanings and check yourself." })]),
@@ -1967,9 +1938,8 @@
     var start = open.filter(function (a) { return a.level === "start"; });
     var later = open.filter(function (a) { return a.level !== "start"; });
     v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "eyebrow", text: "> JOBS" + (JOBS.updated ? " · LINKS CHECKED " + niceDate(JOBS.updated).toUpperCase() : "") }),
-      h("h1", { text: "Where this can lead" }),
-      h("p", { class: "lede", text: "Real ads with real links. Pay is copied as each ad posted it: an example, not a promise. An automatic check opens every ad once a day: each ad shows when its link was last checked, and is hidden once the link dies." })
+      h("div", { class: "tag", id: "jobs-checked", text: JOBS.updated ? "Links checked " + niceDate(JOBS.updated) : "Links not checked yet" }),
+      h("p", { class: "lede", text: "Real ads. Pay is copied as each ad posted it: an example, not a promise. Every link is re-checked once a day, and an ad is hidden when its link dies." })
     ]));
 
     var startBlock = h("div", { class: "block", id: "jobs-start" }, [
@@ -2000,19 +1970,10 @@
       h("p", { class: "dim", text: "What the next rung is called, and what it asks for. Worth applying once you have Python, public write-ups, and a contest placing or bounty credit." })
     ]);
     later.forEach(function (a) { laterFold.appendChild(adCard(a)); });
-    var money = h("div", { class: "rows" });
-    MONEY.forEach(function (m) {
-      money.appendChild(h("div", { class: "row" }, [h("div", null, [h("strong", { text: m[0] })]), h("p", { text: m[1] })]));
-    });
-    v.appendChild(h("div", { class: "block" }, [
-      h("h2", { text: "More" }),
-      laterFold,
-      h("details", { class: "fold" }, [h("summary", { text: "What to show instead of a degree" }), bullets(PROOF)]),
-      h("details", { class: "fold" }, [h("summary", { text: "Four ways this can pay, easiest first" }), money])
-    ]));
+    v.appendChild(h("div", { class: "block" }, [laterFold]));
   }
 
-  // ---------- Menu: syncing, settings, and the reasons behind the path ----------
+  // ---------- Settings: linking devices, and settings ----------
   function syncPanel() {
     var box = document.getElementById("menu-sync");
     box.textContent = "";
@@ -2167,38 +2128,8 @@
   function renderMenu() {
     var v = document.getElementById("view-menu");
     v.textContent = "";
-    var jump = h("div", { class: "jump" });
-    [["Link devices", "menu-sync"], ["Settings", "menu-settings"], ["Where you learn", "menu-places"], ["Rules", "menu-rules"], ["Template", "menu-template"]].forEach(function (j) {
-      var b = h("button", { type: "button", text: j[0] });
-      b.addEventListener("click", function () { document.getElementById(j[1]).scrollIntoView({ block: "start" }); });
-      jump.appendChild(b);
-    });
-    v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "eyebrow", text: "> MENU" }),
-      h("h1", { text: "Link devices, settings and info" }),
-      jump
-    ]));
     v.appendChild(h("div", { class: "block panel", id: "menu-sync" }));
     v.appendChild(h("div", { class: "block panel", id: "menu-settings" }));
-
-    var rows = h("div", { class: "rows" });
-    PLACES.forEach(function (p) {
-      rows.appendChild(h("div", { class: "row" }, [h("div", null, [link(p[0], p[1])]), h("div", { class: "meta", text: p[2] }), h("p", { text: p[3] })]));
-    });
-    v.appendChild(h("div", { class: "block", id: "menu-places" }, [
-      h("h2", { text: "Where you learn, and why" }),
-      h("p", { class: "lede", text: "One main name, Microsoft, so you can say where you studied. Two named extras cover what Microsoft does not offer. Everything is free and in a web browser except Microsoft's labs. The list changes only when a fact changes, and the audit below says what changed." }),
-      rows
-    ]));
-
-    v.appendChild(h("div", { class: "block", id: "menu-rules" }, [h("h2", { text: "Rules that keep you safe and hireable" }), bullets(RULES)]));
-
-    var status = h("span", { class: "status-line", role: "status" });
-    var pre = h("pre", { class: "template", id: "template", text: TEMPLATE });
-    var copy = h("button", { type: "button", id: "copy-template", text: "Copy template" });
-    copy.addEventListener("click", function () { copyText(TEMPLATE, status, pre); });
-    v.appendChild(h("div", { class: "block", id: "menu-template" }, [h("h2", { text: "Write-up template" }), pre, h("div", { class: "btnrow" }, [copy, status])]));
-
     syncPanel();
     settingsPanel();
   }
@@ -2360,7 +2291,7 @@
       var p = JSON.parse(window.localStorage.getItem(TUTOR_KEY) || "null");
       if (typeof p === "number") { tutor.step = p; } // an earlier version stored only the thinking step
       else if (p && typeof p === "object") {
-        if (p.view === "lessons" || p.view === "coach" || p.view === "think" || p.view === "notes") { tutor.view = p.view; }
+        if (p.view === "lessons" || p.view === "words" || p.view === "think" || p.view === "notes") { tutor.view = p.view; }
         if (typeof p.note === "string") { tutor.note = p.note; }
         if (typeof p.step === "number") { tutor.step = p.step; }
         if (typeof p.lesson === "string") { tutor.lesson = p.lesson; }
@@ -2406,7 +2337,7 @@
     if (at === -1) {
       // The list of lessons.
       var passed = LESSONS.filter(function (l) { return isDone(l.id); }).length;
-      v.appendChild(h("p", { class: "lede", id: "lesson-count", text: passed + " of " + LESSONS.length + " lessons passed. Each takes about two minutes and ends with one question." }));
+      v.appendChild(h("p", { class: "lede", id: "lesson-count", text: passed + " of " + LESSONS.length + " lessons passed. Extra reading: each lab page already carries the one technique it needs. Each lesson takes about two minutes and ends with one question." }));
       var group = "";
       var block = null;
       LESSONS.forEach(function (l, i) {
@@ -2428,7 +2359,8 @@
       });
       v.appendChild(h("div", { class: "block" }, [
         h("details", { class: "fold", id: "tutor-sources" }, [h("summary", { text: "Where these lessons come from: " + Object.keys(seen).length + " sources" }),
-          h("p", { class: "note", text: "Every page was opened on " + AUDIT_DATE + ". The lessons are this app's own summaries of them." }), list])
+          h("p", { class: "note", text: "Every page was opened on " + AUDIT_DATE + ". The lessons are this app's own summaries of them." }), list]),
+        h("details", { class: "fold", id: "tutor-rules" }, [h("summary", { text: "Rules that keep you safe and hireable" }), bullets(RULES)])
       ]));
       return;
     }
@@ -2521,20 +2453,15 @@
   function renderTutor(focusId) {
     var v = document.getElementById("view-tutor");
     v.textContent = "";
-    var views = [["lessons", "Lessons"], ["think", "Think it through"], ["notes", "My notes"]];
+    var views = [["lessons", "Lessons"], ["words", "Words"], ["think", "Thinking steps"], ["notes", "My notes"]];
     var seg = h("div", { class: "seg", role: "group", "aria-label": "Parts of the Tutor" });
     views.forEach(function (x) {
       var b = h("button", { type: "button", id: "tutor-tab-" + x[0], "aria-pressed": tutor.view === x[0] ? "true" : "false", text: x[1] });
       b.addEventListener("click", function () { tutorGo({ view: x[0] }, "tutor-tab-" + x[0]); });
       seg.appendChild(b);
     });
-    v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "eyebrow", text: "> TUTOR" }),
-      h("h1", { text: "Learn it, then try it" }),
-      h("p", { class: "lede", text: "Short lessons on known techniques, a way to think when you are stuck, and your notes. For labs, contests and bounty programs that invite it." }),
-      seg
-    ]));
-    if (tutor.view === "think") { tutorThink(v); } else if (tutor.view === "notes") { tutorNotes(v); } else { tutorLessons(v); }
+    v.appendChild(seg);
+    if (tutor.view === "words") { tutorWords(v); } else if (tutor.view === "think") { tutorThink(v); } else if (tutor.view === "notes") { tutorNotes(v); } else { tutorLessons(v); }
     if (focusId) {
       var again = document.getElementById(focusId);
       if (again) { again.focus({ preventScroll: true }); }
@@ -2543,8 +2470,8 @@
 
   // ---------- frame ----------
   // One screen at a time. "now" is the box you are on (or one opened from the Path list: #i-<box id>).
-  // Library, Words, Jobs and Settings are side screens reached from the Path list.
-  var OLD_TABS = { next: "now", path: "now", info: "menu", why: "menu", audit: "menu" }; // links saved before the layout changed still land somewhere useful
+  // Library, Jobs and Settings are side screens reached from the Path list.
+  var OLD_TABS = { next: "now", path: "now", words: "tutor", info: "menu", why: "menu", audit: "menu" }; // links saved before the layout changed still land somewhere useful
   function currentScreen() {
     var name = (window.location.hash || "#now").slice(1);
     name = OLD_TABS[name] || name;
@@ -2552,7 +2479,7 @@
   }
   function showScreen() {
     var name = currentScreen();
-    ["now", "tutor", "words", "jobs", "menu"].forEach(function (t) { $("view-" + t).hidden = t !== name; });
+    ["now", "tutor", "jobs", "menu"].forEach(function (t) { $("view-" + t).hidden = t !== name; });
   }
   function render(focusId) {
     var idx = currentIndex();
@@ -2627,7 +2554,6 @@
   carryOverHints();
   var joined = takeLink();
   renderTutor();
-  renderWords();
   renderJobs();
   renderMenu();
   route();
