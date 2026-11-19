@@ -21,7 +21,7 @@
 - [x] 1. Safety tag `before-fixup` pushed before any change. Proof: `git ls-remote --tags origin before-fixup` shows commit 018548c.
 - [x] 2. Audit report given, and Shad's answers recorded in FIXUP-NOTES.md. Proof: commits 1281899 (audit) and a1d7d46 (answers).
 - [x] 3. Four layout previews live in a `preview/` folder, one picked by Shad. Proof: four live links answered 200 (commit a1d7d46); Shad picked layout 4 at 08:05 Alberta, written in FIXUP-NOTES.md.
-- [ ] 4. Build plan approved by Shad before the app itself changes. Proof: the plan in FIXUP-NOTES.md with Shad's go-ahead noted.
+- [x] 4. Build plan approved by Shad before the app itself changes. Proof: plan committed in af921d8 while the app was still untouched; go-ahead given 08:10 Alberta and noted in FIXUP-NOTES.md.
 - [ ] 5. Every one of the 12 labs has one tutor page with exactly: what it is, objective, how to think, Hint 1/2/3 (one at a time), full answer (locked until 3 hints + "I tried"), what's next, and a verified/unverified label. Proof: a check script passes on the live site.
 - [ ] 6. Videos and labs in the right order with one clear "do this next" from first video to last lab. Proof: the walk-through check on the live site, link check script exits 0.
 - [ ] 7. Saved progress kept: ticks made in the old app still show in the new one. Proof: a test that loads old saved data into the new app.

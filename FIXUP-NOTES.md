@@ -10,7 +10,7 @@ A fresh session should be able to carry on from this file alone.
 - Session start: 07:28 Alberta, EPOCH 1795094890. Clock: `bash ~/scope-hq/alberta-now.sh` only.
 - Today is an exception day (see SCOPE.md top). Still on: weekly usage stop at 75%, wrap-up 9:45 pm, nothing after 10 pm, 60-minute check-ins.
 - Stop-gate file lives at `C:\Users\SHADHUNTER\Desktop\.claude\DONE` (the session's folder is Desktop, not the repo). It can only be rewritten at the start of a new turn.
-- **Current step: Step 4, plan written, waiting for Shad's go-ahead. Do not touch index.html, app.js or style.css before he says go.** Earlier: Steps done: set-up, Step 1 audit, Step 2 questions, four previews live (commit a1d7d46).
+- **Current step: Step 5 (build). P1 is live; waiting for Shad's OK on the quality of Lab 1's page before writing the other 11 lab pages (P3). P2 (order) is next and does not need to wait.** Earlier: Steps done: set-up, Step 1 audit, Step 2 questions, four previews live (commit a1d7d46).
 - After his pick: write the plan (Step 4) into this file, show it, and wait for his go-ahead before touching index.html, app.js or style.css.
 - Weekly usage: 46% at about 07:40 (Shad's reading). Chrome extension not connected at 07:40; retry at check-ins.
 
@@ -203,7 +203,7 @@ Four previews, live since 08:0x Alberta on 19 Nov 2026, same content (home + Lab
 
 ## The plan (Step 4)
 
-Layout: 4, "Opens on your lab". Written 08:1x Alberta, 19 Nov 2026. **Go-ahead: (waiting)**
+Layout: 4, "Opens on your lab". Written 08:1x Alberta, 19 Nov 2026. **Go-ahead:** yes, 08:10 Alberta. Shad: "Looks good, build it. The concept design for the layout is how you will build it correct? I like it, build it like that." So the real app follows preview 4 closely.
 
 How layout 4 works in the real app (the design every item below builds toward):
 - The app opens on the one thing to do now. A lab shows its tutor page. A video shows its player. Anything else shows a short card.
@@ -214,7 +214,11 @@ How layout 4 works in the real app (the design every item below builds toward):
 
 Checklist, most valuable first. One item at a time: build, test, commit, push, check the live site, show proof and what to tap.
 
-- [ ] P1. **New frame + Lab 1's tutor page (the sample).** The app opens on your current step in layout 4. Lab 1 gets the finished page: what it is, objective, how to think, Hint 1/2/3 one at a time, one-line unlock, full answer with why, what's next, verified label. Old saved ticks, notes and opened hints carry over (proved by a test that loads old saved data). **Then stop and wait for Shad's OK on the quality.**
+- [x] P1. **New frame + Lab 1's tutor page (the sample).** The app opens on your current step in layout 4. Lab 1 gets the finished page: what it is, objective, how to think, Hint 1/2/3 one at a time, one-line unlock, full answer with why, what's next, verified label. Old saved ticks, notes and opened hints carry over (proved by a test that loads old saved data). **Then stop and wait for Shad's OK on the quality.**
+  - Done 19 Nov, about 08:30 Alberta. Commit: "P1: the app opens on what you are doing; Lab 1's tutor page". Proof: `python tools/app_test.py https://albertancoder.github.io/red-team-path/` ALL PASSED on the live site (39 checks, including old ticks, old note and old opened hints carried over).
+  - What changed: `index.html` (top strip, bottom bar, Path list; tab bar gone), `style.css` (new block at the end), `app.js` (`LAB_PAGES` after `COACH`; marks `ha/hb/hc/tr/un` + lab number registered in `KNOWN`; `mark()`, `hintsOpen()`; Home section replaces the Now and Path tabs; frame rewritten; lab coach removed). Labs 2 to 12 still show their old coach text through `labPage()`'s fallback, marked unverified, until P3.
+  - The online store was tested with a throwaway record: it accepts the new marks (numbers only), so they sync once devices are linked. Record deleted.
+  - One difference from the preview: instead of two "Hint 2 is locked" lines there is a single button, "Show hint 1 of 3". Less text.
 - [ ] P2. **Order and "next".** Write-ups optional. Labs 7, 8, 11, 12 in a group called "Harder versions" after Episode 7. Labs 3, 4, 9, 10 in an optional group off the main line. Episodes 8 to 10 moved to Step 5. One Next at every point; optional things never block it. Count changes from 58 to 49 required boxes; no tick is lost.
 - [ ] P3. **The other 11 lab pages**, same standard as Lab 1, in the order he meets them: 6, 2, 5, then 7, 8, 11, 12, then optional 3, 9, 10, 4. Each answer run in the real lab where safe (6, 2, 5, 7, 8, 11) and labelled verified or unverified. Lab 9 and 10: one harmless test message to learn whether a filter exists on his set-up. Lab 4: technique and why, no message wording. Lab 12: "no known answer" until P9.
 - [ ] P4. **Lab results.** "I beat it" / "Moving on, not solved" saved per lab; a short "come back to these" list in Path. Old lab ticks count as beaten.
