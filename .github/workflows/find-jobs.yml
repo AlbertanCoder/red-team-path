@@ -1,0 +1,35 @@
+# Once a week, read the public job feeds of AI companies for new ads with titles like "red team" or "jailbreak".
+# New ones are added to jobs.js, marked as found by the scan and not yet read by a person.
+name: Find new job ads
+
+on:
+  schedule:
+    - cron: "47 13 * * 1"   # Mondays, 13:47 UTC (early morning in North America)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: check-jobs        # never at the same moment as the daily link check: both rewrite jobs.js
+  cancel-in-progress: false
+
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read the job feeds
+        run: python3 tools/find_jobs.py
+      - name: Save the result
+        run: |
+          if git diff --quiet -- jobs.js; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add jobs.js
+          git commit -m "Weekly scan for new job ads"
+          # If someone pushed while the scan ran, put this commit on top of theirs and try once more.
+          git push || (git pull --rebase && git push)

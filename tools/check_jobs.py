@@ -1,6 +1,6 @@
 """Link check for the job ads on the Jobs tab (run from the repo root: python tools/check_jobs.py).
 
-Reads jobs.js, opens every ad's link, and rewrites jobs.js:
+Reads jobs.js, checks every ad (its page, or its company's public job feed), and rewrites jobs.js:
   - an ad whose page is gone, redirects away, or says it is closed is marked  "open": false  (the app hides it)
   - an ad that is confirmed still up gets today's date in "checked"
   - an ad that could not be reached today (site blocked the check, timeout) is left exactly as it was
@@ -16,6 +16,9 @@ import re
 import sys
 import urllib.error
 import urllib.request
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import job_feeds  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 FILE = ROOT / "jobs.js"
@@ -54,24 +57,23 @@ def plain(body):
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body)))
 
 
-BOARDS = {}
+FEEDS = {}
 
 
-def check_ashby(ad):
-    """Ashby job boards publish a feed of open jobs. Match by title, because a reposted ad gets a new link."""
+def check_feed(ad):
+    """Job boards publish a feed of their open jobs. Match by title, because a reposted ad gets a new link.
+    Ads added by hand say  "type": "ashby", "board": ...   Ads found by the weekly scan say  "type": "feed", "kind": ..., "board": ..."""
+    kind = ad["check"].get("kind", "ashby")
     board = ad["check"]["board"]
-    if board not in BOARDS:
-        code, _, body = get("https://api.ashbyhq.com/posting-api/job-board/" + board)
-        try:
-            BOARDS[board] = json.loads(body)["jobs"] if code == 200 else None
-        except (ValueError, KeyError):
-            BOARDS[board] = None
-    jobs = BOARDS[board]
+    if (kind, board) not in FEEDS:
+        FEEDS[(kind, board)] = job_feeds.feed(kind, board)
+    jobs = FEEDS[(kind, board)]
     if jobs is None:
         return "unknown", "could not read the %s job board" % board
     for job in jobs:
-        if job.get("title", "").strip() == ad["check"]["title"]:
-            ad["url"] = job["jobUrl"]
+        if job["title"] == ad["check"]["title"]:
+            if job["url"]:
+                ad["url"] = job["url"]
             return "open", "listed on the %s job board" % board
     return "closed", "no longer listed on the %s job board" % board
 
@@ -101,7 +103,7 @@ def main():
     data = load()
     counts = {"open": 0, "closed": 0, "unknown": 0}
     for ad in data["ads"]:
-        result, why = (check_ashby if ad["check"]["type"] == "ashby" else check_page)(ad)
+        result, why = (check_feed if ad["check"]["type"] in ("ashby", "feed") else check_page)(ad)
         counts[result] += 1
         if result == "open":
             ad["open"] = True

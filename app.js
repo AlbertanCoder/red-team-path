@@ -407,7 +407,7 @@
     ]]
   ];
 
-  // ---------- jobs: the ads themselves live in jobs.js, which the link check (tools/check_jobs.py) rewrites. ----------
+  // ---------- jobs: the ads live in jobs.js. The daily link check (tools/check_jobs.py) and the weekly scan for new ads (tools/find_jobs.py) rewrite it. ----------
   var JOBS = window.RTP_JOBS && Array.isArray(window.RTP_JOBS.ads) ? window.RTP_JOBS : { updated: "", ads: [] };
   var HONEST = [
     "Most work a beginner can get is contract work, paid by the hour through AI-training platforms. It comes project by project, and hours are not guaranteed.",
@@ -1937,8 +1937,8 @@
       h("div", { class: "pay", text: ad.pay }),
       h("p", { text: ad.ask }),
       h("div", { class: "acts" }, [
-        link("Open the ad ↗", ad.url, "open"),
-        h("span", { class: "checked" + (stale ? " stale" : ""), text: (stale ? "Not re-checked since " : "Link checked ") + niceDate(ad.checked) })
+        link("Open the ad \u2197", ad.url, "open"),
+        h("span", { class: "checked" + (stale ? " stale" : ""), text: (ad.found ? "Found " + niceDate(ad.found) + " \u00B7 " : "") + (stale ? "Not re-checked since " : "Link checked ") + niceDate(ad.checked) })
       ])
     ]);
   }
@@ -1947,41 +1947,53 @@
     v.textContent = "";
     var open = JOBS.ads.filter(function (a) { return a.open !== false && /^https:\/\//.test(a.url || ""); });
     var start = open.filter(function (a) { return a.level === "start"; });
-    var later = open.filter(function (a) { return a.level !== "start"; });
+    var fresh = open.filter(function (a) { return a.level === "new"; });   // found by the weekly scan, not yet read by a person
+    var later = open.filter(function (a) { return a.level !== "start" && a.level !== "new"; });
     v.appendChild(h("div", { class: "block" }, [
-      h("div", { class: "tag", id: "jobs-checked", text: JOBS.updated ? "Links checked " + niceDate(JOBS.updated) : "Links not checked yet" }),
-      h("p", { class: "lede", text: "Real ads. Pay is copied as each ad posted it: an example, not a promise. Every link is re-checked once a day, and an ad is hidden when its link dies." })
+      h("div", { class: "tag", id: "jobs-checked", text: (JOBS.updated ? "Links checked " + niceDate(JOBS.updated) : "Links not checked yet") +
+        (JOBS.scanned ? " \u00B7 scanned for new ads " + niceDate(JOBS.scanned) : "") }),
+      h("p", { class: "lede", text: "Real ads. Pay is copied as each ad posted it: an example, not a promise. Every link is re-checked once a day, and an ad is hidden when it closes." })
     ]));
 
     var startBlock = h("div", { class: "block", id: "jobs-start" }, [
-      h("h2", { text: "Open now for beginners" }),
-      h("p", { class: "lede", text: "You can apply once you have a couple of lab write-ups. Gray Swan results raise your odds." })
+      h("h2", { text: "Open now for beginners (" + start.length + ")" }),
+      h("p", { class: "lede", text: "Read by a person. You can apply once you have a couple of lab write-ups." })
     ]);
     if (start.length) { start.forEach(function (a) { startBlock.appendChild(adCard(a)); }); }
     else { startBlock.appendChild(h("p", { class: "note", text: "No beginner ad is confirmed open today. Use the searches below: they always show today's ads." })); }
     v.appendChild(startBlock);
 
+    var freshBlock = h("div", { class: "block", id: "jobs-new" }, [
+      h("h2", { text: "Found by the weekly scan (" + fresh.length + ")" }),
+      h("p", { class: "lede", text: "Once a week a script reads the public job boards of " + (JOBS.boards || "about 20") + " AI companies for titles like red team, jailbreak and safety testing. Nobody has read these for you yet, and some will ask for experience." })
+    ]);
+    if (fresh.length) { fresh.forEach(function (a) { freshBlock.appendChild(adCard(a)); }); }
+    else { freshBlock.appendChild(h("p", { class: "note", text: JOBS.scanned ? "Nothing new was found in the last scan." : "The first weekly scan has not run yet." })); }
+    v.appendChild(freshBlock);
+
     var searches = h("div", { class: "block", id: "jobs-search" }, [
       h("h2", { text: "Search for today's ads" }),
-      h("p", { class: "lede", text: "One tap opens a ready-made search. Other words that work: " + SEARCH_WORDS + "." })
+      h("p", { class: "lede", text: "One tap opens a ready-made search." })
     ]);
-    SEARCHES.forEach(function (s) { searches.appendChild(link(s[0] + " ↗", s[1], "big open")); });
+    SEARCHES.forEach(function (s) { searches.appendChild(link(s[0] + " \u2197", s[1], "big open")); });
+    v.appendChild(searches);
+
     var boards = h("div", { class: "rows" });
     BOARDS.forEach(function (b) {
       boards.appendChild(h("div", { class: "row" }, [h("div", null, [link(b[0], b[1])]), h("p", { text: b[2] })]));
     });
-    searches.appendChild(h("details", { class: "fold", id: "jobs-boards" }, [h("summary", { text: "Job boards to check yourself: " + BOARDS.length }), boards]));
-    v.appendChild(searches);
-
-    v.appendChild(h("div", { class: "block" }, [h("h2", { text: "The honest picture" }), bullets(HONEST)]));
-    v.appendChild(h("div", { class: "block" }, [h("h2", { text: "Before you apply anywhere" }), bullets(APPLY_RULES)]));
-
     var laterFold = h("details", { class: "fold", id: "jobs-later" }, [
       h("summary", { text: "Later goals: ads that ask for experience (" + later.length + ")" }),
       h("p", { class: "dim", text: "What the next rung is called, and what it asks for. Worth applying once you have Python, public write-ups, and a contest placing or bounty credit." })
     ]);
     later.forEach(function (a) { laterFold.appendChild(adCard(a)); });
-    v.appendChild(h("div", { class: "block" }, [laterFold]));
+    v.appendChild(h("div", { class: "block", id: "jobs-more" }, [
+      h("details", { class: "fold", id: "jobs-honest" }, [h("summary", { text: "The honest picture" }), bullets(HONEST)]),
+      h("details", { class: "fold", id: "jobs-rules" }, [h("summary", { text: "Before you apply anywhere" }), bullets(APPLY_RULES)]),
+      h("details", { class: "fold", id: "jobs-boards" }, [h("summary", { text: "Job boards to check yourself: " + BOARDS.length }),
+        h("p", { class: "dim", text: "Other search words that work: " + SEARCH_WORDS + "." }), boards]),
+      laterFold
+    ]));
   }
 
   // ---------- Settings: linking devices, and settings ----------
