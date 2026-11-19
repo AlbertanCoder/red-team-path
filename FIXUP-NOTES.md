@@ -10,7 +10,7 @@ A fresh session should be able to carry on from this file alone.
 - Session start: 07:28 Alberta, EPOCH 1795094890. Clock: `bash ~/scope-hq/alberta-now.sh` only.
 - Today is an exception day (see SCOPE.md top). Still on: weekly usage stop at 75%, wrap-up 9:45 pm, nothing after 10 pm, 60-minute check-ins.
 - Stop-gate file lives at `C:\Users\SHADHUNTER\Desktop\.claude\DONE` (the session's folder is Desktop, not the repo). It can only be rewritten at the start of a new turn.
-- **Current step: Step 3, waiting for Shad to pick a layout (or a mix of two).** Steps done: set-up, Step 1 audit, Step 2 questions, four previews live (commit a1d7d46).
+- **Current step: Step 4, plan written, waiting for Shad's go-ahead. Do not touch index.html, app.js or style.css before he says go.** Earlier: Steps done: set-up, Step 1 audit, Step 2 questions, four previews live (commit a1d7d46).
 - After his pick: write the plan (Step 4) into this file, show it, and wait for his go-ahead before touching index.html, app.js or style.css.
 - Weekly usage: 46% at about 07:40 (Shad's reading). Chrome extension not connected at 07:40; retry at check-ins.
 
@@ -199,8 +199,34 @@ Four previews, live since 08:0x Alberta on 19 Nov 2026, same content (home + Lab
 - 4. Opens on your lab (recommended): no home screen; the app opens on the lab you are doing; bottom bar always shows Next and the two result buttons; everything else in one pull-up Path list. Best at his number one pain, finding the lab's help (zero taps). Gives up: a separate overview screen.
 - Natural mix if he wants one: 4's "opens on your lab" with 3's fold-up rows, so the page is one screen tall.
 
-**Shad's pick:** (waiting)
+**Shad's pick:** Layout 4, "Opens on your lab" (his words, 08:05 Alberta: "I really like 4 the one you recommend"). No mix asked for.
 
 ## The plan (Step 4)
 
-(not written yet)
+Layout: 4, "Opens on your lab". Written 08:1x Alberta, 19 Nov 2026. **Go-ahead: (waiting)**
+
+How layout 4 works in the real app (the design every item below builds toward):
+- The app opens on the one thing to do now. A lab shows its tutor page. A video shows its player. Anything else shows a short card.
+- Top strip: "NOW", the title, and one button, Path.
+- Bottom bar: the Next line, plus the buttons for this item. Labs: "I beat it" and "Moving on, not solved". Everything else: "I'm done".
+- Path (pull-up list): the whole path with ticks, tap any row to open it. At the bottom: Library (28 lessons, 48 words), Jobs, Settings (link devices, light/dark, backup).
+- No bottom tab bar, no Menu tab, no Tutor sub-tabs.
+
+Checklist, most valuable first. One item at a time: build, test, commit, push, check the live site, show proof and what to tap.
+
+- [ ] P1. **New frame + Lab 1's tutor page (the sample).** The app opens on your current step in layout 4. Lab 1 gets the finished page: what it is, objective, how to think, Hint 1/2/3 one at a time, one-line unlock, full answer with why, what's next, verified label. Old saved ticks, notes and opened hints carry over (proved by a test that loads old saved data). **Then stop and wait for Shad's OK on the quality.**
+- [ ] P2. **Order and "next".** Write-ups optional. Labs 7, 8, 11, 12 in a group called "Harder versions" after Episode 7. Labs 3, 4, 9, 10 in an optional group off the main line. Episodes 8 to 10 moved to Step 5. One Next at every point; optional things never block it. Count changes from 58 to 49 required boxes; no tick is lost.
+- [ ] P3. **The other 11 lab pages**, same standard as Lab 1, in the order he meets them: 6, 2, 5, then 7, 8, 11, 12, then optional 3, 9, 10, 4. Each answer run in the real lab where safe (6, 2, 5, 7, 8, 11) and labelled verified or unverified. Lab 9 and 10: one harmless test message to learn whether a filter exists on his set-up. Lab 4: technique and why, no message wording. Lab 12: "no known answer" until P9.
+- [ ] P4. **Lab results.** "I beat it" / "Moving on, not solved" saved per lab; a short "come back to these" list in Path. Old lab ticks count as beaten.
+- [ ] P5. **Clutter out.** Path list, Library, Jobs and Settings as described above. Remove the tab bar, the Menu page, the Tutor sub-tabs, the repeated template and rules, and the always-on "Not linked" line. Words shown in place on the screen that introduces them. Proof: before/after counts at phone width.
+- [ ] P6. **Phone and computer in step.** Opened hints, "I tried" and lab results follow him between linked devices (if the online store accepts them: test first; if it refuses, tell Shad, they stay per device). One clear "Link my phone and computer" prompt until he links or dismisses it.
+- [ ] P7. **Jobs: weekly scan for new ads.** A free GitHub job, once a week, reads public job feeds for titles like red team, jailbreak, adversarial, safety testing; adds matches marked "new this week, not yet read by a person". Daily dead-link check stays. Jobs screen shortened.
+- [ ] P8. **Tidy and prove.** Delete `preview/`. Update README and AUDIT.md to match. Keep the link check script in `tools/`. Then the full walk-through on the live site, first video to last lab: every link opens, every lab page loads, every Next goes to the right place. Tag `scope-1-done`.
+- [ ] P9. **Lab 12 attempt**, 30 minutes at most, only if everything above is done.
+
+Notes for the builder:
+- Edit `app.js` in place: keep all data and all saving/syncing code; replace the screen-drawing code. Bump the `?v=` stamps in `index.html` on every push.
+- New saved things must not disturb old ones. Plan: hints, tried and results become extra tick ids inside the existing `m` map (for example `x1a`, `x1b`, `x1c` = hints 1 to 3 of lab 1, `x1t` = tried, `x1u` = moved on unsolved), so they save, merge and sync exactly like ticks. Carry over `redTeamPath.tutor.hints` (lab -> 0..4) once.
+- `manifest.json` and icons do not change, so the home-screen shortcut never needs re-adding; a refresh (close and reopen the app) is enough after each push.
+- Before starting Docker for lab tests: read `~/ram-board/RULES.md` and check free memory.
+- The older outside checker `~/redteam/learn/final_audit.py` reads this app's old structure and may fail after the rebuild; that is expected, say so in the final summary.
