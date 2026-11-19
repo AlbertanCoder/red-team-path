@@ -163,6 +163,198 @@ window.RTP_JOBS = {
       "added": "2026-11-17",
       "checked": "2026-11-19",
       "open": true
+    },
+    {
+      "id": "handshake-ai-red-teamer-cybersecurity-remote",
+      "level": "new",
+      "title": "AI Red Teamer, Cybersecurity (Remote)",
+      "who": "Handshake",
+      "pay": "$65 – $125 per hour",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: Remote (USA).",
+      "url": "https://jobs.ashbyhq.com/handshake/7f607c0b-291d-4c17-9897-6d8c5d35eb00",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "handshake",
+        "title": "AI Red Teamer, Cybersecurity (Remote)"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
+    },
+    {
+      "id": "handshake-ai-red-teamer-cbrne-remote",
+      "level": "new",
+      "title": "AI Red Teamer, CBRNE (Remote)",
+      "who": "Handshake",
+      "pay": "$65 – $158 per hour",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: Remote (USA).",
+      "url": "https://jobs.ashbyhq.com/handshake/87c44874-6f3d-4814-8721-f214ea5eceed",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "handshake",
+        "title": "AI Red Teamer, CBRNE (Remote)"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
+    },
+    {
+      "id": "handshake-ai-red-teamer-remote",
+      "level": "new",
+      "title": "AI Red Teamer (Remote)",
+      "who": "Handshake",
+      "pay": "$32 – $95 per hour",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: Remote (USA).",
+      "url": "https://jobs.ashbyhq.com/handshake/7788a34b-f112-467a-ba9a-b8245f8fccfb",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "handshake",
+        "title": "AI Red Teamer (Remote)"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
+    },
+    {
+      "id": "openai-red-team-cyber",
+      "level": "new",
+      "title": "Red Team - Cyber",
+      "who": "OpenAI",
+      "pay": "$198K – $320K • Offers Equity",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: San Francisco.",
+      "url": "https://jobs.ashbyhq.com/openai/badafdf8-116b-4849-b848-2f20a3ff2732",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "openai",
+        "title": "Red Team - Cyber"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
+    },
+    {
+      "id": "openai-novel-abuse-red-teamer",
+      "level": "new",
+      "title": "Novel Abuse Red Teamer",
+      "who": "OpenAI",
+      "pay": "$158.4K – $320K • Offers Equity",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: San Francisco.",
+      "url": "https://jobs.ashbyhq.com/openai/9e7c3009-6a91-4927-b242-3d5aa766c722",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "openai",
+        "title": "Novel Abuse Red Teamer"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
+    },
+    {
+      "id": "clera-expert-talent-pool-safety-testing-expert-5-years",
+      "level": "new",
+      "title": "Expert Talent Pool, Safety Testing (Expert, 5+ Years)",
+      "who": "Clera",
+      "pay": "Pay not stated in the job feed",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: remote.",
+      "url": "https://jobs.ashbyhq.com/Clera/3db6d9ee-1f99-4251-80b0-8c1ac028f438",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "Clera",
+        "title": "Expert Talent Pool, Safety Testing (Expert, 5+ Years)"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
+    },
+    {
+      "id": "anthropic-red-team-engineer-safeguards",
+      "level": "new",
+      "title": "Red Team Engineer, Safeguards",
+      "who": "Anthropic",
+      "pay": "Pay not stated in the job feed",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: San Francisco, CA.",
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/5320469008",
+      "check": {
+        "type": "feed",
+        "kind": "greenhouse",
+        "board": "anthropic",
+        "title": "Red Team Engineer, Safeguards"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
+    },
+    {
+      "id": "openai-research-program-manager-adversarial-model-research",
+      "level": "new",
+      "title": "Research Program Manager – Adversarial Model Research",
+      "who": "OpenAI",
+      "pay": "$239K – $328K • Offers Equity",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: San Francisco.",
+      "url": "https://jobs.ashbyhq.com/openai/65913e57-80e0-4a1a-bbc3-265ae8a1a41b",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "openai",
+        "title": "Research Program Manager – Adversarial Model Research"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
+    },
+    {
+      "id": "snorkel-ai-research-scientist-open-benchmarks-red-team",
+      "level": "new",
+      "title": "Research Scientist, Open Benchmarks Red Team",
+      "who": "Snorkel AI",
+      "pay": "Pay not stated in the job feed",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: New York City, NY (Hybrid); San Francisco, CA (Hybrid); United States (Remote).",
+      "url": "https://job-boards.greenhouse.io/snorkelai/jobs/6260926004",
+      "check": {
+        "type": "feed",
+        "kind": "greenhouse",
+        "board": "snorkelai",
+        "title": "Research Scientist, Open Benchmarks Red Team"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
+    },
+    {
+      "id": "far-ai-jailbreaking-lead-red-team",
+      "level": "new",
+      "title": "Jailbreaking Lead, Red Team",
+      "who": "FAR.AI",
+      "pay": "$225K – $350K",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: Remote (International).",
+      "url": "https://jobs.ashbyhq.com/far.ai/9b4eded1-8b20-4238-9259-549bea94607c",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "far.ai",
+        "title": "Jailbreaking Lead, Red Team"
+      },
+      "added": "2026-11-19",
+      "found": "2026-11-19",
+      "checked": "2026-11-19",
+      "open": true
     }
-  ]
+  ],
+  "scanned": "2026-11-19",
+  "boards": 22
 };
