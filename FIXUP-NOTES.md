@@ -12,7 +12,7 @@ A fresh session should be able to carry on from this file alone.
 - Stop-gate file lives at `C:\Users\SHADHUNTER\Desktop\.claude\DONE` (the session's folder is Desktop, not the repo). It can only be rewritten at the start of a new turn.
 - **Current step: FINISHED. All nine plan items (P1 to P9) are done, live and proven. Scope 1 is closed and tagged `scope-1-done` (19 Nov 2026, 09:28 Alberta, 121 minutes).** Nothing is in progress. If Shad asks for a change, it is a new scope: draft it in SCOPE.md and get a new "I agree" first. Ship every change with `bash tools/ship.sh "subject" "body"`. History of this line: Shad OK'd the sample at 08:26 and asked for a way to reset hints (Settings has one button per lab, commit 761797f).
 - After his pick: write the plan (Step 4) into this file, show it, and wait for his go-ahead before touching index.html, app.js or style.css.
-- Weekly usage: 46% at about 07:40 (Shad's reading). Chrome extension not connected at 07:40; retry at check-ins.
+- Weekly usage: 46% at about 07:40 (Shad's reading); 49% at 09:30 (read by Claude through Chrome).
 
 ## How to work with me (Shad's words, copied as they are)
 
@@ -265,5 +265,5 @@ Left, or not proven (also in README.md):
 - Shad's own phone and computer are not linked yet. Only he can do it: Path > Settings > Get a code on one, type it on the other.
 - Lab 10 has no known answer; its harmful goal was never run. Labs 3 and 9 show Microsoft's published example, never run. Lab 4 gives no wording by decision.
 - Not tried on a physical phone. Shad's own look is the real test.
-- Weekly usage could not be read by Claude today: the Chrome extension was never connected. Last known figure is Shad's own reading, 46% at 07:40.
+- Weekly usage: 46% at 07:40 (Shad's reading), 49% at 09:30 (read by Claude from claude.ai Settings > Usage once Chrome connected; the Fable-only meter showed 34%). The whole session moved it about 3 points. The page warned: at this pace the week runs out Saturday afternoon, before Tuesday's reset.
 - `~/redteam/learn/final_audit.py` (the older outside checker) reads the app's old structure and has not been run against the rebuilt app.
