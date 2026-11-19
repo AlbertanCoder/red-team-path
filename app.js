@@ -1819,6 +1819,17 @@
       h("div", { class: "sheet-head" }, [h("div", { class: "tag", id: "sheet-count", text: "THE WHOLE PATH · " + done + " OF " + SEQ.length + " DONE" }), close]),
       h("div", { class: "meter", "aria-hidden": "true" }, [h("span", { style: "width:" + (SEQ.length ? (done / SEQ.length) * 100 : 0) + "%" })])
     ]);
+    // Labs you moved on from without solving, so they are not forgotten.
+    var back = ALL.filter(function (it) { var n = labNo(it); return n && isDone(it.id) && isDone("un" + n); });
+    if (back.length) {
+      var box = h("div", { id: "comeback" }, [h("div", { class: "glabel", text: "Come back to these: not solved yet (" + back.length + ")" })]);
+      back.forEach(function (it) {
+        var b = h("button", { type: "button", class: "prow", id: "back-" + it.id }, [h("span", { class: "pm", text: "\u21BA" }), h("span", { text: shortTitle(it) })]);
+        b.addEventListener("click", function () { closeSheet(); justMarked = ""; go("#i-" + it.id); });
+        box.appendChild(b);
+      });
+      panel.appendChild(box);
+    }
     STEPS.forEach(function (step, s) {
       var req = required(stepItems(step));
       var det = h("details", { class: "pstep", id: "pstep-" + (s + 1) });
