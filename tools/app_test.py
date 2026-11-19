@@ -158,6 +158,15 @@ with sync_playwright() as p:
     page.click("#undo-btn")
     m = ticks(page)
     check(not m.get("m1", 0) > 0 and not m.get("un1", 0) > 0 and page.locator("#beat-btn").is_visible(), "Undo takes the mark back")
+    # hints can be hidden again from Settings, one lab at a time
+    page.click("#path-btn")
+    page.click("#also-menu")
+    check(page.locator("#rehide-1").count() == 1 and page.locator("#rehide-2").count() == 1 and page.locator("#rehide-3").count() == 0, "Settings lists only the labs whose hints are open (1 and 2)")
+    page.click("#rehide-1")
+    m = ticks(page)
+    check(not any(m.get(k, 0) > 0 for k in ("ha1", "hb1", "hc1", "tr1")) and m.get("ha2", 0) > 0 and m.get("v3", 0) > 0, "hiding Lab 1's hints leaves Lab 2's hints and every tick alone")
+    page.click("#back-now")
+    check("Hint 1." not in page.inner_text("#view-now") and "1 of 3" in page.inner_text("#hint-btn"), "Lab 1 starts again from Show hint 1 of 3")
     check(not page.errors, "moving on: no page errors %s" % page.errors[:2])
     ctx.close()
 

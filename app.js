@@ -2034,6 +2034,19 @@
     box.appendChild(h("h2", { text: "Settings" }));
     box.appendChild(h("div", { class: "btnrow" }, [themeBtn]));
     box.appendChild(h("p", { id: "streak-line", text: "Streak: " + run + (run === 1 ? " day" : " days") + " in a row with at least one box ticked. Best run: " + state.best + "." }));
+    // Hints you opened can be hidden again, lab by lab. Ticks and notes are not touched.
+    var opened = MS_LABS.filter(function (l) { return isDone("ha" + l[0]) || isDone("tr" + l[0]); });
+    if (opened.length) {
+      box.appendChild(h("p", { class: "dim", id: "rehide-label", text: "Hints you have opened. Hiding them again keeps your ticks and your notes." }));
+      opened.forEach(function (l) {
+        var b = h("button", { type: "button", class: "wide", id: "rehide-" + l[0], text: "Lab " + l[0] + ": hide its hints and answer again" });
+        b.addEventListener("click", function () {
+          ["ha", "hb", "hc", "tr"].forEach(function (k) { if (isDone(k + l[0])) { mark(k + l[0], false); } });
+          render("rehide-label");
+        });
+        box.appendChild(b);
+      });
+    }
     box.appendChild(h("details", { class: "fold", id: "backup-fold", open: foldOpen ? "" : null }, [
       h("summary", { text: "Backup code (works without linking devices)" }),
       h("p", { class: "dim", text: "A code that holds your ticks. Copy it here and load it in this app on another device, or keep it somewhere safe." }),
