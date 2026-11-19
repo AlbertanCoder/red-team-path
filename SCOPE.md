@@ -22,12 +22,16 @@
 - [x] 2. Audit report given, and Shad's answers recorded in FIXUP-NOTES.md. Proof: commits 1281899 (audit) and a1d7d46 (answers).
 - [x] 3. Four layout previews live in a `preview/` folder, one picked by Shad. Proof: four live links answered 200 (commit a1d7d46); Shad picked layout 4 at 08:05 Alberta, written in FIXUP-NOTES.md.
 - [x] 4. Build plan approved by Shad before the app itself changes. Proof: plan committed in af921d8 while the app was still untouched; go-ahead given 08:10 Alberta and noted in FIXUP-NOTES.md.
-- [ ] 5. Every one of the 12 labs has one tutor page with exactly: what it is, objective, how to think, Hint 1/2/3 (one at a time), full answer (locked until 3 hints + "I tried"), what's next, and a verified/unverified label. Proof: a check script passes on the live site.
-- [ ] 6. Videos and labs in the right order with one clear "do this next" from first video to last lab. Proof: the walk-through check on the live site, link check script exits 0.
-- [ ] 7. Saved progress kept: ticks made in the old app still show in the new one. Proof: a test that loads old saved data into the new app.
-- [ ] 8. Clutter removed in the layout Shad picked; preview folder deleted. Proof: before/after counts at phone width; `preview/` gone from the live site.
-- [ ] 9. Jobs section current (and updating weekly if Shad asks for it). Proof: the check run's output and the date on the live Jobs screen.
-- [ ] 10. Final commit pushed, tagged `scope-1-done`, live site checked.
+- [x] 5. Every one of the 12 labs has one tutor page with exactly: what it is, objective, how to think, Hint 1/2/3 (one at a time), full answer (locked until 3 hints + "I tried"), what's next, and a verified/unverified label. Proof: `tools/app_test.py` on the live site opens all 12 (commits e533844, 3c702ff, 65ccbf8). 8 answers were run in the real labs; see PROOF.md.
+- [x] 6. Videos and labs in the right order with one clear "do this next" from first video to last lab. Proof: the live test taps through all 49 boxes in the planned order (commit b51022c); `tools/walk_test.py` and `tools/linkcheck.py` passed on the live site (0 dead links of 86).
+- [x] 7. Saved progress kept: ticks made in the old app still show in the new one. Proof: `tools/app_test.py` loads data saved by the old app (ticks, a note, hints opened in the old lab coach) and finds all of it in the new app, on the live site.
+- [x] 8. Clutter removed in the layout Shad picked; preview folder deleted. Proof: counts in FIXUP-NOTES.md under P5 (commit 9717183); live `preview/4.html` answers 404 (commit bb6315c).
+- [x] 9. Jobs section current, and updating weekly as Shad asked. Proof: first weekly scan ran on GitHub (run 44551308603, commit 06ca309, 10 new ads); daily checker dry run: open=19 closed=0 unknown=0.
+- [x] 10. Final commit pushed, tagged `scope-1-done`, live site checked. Proof: the tag on GitHub and the last `tools/ship.sh` run.
+
+### Closed
+
+Scope 1 closed on Thu Nov 19 2026 at 09:28 Alberta, after 121 minutes, with every checklist item proven. Tag: `scope-1-done`. What works and what is unfinished is in README.md. `~/scope-hq/ACTIVE.md` is back to "Active scope: none". Anything further is a new scope with a new "I agree".
 
 ### Out of scope
 

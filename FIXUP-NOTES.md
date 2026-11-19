@@ -10,7 +10,7 @@ A fresh session should be able to carry on from this file alone.
 - Session start: 07:28 Alberta, EPOCH 1795094890. Clock: `bash ~/scope-hq/alberta-now.sh` only.
 - Today is an exception day (see SCOPE.md top). Still on: weekly usage stop at 75%, wrap-up 9:45 pm, nothing after 10 pm, 60-minute check-ins.
 - Stop-gate file lives at `C:\Users\SHADHUNTER\Desktop\.claude\DONE` (the session's folder is Desktop, not the repo). It can only be rewritten at the start of a new turn.
-- **Current step: Step 5 (build). P1, P2, P3 done and live. Shad OK'd the sample at 08:26 ("The layout looks good, great actually. Can you continue?") and asked for a way to reset hints: done, Settings has one button per lab (commit 761797f). Next: P4, then P5 to P9 in order.** Ship every change with `bash tools/ship.sh "subject" "body"` (tests locally, commits, pushes, waits for Pages, tests the live site). Earlier: Steps done: set-up, Step 1 audit, Step 2 questions, four previews live (commit a1d7d46).
+- **Current step: FINISHED. All nine plan items (P1 to P9) are done, live and proven. Scope 1 is closed and tagged `scope-1-done` (19 Nov 2026, 09:28 Alberta, 121 minutes).** Nothing is in progress. If Shad asks for a change, it is a new scope: draft it in SCOPE.md and get a new "I agree" first. Ship every change with `bash tools/ship.sh "subject" "body"`. History of this line: Shad OK'd the sample at 08:26 and asked for a way to reset hints (Settings has one button per lab, commit 761797f).
 - After his pick: write the plan (Step 4) into this file, show it, and wait for his go-ahead before touching index.html, app.js or style.css.
 - Weekly usage: 46% at about 07:40 (Shad's reading). Chrome extension not connected at 07:40; retry at check-ins.
 
@@ -256,3 +256,14 @@ Notes for the builder:
 - `manifest.json` and icons do not change, so the home-screen shortcut never needs re-adding; a refresh (close and reopen the app) is enough after each push.
 - Before starting Docker for lab tests: read `~/ram-board/RULES.md` and check free memory.
 - The older outside checker `~/redteam/learn/final_audit.py` reads this app's old structure and may fail after the rebuild; that is expected, say so in the final summary.
+
+## Final summary (19 Nov 2026)
+
+Finished: P1 new frame + Lab 1 page (e5445a4), P2 order (b51022c), hint reset in Settings (761797f), P3 all 12 lab pages with real-lab results (e533844, 3c702ff), P4 come-back list (f72f043), P5 clutter out (9717183), P6 link prompt + two-device sync proven (e4e1b26), P7 weekly job scan (289afdd, first run 06ca309), P8 tidy + walk-through (bb6315c), P9 Lab 12 solved 9 of 9 (65ccbf8).
+
+Left, or not proven (also in README.md):
+- Shad's own phone and computer are not linked yet. Only he can do it: Path > Settings > Get a code on one, type it on the other.
+- Lab 10 has no known answer; its harmful goal was never run. Labs 3 and 9 show Microsoft's published example, never run. Lab 4 gives no wording by decision.
+- Not tried on a physical phone. Shad's own look is the real test.
+- Weekly usage could not be read by Claude today: the Chrome extension was never connected. Last known figure is Shad's own reading, 46% at 07:40.
+- `~/redteam/learn/final_audit.py` (the older outside checker) reads the app's old structure and has not been run against the rebuilt app.
