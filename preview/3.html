@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Preview 3: Three tabs and a lab grid</title>
+<link rel="stylesheet" href="p.css?v=1">
+<style>
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; max-width: 34rem; margin: 0 auto; }
+  .tabs button { border: 0; border-top: 3px solid transparent; border-radius: 0; background: transparent; color: var(--muted); font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .tabs button.on { color: var(--ink); border-top-color: var(--accent); }
+  .bar { padding: 0 0 env(safe-area-inset-bottom); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tile { padding: 10px 6px; min-height: 86px; display: grid; gap: 2px; align-content: center; }
+  .tile b { font-size: 1.3rem; }
+  .tile span { font-size: 0.74rem; color: var(--muted); }
+  .tile.now { border-color: var(--accent); }
+  .acc { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .acc > button { border: 0; border-radius: 0; text-align: left; display: flex; justify-content: space-between; background: var(--panel); }
+  .acc > button.open { color: var(--accent); }
+  .acc > div { padding: 4px 14px 14px; background: var(--panel); display: grid; gap: 10px; }
+  .acc + .acc { margin-top: -1px; }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="bar"><div class="tabs" id="tabs"></div></div>
+<script src="shared.js?v=1"></script>
+<script>
+// Layout 3, "Three tabs and a lab grid": a bottom bar (Today, Labs, More). Labs is a grid of all 12, so any lab's page is two taps away.
+// The lab page is fold-up rows: one row open at a time, so it fits one phone screen.
+(function () {
+  var P = window.P, el = P.el, app = document.getElementById("app"), tabs = document.getElementById("tabs");
+  P.banner(3, "THREE TABS + LAB GRID");
+  var tab = "today", lab = 0, open = 0;
+  function result() {
+    if (P.st.result) { return el("p", { class: "note", text: (P.st.result === "beat" ? "Marked: beaten. " : "Marked: moved on, not solved. ") + "Preview only: the real app would now show Episode 4." }); }
+    return el("div", { class: "two" }, [
+      el("button", { type: "button", class: "ok", text: "I beat it", on: { click: function () { P.st.result = "beat"; render(); } } }),
+      el("button", { type: "button", text: "Moving on, not solved", on: { click: function () { P.st.result = "moved"; render(); } } })]);
+  }
+  function today() {
+    app.appendChild(el("div", { class: "stack" }, [
+      el("div", { class: "tag", text: "RED TEAM PATH · " + P.HOME.where }),
+      el("div", { class: "card" }, [
+        el("div", { class: "tag red", text: "NOW · LAB · " + P.HOME.level }),
+        el("h1", { text: P.HOME.now }),
+        el("p", { text: P.HOME.one }),
+        el("button", { type: "button", class: "primary", text: "Open this lab's tutor page", on: { click: function () { tab = "labs"; lab = 1; open = 0; render(); } } }),
+        result()]),
+      el("p", null, [el("b", { class: "tag", text: "NEXT " }), " " + P.HOME.next]),
+      el("p", { class: "note", text: P.HOME.nextNote })
+    ]));
+  }
+  function labs() {
+    if (lab === 1) { page(); return; }
+    var grid = el("div", { class: "grid" });
+    P.LABS.forEach(function (l) {
+      grid.appendChild(el("button", { type: "button", class: "tile" + (l[0] === 1 ? " now" : ""), on: { click: function () {
+        if (l[0] === 1) { lab = 1; open = 0; render(); } else { note.hidden = false; }
+      } } }, [el("b", { text: String(l[0]) }), el("span", { text: l[1] }), el("span", { text: l[0] === 1 ? "NOW" : l[2] })]));
+    });
+    var note = el("p", { class: "note", hidden: "", text: "Preview only: Lab 1 is the sample. The real app would open that lab's page." });
+    app.appendChild(el("div", { class: "stack" }, [el("h1", { text: "The 12 labs" }), el("p", { class: "note", text: "In the order you meet them. Tap one for its tutor page." }), grid, note]));
+  }
+  function page() {
+    var rows = [
+      ["What this lab is", function () { return [el("p", { text: P.LAB.what })]; }],
+      ["The objective", function () { return [el("p", { text: P.LAB.objective })]; }],
+      ["How to think about it", function () { var t = P.think(); t.removeChild(t.firstChild); return [t]; }],
+      ["Hint 1" + (P.st.hints > 0 ? "" : " · hidden"), function () { return [P.hint(0, render)]; }],
+      ["Hint 2" + (P.st.hints > 1 ? "" : " · hidden"), function () { return [P.hint(1, render)]; }],
+      ["Hint 3" + (P.st.hints > 2 ? "" : " · hidden"), function () { return [P.hint(2, render)]; }],
+      ["Full answer" + (P.st.unlocked ? "" : " · locked"), function () { return [P.answer(render)]; }],
+      ["What's next", function () { return [el("p", { text: P.LAB.next })]; }]
+    ];
+    var box = el("div");
+    rows.forEach(function (r, i) {
+      var isOpen = open === i;
+      var kids = [el("button", { type: "button", class: isOpen ? "open" : "", "aria-expanded": isOpen ? "true" : "false", on: { click: function () { open = isOpen ? -1 : i; render(); } } },
+        [el("span", { text: r[0] }), el("span", { text: isOpen ? "–" : "+" })])];
+      if (isOpen) { kids.push(el("div", null, r[1]())); }
+      box.appendChild(el("div", { class: "acc" }, kids));
+    });
+    app.appendChild(el("div", { class: "stack" }, [
+      el("button", { type: "button", class: "quiet", style: "width:auto;min-height:40px;padding:6px 12px;justify-self:start", text: "← All 12 labs", on: { click: function () { lab = 0; render(); } } }),
+      el("h1", { text: P.LAB.title }), P.label(), box]));
+  }
+  function render() {
+    app.textContent = ""; tabs.textContent = "";
+    [["today", "Today"], ["labs", "Labs"], ["more", "More"]].forEach(function (t) {
+      tabs.appendChild(el("button", { type: "button", class: tab === t[0] ? "on" : "", text: t[1], on: { click: function () { tab = t[0]; if (t[0] === "labs") { lab = 0; } render(); window.scrollTo(0, 0); } } }));
+    });
+    if (tab === "labs") { labs(); } else if (tab === "more") { app.appendChild(P.moreList()); } else { today(); }
+  }
+  render();
+})();
+</script>
+</body>
+</html>

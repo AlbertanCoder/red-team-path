@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Preview 4: Opens on your lab</title>
+<link rel="stylesheet" href="p.css?v=1">
+<style>
+  .wrap { padding-bottom: 150px; }
+  .top { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); padding: 10px 16px; }
+  .top .in { max-width: 34rem; margin: 0 auto; display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+  .top h1 { font-size: 1.08rem; }
+  .sheet { position: fixed; inset: 0; z-index: 5; background: rgba(0,0,0,0.6); display: flex; align-items: flex-end; }
+  .sheet .panel { background: var(--panel); border-top: 1px solid var(--line); border-radius: 14px 14px 0 0; width: 100%; max-height: 82vh; overflow: auto; padding: 14px 16px calc(20px + env(safe-area-inset-bottom)); }
+  .sheet .panel > div { max-width: 34rem; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="top"><div class="in" id="top"></div></div>
+<div class="wrap" id="app"></div>
+<div class="bar"><div class="in" id="bar"></div></div>
+<div class="sheet" id="sheet" hidden></div>
+<script src="shared.js?v=1"></script>
+<script>
+// Layout 4, "Opens on your lab": there is no separate home screen. The app opens straight on what you are doing now.
+// On a lab, that is the lab's tutor page. The bottom bar marks the result and shows what is next. Everything else is in one pull-up list.
+(function () {
+  var P = window.P, el = P.el, app = document.getElementById("app"), bar = document.getElementById("bar"), top = document.getElementById("top"), sheet = document.getElementById("sheet");
+  P.banner(4, "OPENS ON YOUR LAB");
+  function openSheet() {
+    sheet.textContent = "";
+    var close = el("button", { type: "button", class: "quiet", text: "Close", on: { click: function () { sheet.hidden = true; } } });
+    sheet.appendChild(el("div", { class: "panel" }, [el("div", { class: "stack" }, [
+      el("div", { class: "tag", text: "THE WHOLE PATH · " + P.HOME.where }), P.pathRows(true),
+      el("div", { class: "glabel", text: "Also here" }), P.moreList(), close])]));
+    sheet.hidden = false;
+  }
+  sheet.addEventListener("click", function (e) { if (e.target === sheet) { sheet.hidden = true; } });
+  function render() {
+    top.textContent = ""; app.textContent = ""; bar.textContent = "";
+    top.appendChild(el("div", null, [
+      el("div", { class: "tag red", text: "NOW · STEP 1 · LAB 1 OF 12 · EASY" }),
+      el("h1", { text: P.LAB.title })]));
+    top.appendChild(el("button", { type: "button", style: "width:auto;min-height:40px;padding:6px 14px", text: "Path", on: { click: openSheet } }));
+    app.appendChild(el("div", { class: "stack" }, [
+      P.what(), P.objective(), P.think(), P.label(),
+      P.hint(0, render), P.hint(1, render), P.hint(2, render),
+      P.part("Full answer", [P.answer(render)]), P.next()]));
+    if (P.st.result) {
+      bar.appendChild(el("div", { class: "stack" }, [
+        el("div", { class: "tag", text: P.st.result === "beat" ? "MARKED: BEATEN · NEXT" : "MARKED: MOVED ON, ON YOUR COME-BACK LIST · NEXT" }),
+        el("button", { type: "button", class: "primary", text: P.HOME.next + " →", on: { click: function () { note.hidden = false; } } }), note]));
+    } else {
+      bar.appendChild(el("div", { class: "tag", style: "margin-bottom:6px", text: "NEXT · " + P.HOME.next }));
+      bar.appendChild(el("div", { class: "two" }, [
+        el("button", { type: "button", class: "ok", text: "I beat it", on: { click: function () { P.st.result = "beat"; render(); } } }),
+        el("button", { type: "button", text: "Moving on, not solved", on: { click: function () { P.st.result = "moved"; render(); } } })]));
+    }
+  }
+  var note = el("p", { class: "note", hidden: "", text: "Preview only: the real app would open Episode 4 here, with its video on this same screen." });
+  render();
+})();
+</script>
+</body>
+</html>

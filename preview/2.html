@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Preview 2: One thing per screen</title>
+<link rel="stylesheet" href="p.css?v=1">
+<style>
+  .dots { display: flex; gap: 6px; justify-content: center; margin: 4px 0 14px; }
+  .dots span { width: 22px; height: 4px; border-radius: 2px; background: var(--line); }
+  .dots span.on { background: var(--accent); }
+  .slide { min-height: 52vh; display: grid; align-content: center; gap: 14px; }
+  .slide p { font-size: 1.08rem; }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="bar"><div class="in two" id="bar"></div></div>
+<script src="shared.js?v=1"></script>
+<script>
+// Layout 2, "One thing per screen": no lists and no tabs. Every screen holds one thing and a Next button.
+(function () {
+  var P = window.P, el = P.el, app = document.getElementById("app"), bar = document.getElementById("bar");
+  P.banner(2, "ONE THING PER SCREEN");
+  var screen = "home", step = 0;
+  var STEPS = [
+    ["What this lab is", function () { return [el("p", { text: P.LAB.what })]; }],
+    ["The objective", function () { return [el("p", { text: P.LAB.objective })]; }],
+    ["How to think about it", function () { var t = P.think(); t.removeChild(t.firstChild); return [t]; }],
+    ["Hint 1 of 3", function () { return [P.hint(0, render), P.st.hints < 1 ? el("p", { class: "note", text: "Try the lab first. Open this only when you are stuck." }) : null]; }],
+    ["Hint 2 of 3", function () { return [P.hint(1, render)]; }],
+    ["Hint 3 of 3", function () { return [P.hint(2, render)]; }],
+    ["Full answer", function () { return [P.answer(render)]; }],
+    ["What's next", function () { return [el("p", { text: P.LAB.next }), result()]; }]
+  ];
+  function result() {
+    if (P.st.result) { return el("p", { class: "note", text: (P.st.result === "beat" ? "Marked: beaten. " : "Marked: moved on, not solved. ") + "Preview only: the real app would now show Episode 4." }); }
+    return el("div", { class: "two" }, [
+      el("button", { type: "button", class: "ok", text: "I beat it", on: { click: function () { P.st.result = "beat"; render(); } } }),
+      el("button", { type: "button", text: "Moving on, not solved", on: { click: function () { P.st.result = "moved"; render(); } } })]);
+  }
+  function home() {
+    app.appendChild(el("div", { class: "slide" }, [
+      el("div", { class: "tag", text: P.HOME.where }),
+      el("div", { class: "tag red", text: "NOW · LAB · " + P.HOME.level }),
+      el("h1", { text: P.HOME.now }),
+      el("p", { text: P.HOME.one }),
+      el("button", { type: "button", class: "primary", text: "Start: open the tutor", on: { click: function () { screen = "tutor"; step = 0; render(); } } }),
+      el("p", { class: "note" }, [el("b", { text: "NEXT " }), P.HOME.next])
+    ]));
+    bar.appendChild(el("button", { type: "button", class: "quiet", text: "‹ Earlier", on: { click: function () { screen = "peek"; render(); } } }));
+    bar.appendChild(el("button", { type: "button", class: "quiet", text: "More", on: { click: function () { screen = "more"; render(); } } }));
+  }
+  function tutor() {
+    var dots = el("div", { class: "dots" });
+    STEPS.forEach(function (s, i) { dots.appendChild(el("span", { class: i <= step ? "on" : "" })); });
+    app.appendChild(el("div", { class: "tag", text: P.LAB.title + " · " + (step + 1) + " of " + STEPS.length }));
+    app.appendChild(dots);
+    app.appendChild(el("div", { class: "slide" }, [el("h1", { text: STEPS[step][0] })].concat(STEPS[step][1]()).concat(step >= 3 && step <= 6 ? [P.label()] : [])));
+    bar.appendChild(el("button", { type: "button", class: "quiet", text: step === 0 ? "‹ Home" : "‹ Back", on: { click: function () { if (step === 0) { screen = "home"; } else { step -= 1; } render(); } } }));
+    var last = step === STEPS.length - 1;
+    bar.appendChild(el("button", { type: "button", class: "primary", text: last ? "Home" : "Next ›", on: { click: function () { if (last) { screen = "home"; } else { step += 1; } render(); } } }));
+  }
+  function other(nodes) {
+    app.appendChild(el("div", { class: "stack" }, nodes));
+    bar.appendChild(el("button", { type: "button", class: "quiet", text: "‹ Home", on: { click: function () { screen = "home"; render(); } } }));
+    bar.appendChild(el("span"));
+  }
+  function render() {
+    app.textContent = ""; bar.textContent = ""; window.scrollTo(0, 0);
+    if (screen === "tutor") { tutor(); }
+    else if (screen === "peek") { other([el("div", { class: "tag", text: "Earlier and later" }), P.pathRows(true)]); }
+    else if (screen === "more") { other([P.moreList()]); }
+    else { home(); }
+  }
+  render();
+})();
+</script>
+</body>
+</html>

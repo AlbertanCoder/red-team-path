@@ -166,7 +166,26 @@ Checked: all of `app.js`, `jobs.js`, `index.html`, the job checker, PROOF.md, AU
 
 ## My answers (Step 2)
 
-(filled in as Shad answers)
+Asked one at a time on 19 Nov 2026, about 07:35 to 07:55 Alberta. Shad's pick is in bold.
+
+0. Scope: **"I agree"** to SCOPE.md (Scope 1 open; recorded in `~/scope-hq/ACTIVE.md`).
+0. Weekly usage: **46%** at about 07:40. Shad: "You are capable of checking that every so often so please do that." Check the meter myself (claude.ai/settings/usage through Chrome, look only) at each hourly check-in; the Chrome extension was not connected at 07:40, so retry, and only ask him if it still will not connect.
+1. Which lab is he on now: **Lab 1 (passwords file, easy).** Previews and the sample tutor page are for Lab 1.
+2. Labs on this computer: **working, and yes I may send test messages** (separate test user, a few cents of his OpenAI credit). Never run the weapon or toxin goals. How to drive the labs: see finding e4f3130c (login with AUTH_KEY on localhost:5000, POST /chats, POST /chats/<id>/messages) and `~/redteam/learn/proof_test.py`.
+3. Labs 3, 4, 9, 10 (weapon/toxin goals): **move to an optional group off the main line.** Each still gets a full tutor page. My stated limit: for Lab 4 (toxin) teach the technique and why it works but do not write message wording; for 3, 9, 10 use the example shape Microsoft itself published.
+4. The 28 lessons: **fold the one needed technique into each lab page's "How to think about it"; move the 28 lessons to a Library list off the main route.** Keep passed-lesson ticks.
+5. Where he studies: **phone for the app, PC for the labs.** Tutor page is phone-first.
+6. Linking: "They aren't officially linked, but they should be able to sync." So: not linked yet, he wants it to work. Make linking easy to find once, and make hints opened / "I tried" follow him between devices.
+7. Notes and write-ups: **one line to unlock.** To unlock the full answer he types one line (what he tried); it is saved as that lab's note. Write-up boxes stay in the path but are optional and never block "next".
+8. Lab result: **two buttons, "I beat it" and "Moving on, not solved".** Both go to the next step. Unsolved labs get a small "come back to these" list on the home screen. Old ticks count as solved.
+9. Episodes 8 to 10: **move to Step 5**, right before the automation tasks. Keep their ticks.
+10. Harder repeat labs 7, 8, 11, 12: **stay after Episode 7**, as a group called "Harder versions".
+11. Words: **show new words in place on each screen; full searchable list moves to the Library**, off the bottom bar.
+12. Jobs: **yes, a weekly scan for new ads** from public job feeds (titles like red team, jailbreak, safety testing), added automatically and marked "new this week, not yet read by a person". Daily dead-link check stays.
+13. Lab 12: **30 minutes at the very end**, only after everything else. Lab 10 gets no attempt.
+14. Biggest pains today (he picked three): **finding my lab's help; too much text; hints give too little or too much.** He did not pick "not sure what's next".
+
+Pattern to remember: he took the recommended answer on every multiple-choice question. For the layout, do not rely on him choosing from descriptions; build them so he can try each on his phone.
 
 ## The layout I picked (Step 3)
 
