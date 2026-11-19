@@ -40,8 +40,8 @@ STEP5 = "v8 a1 v9 a2 v10 a3 a4".split()
 OPTIONAL = "w1 w2 w3 w4 w5 m3 m4 m9 m10".split()
 ROAD = ("v1 v2 m0 v3 m1 v4 m6 v5 m2 v6 m5 v7 m7 m8 m11 m12 s0 s1 s2 s3 g1 g2 g3 g4 g5 g6 g7 g8 g9 "
         "py1 py2 py3 py4 py5 py6 py7 py8 v8 a1 v9 a2 v10 a3 a4 p1 b1 b2 b3 b4").split()
-VERIFIED = {1, 2, 5, 6, 7, 8, 11}   # answers that were run in the real lab and won
-NO_ANSWER = {4, 10, 12}             # 4: toxin goal, no answer on purpose. 10 and 12: no known answer.
+VERIFIED = {1, 2, 5, 6, 7, 8, 11, 12}   # answers that were run in the real lab and won
+NO_ANSWER = {4, 10}                 # 4: toxin goal, no answer on purpose. 10: no known answer.
 PARTS = ["What this lab is", "The objective", "How to think about it", "Hints", "Full answer", "What's next"]
 
 

@@ -34,7 +34,7 @@ Every one of the 12 labs has one page with the same six parts and nothing else:
 5. The full answer, with why it works. It unlocks only after all three hints are open and you have typed one line about what you tried. That line is saved as your note for the lab.
 6. What's next
 
-Each page is labelled **verified** or **unverified**. Verified means the lab facts were checked against Microsoft's own lab file and the answer was run in the real lab and won: labs 1, 2, 5, 6, 7, 8 and 11. The numbers are in `PROOF.md`. Unverified: labs 3 and 9 show the example Microsoft's researchers published and were never run; lab 4 (a toxin goal) gives no message wording on purpose; labs 10 and 12 have no known answer.
+Each page is labelled **verified** or **unverified**. Verified means the lab facts were checked against Microsoft's own lab file and the answer was run in the real lab and won: labs 1, 2, 5, 6, 7, 8, 11 and 12. The numbers are in `PROOF.md`. Unverified: labs 3 and 9 show the example Microsoft's researchers published and were never run; lab 4 (a toxin goal) gives no message wording on purpose; lab 10 has no known answer.
 
 ### Library, Jobs, Settings
 
@@ -61,14 +61,14 @@ The home-screen app and Safari keep separate progress, so link the one you use.
 
 Works, each with a check that passed on the live site:
 - The app opens on the current step; progress saved by the older version carries over (`tools/app_test.py`).
-- All 12 lab tutor pages; 7 answers run in the real labs on 18 and 19 Nov 2026 (`tools/verify_labs.py`, `PROOF.md`).
+- All 12 lab tutor pages; 8 answers run in the real labs on 18 and 19 Nov 2026 (`tools/verify_labs.py`, `PROOF.md`). Lab 12, which had no known answer, was solved on 19 Nov: 9 of 9.
 - The order of the path, with one Next at every point: the test taps through all 49 boxes from the first video to the finish.
 - Phone and computer stay in step once linked (`tools/sync_test.py`, two browsers on the live site).
 - The 10 videos open in the app and every Open button has an address (`tools/walk_test.py`); no dead links (`tools/linkcheck.py`).
 - Jobs: daily link check and weekly scan for new ads, both running on GitHub.
 
 Unfinished, or not proven:
-- Lab 12 has no known answer. Lab 10's harmful goal was never run; only its key step was tested.
+- Lab 10 has no known answer. Its harmful goal was never run; only its key step was tested.
 - Labs 3 and 9 show Microsoft's published example, which was not run for this app.
 - The 8 Gray Swan practice links load, but a script cannot prove each set is still offered.
 - Tested in a phone-sized desktop browser, not on a physical iPhone or Android phone.
