@@ -9,6 +9,8 @@ What it proves:
      until all three hints are open and one line has been typed.
   4. "I beat it" and "Moving on, not solved" both save and both lead to the next step.
   5. The Path list and the side screens (Library, Words, Jobs, Settings) open and come back.
+  7. Every one of the 12 labs has its own page with the six parts, three hints of its own (no hint is shared between
+     labs), a verified or unverified label, and a full answer or a plain statement that there is none.
   6. The order: every video comes before its lab, optional boxes never block the way, and tapping through from the
      first video reaches the end in exactly the planned order with one Next at every point.
 """
@@ -38,6 +40,8 @@ STEP5 = "v8 a1 v9 a2 v10 a3 a4".split()
 OPTIONAL = "w1 w2 w3 w4 w5 m3 m4 m9 m10".split()
 ROAD = ("v1 v2 m0 v3 m1 v4 m6 v5 m2 v6 m5 v7 m7 m8 m11 m12 s0 s1 s2 s3 g1 g2 g3 g4 g5 g6 g7 g8 g9 "
         "py1 py2 py3 py4 py5 py6 py7 py8 v8 a1 v9 a2 v10 a3 a4 p1 b1 b2 b3 b4").split()
+VERIFIED = {1, 2, 5, 6, 7, 8, 11}   # answers that were run in the real lab and won
+NO_ANSWER = {4, 10, 12}             # 4: toxin goal, no answer on purpose. 10 and 12: no known answer.
 PARTS = ["What this lab is", "The objective", "How to think about it", "Hints", "Full answer", "What's next"]
 
 
@@ -168,6 +172,40 @@ with sync_playwright() as p:
     page.click("#back-now")
     check("Hint 1." not in page.inner_text("#view-now") and "1 of 3" in page.inner_text("#hint-btn"), "Lab 1 starts again from Show hint 1 of 3")
     check(not page.errors, "moving on: no page errors %s" % page.errors[:2])
+    ctx.close()
+
+    # ---- 7. every lab's page ----
+    ctx, page = new_page(b)
+    seen_hints = {}
+    for n in range(1, 13):
+        page.evaluate("location.hash = '#i-m%d'" % n)
+        page.wait_for_timeout(120)
+        check(page.inner_text("#top-title").startswith("Lab %d: " % n), "lab %d: its page opens" % n)
+        parts = [x.strip().lower() for x in page.locator("#view-now .part h2").all_inner_texts()]
+        check(parts == [x.lower() for x in PARTS], "lab %d: exactly the six parts, in order" % n)
+        label = page.inner_text("#lab-label")
+        want = "VERIFIED" if n in VERIFIED else "UNVERIFIED"
+        check(label.startswith(want), "lab %d: labelled %s" % (n, want.lower()))
+        check(page.locator("#answer-locked").is_visible() and page.locator(".hintbox").count() == 0, "lab %d: hints hidden and answer locked at the start" % n)
+        for k in (1, 2, 3):
+            page.click("#hint-btn")
+            check(page.locator(".hintbox").count() == k, "lab %d: hint %d opens alone" % (n, k))
+        for k, text in enumerate(page.locator(".hintbox").all_inner_texts()):
+            check(text not in seen_hints, "lab %d: hint %d is its own, not shared with lab %s" % (n, k + 1, seen_hints.get(text)))
+            seen_hints[text] = n
+        check("kind of technique" in page.locator("#hint-1").inner_text(), "lab %d: hint 1 names the kind of technique" % n)
+        check(page.locator("#tried-btn").is_disabled(), "lab %d: answer still locked after three hints, until a line is typed" % n)
+        page.fill("#tried-box", "this is what I tried in lab %d" % n)
+        page.click("#tried-btn")
+        ans = page.inner_text("#lab-answer")
+        if n in NO_ANSWER:
+            check(ans.startswith("No ") and "Why it works." not in ans, "lab %d: says plainly that there is no answer" % n)
+        else:
+            check("Why it works." in ans and want in ans, "lab %d: full answer with why it works and the %s label" % (n, want.lower()))
+        check(len(page.inner_text("#lab-next")) > 10, "lab %d: says what is next" % n)
+        no_side_scroll(page, "lab %d" % n)
+    check(len(seen_hints) == 36, "36 different hints across the 12 labs")
+    check(not page.errors, "lab pages: no page errors %s" % page.errors[:2])
     ctx.close()
 
     # ---- 6. the order of the path ----
