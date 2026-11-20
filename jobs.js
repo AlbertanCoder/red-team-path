@@ -1,7 +1,7 @@
 // Job ads for the Jobs tab. tools/check_jobs.py re-checks every link and rewrites this file,
 // so edit it by hand only to add or remove an ad. Everything after the equals sign is plain JSON.
 window.RTP_JOBS = {
-  "updated": "2026-11-19",
+  "updated": "2026-11-20",
   "ads": [
     {
       "id": "alignerr-red-team-tester",
@@ -19,7 +19,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -36,7 +36,7 @@ window.RTP_JOBS = {
         "title": "Expert Talent Pool, Safety Testing Associate"
       },
       "added": "2026-11-17",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -54,7 +54,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -71,7 +71,7 @@ window.RTP_JOBS = {
         "title": "Expert Talent Pool, Evals and Benchmarks (Associate)"
       },
       "added": "2026-11-17",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -88,7 +88,7 @@ window.RTP_JOBS = {
         "title": "Data Annotation Specialist, Safety"
       },
       "added": "2026-11-17",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -107,7 +107,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -144,7 +144,8 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-17",
       "checked": "2026-11-19",
-      "open": true
+      "open": false,
+      "closed": "2026-11-20"
     },
     {
       "id": "turing-benchmark-red-teaming-specialist",
@@ -161,7 +162,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -180,7 +181,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -199,7 +200,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -218,7 +219,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -237,7 +238,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -256,7 +257,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -275,7 +276,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -294,7 +295,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -313,7 +314,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -332,7 +333,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     },
     {
@@ -351,7 +352,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-19",
+      "checked": "2026-11-20",
       "open": true
     }
   ],
