@@ -22,5 +22,18 @@ for where, want in CASES:
     ok = got.get("canada") == want and bool(got.get("where"))
     print(("ok   " if ok else "FAIL ") + "%-40r -> %s (want %s)" % (where, got.get("canada"), want))
     fails += not ok
+
+# 2. room_left: hidden ads (canada "no") must not fill the weekly scan's list of 12.
+from find_jobs import MAX_NEW, room_left  # noqa: E402
+hidden = [{"level": "new", "open": True, "canada": "no"} for _ in range(11)]
+shown = [{"level": "new", "open": True, "canada": "anywhere"}, {"level": "new", "open": True}]
+closed = [{"level": "new", "open": False, "canada": "yes"}]
+for what, ads, want in [("11 hidden US/UK ads leave the list empty", hidden, MAX_NEW),
+                        ("2 shown ads take 2 places", hidden + shown, MAX_NEW - 2),
+                        ("a closed ad takes no place", shown + closed, MAX_NEW - 2)]:
+    got = room_left(ads)
+    print(("ok   " if got == want else "FAIL ") + "%s: room %d (want %d)" % (what, got, want))
+    fails += got != want
+    CASES.append(what)
 print("%d FAILED" % fails if fails else "ALL PASSED (%d cases)" % len(CASES))
 sys.exit(1 if fails else 0)

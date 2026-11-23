@@ -46,6 +46,12 @@ def canada_from(where):
     return hidden
 
 
+def room_left(ads):
+    """How many more scan-found ads may be listed. Only ads the app shows count: an ad hidden because it needs the US or UK
+    stays in the file so the scan does not add it again, but it must not use up a place on the list."""
+    return MAX_NEW - sum(1 for a in ads if a.get("level") == "new" and a.get("open", True) and a.get("canada") != "no")
+
+
 def slug(text):
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:60]
 
@@ -58,7 +64,7 @@ def main():
     have_urls = {a["url"] for a in ads}
     have_keys = {(a["who"].split(",")[0].strip().lower(), a["title"].strip().lower()) for a in ads}
     ids = {a["id"] for a in ads}
-    room = MAX_NEW - sum(1 for a in ads if a.get("level") == "new" and a.get("open", True))
+    room = room_left(ads)
     found, read = [], 0
     for kind, board, name in BOARDS:
         jobs = feed(kind, board)

@@ -510,6 +510,69 @@ window.RTP_JOBS = {
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the UK."
+    },
+    {
+      "id": "clera-expert-talent-pool-safety-testing-associate",
+      "level": "new",
+      "title": "Expert Talent Pool, Safety Testing (Associate)",
+      "who": "Clera",
+      "pay": "Pay not stated in the job feed",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: remote.",
+      "url": "https://jobs.ashbyhq.com/Clera/998994f7-8a58-44b6-a0fc-9c3a46640ab8",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "Clera",
+        "title": "Expert Talent Pool, Safety Testing (Associate)"
+      },
+      "added": "2026-11-23",
+      "found": "2026-11-23",
+      "checked": "2026-11-23",
+      "open": true,
+      "canada": "check",
+      "where": "Location as posted: remote. The feed names no country: read the ad to be sure."
+    },
+    {
+      "id": "uk-ai-security-institute-software-engineer-red-team",
+      "level": "new",
+      "title": "Software Engineer - Red Team",
+      "who": "UK AI Security Institute",
+      "pay": "Pay not stated in the job feed",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: London, UK.",
+      "url": "https://job-boards.eu.greenhouse.io/aisi/jobs/5041474101",
+      "check": {
+        "type": "feed",
+        "kind": "greenhouse",
+        "board": "aisi",
+        "title": "Software Engineer - Red Team"
+      },
+      "added": "2026-11-23",
+      "found": "2026-11-23",
+      "checked": "2026-11-23",
+      "open": true,
+      "canada": "no",
+      "where": "Hidden by the scan: location as posted is London, UK, which is not open to someone working from Canada."
+    },
+    {
+      "id": "faculty-senior-research-scientist-ai-safety-evaluations",
+      "level": "new",
+      "title": "Senior Research Scientist - AI Safety Evaluations",
+      "who": "Faculty",
+      "pay": "Pay not stated in the job feed",
+      "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: London.",
+      "url": "https://jobs.ashbyhq.com/faculty/6c0abf94-8d61-459b-b094-49307a595c60",
+      "check": {
+        "type": "feed",
+        "kind": "ashby",
+        "board": "faculty",
+        "title": "Senior Research Scientist - AI Safety Evaluations"
+      },
+      "added": "2026-11-23",
+      "found": "2026-11-23",
+      "checked": "2026-11-23",
+      "open": true,
+      "canada": "no",
+      "where": "Hidden by the scan: location as posted is London, which is not open to someone working from Canada."
     }
   ],
   "scanned": "2026-11-23",
