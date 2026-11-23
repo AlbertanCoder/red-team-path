@@ -37,6 +37,9 @@ with sync_playwright() as p:
     code = ""
     try:
         # the phone has some progress before linking; the computer has different progress
+        phone.click("#quiz-start")
+        for _ in range(phone.evaluate("window.RTP_QUIZ[1].length")):
+            phone.click("#quiz-opts .opt[data-right='1']")
         phone.click("#done-btn")
         computer.evaluate("location.hash = '#i-m1'")
         computer.click("#hint-btn")

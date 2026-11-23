@@ -1111,6 +1111,7 @@
   LESSONS.forEach(function (l) { KNOWN[l.id] = l; }); // a passed lesson is saved, and linked across devices, like a tick
   // Marks for each lab, saved and linked exactly like ticks. For lab n: ha, hb, hc + n = hint 1, 2, 3 opened;
   // tr + n = you typed what you tried, so the full answer is unlocked; un + n = you moved on without solving it.
+  VIDEOS.forEach(function (_, i) { KNOWN["qz" + (i + 1)] = { id: "qz" + (i + 1) }; }); // a passed video quiz
   MS_LABS.forEach(function (l) { ["ha", "hb", "hc", "tr", "un", "pf", "ga"].forEach(function (k) { KNOWN[k + l[0]] = { id: k + l[0] }; }); });
 
   function storageFailed() {
@@ -1790,6 +1791,75 @@
       (extra ? " Optional first, if you want it: " + shortTitle(extra) + "." : "") })]));
   }
 
+  // ----- the quiz after each video: written from the video's own subtitles; you need 80% to tick the video -----
+  var QUIZ = window.RTP_QUIZ && typeof window.RTP_QUIZ === "object" ? window.RTP_QUIZ : {};
+  var quizRun = null; // the quiz in progress: survives a redraw, not a reload
+  function videoNo(it) { var m = it && it.kind === "video" ? /^v(\d+)$/.exec(it.id) : null; return m ? parseInt(m[1], 10) : 0; }
+  function needsQuiz(it) { var n = videoNo(it); return !!(n && QUIZ[n] && QUIZ[n].length); }
+  function passMark(total) { return Math.ceil(total * 0.8); }
+  function shuffled(list) {
+    var a = list.slice();
+    for (var i = a.length - 1; i > 0; i -= 1) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function startQuiz(n, which) {
+    // which: the question numbers to ask (all of them at the start, only the missed ones on a retry)
+    var keep = quizRun && quizRun.n === n ? quizRun.right : {};
+    quizRun = { n: n, ask: which, retry: !!(quizRun && quizRun.n === n), at: 0, right: keep, missed: [], order: which.map(function (q) { return shuffled(QUIZ[n][q].options.map(function (_, i) { return i; })); }) };
+  }
+  function quizBox(it) {
+    var n = videoNo(it);
+    // Redraw just this box: the rest of the screen stays put, so a playing video keeps playing.
+    var redraw = function () {
+      var old = document.getElementById("quiz-box");
+      if (old && old.parentNode) { old.parentNode.replaceChild(quizBox(it), old); }
+      render("quiz-box");
+    };
+    var qs = QUIZ[n];
+    var need = passMark(qs.length);
+    if (isDone("qz" + n)) {
+      return h("div", { class: "answer", id: "quiz-box" }, [h("p", null, [h("b", { text: "Quiz passed. " }), "You can tick this video."])]);
+    }
+    var box = h("div", { class: "block", id: "quiz-box" });
+    if (!quizRun || quizRun.n !== n) {
+      box.appendChild(h("p", { class: "small", text: qs.length + " questions about this video. Get " + need + " right to tick it. A miss tells you where in the video to look, not the answer." }));
+      var go = h("button", { type: "button", class: "wide", id: "quiz-start", text: "Start the quiz" });
+      go.addEventListener("click", function () { startQuiz(n, qs.map(function (_, i) { return i; })); redraw(); });
+      box.appendChild(go);
+      return box;
+    }
+    var run = quizRun;
+    var score = Object.keys(run.right).length;
+    if (run.at < run.ask.length) {
+      var qi = run.ask[run.at];
+      var q = qs[qi];
+      box.appendChild(h("div", { class: "tag", id: "quiz-count", text: "QUESTION " + (run.at + 1) + " OF " + run.ask.length + (run.retry ? " (THE ONES YOU MISSED)" : "") }));
+      box.appendChild(h("p", { id: "quiz-q", text: q.q }));
+      var opts = h("div", { class: "opts", id: "quiz-opts" });
+      run.order[run.at].forEach(function (oi) {
+        var b = h("button", { type: "button", class: "opt", "data-right": oi === q.answer ? "1" : "0", text: q.options[oi] });
+        b.addEventListener("click", function () {
+          if (oi === q.answer) { run.right[qi] = 1; } else { run.missed.push(qi); }
+          run.at += 1;
+          if (run.at >= run.ask.length && Object.keys(run.right).length >= need) { mark("qz" + n, true); quizRun = null; }
+          redraw();
+        });
+        opts.appendChild(b);
+      });
+      box.appendChild(opts);
+      return box;
+    }
+    // A round is over and the score is still short.
+    box.appendChild(h("p", { id: "quiz-score" }, [h("b", { text: score + " of " + qs.length + " right. " }), "You need " + need + ". Rewatch these moments, then answer the ones you missed again:"]));
+    var ul = h("ul", { id: "quiz-misses" });
+    run.missed.forEach(function (qi) { ul.appendChild(h("li", null, [h("b", { text: qs[qi].q + " " }), qs[qi].hint])); });
+    box.appendChild(ul);
+    var again = h("button", { type: "button", class: "wide", id: "quiz-retry", text: "Answer the " + run.missed.length + " I missed again" });
+    again.addEventListener("click", function () { startQuiz(n, run.missed.slice()); redraw(); });
+    box.appendChild(again);
+    return box;
+  }
+
   // ----- a video, and everything else -----
   function videoScreen(v, it) {
     if (it.why) { v.appendChild(h("p", { text: it.why })); }
@@ -1805,6 +1875,7 @@
     });
     watch.appendChild(watchBtn);
     v.appendChild(watch);
+    if (needsQuiz(it)) { v.appendChild(part("Quiz", [quizBox(it)])); }
     if (it.how) { v.appendChild(howFold(it.how)); }
     if (WORDS_AT[it.id]) { v.appendChild(wordsFold(WORDS_AT[it.id])); }
   }
@@ -1915,6 +1986,11 @@
         d.appendChild(h("div", { class: "two" }, [
           dockBtn("I beat it", "ok", "beat-btn", function () { finish(it, false); }),
           dockBtn("Moving on, not solved", "", "moved-btn", function () { finish(it, true); })]));
+      } else if (needsQuiz(it) && !isDone("qz" + videoNo(it))) {
+        // A video is ticked only after its quiz is passed.
+        var locked = dockBtn("Pass the quiz above to finish", "", "done-btn", function () {});
+        locked.disabled = true;
+        d.appendChild(locked);
       } else {
         d.appendChild(dockBtn("I'm done ✓", "primary", "done-btn", function () { finish(it, false); }));
       }

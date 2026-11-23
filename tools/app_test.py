@@ -147,6 +147,21 @@ with sync_playwright() as p:
         check(page.inner_text("#top-title") == title and page.locator("#view-" + name).is_visible(), title + " opens from the Path list")
         no_side_scroll(page, title)
         page.click("#back-now")
+    # the quiz under Episode 1 has to be passed before the video can be ticked
+    check(page.locator("#done-btn").is_disabled() and "Pass the quiz" in page.inner_text("#done-btn"), "a video cannot be ticked before its quiz is passed")
+    total = page.evaluate("window.RTP_QUIZ[1].length")
+    check(5 <= total <= 10, "Episode 1 has a quiz of 5 to 10 questions (%d)" % total)
+    page.click("#quiz-start")
+    for k in range(total):
+        page.click("#quiz-opts .opt[data-right='0'] >> nth=0")
+    misses = page.locator("#quiz-misses li").count()
+    check("0 of %d right" % total in page.inner_text("#quiz-score") and misses == total and page.locator("#done-btn").is_disabled(), "all wrong: the score shows, every miss is listed, and the video stays locked")
+    check(all(page.evaluate("window.RTP_QUIZ[1][%d].options[window.RTP_QUIZ[1][%d].answer]" % (i, i)) not in page.inner_text("#quiz-misses") for i in range(total)), "a miss points to the moment in the video and never shows the right answer")
+    page.click("#quiz-retry")
+    check(("OF %d (THE ONES YOU MISSED)" % total) in page.inner_text("#quiz-count"), "the retry asks only the missed questions")
+    for k in range(total):
+        page.click("#quiz-opts .opt[data-right='1']")
+    check(ticks(page).get("qz1", 0) > 0 and "Quiz passed" in page.inner_text("#quiz-box") and page.locator("#done-btn").is_enabled(), "getting them right passes the quiz and unlocks the video")
     page.click("#done-btn")
     check(ticks(page).get("v1", 0) > 0 and "MARKED" in page.inner_text("#next-line"), "I'm done ticks the box and shows what is next")
     page.click("#next-btn")
@@ -309,7 +324,7 @@ with sync_playwright() as p:
     check("OPTIONAL" in page.inner_text("#top-tag") and "EPISODE 1" in page.inner_text("#next-line").upper(), "an optional lab opens, and its Next still points at where you are")
     page.click("#back-now")
     # every required lab gets its proof, so the walk can tap I beat it
-    page.evaluate("(function () { var d = JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}'); d.m = d.m || {}; [1, 2, 5, 6, 7, 8, 11, 12].forEach(function (n) { d.m['pf' + n] = Date.now() + n; }); localStorage.setItem('redTeamPath.v2', JSON.stringify(d)); })()")
+    page.evaluate("(function () { var d = JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}'); d.m = d.m || {}; [1, 2, 5, 6, 7, 8, 11, 12].forEach(function (n) { d.m['pf' + n] = Date.now() + n; }); for (var v = 1; v <= 10; v += 1) { d.m['qz' + v] = Date.now() + 20 + v; } localStorage.setItem('redTeamPath.v2', JSON.stringify(d)); })()")
     page.reload()
     page.wait_for_selector("#top-title")
     walked = []
