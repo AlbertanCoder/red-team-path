@@ -42,6 +42,8 @@ with sync_playwright() as p:
         check(title.startswith("Episode %d:" % n) and loaded and not broken, "%s: the player opens inside the app (%s)" % (title, "YouTube" if "youtube" in src else "Microsoft"))
         check(page.locator("#player-fallback").count() == 1, "Episode %d: has the fall-back link to Microsoft's page" % n)
     # every other box: its Open button has a real https address, or it has no button because nothing needs opening
+    if page.locator("#menu-btn").is_visible():
+        page.click("#menu-btn")
     page.click("#path-btn")
     boxes = page.evaluate("Array.from(document.querySelectorAll('#sheet .prow')).map(function (r) { return r.id; }).filter(function (i) { return i.indexOf('row-') === 0; }).map(function (i) { return i.slice(4); })")
     page.click("#sheet-close")

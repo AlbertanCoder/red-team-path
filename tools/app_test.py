@@ -76,7 +76,7 @@ def check(cond, what):
         fails.append(what)
 
 
-def new_page(browser, saved=None):
+def new_page(browser, saved=None, start=True):
     ctx = browser.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
     if saved:
         # Put the old saved data in place before the app starts, once, the way a returning visitor's browser has it.
@@ -88,7 +88,24 @@ def new_page(browser, saved=None):
     page.goto(base)
     page.wait_for_selector("#top-title")
     page.wait_for_timeout(300)
+    if start:
+        page.click("#continue-btn")  # the app opens on the main menu; Continue goes to the current step
     return ctx, page
+
+
+def home(page):
+    if page.locator("#menu-btn").is_visible():
+        page.click("#menu-btn")
+
+
+def open_path(page):
+    home(page)
+    page.click("#path-btn")
+
+
+def open_side(page, name):
+    home(page)
+    page.click("#also-" + name)
 
 
 def ticks(page):
@@ -108,17 +125,27 @@ with sync_playwright() as p:
     b = p.chromium.launch()
 
     # ---- 1. a brand new visitor ----
-    ctx, page = new_page(b)
+    ctx, page = new_page(b, start=False)
+    check(page.inner_text("#top-title") == "Main menu" and page.locator("#view-home").is_visible(), "the app opens on the main menu")
+    check("Episode 1" in page.inner_text("#continue-btn") and "CONTINUE" in page.inner_text("#continue-btn"), "the main menu's Continue card names the current step")
+    check([t.split("\n")[0].strip() for t in page.locator("#view-home .tile").all_inner_texts()] == ["Path", "Library", "Jobs", "Settings"], "the main menu has four big buttons: Path, Library, Jobs, Settings")
+    check(not page.locator("#menu-btn").is_visible() and not page.locator("#dock").is_visible(), "the main menu has no Menu button and no bottom bar")
+    check("0 OF 49 DONE" in page.inner_text("#home-progress"), "the main menu shows how far along you are")
+    no_side_scroll(page, "Main menu")
+    shot(page, "0-main-menu")
+    page.click("#continue-btn")
+    check(page.locator("#menu-btn").is_visible() and not page.locator("#path-btn").is_visible(), "a step shows only a Menu button at the top, no Path button")
     check(page.inner_text("#top-title").startswith("Episode 1"), "new visitor: opens on Episode 1")
     check("NOW" in page.inner_text("#top-tag"), "new visitor: the top strip says NOW")
     check("EPISODE 2" in page.inner_text("#next-line").upper(), "new visitor: the bottom bar says what is next (Episode 2)")
     check(page.locator("#watch-btn").is_visible() and page.locator("#done-btn").is_visible(), "new visitor: a video shows Watch and I'm done")
     shot(page, "1-new-visitor")
-    page.click("#path-btn")
-    check(page.locator("#sheet-count").inner_text().startswith("THE WHOLE PATH") and page.locator("#row-v1.now").count() == 1, "Path list opens and marks where you are")
+    open_path(page)
+    check(page.locator("#sheet-count").inner_text().startswith("THE WHOLE PATH") and page.locator("#row-v1.now").count() == 1, "Path list opens from the main menu and marks where you are")
     shot(page, "1-path")
+    page.click("#sheet-close")
     page.click("#also-jobs")
-    check(page.inner_text("#top-title") == "Jobs" and page.locator("#view-jobs").is_visible(), "Jobs opens from the Path list")
+    check(page.inner_text("#top-title") == "Jobs" and page.locator("#view-jobs").is_visible() and page.locator("#menu-btn").is_visible(), "Jobs opens from the main menu, with a Menu button back")
     jobs = page.evaluate("(function () { var a = window.RTP_JOBS.ads.filter(function (x) { return x.open !== false && x.canada !== 'no'; }); return { start: a.filter(function (x) { return x.level === 'start'; }).length, fresh: a.filter(function (x) { return x.level === 'new'; }).length, scanned: window.RTP_JOBS.scanned || '' }; })()")
     check(page.locator("#jobs-start .card.ad").count() == jobs["start"] and page.locator("#jobs-new .card.ad").count() == jobs["fresh"], "Jobs shows every open beginner ad (%d) and every ad found by the weekly scan (%d)" % (jobs["start"], jobs["fresh"]))
     no_ids = page.evaluate("window.RTP_JOBS.ads.filter(function (x) { return x.canada === 'no'; }).map(function (x) { return x.id; })")
@@ -129,11 +156,12 @@ with sync_playwright() as p:
     no_side_scroll(page, "Jobs")
     page.click("#back-now")
     check(page.inner_text("#top-title").startswith("Episode 1"), "Back returns to what you were doing")
-    page.click("#path-btn")
+    open_path(page)
     check(page.locator("#link-prompt").is_visible(), "an unlinked device sees one link prompt at the top of the Path list")
     page.click("#link-no")
     check(page.locator("#link-prompt").count() == 0 and page.evaluate("JSON.parse(localStorage.getItem('redTeamPath.v2')).nolink") is True, "Not now hides the prompt for good")
-    check(page.locator("#sheet .panel ~ .also button, #sheet .sheet-panel > .also button").count() == 3, "the Path list ends with exactly three side screens: Library, Jobs, Settings")
+    check(page.locator("#sheet .also").count() == 0, "Library, Jobs and Settings are no longer buried at the end of the Path list")
+    page.click("#sheet-close")
     page.click("#also-tutor")
     check([s.strip() for s in page.locator("#view-tutor .seg button").all_inner_texts()] == ["Lessons", "Words", "Thinking steps", "My notes"], "Library has four parts: Lessons, Words, Thinking steps, My notes")
     page.click("#tutor-tab-words")
@@ -141,15 +169,13 @@ with sync_playwright() as p:
     page.click("#tutor-tab-lessons")
     check(page.locator("#tutor-rules").count() == 1 and page.locator("#view-tutor .rowbtn").count() == 28, "Lessons lists the 28 lessons and the safety rules")
     page.click("#back-now")
-    page.click("#path-btn")
-    page.click("#also-menu")
+    open_side(page, "menu")
     check(page.locator("#menu-sync").is_visible() and page.locator("#menu-settings").is_visible() and page.locator("#view-menu > *").count() == 2, "Settings holds two panels only: link devices, and settings")
     page.click("#back-now")
     check(page.locator(".tabbar").count() == 0 and page.locator("#view-words").count() == 0, "the old tab bar and the separate Words screen are gone")
     for name, title in (("tutor", "Library"), ("menu", "Settings")):
-        page.click("#path-btn")
-        page.click("#also-" + name)
-        check(page.inner_text("#top-title") == title and page.locator("#view-" + name).is_visible(), title + " opens from the Path list")
+        open_side(page, name)
+        check(page.inner_text("#top-title") == title and page.locator("#view-" + name).is_visible(), title + " opens from the main menu")
         no_side_scroll(page, title)
         page.click("#back-now")
     # the quiz under Episode 1 has to be passed before the video can be ticked
@@ -233,7 +259,7 @@ with sync_playwright() as p:
     page.wait_for_selector("#top-title")
     m = ticks(page)
     check(m.get("m1", 0) > 0 and m.get("tr1", 0) > 0 and page.inner_text("#top-title") != "Lab 1: Credential Exfiltration", "after closing and reopening, everything is still saved and the app has moved on")
-    page.click("#path-btn")
+    open_path(page)
     page.click("#row-m1")
     check(page.inner_text("#top-title") == "Lab 1: Credential Exfiltration" and "teacher preparing" in page.inner_text("#view-now"), "Lab 1's page can be reopened from the Path list, answer still unlocked")
     page.click("#back-now")
@@ -248,16 +274,19 @@ with sync_playwright() as p:
     ctx, page = new_page(b, moved)
     m = ticks(page)
     check(m.get("m1", 0) > 0 and m.get("un1", 0) > 0, "an old 'moved on, not solved' mark on lab 1 is still there")
-    page.click("#path-btn")
+    open_path(page)
     check(page.locator("#comeback #back-m1").count() == 1 and "NOT SOLVED YET" in page.inner_text("#row-m1"), "Path lists Lab 1 under Come back to these")
     page.click("#back-m1")
     check(page.inner_text("#top-title") == "Lab 1: Credential Exfiltration" and "MOVED ON, NOT SOLVED" in page.inner_text("#next-line"), "tapping it reopens Lab 1, still marked not solved")
     check(page.locator("#beat-btn").count() == 0, "it cannot be changed to beaten without proof")
     page.fill("#proof-paste", LAB1_WIN)
     page.click("#proof-check")
-    page.click("#path-btn")
+    open_path(page)
     check(page.locator("#comeback").count() == 0 and ticks(page).get("m1", 0) > 0 and not ticks(page).get("un1", 0) > 0, "adding a winning chat marks it beaten: the come-back list is empty and the tick stays")
     page.click("#sheet-close")
+    check(page.inner_text("#top-title") == "Main menu", "closing the Path list leaves you on the main menu")
+    page.evaluate("location.hash = '#i-m1'")
+    page.wait_for_selector("#untick-btn")
     page.click("#untick-btn")
     page.click("#untick-btn")
     check(not ticks(page).get("m1", 0) > 0, "Untick (two taps) takes the tick off")
@@ -267,8 +296,7 @@ with sync_playwright() as p:
     m = ticks(page)
     check(not m.get("m1", 0) > 0 and not m.get("un1", 0) > 0 and page.locator("#beat-btn").is_visible(), "Undo takes the mark back")
     # hints can be hidden again from Settings, one lab at a time
-    page.click("#path-btn")
-    page.click("#also-menu")
+    open_side(page, "menu")
     check(page.locator("#rehide-1").count() == 1 and page.locator("#rehide-2").count() == 1 and page.locator("#rehide-3").count() == 0, "Settings lists only the labs whose hints are open (1 and 2)")
     page.click("#rehide-1")
     m = ticks(page)
@@ -322,7 +350,7 @@ with sync_playwright() as p:
 
     # ---- 6. the order of the path ----
     ctx, page = new_page(b)
-    page.click("#path-btn")
+    open_path(page)
     rows = lambda step: page.evaluate("Array.from(document.querySelectorAll('#pstep-%d .prow')).map(function (r) { return r.id.slice(4); })" % step)
     check(rows(1) == STEP1, "Step 1 order: each video, then its lab; harder versions after Episode 7; harmful-goal labs last")
     check(rows(5) == STEP5, "Step 5 order: Episodes 8, 9 and 10 each sit right before the task they show")

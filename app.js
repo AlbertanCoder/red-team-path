@@ -126,7 +126,7 @@
   function videoSteps(n) {
     var steps = [
       "Tap Watch it here. If the video shows a play button, press it.",
-      "Watch it through. When a word is new, pause and look it up: tap Path, then Library, then Words."
+      "Watch it through. When a word is new, pause and look it up: Menu, then Library, then Words."
     ];
     if (n >= 3 && n <= 7) { steps.push("Write down one thing from the video you want to try. The lab for this episode comes next."); }
     else if (n >= 8) { steps.push("Watch what the tool does. You do it yourself in the next box."); }
@@ -1545,7 +1545,7 @@
   }
   function go(hash) {
     // Change the address (so the phone's Back button works), and draw the new screen straight away.
-    if ((window.location.hash || "#now") !== hash) { window.location.hash = hash; }
+    if ((window.location.hash || "#home") !== hash) { window.location.hash = hash; }
     route();
     window.scrollTo(0, 0);
   }
@@ -1904,7 +1904,7 @@
     }
     var box = h("div", { class: "block", id: "quiz-box" });
     if (!quizRun || quizRun.n !== n) {
-      box.appendChild(h("p", { class: "small", text: qs.length + " questions about this video. Get " + need + " right to tick it. A miss tells you where in the video to look, not the answer." }));
+      box.appendChild(h("p", { class: "small", text: qs.length + " questions about this video. Get " + need + " right to tick it. A miss shows what you picked and where in the video to look; the right answers show once you pass." }));
       var go = h("button", { type: "button", class: "wide", id: "quiz-start", text: "Start the quiz" });
       go.addEventListener("click", function () { startQuiz(n, qs.map(function (_, i) { return i; })); redraw(); });
       box.appendChild(go);
@@ -1998,7 +1998,7 @@
     v.textContent = "";
     v.setAttribute("data-id", it ? it.id : "");
     if (!it) {
-      v.appendChild(h("p", { class: "lede", text: "Keep entering Gray Swan contests and keep writing up what you find. Jobs, in the Path list, shows where to apply." }));
+      v.appendChild(h("p", { class: "lede", text: "Keep entering Gray Swan contests and keep writing up what you find. Jobs, on the main menu, shows where to apply." }));
       return;
     }
     var n = labNo(it);
@@ -2006,11 +2006,12 @@
   }
 
   // ----- the top strip and the bottom bar -----
-  var SCREENS = { tutor: "Library", jobs: "Jobs", menu: "Settings" };
+  var SCREENS = { home: "Main menu", tutor: "Library", jobs: "Jobs", menu: "Settings" };
   function renderTop(idx, it, screen) {
     var tag = $("top-tag");
     var title = $("top-title");
     tag.className = "tag";
+    $("menu-btn").hidden = screen === "home";
     if (screen !== "now") { tag.textContent = "RED TEAM PATH"; title.textContent = SCREENS[screen]; return; }
     if (!it) { tag.textContent = "PATH COMPLETE"; title.textContent = "Every box is ticked"; return; }
     var isNow = idx !== -1 && SEQ[idx].it.id === it.id;
@@ -2052,8 +2053,9 @@
   function renderDock(idx, it, screen) {
     var d = $("dock-in");
     d.textContent = "";
+    $("dock").hidden = screen === "home"; // the main menu is all buttons already
     if (screen !== "now") { d.appendChild(dockBtn("← Back to what I'm doing", "", "back-now", goNow)); return; }
-    if (!it) { d.appendChild(h("div", { class: "tag", text: "NOTHING LEFT TO DO. OPEN PATH TO LOOK BACK." })); return; }
+    if (!it) { d.appendChild(h("div", { class: "tag", text: "NOTHING LEFT TO DO. THE MAIN MENU HAS THE PATH LIST." })); return; }
     var isNow = idx !== -1 && SEQ[idx].it.id === it.id;
     var n = labNo(it);
     var unsolved = n ? isDone("un" + n) : false;
@@ -2110,7 +2112,38 @@
     }
   }
 
-  // ----- Path: the whole list, pulled up from the top button. Library, Jobs and Settings are at its end. -----
+  // ----- the main menu: where the app opens. Continue, how far along you are, and the four places. -----
+  function renderMainMenu(idx) {
+    var v = $("view-home");
+    v.textContent = "";
+    var it = idx === -1 ? null : SEQ[idx].it;
+    var done = SEQ.filter(function (e) { return isDone(e.it.id); }).length;
+    var go1 = h("button", { type: "button", class: "continue", id: "continue-btn" }, it ? [
+      h("span", { class: "tag red", text: "CONTINUE · STEP " + (PLACE[it.id].s + 1) + " · " + KIND[it.kind] }),
+      h("span", { class: "ctitle", text: shortTitle(it) }),
+      h("span", { class: "carrow", "aria-hidden": "true", text: "→" })
+    ] : [h("span", { class: "tag", text: "PATH COMPLETE" }), h("span", { class: "ctitle", text: "Every box is ticked. Look back any time." })]);
+    go1.addEventListener("click", goNow);
+    v.appendChild(go1);
+    var run = streak();
+    v.appendChild(h("div", { class: "progress", id: "home-progress" }, [
+      h("div", { class: "tag", text: done + " OF " + SEQ.length + " DONE" + (run ? " · " + run + "-DAY STREAK" : "") }),
+      h("div", { class: "meter", "aria-hidden": "true" }, [h("span", { style: "width:" + (SEQ.length ? (done / SEQ.length) * 100 : 0) + "%" })])
+    ]));
+    var openAds = JOBS.ads.filter(function (a) { return a.open !== false && a.canada !== "no"; }).length;
+    var tiles = h("div", { class: "tiles" });
+    [["path-btn", "Path", "Every step, in order"],
+     ["also-tutor", "Library", "Lessons, words, practice"],
+     ["also-jobs", "Jobs", openAds + " open ads for Canada"],
+     ["also-menu", "Settings", "Link devices, theme"]].forEach(function (t) {
+      var b = h("button", { type: "button", class: "tile", id: t[0] }, [h("span", { class: "tname", text: t[1] }), h("span", { class: "tsub", text: t[2] })]);
+      b.addEventListener("click", function () { if (t[0] === "path-btn") { openSheet(); } else { go("#" + t[0].slice(5)); } });
+      tiles.appendChild(b);
+    });
+    v.appendChild(tiles);
+  }
+
+  // ----- Path: the whole list, pulled up from the Path tile on the main menu. -----
   function buildSheet() {
     var sheet = $("sheet");
     sheet.textContent = "";
@@ -2172,14 +2205,6 @@
       });
       panel.appendChild(det);
     });
-    var also = h("div", { class: "also" });
-    [["Library", "#tutor"], ["Jobs", "#jobs"], ["Settings", "#menu"]].forEach(function (a) {
-      var b = h("button", { type: "button", id: "also-" + a[1].slice(1), text: a[0] });
-      b.addEventListener("click", function () { closeSheet(); go(a[1]); });
-      also.appendChild(b);
-    });
-    panel.appendChild(h("div", { class: "glabel", text: "Also here" }));
-    panel.appendChild(also);
     sheet.appendChild(panel);
   }
   function openSheet() {
@@ -2355,7 +2380,7 @@
         status.textContent = "";
         show.textContent = "";
         show.appendChild(h("div", { class: "pin-code", id: "pair-code", text: showPin(pin) }));
-        show.appendChild(h("p", { text: "Open this app on your other device. Tap Path, then Settings, and type this code where it says \"I have a code\", and tap Link." }));
+        show.appendChild(h("p", { text: "Open this app on your other device. Open the main menu, then Settings, and type this code where it says \"I have a code\", and tap Link." }));
         show.appendChild(h("p", { class: "dim", text: "The code works once and runs out in 10 minutes." }));
         show.hidden = false;
         // After 10 minutes the code no longer works, so stop showing it.
@@ -2830,17 +2855,18 @@
   }
 
   // ---------- frame ----------
-  // One screen at a time. "now" is the box you are on (or one opened from the Path list: #i-<box id>).
-  // Library, Jobs and Settings are side screens reached from the Path list.
+  // One screen at a time. "home" is the main menu, where the app opens. "now" is the box you are on (or one opened from the Path list: #i-<box id>).
+  // Library, Jobs and Settings are screens reached from the main menu.
   var OLD_TABS = { next: "now", path: "now", words: "tutor", info: "menu", why: "menu", audit: "menu" }; // links saved before the layout changed still land somewhere useful
   function currentScreen() {
-    var name = (window.location.hash || "#now").slice(1);
-    name = OLD_TABS[name] || name;
+    var hash = window.location.hash || "";
+    if (!hash || hash === "#") { return "home"; } // the app opens on the main menu
+    var name = OLD_TABS[hash.slice(1)] || hash.slice(1);
     return SCREENS[name] ? name : "now";
   }
   function showScreen() {
     var name = currentScreen();
-    ["now", "tutor", "jobs", "menu"].forEach(function (t) { $("view-" + t).hidden = t !== name; });
+    ["home", "now", "tutor", "jobs", "menu"].forEach(function (t) { $("view-" + t).hidden = t !== name; });
   }
   function render(focusId) {
     var idx = currentIndex();
@@ -2852,6 +2878,7 @@
     renderTop(idx, it, screen);
     renderDock(idx, it, screen);
     renderHome(idx, it);
+    renderMainMenu(idx);
     settingsPanel();
     if (!$("sheet").hidden) { buildSheet(); }
     if (focusId) {
@@ -2899,9 +2926,9 @@
     closeSheet();
     route();
   });
-  $("path-btn").addEventListener("click", openSheet);
+  $("menu-btn").addEventListener("click", function () { justMarked = ""; shown = ""; go("#home"); });
   $("sheet").addEventListener("click", function (e) { if (e.target === $("sheet")) { closeSheet(); } });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("sheet").hidden) { closeSheet(); $("path-btn").focus(); } });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("sheet").hidden) { closeSheet(); if ($("path-btn")) { $("path-btn").focus(); } } });
   // Safari on iPhone and iPad reports a pinch as a "gesture". Cancelling it keeps the page from zooming and
   // getting stuck zoomed in. The page's own settings (index.html and style.css) switch zoom off as well.
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (name) {
