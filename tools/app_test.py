@@ -211,6 +211,7 @@ with sync_playwright() as p:
     check("Answer the quiz under the video" in page.text_content("#view-now"), "the video's steps say the quiz comes before I'm done")
     total = page.evaluate("window.RTP_QUIZ[1].length")
     check(5 <= total <= 10, "Episode 1 has a quiz of 5 to 10 questions (%d)" % total)
+    page.clock.install()  # the test moves time on itself instead of waiting out the 2-minute retry
     page.click("#quiz-start")
     for k in range(total):
         page.click("#quiz-opts .opt[data-right='0'] >> nth=0")
@@ -218,6 +219,11 @@ with sync_playwright() as p:
     check("0 of %d right" % total in page.inner_text("#quiz-score") and misses == total and page.locator("#done-btn").is_disabled(), "all wrong: the score shows, every miss is listed, and the video stays locked")
     check(all(page.evaluate("window.RTP_QUIZ[1][%d].options[window.RTP_QUIZ[1][%d].answer]" % (i, i)) not in page.inner_text("#quiz-misses") for i in range(total)), "a miss points to the moment in the video and never shows the right answer")
     check(page.inner_text("#quiz-misses").count("You answered") == total, "each miss shows the answer I picked")
+    page.wait_for_timeout(100)
+    check(page.locator("#quiz-retry").is_disabled() and "opens in" in page.inner_text("#quiz-retry"), "after a missed round the retry stays shut for 2 minutes, with a countdown")
+    page.clock.fast_forward("02:05")
+    page.wait_for_timeout(200)
+    check(page.locator("#quiz-retry").is_enabled(), "the retry opens after 2 minutes")
     page.click("#quiz-retry")
     check(("OF %d (THE ONES YOU MISSED)" % total) in page.inner_text("#quiz-count"), "the retry asks only the missed questions")
     for k in range(total):
@@ -230,6 +236,17 @@ with sync_playwright() as p:
     check(ticks(page).get("v1", 0) > 0 and "MARKED" in page.inner_text("#next-line"), "I'm done ticks the box and shows what is next")
     page.click("#next-btn")
     check(page.inner_text("#top-title").startswith("Episode 2"), "the Next button goes to Episode 2")
+    # a reload does not skip the wait: Episode 2's quiz, all wrong, then the page is reloaded
+    page.click("#quiz-start")
+    for k in range(page.evaluate("window.RTP_QUIZ[2].length")):
+        page.click("#quiz-opts .opt[data-right='0'] >> nth=0")
+    page.reload()
+    page.wait_for_selector("#quiz-start")
+    page.wait_for_timeout(100)
+    check(page.locator("#quiz-start").is_disabled() and "opens in" in page.inner_text("#quiz-start"), "reloading the page does not skip the 2-minute wait")
+    page.clock.fast_forward("02:05")
+    page.wait_for_timeout(200)
+    check(page.locator("#quiz-start").is_enabled(), "the quiz can be started again after the wait")
     check(not page.errors, "new visitor: no page errors %s" % page.errors[:2])
     ctx.close()
 
