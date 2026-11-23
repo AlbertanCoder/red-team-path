@@ -1741,7 +1741,15 @@
     // A chat saved by the lab: one chat id on every message, times in order (the lab writes yours as a number, its own as a date), no repeated ids.
     if (!GUID_RX.test(String(d.id || ""))) { return edited; }
     var times = msgs.map(function (m) { return typeof m.timestamp === "number" ? m.timestamp : Date.parse(m.timestamp || ""); });
-    if (times.some(function (t, i) { return isNaN(t) || (i > 0 && t < times[i - 1]); })) { return edited; }
+    // Times written by the same clock must run in order. Your messages carry this computer's clock and the lab's replies the lab's
+    // own clock, which can be a little out (a laptop that slept, for one), so across the two clocks 10 minutes of slack is allowed.
+    var lastOf = {};
+    if (msgs.some(function (m, i) {
+      var t = times[i], clock = typeof m.timestamp;
+      if (isNaN(t) || (lastOf[clock] !== undefined && t < lastOf[clock]) || (i > 0 && t < times[i - 1] - 600000)) { return true; }
+      lastOf[clock] = t;
+      return false;
+    })) { return edited; }
     if (msgs.some(function (m) { return m.chatId !== d.id; })) { return edited; }
     var ids = msgs.map(function (m) { return m.id; }).filter(Boolean);
     if (ids.some(function (x, i) { return ids.indexOf(x) !== i; })) { return edited; }
