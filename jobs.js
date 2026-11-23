@@ -356,6 +356,60 @@ window.RTP_JOBS = {
       "found": "2026-11-19",
       "checked": "2026-11-23",
       "open": true
+    },
+    {
+      "id": "vettedlance-ai-red-teamer-generalist",
+      "level": "start",
+      "title": "AI Red-Teamer (Generalist)",
+      "who": "Vettedlance",
+      "pay": "Rate agreed per project, hourly or per task, in US dollars",
+      "ask": "No experience is listed as required; it asks for good written English. A talent pool with rolling applications. The ad does not say which countries can apply.",
+      "url": "https://vettedlance.com/jobs/ai-red-teamer",
+      "check": {
+        "type": "page",
+        "must": [
+          "AI Red-Teamer"
+        ]
+      },
+      "added": "2026-11-23",
+      "checked": "2026-11-23",
+      "open": true
+    },
+    {
+      "id": "trajectory-labs-ai-cyber-red-teamer",
+      "level": "later",
+      "title": "AI Cyber Red Teamer (Contract)",
+      "who": "Trajectory Labs",
+      "pay": "Pay not stated on the ad",
+      "ask": "Must have already jailbroken frontier models like GPT, Claude or Gemini. Hacking, CTF or bug bounty results count a lot. Contract, listed as open worldwide.",
+      "url": "https://www.trajectorylabs.com/careers/ai-cyber-red-teamer",
+      "check": {
+        "type": "page",
+        "must": [
+          "AI Cyber Red Teamer"
+        ]
+      },
+      "added": "2026-11-23",
+      "checked": "2026-11-23",
+      "open": true
+    },
+    {
+      "id": "syntony-trusted-red-team-network",
+      "level": "later",
+      "title": "Trusted Red Team Network",
+      "who": "Syntony",
+      "pay": "Pay not stated on the ad",
+      "ask": "A network you join, then get called for projects. The form asks for your work background and your red teaming experience. Listed as open worldwide.",
+      "url": "https://www.syntonyresearch.ai/work/trusted-red-team/",
+      "check": {
+        "type": "page",
+        "must": [
+          "Trusted Red Team"
+        ]
+      },
+      "added": "2026-11-23",
+      "checked": "2026-11-23",
+      "open": true
     }
   ],
   "scanned": "2026-11-23",
