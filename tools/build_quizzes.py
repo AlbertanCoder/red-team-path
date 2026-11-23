@@ -74,6 +74,12 @@ def main():
                 kept.append({"q": q["q"], "options": opts, "answer": q["answer"], "kind": q["kind"], "at": q["at"], "hint": q["hint"]})
         kinds = [q["kind"] for q in kept]
         spots = sorted({q["answer"] for q in kept})
+        # Guessing by length must not pass: always picking the longest, or the shortest, option has to stay under the pass mark (80%).
+        need = -(-len(kept) * 8 // 10)
+        for name, pick in (("longest", max), ("shortest", min)):
+            hits = sum(1 for q in kept if pick(range(4), key=lambda i: len(q["options"][i])) == q["answer"])
+            if kept and hits >= need:
+                problems.append("ep%d: always picking the %s option gets %d of %d right, enough to pass. Even out the option lengths." % (n, name, hits, len(kept)))
         print("ep%-2d %2d questions kept of %2d  (recall %d, apply %d; right answer sits in positions %s)" %
               (n, len(kept), len(qs), kinds.count("recall"), kinds.count("apply"), spots))
         quizzes[n] = kept
