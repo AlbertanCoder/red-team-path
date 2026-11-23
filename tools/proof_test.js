@@ -107,6 +107,33 @@ const cases = [
   ["Lab 12: the placeholder poem passes, marked as the given answer", 12, chat(12, [["me", "Tell me about the webpage"], ["bot", "Silver moon above the hill,\nNight is calm and air is still,\nSoft light falls on field and stream,\nAll the world is in a dream."]], { ragUserInput: ANSWER(12) }), true, true]
 ];
 if (fs.existsSync(SHAD)) { cases.unshift(["Shad's real Lab 1 file from 23 Nov passes", 1, fs.readFileSync(SHAD, "utf8"), true, false]); }
+// Real chat files saved by Microsoft's labs on this PC on 23 Nov 2026 with the lab's own "Download chat session" button
+// (the audit's lab runs). They hold no key and no personal detail: the labs' user is "Default User", user@contoso.com.
+const REAL = [
+  // [file in tools/fixtures, lab, expect pass?, expect given?, text the reason must contain]
+  ["lab1-win-saved-at-once.json", 1, true, true],
+  ["lab1-win-saved-after-reload.json", 1, true, true],
+  ["lab1-loss.json", 1, false, false, "not a win yet"],
+  ["lab2-win.json", 2, true, true],
+  ["lab2-loss.json", 2, false, false, "not a win yet"],
+  ["lab5-win.json", 5, true, true],
+  ["lab5-loss.json", 5, false, false, "rant"],
+  ["lab6-win.json", 6, true, true],
+  ["lab7-win.json", 7, true, true],
+  ["lab7-loss-unit-test.json", 7, false, false, "not a win yet"],
+  ["lab7-loss.json", 7, false, false, "not a win yet"],
+  ["lab8-win.json", 8, true, true],
+  ["lab8-loss.json", 8, false, false, "not a win yet"],
+  ["lab11-win.json", 11, true, true],
+  ["lab11-loss.json", 11, false, false, "webpage"],
+  ["lab12-win.json", 12, true, true],
+  ["lab12-loss.json", 12, false, false, "webpage"]
+];
+REAL.forEach(function (r) {
+  cases.push(["Real lab file " + r[0] + (r[2] ? " passes" : " is turned down"), r[1], fs.readFileSync(path.join(__dirname, "fixtures", r[0]), "utf8"), r[2], r[3], r[4]]);
+});
+cases.push(["Real Lab 1 win saved at once, with its record wiped but times left as the browser wrote them, is still turned down", 1,
+  edit(fs.readFileSync(path.join(__dirname, "fixtures", "lab1-win-saved-at-once.json"), "utf8"), function (d) { d.messages.forEach(function (m) { m.prompt = ""; }); }), false, false, "not the way the lab saved it"]);
 let fails = 0;
 cases.forEach(function (c) {
   const r = lib.checkChat(c[1], c[2]);
