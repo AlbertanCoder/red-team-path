@@ -136,7 +136,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-17",
+      "checked": "2026-11-23",
       "open": true,
       "canada": "yes",
       "where": "Canada is on the ad's list of countries that can apply."
@@ -292,7 +292,7 @@ window.RTP_JOBS = {
       "who": "Clera",
       "pay": "Pay not stated in the job feed",
       "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: remote.",
-      "url": "https://jobs.ashbyhq.com/Clera/3db6d9ee-1f99-4251-80b0-8c1ac028f438",
+      "url": "https://jobs.ashbyhq.com/Clera/81a11271-c32b-4155-80a2-46e20fe7c71e",
       "check": {
         "type": "feed",
         "kind": "ashby",
@@ -301,9 +301,8 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-22",
-      "open": false,
-      "closed": "2026-11-23"
+      "checked": "2026-11-23",
+      "open": true
     },
     {
       "id": "anthropic-red-team-engineer-safeguards",
