@@ -13,6 +13,20 @@ base = sys.argv[1]
 fails = []
 
 
+# The page carries no mark of the right option, so the test looks the question up in the quiz data and taps by text.
+PICK = """(right) => {
+  var q = document.getElementById('quiz-q').textContent, hit = null;
+  Object.keys(window.RTP_QUIZ).forEach(function (n) { window.RTP_QUIZ[n].forEach(function (x) { if (x.q === q) { hit = x; } }); });
+  var want = hit.options[hit.answer], opts = Array.prototype.slice.call(document.querySelectorAll('#quiz-opts .opt'));
+  for (var i = 0; i < opts.length; i += 1) { if ((opts[i].textContent === want) === right) { return i; } }
+  return -1;
+}"""
+
+
+def answer(page, right):
+    page.locator("#quiz-opts .opt").nth(page.evaluate(PICK, right)).click()
+
+
 def check(cond, what):
     print(("ok   " if cond else "FAIL ") + what)
     if not cond:
@@ -41,7 +55,7 @@ with sync_playwright() as p:
         # the phone has some progress before linking; the computer has different progress
         phone.click("#quiz-start")
         for _ in range(phone.evaluate("window.RTP_QUIZ[1].length")):
-            phone.click("#quiz-opts .opt[data-right='1']")
+            answer(phone, True)
         phone.click("#done-btn")
         computer.evaluate("location.hash = '#i-m1'")
         computer.click("#hint-btn")

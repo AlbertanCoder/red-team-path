@@ -2031,7 +2031,7 @@
       box.appendChild(h("p", { id: "quiz-q", text: q.q }));
       var opts = h("div", { class: "opts", id: "quiz-opts" });
       run.order[run.at].forEach(function (oi) {
-        var b = h("button", { type: "button", class: "opt", "data-right": oi === q.answer ? "1" : "0", text: q.options[oi] });
+        var b = h("button", { type: "button", class: "opt", text: q.options[oi] });
         b.addEventListener("click", function () {
           if (oi === q.answer) { run.right[qi] = 1; } else { run.missed.push(qi); run.wrong[qi] = q.options[oi]; }
           run.at += 1;

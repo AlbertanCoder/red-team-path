@@ -114,6 +114,20 @@ def ticks(page):
     return page.evaluate("JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}').m || {}")
 
 
+# The page carries no mark of the right option, so the test looks the question up in the quiz data and taps by text.
+PICK = """(right) => {
+  var q = document.getElementById('quiz-q').textContent, hit = null;
+  Object.keys(window.RTP_QUIZ).forEach(function (n) { window.RTP_QUIZ[n].forEach(function (x) { if (x.q === q) { hit = x; } }); });
+  var want = hit.options[hit.answer], opts = Array.prototype.slice.call(document.querySelectorAll('#quiz-opts .opt'));
+  for (var i = 0; i < opts.length; i += 1) { if ((opts[i].textContent === want) === right) { return i; } }
+  return -1;
+}"""
+
+
+def answer(page, right):
+    page.locator("#quiz-opts .opt").nth(page.evaluate(PICK, right)).click()
+
+
 def shot(page, name, full=False):
     if shots:
         page.screenshot(path=str(shots / (name + ".png")), full_page=full)
@@ -213,8 +227,9 @@ with sync_playwright() as p:
     check(5 <= total <= 10, "Episode 1 has a quiz of 5 to 10 questions (%d)" % total)
     page.clock.install()  # the test moves time on itself instead of waiting out the 2-minute retry
     page.click("#quiz-start")
+    check(page.locator("#quiz-opts .opt").count() == 4 and page.locator("#quiz-opts .opt[data-right]").count() == 0, "the quiz buttons carry no mark of the right answer")
     for k in range(total):
-        page.click("#quiz-opts .opt[data-right='0'] >> nth=0")
+        answer(page, False)
     misses = page.locator("#quiz-misses li").count()
     check("0 of %d right" % total in page.inner_text("#quiz-score") and misses == total and page.locator("#done-btn").is_disabled(), "all wrong: the score shows, every miss is listed, and the video stays locked")
     check(all(page.evaluate("window.RTP_QUIZ[1][%d].options[window.RTP_QUIZ[1][%d].answer]" % (i, i)) not in page.inner_text("#quiz-misses") for i in range(total)), "a miss points to the moment in the video and never shows the right answer")
@@ -227,7 +242,7 @@ with sync_playwright() as p:
     page.click("#quiz-retry")
     check(("OF %d (THE ONES YOU MISSED)" % total) in page.inner_text("#quiz-count"), "the retry asks only the missed questions")
     for k in range(total):
-        page.click("#quiz-opts .opt[data-right='1']")
+        answer(page, True)
     check(ticks(page).get("qz1", 0) > 0 and "Quiz passed" in page.inner_text("#quiz-box") and page.locator("#done-btn").is_enabled(), "getting them right passes the quiz and unlocks the video")
     review = page.inner_text("#quiz-review")
     check(page.locator("#quiz-review li").count() == total and all(page.evaluate("window.RTP_QUIZ[1][%d].options[window.RTP_QUIZ[1][%d].answer]" % (i, i)) in review for i in range(total)) and "You answered" in review,
@@ -239,7 +254,7 @@ with sync_playwright() as p:
     # a reload does not skip the wait: Episode 2's quiz, all wrong, then the page is reloaded
     page.click("#quiz-start")
     for k in range(page.evaluate("window.RTP_QUIZ[2].length")):
-        page.click("#quiz-opts .opt[data-right='0'] >> nth=0")
+        answer(page, False)
     page.reload()
     page.wait_for_selector("#quiz-start")
     page.wait_for_timeout(100)
