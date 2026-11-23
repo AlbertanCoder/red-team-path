@@ -208,6 +208,7 @@ with sync_playwright() as p:
         page.click("#back-now")
     # the quiz under Episode 1 has to be passed before the video can be ticked
     check(page.locator("#done-btn").is_disabled() and "Pass the quiz" in page.inner_text("#done-btn"), "a video cannot be ticked before its quiz is passed")
+    check("Answer the quiz under the video" in page.text_content("#view-now"), "the video's steps say the quiz comes before I'm done")
     total = page.evaluate("window.RTP_QUIZ[1].length")
     check(5 <= total <= 10, "Episode 1 has a quiz of 5 to 10 questions (%d)" % total)
     page.click("#quiz-start")

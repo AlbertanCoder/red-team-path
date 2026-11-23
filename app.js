@@ -131,7 +131,7 @@
     if (n >= 3 && n <= 7) { steps.push("Write down one thing from the video you want to try. The lab for this episode comes next."); }
     else if (n >= 8) { steps.push("Watch what the tool does. You do it yourself in the next box."); }
     else { steps.push("Write down one thing that surprised you."); }
-    steps.push("Tap I'm done at the bottom.");
+    steps.push("Answer the quiz under the video (80% to pass), then tap I'm done at the bottom.");
     return steps;
   }
   function labSteps(l) {
