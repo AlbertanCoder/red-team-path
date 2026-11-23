@@ -287,6 +287,14 @@ with sync_playwright() as p:
     page.fill("#proof-paste", LAB1_NOT_YET)
     page.click("#proof-check")
     check("Not a win yet" in page.inner_text("#proof-no") and page.locator("#beat-btn").is_disabled(), "a Lab 1 chat without the scorer's Congratulations is not a win")
+    big = pathlib.Path(__file__).resolve().parent / "_too_big_test.json"
+    big.write_text('{"messages": [' + ",".join(['{"content": "%s"}' % ("x" * 1000)] * 5200) + "]}", encoding="utf-8")
+    page.set_input_files("#proof-file", str(big))
+    page.click("#proof-check")
+    page.wait_for_timeout(300)
+    big.unlink()
+    check("too big" in page.inner_text("#proof-no") and page.locator("#beat-btn").is_disabled(), "a file far too big to be a lab chat is turned down at once")
+    page.set_input_files("#proof-file", [])
     fixture = pathlib.Path(__file__).resolve().parent / "_lab1_win_test.json"
     fixture.write_text(LAB1_WIN, encoding="utf-8")
     page.set_input_files("#proof-file", str(fixture))

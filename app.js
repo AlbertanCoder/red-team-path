@@ -1882,12 +1882,22 @@
       if (!res.ok) { out.appendChild(h("p", { class: "hintbox", id: "proof-no", text: "Not a win yet. " + res.why })); return; }
       accept(res);
     }
+    // A real lab chat is a few kilobytes to a few hundred; a far bigger file is not one, and reading it would stall the page.
+    var TOO_BIG = 5000000;
+    var tooBig = { ok: false, why: "That file is far too big to be a lab chat (over 5 MB). Save the chat again from the lab and add that file." };
+    function read(text) {
+      if (text.length > TOO_BIG) { show(tooBig); return; }
+      var res;
+      try { res = checkChat(n, text); } catch (e) { res = { ok: false, why: "That file could not be read as a lab chat. Save the chat again from the lab and add that file without changing it." }; }
+      show(res);
+    }
     check.addEventListener("click", function () {
       if (file.files && file.files[0]) {
+        if (file.files[0].size > TOO_BIG) { show(tooBig); return; }
         var r = new FileReader();
-        r.onload = function () { show(checkChat(n, String(r.result || ""))); };
+        r.onload = function () { read(String(r.result || "")); };
         r.readAsText(file.files[0]);
-      } else if (paste.value.trim()) { show(checkChat(n, paste.value)); }
+      } else if (paste.value.trim()) { read(paste.value); }
       else { show({ ok: false, why: "Choose the chat file first, or paste its text." }); }
     });
     return h("div", { class: "block", id: "lab-proof" }, [
