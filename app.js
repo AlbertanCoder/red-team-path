@@ -2051,13 +2051,20 @@
     if (it.kind === "writeup") { v.appendChild(noteEditor(it, false)); v.appendChild(templateFold()); }
     if (it.url) { v.appendChild(link((it.openLabel || OPEN_LABEL[it.kind]) + " ↗", it.url, "big open", "open-link")); }
     if (it.id === "m0" && !isDone("m0")) {
-      // Microsoft's labs cost money and need installing, so one tap can skip the whole set.
+      // Microsoft's labs cost money and need installing, so one tap can skip the whole set. A skipped lab is marked
+      // "moved on, not solved" (never beaten) and waits on the come-back list; a passing chat file later makes it beaten.
       var skipBtn = h("button", { type: "button", class: "ghost", id: "skip-labs", text: "SKIP MICROSOFT'S LABS" });
       skipBtn.addEventListener("click", function () {
-        SEQ.forEach(function (e) { if (e.it.skip && !isDone(e.it.id)) { setDone(e.it, true); } });
+        SEQ.forEach(function (e) {
+          if (!e.it.skip || isDone(e.it.id)) { return; }
+          setDone(e.it, true);
+          var n = labNo(e.it);
+          if (n && !isDone("pf" + n)) { mark("un" + n, true); }
+        });
         goNow();
       });
-      v.appendChild(h("p", { class: "linkline" }, ["Not installing or paying for these? ", skipBtn]));
+      v.appendChild(h("p", { class: "linkline" }, ["Not installing or paying for these? ", skipBtn,
+        h("span", { class: "dim", text: " Skipped labs are marked moved on, not solved. Add a chat file to one later and it changes to beaten." })]));
     }
   }
 

@@ -295,6 +295,22 @@ with sync_playwright() as p:
     check(not page.errors, "returning visitor: no page errors %s" % page.errors[:2])
     ctx.close()
 
+    # ---- skipping Microsoft's labs: they are marked moved on, not solved, never beaten ----
+    ctx, page = new_page(b, None, start=False)
+    page.goto(base + "#i-m0")
+    page.wait_for_selector("#skip-labs")
+    page.click("#skip-labs")
+    page.wait_for_timeout(300)
+    m = ticks(page)
+    required = [1, 2, 5, 6, 7, 8, 11, 12]
+    check(all(m.get("m%d" % n, 0) > 0 and m.get("un%d" % n, 0) > 0 and not m.get("pf%d" % n, 0) > 0 for n in required),
+          "Skip Microsoft's labs marks the required labs moved on, not solved, with no proof")
+    page.goto(base + "#i-m1")
+    page.wait_for_selector("#next-line")
+    check("MOVED ON, NOT SOLVED" in page.inner_text("#next-line") and "BEATEN" not in page.inner_text("#next-line") and "Add your chat file" in page.inner_text("#dock"),
+          "a skipped lab shows moved on, not solved, and says a chat file makes it beaten")
+    ctx.close()
+
     # ---- 4. a lab marked "moved on, not solved" before proof was required ----
     moved = dict(OLD)
     st = json.loads(OLD["redTeamPath.v2"])
