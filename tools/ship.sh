@@ -13,8 +13,18 @@ python tools/app_test.py "file:///$(pwd -W 2>/dev/null || pwd)/index.html" > /tm
 if [ $? -ne 0 ]; then echo "STOP: the test failed on the local copy"; grep -v "^ok" /tmp/rtp_local.txt | tail -20; exit 1; fi
 echo "local test: $(tail -1 /tmp/rtp_local.txt) ($(grep -c '^ok' /tmp/rtp_local.txt) checks)"
 git add -A
-git commit -q -m "$subject" -m "$body" -m "Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01TojNKQhgnzQ5YHwUC6Y5T2" 2>/dev/null || { echo "STOP: nothing to commit"; exit 1; }
+# The helper that made the change is named by whoever runs this, so the label is never a stale copy:
+#   RTP_CO_AUTHOR="Claude Opus 5.5 <noreply@anthropic.com>" RTP_SESSION="https://claude.ai/code/session_..." bash tools/ship.sh "subject" "body"
+# Leave both unset for a change made by hand: the commit then carries no helper label.
+trailer=""
+[ -n "${RTP_CO_AUTHOR:-}" ] && trailer="Co-Authored-By: $RTP_CO_AUTHOR"
+[ -n "${RTP_SESSION:-}" ] && trailer="${trailer:+$trailer
+}Claude-Session: $RTP_SESSION"
+if [ -n "$trailer" ]; then
+  git commit -q -m "$subject" -m "$body" -m "$trailer" 2>/dev/null || { echo "STOP: nothing to commit"; exit 1; }
+else
+  git commit -q -m "$subject" -m "$body" 2>/dev/null || { echo "STOP: nothing to commit"; exit 1; }
+fi
 git pull -q --rebase 2>/dev/null
 git push -q || { echo "STOP: push failed"; exit 1; }
 sha=$(git rev-parse HEAD)
