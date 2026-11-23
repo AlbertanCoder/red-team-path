@@ -94,8 +94,11 @@ with sync_playwright() as p:
     shot(page, "1-path")
     page.click("#also-jobs")
     check(page.inner_text("#top-title") == "Jobs" and page.locator("#view-jobs").is_visible(), "Jobs opens from the Path list")
-    jobs = page.evaluate("(function () { var a = window.RTP_JOBS.ads.filter(function (x) { return x.open !== false; }); return { start: a.filter(function (x) { return x.level === 'start'; }).length, fresh: a.filter(function (x) { return x.level === 'new'; }).length, scanned: window.RTP_JOBS.scanned || '' }; })()")
+    jobs = page.evaluate("(function () { var a = window.RTP_JOBS.ads.filter(function (x) { return x.open !== false && x.canada !== 'no'; }); return { start: a.filter(function (x) { return x.level === 'start'; }).length, fresh: a.filter(function (x) { return x.level === 'new'; }).length, scanned: window.RTP_JOBS.scanned || '' }; })()")
     check(page.locator("#jobs-start .card.ad").count() == jobs["start"] and page.locator("#jobs-new .card.ad").count() == jobs["fresh"], "Jobs shows every open beginner ad (%d) and every ad found by the weekly scan (%d)" % (jobs["start"], jobs["fresh"]))
+    no_ids = page.evaluate("window.RTP_JOBS.ads.filter(function (x) { return x.canada === 'no'; }).map(function (x) { return x.id; })")
+    check(all(page.locator('#view-jobs .card.ad[data-id="%s"]' % i).count() == 0 for i in no_ids) and "Only ads you can do remotely from Canada" in page.inner_text("#jobs-canada"),
+          "Jobs hides the %d ads that need you in the US or UK, and says so" % len(no_ids))
     check(page.locator("#jobs-new").is_visible() and "Nobody has read these" in page.inner_text("#jobs-new"), "ads found by the scan are marked as not yet read by a person")
     check(page.locator("#jobs-more details[open]").count() == 0 and page.locator("#jobs-more details").count() == 4, "the rest of Jobs is four closed fold-outs")
     no_side_scroll(page, "Jobs")

@@ -1940,6 +1940,7 @@
       h("div", { class: "title", text: ad.title }),
       h("div", { class: "pay", text: ad.pay }),
       h("p", { text: ad.ask }),
+      ad.where ? h("p", { class: "dim where", text: (ad.canada === "check" ? "From Canada: check first. " : "From Canada: ") + ad.where }) : null,
       h("div", { class: "acts" }, [
         link("Open the ad \u2197", ad.url, "open"),
         h("span", { class: "checked" + (stale ? " stale" : ""), text: (ad.found ? "Found " + niceDate(ad.found) + " \u00B7 " : "") + (stale ? "Not re-checked since " : "Link checked ") + niceDate(ad.checked) })
@@ -1949,14 +1950,23 @@
   function renderJobs() {
     var v = document.getElementById("view-jobs");
     v.textContent = "";
-    var open = JOBS.ads.filter(function (a) { return a.open !== false && /^https:\/\//.test(a.url || ""); });
+    var live = JOBS.ads.filter(function (a) { return a.open !== false && /^https:\/\//.test(a.url || ""); });
+    // Shad lives in Canada and cannot work in the US: hide ads that need you in the US or UK, and list Canada-named ads first.
+    var rank = { yes: 0, anywhere: 1, check: 2 };
+    var open = live.filter(function (a) { return a.canada !== "no"; })
+      .map(function (a, i) { return [a, i]; })
+      .sort(function (x, y) { return ((rank[x[0].canada] === undefined ? 1 : rank[x[0].canada]) - (rank[y[0].canada] === undefined ? 1 : rank[y[0].canada])) || x[1] - y[1]; })
+      .map(function (p) { return p[0]; });
+    var hiddenAbroad = live.length - open.length;
     var start = open.filter(function (a) { return a.level === "start"; });
     var fresh = open.filter(function (a) { return a.level === "new"; });   // found by the weekly scan, not yet read by a person
     var later = open.filter(function (a) { return a.level !== "start" && a.level !== "new"; });
     v.appendChild(h("div", { class: "block" }, [
       h("div", { class: "tag", id: "jobs-checked", text: (JOBS.updated ? "Links checked " + niceDate(JOBS.updated) : "Links not checked yet") +
         (JOBS.scanned ? " \u00B7 scanned for new ads " + niceDate(JOBS.scanned) : "") }),
-      h("p", { class: "lede", text: "Real ads. Pay is copied as each ad posted it: an example, not a promise. Every link is re-checked once a day, and an ad is hidden when it closes." })
+      h("p", { class: "lede", text: "Real ads. Pay is copied as each ad posted it: an example, not a promise. Every link is re-checked once a day, and an ad is hidden when it closes." }),
+      h("p", { class: "note", id: "jobs-canada", text: "Only ads you can do remotely from Canada are shown, with ads that name Canada first." +
+        (hiddenAbroad ? " " + hiddenAbroad + " more open ads are hidden because they need you to live in, or be allowed to work in, the US or UK." : "") })
     ]));
 
     var startBlock = h("div", { class: "block", id: "jobs-start" }, [

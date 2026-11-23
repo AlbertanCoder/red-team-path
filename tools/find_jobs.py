@@ -20,6 +20,19 @@ from job_feeds import BOARDS, SENIOR, WANT, feed  # noqa: E402
 MAX_NEW = 12  # at most this many scan-found ads are listed at a time, so the screen stays short
 
 
+def canada_from(where):
+    """Shad lives in Canada and cannot work in the US. Judge the posted location: ads that need you
+    somewhere else are kept in the file (so the scan does not add them again) but the app hides them."""
+    w = (where or "").strip()
+    if re.search(r"canada|toronto|vancouver|montreal|calgary|edmonton|ottawa", w, re.I):
+        return {"canada": "yes", "where": "Location as posted: %s." % w}
+    if re.search(r"worldwide|international|global|anywhere", w, re.I):
+        return {"canada": "anywhere", "where": "Location as posted: %s. Read the ad to be sure." % w}
+    if not w or re.fullmatch(r"(?i)remote", w):
+        return {}
+    return {"canada": "no", "where": "Hidden by the scan: location as posted is %s, which is not open to someone working from Canada." % w}
+
+
 def slug(text):
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:60]
 
@@ -74,6 +87,7 @@ def main():
             "checked": today,
             "open": True,
         })
+        ads[-1].update(canada_from(j["where"]))
         added += 1
         print("NEW             %-22s %s" % (name, j["title"]))
     if read:

@@ -20,7 +20,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-17",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "check",
+      "where": "Alignerr says it welcomes people from around the world, but its FAQ lists only US ID cards for the identity check. Your application from Canada went through on 17 Nov; ask them before you count on it."
     },
     {
       "id": "clera-safety-testing-associate",
@@ -56,7 +58,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-17",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "anywhere",
+      "where": "The ad says remote and names no country limit."
     },
     {
       "id": "clera-evals-benchmarks-associate",
@@ -73,7 +77,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-17",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "anywhere",
+      "where": "The ad says fully remote and names no country limit."
     },
     {
       "id": "cohere-data-annotation-safety",
@@ -90,7 +96,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-17",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "yes",
+      "where": "Open to people in Canada or the US, as the ad says."
     },
     {
       "id": "alignerr-red-team-tester-coding",
@@ -109,7 +117,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-17",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "check",
+      "where": "Alignerr says it welcomes people from around the world, but its FAQ lists only US ID cards for the identity check. Ask them before you count on it."
     },
     {
       "id": "micro1-jailbreak-security-expert",
@@ -127,7 +137,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-17",
       "checked": "2026-11-17",
-      "open": true
+      "open": true,
+      "canada": "yes",
+      "where": "Canada is on the ad's list of countries that can apply."
     },
     {
       "id": "dataannotation-security-red-team-engineer",
@@ -164,7 +176,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-17",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "anywhere",
+      "where": "The ad says remote and names no country limit; Turing hires worldwide."
     },
     {
       "id": "handshake-ai-red-teamer-cybersecurity-remote",
@@ -183,7 +197,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "handshake-ai-red-teamer-cbrne-remote",
@@ -202,7 +218,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "handshake-ai-red-teamer-remote",
@@ -221,7 +239,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "openai-red-team-cyber",
@@ -240,7 +260,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "openai-novel-abuse-red-teamer",
@@ -259,7 +281,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "clera-expert-talent-pool-safety-testing-expert-5-years",
@@ -298,7 +322,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "openai-research-program-manager-adversarial-model-research",
@@ -317,7 +343,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "snorkel-ai-research-scientist-open-benchmarks-red-team",
@@ -336,7 +364,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "far-ai-jailbreaking-lead-red-team",
@@ -355,7 +385,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "anywhere",
+      "where": "The ad says remote globally; outside the US you are hired through a partner company, so no US work permit is needed."
     },
     {
       "id": "vettedlance-ai-red-teamer-generalist",
@@ -373,7 +405,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-23",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "anywhere",
+      "where": "The ad says work from anywhere with a stable connection."
     },
     {
       "id": "trajectory-labs-ai-cyber-red-teamer",
@@ -391,7 +425,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-23",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "anywhere",
+      "where": "The ad names no country limit; job sites list it as worldwide."
     },
     {
       "id": "syntony-trusted-red-team-network",
@@ -409,7 +445,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-23",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "anywhere",
+      "where": "The page names no country limit; job sites list it as worldwide."
     },
     {
       "id": "10a-labs-ai-red-teamer-cyber",
@@ -428,7 +466,9 @@ window.RTP_JOBS = {
       "added": "2026-11-23",
       "found": "2026-11-23",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "10a-labs-red-teaming-fellowship",
@@ -447,7 +487,9 @@ window.RTP_JOBS = {
       "added": "2026-11-23",
       "found": "2026-11-23",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the US."
     },
     {
       "id": "uk-ai-security-institute-research-residency-red-team",
@@ -466,7 +508,9 @@ window.RTP_JOBS = {
       "added": "2026-11-23",
       "found": "2026-11-23",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "no",
+      "where": "Hidden: needs you to live in, or be allowed to work in, the UK."
     }
   ],
   "scanned": "2026-11-23",
