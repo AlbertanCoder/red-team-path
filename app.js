@@ -2354,7 +2354,8 @@
       b.addEventListener("click", function () {
         closeDrawers();
         justMarked = "";
-        if (p[0] === "path") { if (screen !== "now") { shown = ""; go("#now"); } openSheet(); return; }
+        // Path from another screen changes the address; the address change must not shut the Contents panel opened here.
+        if (p[0] === "path") { if (screen !== "now") { shown = ""; keepPanel = true; go("#now"); } openSheet(); return; }
         shown = "";
         go(p[2]);
       });
@@ -3063,10 +3064,11 @@
     try { window.localStorage.setItem(TUTOR_KEY, JSON.stringify(tutor)); } catch (e) { /* remembering the place is optional */ }
   }
 
+  var keepPanel = false; // set by Menu > Path, which opens Contents and changes the address at the same moment
   window.addEventListener("hashchange", function () {
     if (takeLink()) { syncPanel(); }
     refreshNotes();
-    closeDrawers();
+    if (keepPanel) { keepPanel = false; } else { closeDrawers(); }
     route();
   });
   $("nav-btn").addEventListener("click", toggleNav);

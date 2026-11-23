@@ -168,6 +168,17 @@ with sync_playwright() as p:
     check(all(page.locator('#view-jobs .card.ad[data-id="%s"]' % i).count() == 0 for i in no_ids) and "Only ads you can do remotely from Canada" in page.inner_text("#jobs-canada"),
           "Jobs hides the %d ads that need you in the US or UK, and says so" % len(no_ids))
     check(page.locator("#jobs-new").is_visible() and "Nobody has read these" in page.inner_text("#jobs-new"), "ads found by the scan are marked as not yet read by a person")
+    # from a side screen, Menu then Path must land on the lesson with Contents left open
+    page.click("#nav-btn")
+    page.wait_for_timeout(300)
+    page.click("#nav-path")
+    page.wait_for_timeout(500)
+    check(page.locator("#view-now").is_visible() and page.locator("#sheet .prow.now").is_visible() and page.evaluate("document.documentElement.classList.contains('toc-open')"),
+          "phone: Menu then Path from Jobs opens the lesson with Contents still open")
+    page.click("#sheet-close")
+    page.wait_for_timeout(300)
+    home(page)
+    page.click("#also-jobs")
     check(page.locator("#jobs-more details[open]").count() == 0 and page.locator("#jobs-more details").count() == 4, "the rest of Jobs is four closed fold-outs")
     no_side_scroll(page, "Jobs")
     page.click("#back-now")
