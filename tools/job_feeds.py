@@ -39,6 +39,19 @@ BOARDS = [
     ("ashby", "patronus", "Patronus AI"),
     ("greenhouse", "hiddenlayer", "HiddenLayer"),
     ("greenhouse", "bugcrowd", "Bugcrowd"),
+    # Added 23 Nov 2026: companies that sell AI red teaming or test AI for governments. Every one answered that day.
+    ("ashby", "Gray%20Swan%20AI", "Gray Swan"),
+    ("ashby", "trajectory-labs", "Trajectory Labs"),
+    ("greenhouse", "haizelabs", "Haize Labs"),
+    ("ashby", "hackerone", "HackerOne"),
+    ("ashby", "afterquery", "AfterQuery"),
+    ("greenhouse", "10alabs", "10a Labs"),
+    ("greenhouse", "aisi", "UK AI Security Institute"),
+    ("ashby", "faculty", "Faculty"),
+    ("lever", "apolloresearch", "Apollo Research"),
+    ("lever", "metr", "METR"),
+    ("ashby", "redwoodresearch", "Redwood Research"),
+    ("greenhouse", "cais", "Center for AI Safety"),
 ]
 
 # A title must match this to be listed. Narrow on purpose: better to miss an ad than to list the wrong kind of job.

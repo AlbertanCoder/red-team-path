@@ -410,8 +410,65 @@ window.RTP_JOBS = {
       "added": "2026-11-23",
       "checked": "2026-11-23",
       "open": true
+    },
+    {
+      "id": "10a-labs-ai-red-teamer-cyber",
+      "level": "new",
+      "title": "AI Red Teamer, Cyber",
+      "who": "10a Labs",
+      "pay": "$100K to $120K a year as posted",
+      "ask": "Read 23 Nov: US only (fully remote inside the US). Asks for 2 to 5 years of work experience and a computer degree.",
+      "url": "https://job-boards.greenhouse.io/10alabs/jobs/4266196009",
+      "check": {
+        "type": "feed",
+        "kind": "greenhouse",
+        "board": "10alabs",
+        "title": "AI Red Teamer, Cyber"
+      },
+      "added": "2026-11-23",
+      "found": "2026-11-23",
+      "checked": "2026-11-23",
+      "open": true
+    },
+    {
+      "id": "10a-labs-red-teaming-fellowship",
+      "level": "new",
+      "title": "Red Teaming Fellowship",
+      "who": "10a Labs",
+      "pay": "$25 an hour (undergraduate) or $32.50 (graduate) as posted",
+      "ask": "Read 23 Nov: for current university students only, remote inside the continental US, up to 20 hours a week.",
+      "url": "https://job-boards.greenhouse.io/10alabs/jobs/4273684009",
+      "check": {
+        "type": "feed",
+        "kind": "greenhouse",
+        "board": "10alabs",
+        "title": "Red Teaming Fellowship"
+      },
+      "added": "2026-11-23",
+      "found": "2026-11-23",
+      "checked": "2026-11-23",
+      "open": true
+    },
+    {
+      "id": "uk-ai-security-institute-research-residency-red-team",
+      "level": "new",
+      "title": "Research Residency – Red Team",
+      "who": "UK AI Security Institute",
+      "pay": "£65,000 to £145,000 a year as posted",
+      "ask": "Read 23 Nov: UK government lab in London. For PhD students or recent PhDs, and you need the right to work in the UK. Applications close 8 December.",
+      "url": "https://job-boards.eu.greenhouse.io/aisi/jobs/5043106101",
+      "check": {
+        "type": "feed",
+        "kind": "greenhouse",
+        "board": "aisi",
+        "title": "Research Residency – Red Team"
+      },
+      "added": "2026-11-23",
+      "found": "2026-11-23",
+      "checked": "2026-11-23",
+      "open": true
     }
   ],
   "scanned": "2026-11-23",
-  "boards": 22
+  "boards": 34
 };
