@@ -44,9 +44,15 @@ def urls_from(repo):
             if not any(s in u for s in SKIP) and not u.endswith(("?id=", "/embed/", "challenge/", "/sync/", "/pair/"))}
 
 
+# GitHub answers 503 to scripts for every file page (github.com/.../blob/...), Microsoft's too, so the file itself is checked instead.
+GITHUB_FILE = re.compile(r"^https://github\.com/([^/]+)/([^/]+)/blob/([^/]+)/([^#?]+)")
+
+
 def check(u):
+    m = GITHUB_FILE.match(u)
+    target = "https://raw.githubusercontent.com/%s/%s/%s/%s" % m.groups() if m else u
     try:
-        r = urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=25)
+        r = urllib.request.urlopen(urllib.request.Request(target, headers=UA), timeout=25)
         return u, r.status
     except urllib.error.HTTPError as e:
         return u, e.code
