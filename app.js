@@ -1290,7 +1290,7 @@
       var line = document.getElementById(id);
       if (line) { line.textContent = STATUS_TEXT[s]; line.setAttribute("data-sync", s); }
     });
-    var btn = document.getElementById("menu-btn");
+    var btn = document.getElementById("nav-btn");
     if (btn) { btn.setAttribute("data-sync", s); }
   }
   function send(method, url, body) {
@@ -2011,7 +2011,6 @@
     var tag = $("top-tag");
     var title = $("top-title");
     tag.className = "tag";
-    $("menu-btn").hidden = screen === "home";
     if (screen !== "now") { tag.textContent = "RED TEAM PATH"; title.textContent = SCREENS[screen]; return; }
     if (!it) { tag.textContent = "PATH COMPLETE"; title.textContent = "Every box is ticked"; return; }
     var isNow = idx !== -1 && SEQ[idx].it.id === it.id;
@@ -2131,19 +2130,19 @@
       h("div", { class: "meter", "aria-hidden": "true" }, [h("span", { style: "width:" + (SEQ.length ? (done / SEQ.length) * 100 : 0) + "%" })])
     ]));
     var openAds = JOBS.ads.filter(function (a) { return a.open !== false && a.canada !== "no"; }).length;
-    var tiles = h("div", { class: "tiles" });
-    [["path-btn", "Path", "Every step, in order"],
-     ["also-tutor", "Library", "Lessons, words, practice"],
-     ["also-jobs", "Jobs", openAds + " open ads for Canada"],
-     ["also-menu", "Settings", "Link devices, theme"]].forEach(function (t) {
-      var b = h("button", { type: "button", class: "tile", id: t[0] }, [h("span", { class: "tname", text: t[1] }), h("span", { class: "tsub", text: t[2] })]);
-      b.addEventListener("click", function () { if (t[0] === "path-btn") { openSheet(); } else { go("#" + t[0].slice(5)); } });
-      tiles.appendChild(b);
+    var bars = h("div", { class: "bars" });
+    [["path-btn", "path", "Path", "Every step in order, with ticks"],
+     ["also-tutor", "tutor", "Library", "Lessons, words, thinking steps, your notes"],
+     ["also-jobs", "jobs", "Jobs", openAds + " open ads you can do from Canada"],
+     ["also-menu", "menu", "Settings", "Link your devices, theme"]].forEach(function (t) {
+      var b = h("button", { type: "button", class: "mbar", id: t[0] }, [icon(t[1], "mico"), h("span", { class: "mtext" }, [h("span", { class: "mname", text: t[2] }), h("span", { class: "msub", text: t[3] })]), h("span", { class: "mgo", "aria-hidden": "true", text: "›" })]);
+      b.addEventListener("click", function () { if (t[1] === "path") { openSheet(); } else { go("#" + t[1]); } });
+      bars.appendChild(b);
     });
-    v.appendChild(tiles);
+    v.appendChild(bars);
   }
 
-  // ----- Path: the whole list, pulled up from the Path tile on the main menu. -----
+  // ----- Contents: the whole path, in the right-hand panel -----
   function buildSheet() {
     var sheet = $("sheet");
     sheet.textContent = "";
@@ -2151,10 +2150,10 @@
     var nowId = idx === -1 ? "" : SEQ[idx].it.id;
     var onScreen = shown || nowId;
     var done = SEQ.filter(function (e) { return isDone(e.it.id); }).length;
-    var close = h("button", { type: "button", id: "sheet-close", text: "Close" });
-    close.addEventListener("click", closeSheet);
+    var close = h("button", { type: "button", id: "sheet-close", text: WIDE.matches ? "Hide" : "Close" });
+    close.addEventListener("click", hideToc);
     var panel = h("div", { class: "sheet-panel", id: "sheet-panel" }, [
-      h("div", { class: "sheet-head" }, [h("div", { class: "tag", id: "sheet-count", text: "THE WHOLE PATH · " + done + " OF " + SEQ.length + " DONE" }), close]),
+      h("div", { class: "sheet-head" }, [h("div", { class: "tag", id: "sheet-count", text: "CONTENTS · " + done + " OF " + SEQ.length + " DONE" }), close]),
       h("div", { class: "meter", "aria-hidden": "true" }, [h("span", { style: "width:" + (SEQ.length ? (done / SEQ.length) * 100 : 0) + "%" })])
     ]);
     // Not linked yet: one prompt, here only, until this device is linked or you say not now.
@@ -2207,17 +2206,103 @@
     });
     sheet.appendChild(panel);
   }
+  // ----- the two side panels. Wide screen: they sit beside the page, each can be hidden, and that is remembered on this device.
+  // Narrower screens: they slide in over the page and close again when you pick something. -----
+  var WIDE = window.matchMedia("(min-width: 1000px)");
+  var LAYOUT_KEY = "redTeamPath.layout";
+  var layout = { nav: true, toc: true };
+  try { var savedLayout = JSON.parse(window.localStorage.getItem(LAYOUT_KEY) || "null"); if (savedLayout) { layout.nav = savedLayout.nav !== false; layout.toc = savedLayout.toc !== false; } } catch (e) { /* both open */ }
+  function saveLayout() { try { window.localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); } catch (e) { /* a nicety */ } }
+  function drawerOpen() { var c = document.documentElement.classList; return c.contains("nav-open") || c.contains("toc-open"); }
+  function applyLayout() {
+    var c = document.documentElement.classList;
+    var wide = WIDE.matches;
+    if (wide) { c.remove("nav-open", "toc-open"); }
+    c.toggle("nav-closed", wide && !layout.nav);
+    c.toggle("toc-closed", wide && !layout.toc);
+    var navShown = wide ? layout.nav : c.contains("nav-open");
+    var tocShown = wide ? layout.toc : c.contains("toc-open");
+    $("nav").setAttribute("aria-hidden", navShown ? "false" : "true");
+    $("sheet").setAttribute("aria-hidden", tocShown ? "false" : "true");
+    $("nav").inert = !navShown;
+    $("sheet").inert = !tocShown;
+    $("nav-btn").setAttribute("aria-expanded", navShown ? "true" : "false");
+    $("toc-btn").setAttribute("aria-expanded", tocShown ? "true" : "false");
+    $("scrim").hidden = wide || !drawerOpen();
+    if ($("sheet-close")) { $("sheet-close").textContent = wide ? "Hide" : "Close"; }
+  }
+  function measureTop() { document.querySelector(".app").style.setProperty("--toph", $("top").offsetHeight + "px"); }
+  function openDrawer(which) {
+    var c = document.documentElement.classList;
+    c.remove(which === "nav" ? "toc-open" : "nav-open");
+    c.add(which + "-open");
+    applyLayout();
+    var first = which === "nav" ? (document.querySelector("#nav .navi.on") || document.querySelector("#nav .navi")) : $("sheet-close");
+    if (first) { first.focus({ preventScroll: true }); }
+  }
+  function closeDrawers() {
+    document.documentElement.classList.remove("nav-open", "toc-open");
+    applyLayout();
+  }
+  function toggleNav() {
+    if (WIDE.matches) { layout.nav = !layout.nav; saveLayout(); applyLayout(); return; }
+    if (document.documentElement.classList.contains("nav-open")) { closeDrawers(); } else { openDrawer("nav"); }
+  }
+  function toggleToc() {
+    if (WIDE.matches) { layout.toc = !layout.toc; saveLayout(); applyLayout(); scrollTocToNow(); return; }
+    if (document.documentElement.classList.contains("toc-open")) { closeDrawers(); } else { buildSheet(); openDrawer("toc"); scrollTocToNow(); }
+  }
+  function scrollTocToNow() {
+    var here = document.querySelector("#sheet .prow.now");
+    if (here && here.scrollIntoView) { here.scrollIntoView({ block: "center" }); }
+  }
+  // "Show me the path": the Contents panel, opened wherever it is closed.
   function openSheet() {
     buildSheet();
-    $("sheet").hidden = false;
-    document.documentElement.classList.add("sheet-open");
-    var here = document.querySelector("#sheet .prow.now");
-    if (here) { here.scrollIntoView({ block: "center" }); }
-    $("sheet-close").focus({ preventScroll: true });
+    if (WIDE.matches) { if (!layout.toc) { layout.toc = true; saveLayout(); applyLayout(); } scrollTocToNow(); return; }
+    openDrawer("toc");
+    scrollTocToNow();
   }
-  function closeSheet() {
-    $("sheet").hidden = true;
-    document.documentElement.classList.remove("sheet-open");
+  // After picking a row: a sliding panel closes, a panel beside the page stays.
+  function closeSheet() { if (!WIDE.matches) { closeDrawers(); } }
+  function hideToc() {
+    if (WIDE.matches) { layout.toc = false; saveLayout(); applyLayout(); $("toc-btn").focus(); return; }
+    closeDrawers();
+    $("toc-btn").focus();
+  }
+
+  // ----- the menu panel: the five places, the one you are in lit up -----
+  var ICONS = {
+    home: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    path: '<path d="M4 6h16M4 12h16M4 18h10"/>',
+    tutor: '<path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6z"/>',
+    jobs: '<path d="M4 8h16v11H4zM9 8V5h6v3"/>',
+    menu: '<path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>'
+  };
+  function icon(name, cls) {
+    var span = document.createElement("span");
+    span.className = cls || "icn";
+    span.setAttribute("aria-hidden", "true");
+    span.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + "</svg>";
+    return span;
+  }
+  var PLACES = [["home", "Main menu", "#home"], ["path", "Path", ""], ["tutor", "Library", "#tutor"], ["jobs", "Jobs", "#jobs"], ["menu", "Settings", "#menu"]];
+  function renderNav(screen) {
+    var v = $("nav");
+    v.textContent = "";
+    v.appendChild(h("div", { class: "nav-brand", text: "Red Team Path" }));
+    PLACES.forEach(function (p) {
+      var on = p[0] === "path" ? screen === "now" : p[0] === screen;
+      var b = h("button", { type: "button", class: "navi" + (on ? " on" : ""), id: "nav-" + p[0], "aria-current": on ? "page" : null }, [icon(p[0]), h("span", { text: p[1] })]);
+      b.addEventListener("click", function () {
+        closeDrawers();
+        justMarked = "";
+        if (p[0] === "path") { if (screen !== "now") { shown = ""; go("#now"); } openSheet(); return; }
+        shown = "";
+        go(p[2]);
+      });
+      v.appendChild(b);
+    });
   }
 
   // ---------- Words: one part of the Library ----------
@@ -2879,8 +2964,9 @@
     renderDock(idx, it, screen);
     renderHome(idx, it);
     renderMainMenu(idx);
+    renderNav(screen);
     settingsPanel();
-    if (!$("sheet").hidden) { buildSheet(); }
+    buildSheet();
     if (focusId) {
       var again = $(focusId);
       if (again) { again.focus({ preventScroll: true }); }
@@ -2923,12 +3009,15 @@
   window.addEventListener("hashchange", function () {
     if (takeLink()) { syncPanel(); }
     refreshNotes();
-    closeSheet();
+    closeDrawers();
     route();
   });
-  $("menu-btn").addEventListener("click", function () { justMarked = ""; shown = ""; go("#home"); });
-  $("sheet").addEventListener("click", function (e) { if (e.target === $("sheet")) { closeSheet(); } });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("sheet").hidden) { closeSheet(); if ($("path-btn")) { $("path-btn").focus(); } } });
+  $("nav-btn").addEventListener("click", toggleNav);
+  $("toc-btn").addEventListener("click", toggleToc);
+  $("scrim").addEventListener("click", closeDrawers);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && drawerOpen()) { closeDrawers(); $("nav-btn").focus(); } });
+  if (WIDE.addEventListener) { WIDE.addEventListener("change", applyLayout); } else { WIDE.addListener(applyLayout); }
+  window.addEventListener("resize", measureTop);
   // Safari on iPhone and iPad reports a pinch as a "gesture". Cancelling it keeps the page from zooming and
   // getting stuck zoomed in. The page's own settings (index.html and style.css) switch zoom off as well.
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (name) {
@@ -2939,6 +3028,8 @@
   window.addEventListener("pageshow", function (e) { if (e.persisted) { wake(); } });
 
   load();
+  applyLayout();
+  measureTop();
   carryOverHints();
   var joined = takeLink();
   renderTutor();

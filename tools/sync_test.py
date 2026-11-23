@@ -47,7 +47,8 @@ with sync_playwright() as p:
         computer.click("#hint-btn")
         # link them: Path > Settings on the phone gives a short code, typed into the computer
         phone.click("#next-btn")
-        phone.click("#menu-btn")
+        phone.click("#nav-btn")
+        phone.click("#nav-home")
         phone.click("#path-btn")
         check(phone.locator("#link-prompt").is_visible(), "an unlinked device shows the link prompt at the top of the Path list")
         phone.click("#link-go")
@@ -89,7 +90,8 @@ with sync_playwright() as p:
         phone.evaluate("location.hash = '#i-m1'")
         phone.wait_for_selector("#lab-proof.answer", timeout=25000)
         check("Proof added" in phone.inner_text("#lab-proof"), "Lab 1's proof, added on the computer, shows on the phone")
-        phone.click("#menu-btn")
+        phone.click("#nav-btn")
+        phone.click("#nav-home")
         phone.click("#path-btn")
         check(phone.locator("#link-prompt").count() == 0, "a linked device no longer shows the link prompt")
     finally:
