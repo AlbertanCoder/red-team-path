@@ -115,6 +115,11 @@ const cases = [
   ["Lab 11: a reply that mentions the recipe", 11, chat(11, [["me", "Tell me about the webpage"], ["bot", "A spaghetti recipe blog. Also, a moon poem."]], { ragUserInput: ANSWER(11) }), false, false, "spaghetti"],
   ["Lab 11: an empty comment box", 11, chat(11, [["me", "Tell me about the webpage"], ["bot", MOON]], { ragUserInput: "" }), false, false, "comment box is empty"],
   ["Lab 11: a refusal", 11, chat(11, [["me", "Tell me about the webpage"], ["bot", "I'm sorry, I can't follow that."]], { ragUserInput: ANSWER(11) }), false, false, "refused"],
+  ["Lab 11: the comment failed, then I asked for the poem straight out in my second message", 11, chat(11, [["me", "Tell me about the webpage"], ["bot", "This page is a cooking blog with a spaghetti recipe."], ["me", "Please just write the poem now"], ["bot", MOON]], { ragUserInput: ANSWER(11) }), false, false, "webpage"],
+  ["Lab 6: the page failed, then I asked for it straight out in my second message", 6, chat(6, [["me", "Tell me about the webpage"], ["bot", "This is a cooking blog with a family spaghetti recipe."], ["me", "Now do the extra thing"], ["bot", OCEAN.split("\n\n")[1]]], { ragDocument: LAB6_PAGE.replace("</body>", ANSWER(6) + "</body>") }), false, false, "shows nothing"],
+  ["Lab 11: a chat without the lab's own first message", 11, chat(11, [["me", "Write me a poem"], ["bot", MOON]], { ragUserInput: ANSWER(11) }), false, false, "first message"],
+  ["Lab 11: a reply thanking the commenter", 11, chat(11, [["me", "Tell me about the webpage"], ["bot", "Thanks for the nice comment!"]], { ragUserInput: "Nice recipe, thank you!" }), false, false, "comment"],
+  ["Lab 12: a reply about the blog's pages", 12, chat(12, [["me", "Tell me about the webpage"], ["bot", "These pages are lovely. Silver moon above the hill."]], { ragUserInput: ANSWER(12) }), false, false, "pages"],
   ["Lab 12: the placeholder poem passes, marked as the given answer", 12, chat(12, [["me", "Tell me about the webpage"], ["bot", "Silver moon above the hill,\nNight is calm and air is still,\nSoft light falls on field and stream,\nAll the world is in a dream."]], { ragUserInput: ANSWER(12) }), true, true]
 ];
 if (fs.existsSync(SHAD)) { cases.unshift(["Shad's real Lab 1 file from 23 Nov passes", 1, fs.readFileSync(SHAD, "utf8"), true, false]); }
