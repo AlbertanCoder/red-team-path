@@ -19,9 +19,11 @@ Built around one name, Microsoft, so you can say where you studied. Two named ex
 
 ## How the app works
 
-- **It opens on what you are doing.** A video plays right there. A lab shows its tutor page. Anything else shows a short card with numbered steps.
-- **The bottom bar** says what is next and holds the buttons: **I'm done**, or for a lab **I beat it** and **Moving on, not solved**.
-- **Path** (top right) pulls up the whole list. Tap any row to open it. Labs you moved on from are listed at the top under "Come back to these". Library, Jobs and Settings are at the bottom.
+- **It opens on the main menu:** a Continue card for the step you are on, how far along you are, and four bars: Path, Library, Jobs, Settings.
+- **Every screen has a Menu button (top left)** for those five places, and a **Contents button (top right)** for the whole path with its ticks. Labs you moved on from are listed under "Come back to these". On a screen 1000 px wide or more, both panels sit open beside the lesson.
+- **A step** shows the video, the lab's tutor page, or a short card with numbered steps. **The bottom bar** says what is next and holds the button that finishes the step.
+- **A video** is finished only after its quiz is passed (80%, written from the video's own words). A miss shows what you picked and where to rewatch; the retry opens 2 minutes later; the right answers show once you pass.
+- **A required lab (1, 2, 5, 6, 7, 8, 11, 12)** is finished only with proof: the chat file the lab's own download button saves, read by the app the way the lab's scorer, or Microsoft's written rule, decides a win. The harmful-goal labs (3, 4, 9, 10) stay optional with **I beat it** and **Moving on, not solved**. "Skip Microsoft's labs" on the set-up box marks the labs moved on, not solved.
 
 ### A lab's tutor page
 
@@ -44,7 +46,7 @@ Each page is labelled **verified** or **unverified**. Verified means the lab fac
 
 ## Saving and linking devices
 
-Everything saves by itself in the browser. To see the same progress on a phone and a computer, open **Path > Settings** on one of them and tap **Get a code**. Type that short code into the same place on the other device. No account, no password. The code works once and runs out in 10 minutes.
+Everything saves by itself in the browser. To see the same progress on a phone and a computer, open **Settings** (main menu, or the Menu button) on one of them and tap **Get a code**. Type that short code into the same place on the other device. No account, no password. The code works once and runs out in 10 minutes.
 
 The first time two devices are linked, everything from both is kept. After that the newest change wins, and a device with no internet sends its changes when it is back online.
 
