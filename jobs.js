@@ -358,6 +358,6 @@ window.RTP_JOBS = {
       "open": true
     }
   ],
-  "scanned": "2026-11-19",
+  "scanned": "2026-11-23",
   "boards": 22
 };
