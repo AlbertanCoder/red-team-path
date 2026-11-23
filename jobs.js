@@ -302,7 +302,9 @@ window.RTP_JOBS = {
       "added": "2026-11-19",
       "found": "2026-11-19",
       "checked": "2026-11-23",
-      "open": true
+      "open": true,
+      "canada": "anywhere",
+      "where": "The ad says fully remote and names no country limit."
     },
     {
       "id": "anthropic-red-team-engineer-safeguards",
@@ -425,8 +427,8 @@ window.RTP_JOBS = {
       "added": "2026-11-23",
       "checked": "2026-11-23",
       "open": true,
-      "canada": "anywhere",
-      "where": "The ad names no country limit; job sites list it as worldwide."
+      "canada": "check",
+      "where": "The page names no place at all. Job sites list it as worldwide, but ask Trajectory Labs before you count on it."
     },
     {
       "id": "syntony-trusted-red-team-network",
@@ -445,8 +447,8 @@ window.RTP_JOBS = {
       "added": "2026-11-23",
       "checked": "2026-11-23",
       "open": true,
-      "canada": "anywhere",
-      "where": "The page names no country limit; job sites list it as worldwide."
+      "canada": "check",
+      "where": "The page names no place at all. Job sites list it as worldwide, but ask Syntony before you count on it."
     },
     {
       "id": "10a-labs-ai-red-teamer-cyber",

@@ -35,5 +35,12 @@ for what, ads, want in [("11 hidden US/UK ads leave the list empty", hidden, MAX
     print(("ok   " if got == want else "FAIL ") + "%s: room %d (want %d)" % (what, got, want))
     fails += got != want
     CASES.append(what)
+
+# 3. jobs.js itself: every open ad says whether it can be done from Canada, and how that is known.
+from check_jobs import load  # noqa: E402
+untagged = [a["id"] for a in load()["ads"] if a.get("open", True) and (a.get("canada") not in ("yes", "anywhere", "check", "no") or not a.get("where"))]
+print(("ok   " if not untagged else "FAIL ") + "every open ad in jobs.js has a Canada tag and a where line" + ("" if not untagged else ": missing on " + ", ".join(untagged)))
+fails += bool(untagged)
+CASES.append("tags")
 print("%d FAILED" % fails if fails else "ALL PASSED (%d cases)" % len(CASES))
 sys.exit(1 if fails else 0)
