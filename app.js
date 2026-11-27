@@ -2619,10 +2619,14 @@
     for (var i = a.length - 1; i > 0; i -= 1) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
     return a;
   }
-  function startQuiz(n, which) {
-    // which: the question numbers to ask (all of them at the start, only the missed ones on a retry)
+  function startQuiz(n) {
+    // Every round asks every question, in a new order, with the options shuffled again (Shad's decision 3, 27 Nov 2026).
+    // Right answers from an earlier round do not carry over. everWrong keeps each miss, for the review after the pass.
     var same = quizRun && quizRun.n === n;
-    quizRun = { n: n, ask: which, retry: !!same, at: 0, right: same ? quizRun.right : {}, wrong: same ? quizRun.wrong : {}, missed: [], order: which.map(function (q) { return shuffled(QUIZ[n][q].options.map(function (_, i) { return i; })); }) };
+    var all = QUIZ[n].map(function (_, i) { return i; });
+    var ask = shuffled(all);
+    for (var tries = 0; same && all.length > 1 && ask.join() === quizRun.ask.join() && tries < 20; tries += 1) { ask = shuffled(all); }
+    quizRun = { n: n, ask: ask, retry: !!same, at: 0, right: {}, wrong: {}, everWrong: same ? quizRun.everWrong : {}, missed: [], order: ask.map(function (q) { return shuffled(QUIZ[n][q].options.map(function (_, i) { return i; })); }) };
   }
   // After a pass, the questions you got wrong on the way, with what you picked and the right answer. Kept on this device.
   var REVIEW_KEY = "redTeamPath.quizReview";
@@ -2678,12 +2682,12 @@
     }
     var box = h("div", { class: "block", id: "quiz-box" });
     if (!quizRun || quizRun.n !== n) {
-      box.appendChild(h("p", { class: "small", text: qs.length + " questions " + (videoNo(it) ? "about this video" : "from the course's own pages") + ". Get " + need + " right to tick it. A miss shows what you picked and " + (videoNo(it) ? "where in the video to look" : "which page to read again") + ", and the retry opens 2 minutes later; the right answers show once you pass." }));
+      box.appendChild(h("p", { class: "small", text: qs.length + " questions " + (videoNo(it) ? "about this video" : "from the course's own pages") + ". Get " + need + " right in one round to tick it. A miss shows what you picked and " + (videoNo(it) ? "where in the video to look" : "which page to read again") + ". The retry opens 2 minutes later and asks every question again, in a new order; the right answers show once you pass." }));
       var startBtn = h("button", { type: "button", class: "wide", id: "quiz-start", text: "Start the quiz" });
       var startAt = quizWaitUntil(n);
       startBtn.addEventListener("click", function () {
         if (Date.now() < startAt) { return; }
-        startQuiz(n, qs.map(function (_, i) { return i; }));
+        startQuiz(n);
         redraw();
       });
       if (Date.now() < startAt) { waitButton(startBtn, startAt, "Start the quiz"); }
@@ -2695,19 +2699,19 @@
     if (run.at < run.ask.length) {
       var qi = run.ask[run.at];
       var q = qs[qi];
-      box.appendChild(h("div", { class: "tag", id: "quiz-count", text: "QUESTION " + (run.at + 1) + " OF " + run.ask.length + (run.retry ? " (THE ONES YOU MISSED)" : "") }));
+      box.appendChild(h("div", { class: "tag", id: "quiz-count", text: "QUESTION " + (run.at + 1) + " OF " + run.ask.length + (run.retry ? " (EVERY QUESTION AGAIN, NEW ORDER)" : "") }));
       box.appendChild(h("p", { id: "quiz-q", text: q.q }));
       if (q.code) { box.appendChild(h("pre", { class: "msg qcode", id: "quiz-code", text: q.code })); }
       var opts = h("div", { class: "opts", id: "quiz-opts" });
       run.order[run.at].forEach(function (oi) {
         var b = h("button", { type: "button", class: "opt" + (q.kind === "code" ? " mono" : ""), text: q.options[oi] });
         b.addEventListener("click", function () {
-          if (oi === q.answer) { run.right[qi] = 1; } else { run.missed.push(qi); run.wrong[qi] = q.options[oi]; }
+          if (oi === q.answer) { run.right[qi] = 1; } else { run.missed.push(qi); run.wrong[qi] = q.options[oi]; run.everWrong[qi] = q.options[oi]; }
           run.at += 1;
           if (run.at >= run.ask.length) { studied(); }
           if (run.at >= run.ask.length && Object.keys(run.right).length < need) { quizWaitUntil(n, Date.now() + WAIT_MS); }
           if (run.at >= run.ask.length && Object.keys(run.right).length >= need) {
-            quizReview(n, Object.keys(run.wrong).map(function (k) { return { q: qs[k].q, picked: run.wrong[k], right: qs[k].options[qs[k].answer] }; }));
+            quizReview(n, Object.keys(run.everWrong).map(function (k) { return { q: qs[k].q, picked: run.everWrong[k], right: qs[k].options[qs[k].answer] }; }));
             mark("qz" + n, true);
             quizRun = null;
           }
@@ -2719,17 +2723,17 @@
       return box;
     }
     // A round is over and the score is still short.
-    box.appendChild(h("p", { id: "quiz-score" }, [h("b", { text: score + " of " + qs.length + " right. " }), "You need " + need + ". " + (videoNo(it) ? "Rewatch these moments" : "Read those pages again") + ", then answer the ones you missed again. The retry opens 2 minutes after a missed round:"]));
+    box.appendChild(h("p", { id: "quiz-score" }, [h("b", { text: score + " of " + qs.length + " right. " }), "You need " + need + ". " + (videoNo(it) ? "Rewatch these moments" : "Read those pages again") + ", then take the quiz again: every question, in a new order. The retry opens 2 minutes after a missed round:"]));
     var ul = h("ul", { id: "quiz-misses" });
     run.missed.forEach(function (qi) {
       ul.appendChild(h("li", null, [h("b", { text: qs[qi].q + " " }), "You answered “" + run.wrong[qi] + "”. " + qs[qi].hint,
         qs[qi].url ? " " : null, qs[qi].url ? link("Open that lesson ↗", qs[qi].url, "", null) : null]));
     });
     box.appendChild(ul);
-    var label = "Answer the " + run.missed.length + " I missed again";
+    var label = "Take all " + qs.length + " again, in a new order";
     var again = h("button", { type: "button", class: "wide", id: "quiz-retry", text: label });
     var retryAt = quizWaitUntil(n);
-    again.addEventListener("click", function () { if (Date.now() < retryAt) { return; } startQuiz(n, run.missed.slice()); redraw(); });
+    again.addEventListener("click", function () { if (Date.now() < retryAt) { return; } startQuiz(n); redraw(); });
     if (Date.now() < retryAt) { waitButton(again, retryAt, label); }
     box.appendChild(again);
     return box;

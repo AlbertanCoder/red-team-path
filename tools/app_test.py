@@ -247,7 +247,9 @@ with sync_playwright() as p:
     page.clock.install()  # the test moves time on itself instead of waiting out the 2-minute retry
     page.click("#quiz-start")
     check(page.locator("#quiz-opts .opt").count() == 4 and page.locator("#quiz-opts .opt[data-right]").count() == 0, "the quiz buttons carry no mark of the right answer")
+    round1 = []
     for k in range(total):
+        round1.append(page.inner_text("#quiz-q") + (page.inner_text("#quiz-code") if page.locator("#quiz-code").count() else ""))
         answer(page, False)
     misses = page.locator("#quiz-misses li").count()
     check("0 of %d right" % total in page.inner_text("#quiz-score") and misses == total and page.locator("#done-btn").is_disabled(), "all wrong: the score shows, every miss is listed, and the video stays locked")
@@ -259,9 +261,13 @@ with sync_playwright() as p:
     page.wait_for_timeout(200)
     check(page.locator("#quiz-retry").is_enabled(), "the retry opens after 2 minutes")
     page.click("#quiz-retry")
-    check(("OF %d (THE ONES YOU MISSED)" % total) in page.inner_text("#quiz-count"), "the retry asks only the missed questions")
+    # Scope 3, fix 11 (audit E2, decision 3): a retry asks every question again, in a new order.
+    check(("1 OF %d (EVERY QUESTION AGAIN" % total) in page.inner_text("#quiz-count"), "Scope 3: the retry asks every question again, not only the missed ones")
+    round2 = []
     for k in range(total):
+        round2.append(page.inner_text("#quiz-q") + (page.inner_text("#quiz-code") if page.locator("#quiz-code").count() else ""))
         answer(page, True)
+    check(sorted(round1) == sorted(round2) and round1 != round2, "Scope 3: the retry asks the same questions in a new order")
     check(ticks(page).get("qz1", 0) > 0 and "Quiz passed" in page.inner_text("#quiz-box") and page.locator("#done-btn").is_enabled(), "getting them right passes the quiz and unlocks the video")
     review = page.inner_text("#quiz-review")
     check(page.locator("#quiz-review li").count() == total and all(page.evaluate("window.RTP_QUIZ[1][%d].options[window.RTP_QUIZ[1][%d].answer]" % (i, i)) in review for i in range(total)) and "You answered" in review,
@@ -526,8 +532,15 @@ with sync_playwright() as p:
     sp.evaluate("location.hash = '#i-fc2'"); sp.evaluate("location.hash = '#i-fc1'")
     sp.wait_for_selector("#quiz-retry")
     sp.click("#quiz-retry")
-    answer(sp, True)
-    answer(sp, True)
+    for i in range(total):
+        answer(sp, i < 2)  # right on the first two only: the 6 right from the round before must not count
+    check(ticks(sp).get("qzfc1", 0) <= 0 and ("2 of %d right" % total) in sp.inner_text("#quiz-score"), "Scope 3: a retry does not keep the right answers of the round before")
+    sp.evaluate("(function () { var w = JSON.parse(localStorage.getItem('redTeamPath.quizWait') || '{}'); w.fc1 = 1; localStorage.setItem('redTeamPath.quizWait', JSON.stringify(w)); })()")
+    sp.evaluate("location.hash = '#i-fc2'"); sp.evaluate("location.hash = '#i-fc1'")
+    sp.wait_for_selector("#quiz-retry")
+    sp.click("#quiz-retry")
+    for i in range(total):
+        answer(sp, True)
     check(ticks(sp).get("qzfc1", 0) > 0 and sp.locator("#done-btn").is_enabled(), "Scope 2: passing fc1's quiz saves qzfc1 and unlocks the box")
     sp.click("#done-btn")
     check(ticks(sp).get("fc1", 0) > 0 and ticks(sp).get("ac%d" % sp.evaluate("new Date().getDay()"), 0) > 0, "Scope 2: fc1 ticks, and today counts as a study day")
