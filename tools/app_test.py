@@ -44,19 +44,22 @@ OLD = {
 # The planned order. Step 1 as the Path list shows it (optional boxes included), Step 5, and the required boxes from start to finish.
 STEP1 = "v1 v2 m0 v3 m1 w1 v4 m6 w2 v5 m2 w3 v6 m5 w4 v7 m7 m8 m11 m12 m3 m4 m9 m10".split()
 STEP5 = "v8 a1 v9 a2 v10 a3 a4".split()
-OPTIONAL = "w1 w2 w3 w4 w5 m3 m4 m9 m10".split()
+OPTIONAL = "w1 w2 w3 w4 w5 m3 m4 m9 m10 pd6 pd7 c50".split()
 ROAD = ("v1 v2 m0 v3 m1 v4 m6 v5 m2 v6 m5 v7 m7 m8 m11 m12 s0 s1 s2 s3 g1 g2 g3 g4 g5 g6 g7 g8 g9 "
         "py1 py2 py3 py4 py5 py6 py7 py8 v8 a1 v9 a2 v10 a3 a4 p1 b1 b2 b3 b4 "
         "fc1 fc2 fc3 fc4 fc5 fc6 fc7 fc8 fc9 fc10 xb7 "
         "gt1 lx1 ap1 ap2 ap3 xb8 md1 md2 md3 md4 md5 md6 md7 xb9 "
-        "wb1 wb2 wb3 wb4 wb5 wb6 xb10 ag1 ag2 ag3 ag4 ag5 xb11").split()
+        "wb1 wb2 wb3 wb4 wb5 wb6 xb10 ag1 ag2 ag3 ag4 ag5 xb11 "
+        "tl1 tl2 tl3 tl4 xb12 pd1 pd2 pd3 pd4 pd5 xb13 "
+        "fc11 fc12 fc13 fc14 fc15 fc16 fc17 fc18 xb14").split()
 OLD_COUNT = 49  # boxes that counted before Scope 2
 COUNT = len(ROAD)
 FC = ["fc%d" % i for i in range(1, 11)]
 QUIZZED = (FC + ["gt1", "lx1", "ap1", "ap2", "ap3"] + ["md%d" % i for i in range(1, 8)] +
-           ["wb%d" % i for i in range(1, 7)] + ["ag%d" % i for i in range(1, 6)])        # new boxes with a quiz
-GITHUB = ["gt1", "ap1", "ap2", "ap3", "ag1", "ag4", "ag5", "wb6"]                       # new boxes with a proof check (wb6: a link)
-EXPLAIN = ["xb7", "xb8", "xb9", "xb10", "xb11"]
+           ["wb%d" % i for i in range(1, 7)] + ["ag%d" % i for i in range(1, 6)] +
+           ["tl%d" % i for i in range(1, 5)] + ["pd%d" % i for i in range(1, 6)] + ["fc%d" % i for i in range(11, 19)])   # new boxes with a quiz
+GITHUB = ["gt1", "ap1", "ap2", "ap3", "ag1", "ag4", "ag5", "wb6", "tl1", "tl2", "tl3", "tl4", "pd2", "fc18"]   # new boxes with a proof check (some are links)
+EXPLAIN = ["xb7", "xb8", "xb9", "xb10", "xb11", "xb12", "xb13", "xb14"]
 VERIFIED = {1, 2, 5, 6, 7, 8, 11, 12}   # answers that were run in the real lab and won
 NO_ANSWER = {4, 10}                 # 4: toxin goal, no answer on purpose. 10: no known answer.
 PARTS = ["What this lab is", "The objective", "How to think about it", "Hints", "Full answer", "What's next"]
@@ -225,7 +228,7 @@ with sync_playwright() as p:
     page.click("#tutor-tab-words")
     check(page.locator("#word-search").is_visible() and page.locator("#view-tutor details.word").count() >= 40, "Words (search and the full list) is inside the Library")
     page.click("#tutor-tab-lessons")
-    check(page.locator("#tutor-rules").count() == 1 and page.locator("#view-tutor .rowbtn").count() == 35, "Lessons lists the 35 lessons and the safety rules")
+    check(page.locator("#tutor-rules").count() == 1 and page.locator("#view-tutor .rowbtn").count() == 36, "Lessons lists the 36 lessons and the safety rules")
     page.click("#back-now")
     open_side(page, "menu")
     check(page.locator("#menu-sync").is_visible() and page.locator("#menu-settings").is_visible() and page.locator("#view-menu > *").count() == 2, "Settings holds two panels only: link devices, and settings")
@@ -458,7 +461,7 @@ with sync_playwright() as p:
     check(rows(5) == STEP5, "Step 5 order: Episodes 8, 9 and 10 each sit right before the task they show")
     check(page.inner_text("#sheet-count").endswith("0 OF %d DONE" % COUNT), "the count is out of %d required boxes" % COUNT)
     opt = page.evaluate("Array.from(document.querySelectorAll('#sheet .prow')).filter(function (r) { return /OPTIONAL/.test(r.textContent); }).map(function (r) { return r.id.slice(4); })")
-    check(sorted(opt) == sorted(OPTIONAL), "the 5 write-ups and labs 3, 4, 9, 10 are marked optional")
+    check(sorted(opt) == sorted(OPTIONAL), "the 5 write-ups, labs 3, 4, 9, 10, and Scope 2's pd6, pd7 and CS50P are marked optional")
     page.click("#row-m3")
     check("OPTIONAL" in page.inner_text("#top-tag") and "EPISODE 1" in page.inner_text("#next-line").upper(), "an optional lab opens, and its Next still points at where you are")
     page.click("#back-now")
@@ -467,7 +470,9 @@ with sync_playwright() as p:
     page.reload()
     page.wait_for_selector("#top-title")
     walked = []
-    page.evaluate("localStorage.setItem('redTeamPath.notes', JSON.stringify(%s))" % json.dumps({k + s: "word " * 30 for k in EXPLAIN for s in ("-learned", "-use")}))
+    written = {k + s: "word " * 30 for k in EXPLAIN for s in ("-learned", "-use")}
+    written.update({"pd4-a%d" % i: "word " * 25 for i in range(1, 7)})   # pd4's six practice answers
+    page.evaluate("localStorage.setItem('redTeamPath.notes', JSON.stringify(%s))" % json.dumps(written))
     page.reload()
     page.wait_for_selector("#top-title")
     for _ in range(COUNT + 10):
@@ -660,10 +665,47 @@ with sync_playwright() as p:
     sp.click("#proof-link-save")
     check(ticks(sp).get("pfwb6", 0) > 0 and sp.evaluate("JSON.parse(localStorage.getItem('redTeamPath.notes'))['wb6-link']") == "https://hackerone.com/test-hunter",
           "Scope 2: a HackerOne profile address is saved on this device and the proof mark is set")
+    # Step 12: the profile README check, against the pretend GitHub (the profile repository is named like the user)
+    FILES.clear()
+    def fake_raw_profile(route):
+        url = route.request.url
+        if "/testuser/testuser/HEAD/README.md" in url:
+            route.fulfill(status=200, content_type="text/plain", headers={"Access-Control-Allow-Origin": "*"}, body=profile["text"])
+        else:
+            route.fulfill(status=404, content_type="text/plain", headers={"Access-Control-Allow-Origin": "*"}, body="404")
+    profile = {"text": "# Hi, I'm testing\nI work in construction."}
+    sp.route("https://raw.githubusercontent.com/**", fake_raw_profile)
+    sp.evaluate("location.hash = '#i-tl4'")
+    sp.wait_for_selector("#gh-check")
+    sp.click("#gh-check")
+    sp.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled")
+    check("does not link red-team-tools" in sp.inner_text("#gh-result") and ticks(sp).get("pftl4", 0) <= 0, "Scope 2: a profile README that doesn't link red-team-tools fails tl4's check")
+    profile["text"] += "\nMy tools: https://github.com/testuser/red-team-tools"
+    sp.click("#gh-check")
+    sp.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled && /passed/.test(document.getElementById('gh-box').textContent)")
+    check(ticks(sp).get("pftl4", 0) > 0, "Scope 2: a profile README that links red-team-tools passes tl4's check")
+    sp.unroute("https://raw.githubusercontent.com/**")
+    sp.errors[:] = [e for e in sp.errors if "status of 404" not in e]
+    # Step 13: two links on one box (pd2), and written practice answers (pd4)
+    sp.evaluate("location.hash = '#i-pd2'")
+    sp.wait_for_selector("#proof-link2")
+    sp.fill("#proof-link", "https://hackerone.com/test-hunter")
+    sp.fill("#proof-link2", "https://bugcrowd.com/test-hunter")
+    sp.click("#proof-link-save")
+    check(ticks(sp).get("pfpd2", 0) <= 0 and "bugcrowd.com/h/" in sp.inner_text("#proof-link-status"), "Scope 2: an old-style Bugcrowd address is refused, and the box shows the right shape")
+    sp.fill("#proof-link2", "https://bugcrowd.com/h/test-hunter")
+    sp.click("#proof-link-save")
+    check(ticks(sp).get("pfpd2", 0) > 0, "Scope 2: both profile addresses in the right shape set pd2's proof mark")
+    sp.evaluate("location.hash = '#i-pd4'")
+    sp.wait_for_selector("#explain-a6")
+    check(sp.locator("#view-now textarea").count() == 6 and sp.locator("#done-btn").is_disabled() and "20 words" in sp.inner_text("#done-btn"), "Scope 2: pd4 asks six practice questions and stays locked until each has 20 words")
+    for i in range(1, 7):
+        sp.fill("#explain-a%d" % i, "word " * 21)
+    check(sp.locator("#done-btn").is_disabled() and "quiz" in sp.inner_text("#done-btn").lower(), "Scope 2: with the answers written, pd4 still needs its quiz")
     # Library: the new lessons and words
     sp.evaluate("location.hash = '#tutor'")
     sp.wait_for_selector("#view-tutor .rowbtn")
-    check(all(x in sp.inner_text("#view-tutor") for x in ["Tokens and the context window", "MCP: how agents plug into tools", "Data leaks through an agent", "Web basics a bounty hunter needs"]),
+    check(all(x in sp.inner_text("#view-tutor") for x in ["Tokens and the context window", "MCP: how agents plug into tools", "Data leaks through an agent", "Web basics a bounty hunter needs", "What bounty programs actually pay for"]),
           "Scope 2: the Library lists the new lessons")
     sp.evaluate("location.hash = '#i-md6'")
     sp.wait_for_selector("#quiz-start")

@@ -17,7 +17,7 @@ import urllib.request
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
       "Accept": "text/html,application/json,*/*", "Accept-Language": "en-US,en;q=0.9"}
 LEARN = "https://learn.microsoft.com/en-us"
-SKIP = ("firebaseio.com", "youtube-nocookie.com/embed/", "localhost", "://(www")  # the last: a link pattern in app.js, not a link
+SKIP = ("firebaseio.com", "youtube-nocookie.com/embed/", "localhost", "://(www", "://certificates", "/yourname", "reports/1234567")  # the last: a link pattern in app.js, not a link
 BLOCKED = (401, 403, 405, 429, 999)  # the site refuses scripts: could not tell
 
 
@@ -60,7 +60,8 @@ def check(u):
     except urllib.error.HTTPError as e:
         return u, e.code
     except Exception:
-        return u, 0
+        # canada.ca drops script connections without answering (it opens in a browser): count it as refusing scripts, not dead
+        return u, 403 if "://www.canada.ca/" in u else 0
 
 
 def main():

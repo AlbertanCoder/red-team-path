@@ -135,6 +135,22 @@
       "The third certificate project.", 3, false]
   ];
 
+  // Step 14: the second half of freeCodeCamp's course, the last 2 certificate projects, and the exam. Same columns as FCC_PART1.
+  var FCC_PART2 = [
+    ["fc11", "Linear data structures: Big O, stacks, queues, linked lists, hash maps", 15, "lecture-working-with-common-data-structures/what-is-an-algorithm-and-how-does-big-o-notation-work",
+      "How fast code grows with its input, and the basic ways to hold data.", 0, false],
+    ["fc12", "Certificate project 4: Hash Table", 8, "lab-hash-table/build-a-hash-table", "The fourth certificate project.", 4, false],
+    ["fc13", "Recursion", 10, "lecture-understanding-recursion-and-the-call-stack-python/what-is-recursion-and-how-does-it-work",
+      "Functions that call themselves, and the call stack.", 0, false],
+    ["fc14", "Searching and sorting algorithms", 30, "lecture-searching-and-sorting-algorithms/what-is-binary-search-and-how-does-it-differ-from-linear-search",
+      "Linear and binary search, merge sort and quicksort, and four labs.", 0, false],
+    ["fc15", "Certificate project 5: Tower of Hanoi", 8, "lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm", "The fifth and last certificate project.", 5, false],
+    ["fc16", "Graphs and trees", 30, "lecture-understanding-graphs-and-trees/what-are-graphs-in-computer-science",
+      "Graphs, breadth-first and depth-first search, trees, tries and heaps, with three labs.", 0, false],
+    ["fc17", "Dynamic programming", 12, "lecture-understanding-dynamic-programming/what-is-dynamic-programming-and-what-are-some-common-algorithms",
+      "Solving big problems by saving the answers to small ones.", 0, false]
+  ];
+
   var KIND = { video: "VIDEO", lab: "LAB", writeup: "WRITE-UP", learn: "MICROSOFT LEARN", practice: "PRACTICE", auto: "AUTOMATION", proof: "PROOF", bounty: "BOUNTY",
     course: "COURSE", read: "READ", build: "BUILD", explain: "EXPLAIN IT BACK", paid: "GETTING PAID" };
 
@@ -456,8 +472,9 @@
         ] }),
       item("wb6", "practice", "Hacker101: the newcomer videos, then its CTF to 26 points",
         "HackerOne's free class and capture-the-flag game. 26 points makes your HackerOne account eligible for invitations to private bug bounty programs.",
-        "https://www.hacker101.com/", { mins: 1080, pc: true, proof: "link", openLabel: "Open Hacker101", linkLabel: "Your public HackerOne profile address",
-          linkExample: "https://hackerone.com/yourname", linkRx: "^https://(www\\.)?hackerone\\.com/[A-Za-z0-9_.-]{2,40}/?$", how: [
+        "https://www.hacker101.com/", { mins: 1080, pc: true, proof: "link", openLabel: "Open Hacker101", links: [
+          ["Your public HackerOne profile address", "https://hackerone.com/yourname", "^https://(www\\.)?hackerone\\.com/[A-Za-z0-9_.-]{2,40}/?$"]
+        ], how: [
           "Make a free HackerOne account. Set a username you are happy for an employer to see.",
           "On Hacker101, watch the newcomer videos (any order), including the one on writing reports.",
           "Open the Hacker101 CTF, sign in with HackerOne, and earn 26 points. Use its hints when stuck. Keep flags and solutions to yourself.",
@@ -496,6 +513,129 @@
           "Run it and save what it prints to red-team-tools/pyrit/results.txt. Commit and push both. Press Check my GitHub below, then take the quiz."
         ] })
     ];
+
+    var explain12 = item("xb12", "explain", "Explain it back: Step 12", "Two short answers in your own words: what you learned in Step 12, and one thing you would do with it.", "", { mins: 15, shift: true, how: EXPLAIN_HOW });
+    var explain13 = item("xb13", "explain", "Explain it back: Step 13", "Two short answers in your own words: what you learned in Step 13, and one thing you would do with it.", "", { mins: 15, shift: true, how: EXPLAIN_HOW });
+    var explain14 = item("xb14", "explain", "Explain it back: Step 14", "Two short answers in your own words: what you learned in Step 14, and one thing you would do with it.", "", { mins: 15, shift: true, how: EXPLAIN_HOW });
+    var step12 = [
+      item("tl1", "build", "Your own red-team tool: probe.py",
+        "Turn your Step 8 scripts into one tool you can point at any model: it reads a prompt set, attacks, scores and writes a report. This is the portfolio piece the ads ask for.",
+        "https://docs.python.org/3/howto/argparse.html", { mins: 900, pc: true, proof: "github", openLabel: "Open Python's argparse tutorial", how: [
+          "In red-team-tools, write probe.py: it takes the prompt file and the number of tries from the command line (argparse), sends every prompt, scores each reply and writes a report file.",
+          "Put one report it made in the repository (for example samples/report.json), from your own harmless secret-word target.",
+          "Write README.md: what the tool does, a part headed How to run, and what the report shows. Read GitHub's page on READMEs first.",
+          "Build it over several sessions and commit as you go: the check wants 5 or more commits on 3 or more different days. Then press Check my GitHub, and take the quiz."
+        ] }),
+      item("tl2", "build", "A report that gets paid",
+        "Bounty programs pay for reports they can reproduce. Write one practice report, in the shape HackerOne asks for, about a PortSwigger LLM lab you solved.",
+        "https://docs.hackerone.com/en/articles/8475116-quality-reports", { mins: 240, proof: "github", openLabel: "Open HackerOne's guide", how: [
+          "Read HackerOne's Quality Reports page, and the reporting rules on Microsoft's Copilot bounty page.",
+          "Pick one PortSwigger Web LLM lab you solved. In red-team-tools/reports/, write a .md file with the headings Title, Summary, Steps to reproduce, Impact and Suggested fix.",
+          "Steps to reproduce must let a stranger do it again: the exact messages, in order. Impact says who is hurt, not just what happened.",
+          "Commit and push it. Press Check my GitHub, then take the quiz."
+        ] }),
+      item("tl3", "build", "Three public write-ups",
+        "Write-ups are the proof employers read. Three, from practice you are allowed to share: Microsoft's labs, PortSwigger's labs, Bandit-style practice. Never a live bounty finding, never anything under an NDA.",
+        "https://www.hackerone.com/terms/disclosure-guidelines", { mins: 360, proof: "github", openLabel: "Open HackerOne's disclosure rules", how: [
+          "Read HackerOne's disclosure guidelines: what stays private until it is fixed, and why.",
+          "Pick three practice targets whose rules allow sharing. Your write-ups from Step 1 (Menu, Library, notes) are a good start.",
+          "Put each in red-team-tools/writeups/ as a .md file with the app's write-up parts (its template): Target, Goal, What I tried, What happened, How to fix.",
+          "Commit and push. Press Check my GitHub, then take the quiz."
+        ] }),
+      item("tl4", "build", "Your GitHub profile page points to all of it",
+        "An employer who finds your GitHub should see your red-team work in one look.",
+        "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme", { mins: 120, proof: "github", openLabel: "Open GitHub's guide", how: [
+          "Your profile page comes from a public repository named exactly like your username, with a README.md at its top. You may already have one.",
+          "Add a short part about your red-team work: link red-team-tools, your write-ups, and your certificates when you have them. Only true things.",
+          "Commit and push. Press Check my GitHub, then take the quiz."
+        ] })
+    ];
+    var step13 = [
+      item("pd1", "read", "Rules, safe harbor and NDAs",
+        "Before you test anything real: what a program allows, what safe harbor protects, and what an NDA stops you posting.",
+        "https://disclose.io/", { mins: 120, shift: true, openLabel: "Open disclose.io", how: [
+          "Read disclose.io's page on safe harbor, then HackerOne's Safe Harbor overview and its Vulnerability Disclosure Guidelines.",
+          "Write down, for yourself: what makes testing a site legal for you? (A program that invites it, in writing, inside its scope.)",
+          "Take the quiz here."
+        ] }),
+      item("pd2", "paid", "Public HackerOne and Bugcrowd profiles",
+        "Contract networks recruit from these scoreboards. Make both profiles public now, so every accepted report from here on shows.",
+        "https://docs.hackerone.com/hackers/reputation.html", { mins: 120, shift: true, proof: "link", openLabel: "Open HackerOne's reputation page", links: [
+          ["Your public HackerOne profile address", "https://hackerone.com/yourname", "^https://(www\\.)?hackerone\\.com/[A-Za-z0-9_.-]{2,40}/?$"],
+          ["Your public Bugcrowd profile address", "https://bugcrowd.com/h/yourname", "^https://(www\\.)?bugcrowd\\.com/h/[A-Za-z0-9_.-]{2,40}/?$"]
+        ], how: [
+          "You made a HackerOne account in Step 10. Make a Bugcrowd one too (free), with the same honest username.",
+          "On Bugcrowd, set your profile's privacy to Everyone, so it is public. Read how HackerOne reputation and Signal work.",
+          "Paste both public profile addresses below, then take the quiz. The app checks their shape only: it cannot open them."
+        ] }),
+      item("pd3", "read", "Getting paid from US platforms, and tax in Canada",
+        "Bounty and contract platforms are mostly American. This box covers the forms they ask for and the two Canadian rules you meet first. It is not tax advice: ask a tax preparer before your first payout.",
+        "https://www.irs.gov/forms-pubs/about-form-w-8-ben", { mins: 120, shift: true, openLabel: "Open the IRS W-8BEN page", how: [
+          "Read the IRS page on Form W-8BEN, Bugcrowd's page on its W-8BEN form, and HackerOne's Tax Forms page.",
+          "Read the CRA's page on when to register for the GST/HST (the $30,000 small supplier line), and its T2125 page.",
+          "Take the quiz here. Then book a short call with a tax preparer before your first payout."
+        ] }),
+      item("pd4", "paid", "How contract platforms screen people, and a practice run",
+        "Alignerr, Vettedlance, Claru and others screen with quick tests, short interviews and AI interviews. Practise the answers before the real thing.",
+        "https://www.alignerr.com/jobs/43c6c295-45e6-4a72-8d93-35e0138fc19c", { mins: 120, shift: true, openLabel: "Open an Alignerr ad", write: true, minWords: 20, prompts: [
+          "Tell me about a time you got an AI model to do something it was told not to. What did you try first, and what worked?",
+          "How do you make sure a finding is real and not a one-off? What do you record?",
+          "A model refuses your first ten attempts. What do you change, and in what order?",
+          "What is indirect prompt injection, in plain words, and why does it matter for agents?",
+          "Which tools have you used for red teaming, and what did each show you?",
+          "This work runs under an NDA. What will you never post, and where does your public proof come from instead?"
+        ], how: [
+          "Read the job pages in Jobs and the four ads this box quotes: what they screen for, how long, how they pay.",
+          "Answer the six practice questions below in your own words, at least 20 words each, as if speaking to the interviewer. Your answers stay on this device.",
+          "Take the quiz here. Then read your answers out loud once."
+        ] }),
+      item("pd5", "read", "What the big AI programs pay for",
+        "OpenAI, Google and Microsoft pay for security impact through agents; Mozilla 0DIN pays for jailbreaks. All four are open to people in Canada (checked 27 Nov 2026).",
+        "https://openai.com/index/safety-bug-bounty/", { mins: 180, shift: true, openLabel: "Open OpenAI's program", how: [
+          "Read OpenAI's Safety Bug Bounty page, Microsoft's Copilot bounty page, and Mozilla 0DIN's terms. Google's AI VRP rules are at bughunters.google.com.",
+          "For each, write one line: what pays, what is out of scope, and how a report must look.",
+          "Take the quiz here."
+        ] }),
+      item("pd6", "paid", "Optional: apply to 2 contract platforms that take people in Canada",
+        "From the Jobs list, apply to two whose ads say remote and open to Canada. Never pay to join anything. The app cannot see your applications, so this box is optional.",
+        "", { mins: 120, optional: true, how: [
+          "Open Jobs from the main menu and pick two ads marked open to Canada.",
+          "Apply with only true things. Use your GitHub, your profiles and your certificates as proof.",
+          "Note in your calendar when to follow up."
+        ] }),
+      item("pd7", "bounty", "Optional: send your first real bounty report",
+        "Only inside a program's scope and rules, only a finding that repeats. Paste the report's address when it is sent; the app checks its shape only.",
+        "", { optional: true, proof: "link", links: [
+          ["Your report's address on HackerOne or Bugcrowd", "https://hackerone.com/reports/1234567", "^https://(www\\.)?(hackerone\\.com/reports/[0-9]{4,}|bugcrowd\\.com/[A-Za-z0-9/_.-]*submissions/[A-Za-z0-9-]{6,})/?$"]
+        ], how: [
+          "Pick a program from Step 13 whose scope covers what you found. Read its rules again.",
+          "Repeat the finding at least 3 times. Write the report the Step 12 way.",
+          "Send it through the program's own form. Paste its address here."
+        ] })
+    ];
+    var python2 = FCC_PART2.map(function (f) {
+      var it = item(f[0], "course", "freeCodeCamp: " + f[1], f[4] + (f[5] ? " freeCodeCamp's certificate needs all five projects." : ""), FCC + f[3],
+        { mins: f[2] * 60, how: fccSteps(f[5]), openLabel: "Open it on freeCodeCamp", shift: true });
+      return it;
+    });
+    var exam = item("fc18", "course", "freeCodeCamp: Python Review, then the Python Certification Exam",
+      "The last box of the certificate: freeCodeCamp's review, then its 50-question exam in its own desktop exam app. freeCodeCamp's staff review every passing exam.",
+      FCC + "review-python/review-python", { mins: 1500, pc: true, proof: "link", openLabel: "Open the review on freeCodeCamp", links: [
+        ["Your freeCodeCamp Python certificate address", "https://www.freecodecamp.org/certification/yourname/python-v9", "^https://(www\\.)?freecodecamp\\.org/certification/[A-Za-z0-9_-]{1,40}/python-v9/?$"]
+      ], how: [
+        "Do freeCodeCamp's Python Review. All five certificate projects must be done before the exam opens.",
+        "Install freeCodeCamp's exam app and take the 50-question exam. One try a week; its staff review passing exams before the result is final.",
+        "Claim the certificate (it asks you to accept its Academic Honesty Pledge) and paste its address below. Then take the quiz here."
+      ] });
+    var cs50 = item("c50", "course", "Optional: Harvard's CS50P, for a stronger certificate",
+      "Free, from Harvard. A free CS50 Certificate at 70% or more on every problem and the final project. Its honesty rules forbid AI tools other than CS50's own (ChatGPT, Claude, Copilot and the like) for answers. It never blocks your next step.",
+      "https://cs50.harvard.edu/python/", { mins: 3600, pc: true, optional: true, proof: "link", openLabel: "Open CS50P", links: [
+        ["Your CS50 certificate address", "https://certificates.cs50.io/...", "^https://certificates\\.cs50\\.io/[A-Za-z0-9-]{8,}(\\.pdf)?(\\?.*)?$"]
+      ], how: [
+        "Read CS50P's Academic Honesty page first: no AI helpers other than CS50's own.",
+        "Do weeks 0 to 9 and the final project. Submitting needs a free edX account.",
+        "When CS50 sends your certificate, paste its address below."
+      ] });
 
     return [
       { title: "Step 1: Microsoft's videos, each with its lab",
@@ -569,6 +709,35 @@
           { label: "PORTSWIGGER'S AGENT LABS", items: step11.slice(1, 3) },
           { label: "RED-TEAM TOOLS", items: step11.slice(3) },
           { label: "EXPLAIN IT BACK", items: [explain11] }
+        ] },
+      { title: "Step 12: Your own red-team tool and portfolio",
+        goal: "One tool of your own, one report in the shape programs pay for, three write-ups and a profile page that points to them.",
+        why: "Ads and bounty platforms ask what you can show. This is it, on GitHub, built by you over several sessions.",
+        groups: [
+          { label: "YOUR TOOL", items: [step12[0]] },
+          { label: "REPORTS AND WRITE-UPS", items: step12.slice(1, 3) },
+          { label: "YOUR PROFILE", items: [step12[3]] },
+          { label: "EXPLAIN IT BACK", items: [explain12] }
+        ] },
+      { title: "Step 13: Getting paid",
+        goal: "The rules, public profiles, US pay and Canadian tax, contract screening, and what the big programs pay for. Then, optionally, apply and report.",
+        why: "Skills are only half of it. This is the practical side of being paid for AI red teaming from Canada.",
+        groups: [
+          { label: "BEFORE YOU TEST ANYTHING REAL", items: [step13[0]] },
+          { label: "PROFILES, PAY AND SCREENING", items: step13.slice(1, 4) },
+          { label: "THE PROGRAMS", items: [step13[4]] },
+          { label: "OPTIONAL: THE REAL THING", items: step13.slice(5) },
+          { label: "EXPLAIN IT BACK", items: [explain13] }
+        ] },
+      { title: "Step 14: Python, part 2 and the certificate (freeCodeCamp)",
+        goal: "The second half of freeCodeCamp's Python Certification: data structures, recursion, algorithms, graphs, dynamic programming, the last 2 projects and the exam.",
+        why: "Placed last so the skills that pay come first. It ends with a certificate you can link from your profile. CS50P is an optional extra.",
+        groups: [
+          { label: "DATA STRUCTURES AND PROJECT 4", items: python2.slice(0, 2) },
+          { label: "RECURSION, ALGORITHMS AND PROJECT 5", items: python2.slice(2, 5) },
+          { label: "GRAPHS AND DYNAMIC PROGRAMMING", items: python2.slice(5) },
+          { label: "THE CERTIFICATE", items: [exam, cs50] },
+          { label: "EXPLAIN IT BACK", items: [explain14] }
         ] }
     ];
   }
@@ -672,6 +841,19 @@
       ["Excessive agency", "", "An AI that can reach tools or data it doesn't need, and can be talked into using them.", "ag2"],
       ["Data exfiltration", "", "Getting private data sent out of a system, for example by an agent that was tricked into it.", "ag2"],
       ["garak", "", "NVIDIA's free scanner that sends many known attack prompts to a model and records what got through.", "ag4"]
+    ]],
+    ["Getting paid (Steps 12 to 14)", [
+      ["README", "", "The front page of a repository: what the project is, how to run it.", "tl1"],
+      ["Command-line argument", "", "A setting you give a script when you start it, like python probe.py prompts.json --tries 3.", "tl1"],
+      ["Steps to reproduce", "", "The exact actions, in order, that let a stranger see your finding again. The heart of every report.", "tl2"],
+      ["Scope", "", "What a bounty program lets you test. Anything outside it is off limits, even if it is broken.", "pd1"],
+      ["Safe harbor", "", "A program's written promise not to take legal action against good-faith testing inside its rules.", "pd1"],
+      ["NDA", "", "Non-disclosure agreement: a contract saying what you may never share. Work under one can't go in your portfolio.", "pd1"],
+      ["W-8BEN", "", "The US tax form a non-American gives a US payer, such as a bounty platform, before being paid.", "pd3"],
+      ["Small supplier", "", "In Canada, someone whose taxable sales stay at or under $30,000 over four quarters: no GST/HST registration needed.", "pd3"],
+      ["Big O", "", "A way to say how much slower code gets as its input grows, like O(n) or O(n squared).", "fc11"],
+      ["Recursion", "", "A function that calls itself, with a base case that stops it.", "fc13"],
+      ["Dynamic programming", "", "Solving a big problem by saving the answers to its smaller parts, so none is worked out twice.", "fc17"]
     ]]
   ];
 
@@ -756,6 +938,9 @@
     portswiggerIdor: ["PortSwigger: Insecure direct object references (IDOR)", "https://portswigger.net/web-security/access-control/idor"],
     portswiggerXss: ["PortSwigger: Cross-site scripting", "https://portswigger.net/web-security/cross-site-scripting"],
     mdnHttp: ["MDN: Overview of HTTP", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview"],
+    openaiSafety: ["OpenAI: Safety Bug Bounty (2026)", "https://openai.com/index/safety-bug-bounty/"],
+    msCopilot: ["Microsoft: Copilot bounty", "https://www.microsoft.com/en-us/msrc/bounty-ai"],
+    odinPolicy: ["Mozilla 0DIN: bug bounty terms", "https://0din.ai/policy"],
     owasp05: ["OWASP LLM05:2025 Improper Output Handling", "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM05_ImproperOutputHandling.md"],
     owasp06: ["OWASP LLM06:2025 Excessive Agency", "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM06_ExcessiveAgency.md"]
   };
@@ -1120,7 +1305,16 @@
       quiz: { q: "You change /orders?id=500 to id=501 and see a stranger's order. What is that?",
         options: ["An insecure direct object reference (IDOR)", "Cross-site scripting", "A strong password"],
         right: 0, because: "The app used your input to fetch the object directly, without checking it was yours." },
-      src: ["portswiggerIdor", "portswiggerXss", "mdnHttp"] }
+      src: ["portswiggerIdor", "portswiggerXss", "mdnHttp"] },
+    { id: "t37", group: "How models work", title: "What bounty programs actually pay for",
+      idea: "OpenAI, Google and Microsoft pay for security impact: an AI made to leak someone's data or take an action they did not ask for. Plain jailbreaks (rude words, facts you could search for) are out of scope there. Mozilla 0DIN is the program built around jailbreaks.",
+      why: "Choosing the right program for a finding is half the work. A great jailbreak sent to the wrong program earns nothing; a small data leak through an agent can pay.",
+      when: "Before you test: read the program's scope and out-of-scope list, and what a report must hold (OpenAI: the behaviour must repeat at least half the time).",
+      stops: "Nothing stops a good report but the rules: test only inside scope, with a test account, and keep findings private until the program says otherwise.",
+      quiz: { q: "A model swears when asked a certain way. Where does that finding fit best?",
+        options: ["Mozilla 0DIN, which pays for jailbreaks", "OpenAI's Safety Bug Bounty", "Microsoft's Copilot bounty, as prompt injection"],
+        right: 0, because: "OpenAI's page lists rude-language jailbreaks as out of scope, and Microsoft wants impact on other users. 0DIN is built for jailbreak findings." },
+      src: ["openaiSafety", "msCopilot", "odinPolicy"] }
   ];
 
   // One tutor page per lab, and nothing else on it: what the lab is, the objective, how to think about it, three hints
@@ -2457,7 +2651,11 @@
     ap3: ["score.py", "summary.json with total, leaked, refused and secret", "the totals match results.jsonl: the app recounts the leaks itself", "no file that holds an API key"],
     ag1: ["threat-model.md with the six headings", "at least 150 words", "no file that holds an API key"],
     ag4: ["a garak report in scans/ (a .jsonl file garak wrote)", "it ran against a real model, not garak's test generator", "it holds probe attempts and their evaluations", "no file that holds an API key"],
-    ag5: ["a Python file in pyrit/ that imports PyRIT and runs an attack", "a saved result in pyrit/", "no file that holds an API key"]
+    ag5: ["a Python file in pyrit/ that imports PyRIT and runs an attack", "a saved result in pyrit/", "no file that holds an API key"],
+    tl1: ["probe.py, which reads its settings from the command line", "README.md with a How to run part", "a report the tool made", "5 or more commits on 3 or more different days", "no file that holds an API key"],
+    tl2: ["a report in reports/ with Title, Summary, Steps to reproduce, Impact and Suggested fix", "no file that holds an API key"],
+    tl3: ["3 write-ups in writeups/, each with the app's write-up parts: Target, Goal, What I tried, What happened, How to fix", "no file that holds an API key"],
+    tl4: ["your profile repository (named like your username) with a README.md", "the README links red-team-tools"]
   };
   var TM_HEADINGS = [["What it is", /what it is/i], ["What it can do", /what it can do/i], ["Who might attack it", /who might attack/i],
     ["What could go wrong", /could go wrong/i], ["What would hurt most", /hurt most/i], ["What I test first", /test first/i]];
@@ -2606,6 +2804,55 @@
       });
     });
   };
+  function hasParts(text, parts) { return parts.filter(function (pt) { return !new RegExp("(^|\\n)\\s*(#+\\s*|\\*\\*)?" + pt + "\\b", "i").test(text); }); }
+  GH_CHECKS.tl1 = function (user, lines) {
+    return ghFiles(user, TOOLS_REPO).then(function (files) {
+      var probe = findFile(files, "probe.py"), readme = findFile(files, "README.md");
+      var report = files.filter(function (f) { return /^samples\/[^/]+\.(json|jsonl|md|txt|csv)$/i.test(f.path) || /^report[^/]*\.(json|jsonl|md|txt|csv)$/i.test(f.path); })[0];
+      return Promise.all([probe ? ghFile(user, TOOLS_REPO, probe) : Promise.resolve(null), readme ? ghFile(user, TOOLS_REPO, readme) : Promise.resolve(null),
+        ghGet(GH_API + user + "/" + TOOLS_REPO + "/commits?per_page=100")]).then(function (got) {
+        lines.push([got[0] !== null && /argparse|sys\.argv|click|typer/.test(got[0]), got[0] === null ? "No probe.py at the top of the repository." :
+          /argparse|sys\.argv|click|typer/.test(got[0]) ? "probe.py reads its settings from the command line." : "probe.py does not read command-line settings (argparse or the like)."]);
+        lines.push([got[1] !== null && /(^|\n)#+\s*How to run/i.test(got[1]), got[1] === null ? "No README.md." : /(^|\n)#+\s*How to run/i.test(got[1]) ? "README.md has a How to run part." : "README.md has no heading called How to run."]);
+        lines.push([!!report, report ? "A report the tool made: " + report.path + "." : "No report file in samples/ (or report.* at the top)."]);
+        var days = {};
+        (got[2] || []).forEach(function (c) { var d = c.commit && c.commit.author && c.commit.author.date; if (d) { days[d.slice(0, 10)] = 1; } });
+        var n = (got[2] || []).length, nd = Object.keys(days).length;
+        lines.push([n >= 5 && nd >= 3, n + " commits on " + nd + " different days (5 on 3 or more needed: built over time, not pasted in one go)."]);
+        return noKeys(user, files, lines);
+      });
+    });
+  };
+  GH_CHECKS.tl2 = function (user, lines) {
+    return ghFiles(user, TOOLS_REPO).then(function (files) {
+      var reps = files.filter(function (f) { return /^reports\/[^/]+\.md$/i.test(f.path); });
+      if (!reps.length) { lines.push([false, "No .md report in reports/."]); return noKeys(user, files, lines); }
+      return Promise.all(reps.slice(0, 5).map(function (f) { return ghFile(user, TOOLS_REPO, f.path).catch(function () { return ""; }); })).then(function (texts) {
+        var need = ["Title", "Summary", "Steps to reproduce", "Impact", "Suggested fix"];
+        var best = texts.map(function (s) { return hasParts(s, need); }).sort(function (a, b) { return a.length - b.length; })[0];
+        lines.push([!best.length, best.length ? "The report in reports/ is missing: " + best.join(", ") + "." : "A report with Title, Summary, Steps to reproduce, Impact and Suggested fix."]);
+        return noKeys(user, files, lines);
+      });
+    });
+  };
+  GH_CHECKS.tl3 = function (user, lines) {
+    return ghFiles(user, TOOLS_REPO).then(function (files) {
+      var ws = files.filter(function (f) { return /^writeups\/[^/]+\.md$/i.test(f.path); });
+      return Promise.all(ws.slice(0, 10).map(function (f) { return ghFile(user, TOOLS_REPO, f.path).catch(function () { return ""; }); })).then(function (texts) {
+        var need = ["Target", "Goal", "What I tried", "What happened", "How to fix"];
+        var full = texts.filter(function (s) { return !hasParts(s, need).length; }).length;
+        lines.push([full >= 3, full + " of " + ws.length + " write-ups in writeups/ have Target, Goal, What I tried, What happened and How to fix (3 needed)."]);
+        return noKeys(user, files, lines);
+      });
+    });
+  };
+  GH_CHECKS.tl4 = function (user, lines) {
+    return ghFile(user, user, "README.md").then(function (text) {
+      lines.push([true, "Your profile repository " + user + "/" + user + " has a README.md."]);
+      var linked = /red-team-tools/i.test(text);
+      lines.push([linked, linked ? "It links red-team-tools." : "It does not link red-team-tools yet."]);
+    }, function () { lines.push([false, "No README.md in a public repository called " + user + "/" + user + "."]); });
+  };
   function runGithubCheck(it) {
     var user = state.gh;
     var lines = [];
@@ -2655,41 +2902,48 @@
 
   // ----- Proof by link: the app checks the address has the right shape. It cannot open the page (those sites block it), and says so.
   // The address is kept as a note on this device; the proof mark (pf + box id) follows you to a linked device. -----
+  function linkKey(it, i) { return it.id + "-link" + (i ? String(i + 1) : ""); }
   function linkBox(it) {
     var box = h("div", { class: "block", id: "link-box" });
-    var rx = new RegExp(it.linkRx);
-    var saved = notes[it.id + "-link"] || "";
-    box.appendChild(h("p", { class: "small", text: "The app checks that the address has the right shape, like " + it.linkExample +
-      ". It cannot open the page or see what is on it. The address stays on this device; the tick follows you to a linked device." }));
-    var input = h("input", { type: "url", id: "proof-link", "aria-label": it.linkLabel, placeholder: it.linkExample, autocomplete: "off", spellcheck: "false" });
-    input.value = saved;
+    box.appendChild(h("p", { class: "small", text: "The app checks that each address has the right shape, like the example. It cannot open the page or see what is on it. " +
+      "The addresses stay on this device; the tick follows you to a linked device." }));
+    var inputs = it.links.map(function (l, i) {
+      var id = "proof-link" + (i ? String(i + 1) : "");
+      var input = h("input", { type: "url", id: id, "aria-label": l[0], placeholder: l[1], autocomplete: "off", spellcheck: "false" });
+      input.value = notes[linkKey(it, i)] || "";
+      box.appendChild(h("label", { class: "glabel", for: id, text: l[0] }));
+      box.appendChild(input);
+      return input;
+    });
     var status = h("span", { class: "status-line", role: "status", id: "proof-link-status", text: isDone("pf" + it.id) ? "Saved ✓" : "" });
-    var btn = h("button", { type: "button", class: "primary", id: "proof-link-save", text: "Save my link" });
+    var btn = h("button", { type: "button", class: "primary", id: "proof-link-save", text: it.links.length > 1 ? "Save my links" : "Save my link" });
     btn.addEventListener("click", function () {
-      var v = input.value.trim();
-      if (!rx.test(v)) { status.textContent = "That does not look like " + it.linkExample + ". Copy the address from the page itself."; return; }
-      saveNote(it.id + "-link", v);
+      var bad = it.links.filter(function (l, i) { return !new RegExp(l[2]).test(inputs[i].value.trim()); });
+      if (bad.length) { status.textContent = "That does not look like " + bad[0][1] + ". Copy the address from the page itself."; return; }
+      it.links.forEach(function (l, i) { saveNote(linkKey(it, i), inputs[i].value.trim()); });
       if (!isDone("pf" + it.id)) { mark("pf" + it.id, true); studied(); }
       render("proof-link-status");
     });
-    box.appendChild(h("label", { class: "glabel", for: "proof-link", text: it.linkLabel }));
-    box.appendChild(h("div", { class: "btnrow" }, [input, btn]));
-    box.appendChild(status);
+    box.appendChild(h("div", { class: "btnrow" }, [btn, status]));
     return box;
   }
 
   // ----- Explain it back: the last box of each new step. Two answers in your own words, saved as notes on this device. -----
   var EXPLAIN_MIN = 25;
-  function explained(it) { return wordCount(notes[it.id + "-learned"]) >= EXPLAIN_MIN && wordCount(notes[it.id + "-use"]) >= EXPLAIN_MIN; }
+  var EXPLAIN_PARTS = [["-learned", "What I learned in this step, in my own words"], ["-use", "One thing I would do with it"]];
+  function writeParts(it) { return it.prompts ? it.prompts.map(function (pr, i) { return ["-a" + (i + 1), pr]; }) : EXPLAIN_PARTS; }
+  function writeMin(it) { return it.minWords || EXPLAIN_MIN; }
+  function explained(it) { return writeParts(it).every(function (pt) { return wordCount(notes[it.id + pt[0]]) >= writeMin(it); }); }
   function explainBox(it) {
     var box = h("div", { class: "block", id: "explain-box" });
-    box.appendChild(h("p", { class: "small", text: "The app can't grade this: it only checks you wrote at least " + EXPLAIN_MIN +
+    var min = writeMin(it);
+    box.appendChild(h("p", { class: "small", text: "The app can't grade this: it only checks you wrote at least " + min +
       " words in each box. The words stay on this device; the tick follows you to a linked device." }));
-    [["-learned", "What I learned in this step, in my own words"], ["-use", "One thing I would do with it"]].forEach(function (pt) {
+    writeParts(it).forEach(function (pt, i) {
       var key = it.id + pt[0];
-      var count = function (text) { var n = wordCount(text); return n + " words" + (n >= EXPLAIN_MIN ? " ✓" : " (at least " + EXPLAIN_MIN + ")"); };
+      var count = function (text) { var n = wordCount(text); return n + " words" + (n >= min ? " ✓" : " (at least " + min + ")"); };
       var status = h("span", { class: "status-line", role: "status", id: "explain-count" + pt[0], text: count(notes[key]) });
-      var area = h("textarea", { class: "note-area", id: "explain" + pt[0], "aria-label": pt[1], placeholder: pt[1] });
+      var area = h("textarea", { class: "note-area", id: "explain" + pt[0], "aria-label": pt[1], placeholder: it.prompts ? "Your answer" : pt[1] });
       area.value = notes[key] || "";
       area.addEventListener("input", function () {
         var was = explained(it);
@@ -2697,11 +2951,11 @@
         status.textContent = count(area.value);
         if (explained(it) !== was) { renderDock(currentIndex(), it, "now"); }
       });
-      box.appendChild(h("label", { class: "glabel", for: "explain" + pt[0], text: pt[1] }));
+      box.appendChild(h("label", { class: "glabel", for: "explain" + pt[0], text: (it.prompts ? (i + 1) + ". " : "") + pt[1] }));
       box.appendChild(area);
       box.appendChild(status);
     });
-    return part("Explain it back", [box]);
+    return part(it.prompts ? "Practice answers" : "Explain it back", [box]);
   }
 
   // ----- a video, and everything else -----
@@ -2738,7 +2992,7 @@
     if (it.proof === "github") { v.appendChild(part("Proof on GitHub", [githubBox(it)])); }
     if (it.proof === "link") { v.appendChild(part("Proof: your link", [linkBox(it)])); }
     if (needsQuiz(it)) { v.appendChild(part("Quiz", [quizBox(it)])); }
-    if (it.kind === "explain") { v.appendChild(explainBox(it)); }
+    if (it.kind === "explain" || it.write) { v.appendChild(explainBox(it)); }
     if (it.id === "m0" && !isDone("m0")) {
       // Microsoft's labs cost money and need installing, so one tap can skip the whole set. A skipped lab is marked
       // "moved on, not solved" (never beaten) and waits on the come-back list; a passing chat file later makes it beaten.
@@ -2847,8 +3101,8 @@
         var proofFirst = dockBtn(it.proof === "link" ? "Add your link above to finish" : "Pass the GitHub check above to finish", "", "done-btn", function () {});
         proofFirst.disabled = true;
         d.appendChild(proofFirst);
-      } else if (it.kind === "explain" && !explained(it)) {
-        var write = dockBtn("Write " + EXPLAIN_MIN + " words in each box to finish", "", "done-btn", function () {});
+      } else if ((it.kind === "explain" || it.write) && !explained(it)) {
+        var write = dockBtn("Write " + writeMin(it) + " words in each box to finish", "", "done-btn", function () {});
         write.disabled = true;
         d.appendChild(write);
       } else if (needsQuiz(it) && !isDone("qz" + quizKey(it))) {

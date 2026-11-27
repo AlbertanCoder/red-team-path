@@ -2964,6 +2964,945 @@ window.RTP_QUIZ = {
    "code": "w, h = 3, 4\nprint((w ** 2 + h ** 2) ** 0.5)"
   }
  ],
+ "fc11": [
+  {
+   "q": "In Big O notation, which letter usually stands for the input size?",
+   "options": [
+    "n",
+    "x",
+    "O",
+    "s"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on algorithms and Big O: Input Size and Dominant Terms.",
+   "where": "What Is an Algorithm and How Does Big O Notation Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-working-with-common-data-structures/what-is-an-algorithm-and-how-does-big-o-notation-work"
+  },
+  {
+   "q": "What kind of data structure is a stack?",
+   "options": [
+    "Last in, first out (LIFO)",
+    "First in, first out (FIFO)",
+    "Sorted from smallest to largest",
+    "Random order"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on stacks and queues.",
+   "where": "How Do Stacks and Queues Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-working-with-common-data-structures/how-do-stacks-and-queues-work"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "c",
+    "a",
+    "b",
+    "['a', 'b']"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on stacks and queues: which item comes off a stack first.",
+   "where": "How Do Stacks and Queues Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-working-with-common-data-structures/how-do-stacks-and-queues-work",
+   "code": "stack = []\nstack.append(\"a\")\nstack.append(\"b\")\nstack.append(\"c\")\nprint(stack.pop())"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "first",
+    "second",
+    "deque",
+    "None"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on stacks and queues: which item leaves a queue first.",
+   "where": "How Do Stacks and Queues Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-working-with-common-data-structures/how-do-stacks-and-queues-work",
+   "code": "from collections import deque\nqueue = deque()\nqueue.append(\"first\")\nqueue.append(\"second\")\nprint(queue.popleft())"
+  },
+  {
+   "q": "Which of Python's built-in types works as a dynamic array?",
+   "options": [
+    "list",
+    "tuple",
+    "set",
+    "str"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on dynamic and static arrays.",
+   "where": "How Do Dynamic Arrays Differ from Static Arrays?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-working-with-common-data-structures/how-do-dynamic-arrays-differ-from-static-arrays"
+  },
+  {
+   "q": "What is a hash map also known as?",
+   "options": [
+    "A hash table",
+    "A linked list",
+    "A stack",
+    "A binary tree"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on maps, hash maps and sets.",
+   "where": "How Do Maps, Hash Maps, and Sets Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-working-with-common-data-structures/how-do-maps-hash-maps-and-sets-work"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "16",
+    "4",
+    "8",
+    "2"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on algorithms and Big O: a loop inside a loop over the same n items, and quadratic time.",
+   "where": "What Is an Algorithm and How Does Big O Notation Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-working-with-common-data-structures/what-is-an-algorithm-and-how-does-big-o-notation-work",
+   "code": "prompts = [\"a\", \"b\", \"c\", \"d\"]\nsteps = 0\nfor p in prompts:\n    for q in prompts:\n        steps += 1\nprint(steps)"
+  },
+  {
+   "q": "Your tool checks each of n replies against each of n known secrets. Which time complexity is that?",
+   "options": [
+    "O(n^2), quadratic",
+    "O(1), constant",
+    "O(log n), logarithmic",
+    "O(n), linear"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at the lesson on algorithms and Big O: Common Time Complexities.",
+   "where": "What Is an Algorithm and How Does Big O Notation Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-working-with-common-data-structures/what-is-an-algorithm-and-how-does-big-o-notation-work"
+  }
+ ],
+ "fc12": [
+  {
+   "q": "In your Hash Table project, what does the hash method return?",
+   "options": [
+    "The sum of the Unicode code points of the key's characters",
+    "The key in capital letters",
+    "A random number",
+    "The length of the key"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's user stories: the hash method.",
+   "where": "Build a Hash Table",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table"
+  },
+  {
+   "q": "Which built-in function gives a character's code point?",
+   "options": [
+    "ord()",
+    "chr()",
+    "len()",
+    "hash()"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's user stories: the hash method.",
+   "where": "Build a Hash Table",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "195",
+    "ab",
+    "2",
+    "97"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the project's user stories: how the hash is computed. ord('a') is 97.",
+   "where": "Build a Hash Table",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table",
+   "code": "print(sum(ord(c) for c in \"ab\"))"
+  },
+  {
+   "q": "What does the collection attribute start as?",
+   "options": [
+    "An empty dictionary",
+    "An empty list",
+    "None",
+    "A string"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's user stories: the first one.",
+   "where": "Build a Hash Table",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table"
+  },
+  {
+   "q": "Which four instance methods does HashTable need?",
+   "options": [
+    "hash, add, remove and lookup",
+    "get, set, del and len",
+    "push, pop, peek and size",
+    "open, read, write and close"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's user stories: the second one.",
+   "where": "Build a Hash Table",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table"
+  },
+  {
+   "q": "Two different keys can give the same hash in this project. What does this code print?",
+   "options": [
+    "True",
+    "False",
+    "195",
+    "None"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the project's user stories: the hash adds up code points, so the order of the letters does not change the sum.",
+   "where": "Build a Hash Table",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table",
+   "code": "print(sum(ord(c) for c in \"ab\") == sum(ord(c) for c in \"ba\"))"
+  },
+  {
+   "q": "Why does add store a dictionary (holding the key-value pair) under the hash, instead of the value alone?",
+   "options": [
+    "Because different keys can share a hash, so each needs its own entry",
+    "Because dictionaries are faster to print",
+    "Because the tests ask for lists",
+    "Because strings cannot be values"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at the project's user stories: the add method. Then think about 'ab' and 'ba'.",
+   "where": "Build a Hash Table",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table"
+  },
+  {
+   "q": "What is the same hash value also used for, by the project's description?",
+   "options": [
+    "To retrieve and delete the value for that key",
+    "To sort the keys",
+    "To encrypt the values",
+    "Nothing else"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's introduction.",
+   "where": "Build a Hash Table",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table"
+  }
+ ],
+ "fc13": [
+  {
+   "q": "What is recursion?",
+   "options": [
+    "A function calling itself",
+    "A loop that never ends",
+    "Importing a module twice",
+    "Sorting a list in place"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on recursion: its first line.",
+   "where": "What Is Recursion, and How Does It Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-recursion-and-the-call-stack-python/what-is-recursion-and-how-does-it-work"
+  },
+  {
+   "q": "What keeps track of active function calls, last in, first out?",
+   "options": [
+    "The call stack",
+    "The hash table",
+    "The queue",
+    "The heap"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on recursion: the part about how Python keeps track of the calls that are still running.",
+   "where": "What Is Recursion, and How Does It Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-recursion-and-the-call-stack-python/what-is-recursion-and-how-does-it-work"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "3 2 1",
+    "1 2 3",
+    "3 2 1 0",
+    "0 1 2 3"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on recursion: the base case, and when each number is printed.",
+   "where": "What Is Recursion, and How Does It Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-recursion-and-the-call-stack-python/what-is-recursion-and-how-does-it-work",
+   "code": "def countdown(n):\n    if n == 0:\n        return\n    print(n, end=\" \")\n    countdown(n - 1)\n\ncountdown(3)"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "1 2 3",
+    "3 2 1",
+    "0 1 2 3",
+    "3"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on recursion: Changing the Order of Execution.",
+   "where": "What Is Recursion, and How Does It Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-recursion-and-the-call-stack-python/what-is-recursion-and-how-does-it-work",
+   "code": "def countup(n):\n    if n == 0:\n        return\n    countup(n - 1)\n    print(n, end=\" \")\n\ncountup(3)"
+  },
+  {
+   "q": "What happens when this code runs?",
+   "options": [
+    "It stops with a RecursionError",
+    "It prints nothing and ends normally",
+    "It stops with a TypeError",
+    "It runs for ever"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on recursion: what a function without a base case does to the call stack.",
+   "where": "What Is Recursion, and How Does It Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-recursion-and-the-call-stack-python/what-is-recursion-and-how-does-it-work",
+   "code": "def forever(n):\n    return forever(n + 1)\n\nforever(0)"
+  },
+  {
+   "q": "What must every recursive function have, so it stops?",
+   "options": [
+    "A base case",
+    "A global variable",
+    "A print statement",
+    "A try block"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on recursion: Adding a Base Case.",
+   "where": "What Is Recursion, and How Does It Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-recursion-and-the-call-stack-python/what-is-recursion-and-how-does-it-work"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "[2, 3, 4, 5]",
+    "[2, 3, 4]",
+    "[5, 4, 3, 2]",
+    "[]"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Range of Numbers Generator lab: when the list stops, and whether the end is included.",
+   "where": "Build a Range of Numbers Generator",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-range-of-numbers-python/build-a-range-of-numbers-generator",
+   "code": "def range_of_numbers(start, end):\n    if start > end:\n        return []\n    return [start] + range_of_numbers(start + 1, end)\n\nprint(range_of_numbers(2, 5))"
+  },
+  {
+   "q": "A recursive function to count nested folders goes one level deeper on each call. What tells it to stop?",
+   "options": [
+    "The base case: a folder with no subfolders",
+    "Python stops after 10 calls",
+    "The return value of print()",
+    "Nothing: recursion always stops itself"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at the lesson on recursion: the base case.",
+   "where": "What Is Recursion, and How Does It Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-recursion-and-the-call-stack-python/what-is-recursion-and-how-does-it-work"
+  }
+ ],
+ "fc14": [
+  {
+   "q": "How does linear search work?",
+   "options": [
+    "It checks each item from the start until it finds the target",
+    "It halves the list each step",
+    "It sorts the list first",
+    "It guesses at random"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on binary and linear search.",
+   "where": "What Is Binary Search and How Does It Differ from Linear Search?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-searching-and-sorting-algorithms/what-is-binary-search-and-how-does-it-differ-from-linear-search"
+  },
+  {
+   "q": "What is binary search's time complexity?",
+   "options": [
+    "O(log n)",
+    "O(n)",
+    "O(n^2)",
+    "O(1)"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on binary search: its time and space complexity.",
+   "where": "What Is Binary Search and How Does It Differ from Linear Search?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-searching-and-sorting-algorithms/what-is-binary-search-and-how-does-it-differ-from-linear-search"
+  },
+  {
+   "q": "What does binary search need from the list?",
+   "options": [
+    "It must be sorted",
+    "It must hold only strings",
+    "It must be short",
+    "Nothing"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on binary search: what the list must be like for halving to work.",
+   "where": "What Is Binary Search and How Does It Differ from Linear Search?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-searching-and-sorting-algorithms/what-is-binary-search-and-how-does-it-differ-from-linear-search"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "2",
+    "6",
+    "1",
+    "7"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on binary search: each step looks at the middle and throws away half.",
+   "where": "What Is Binary Search and How Does It Differ from Linear Search?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-searching-and-sorting-algorithms/what-is-binary-search-and-how-does-it-differ-from-linear-search",
+   "code": "items = [1, 3, 5, 7, 9, 11, 13]\nlow, high, steps = 0, len(items) - 1, 0\nwhile low <= high:\n    steps += 1\n    mid = (low + high) // 2\n    if items[mid] == 11:\n        break\n    if items[mid] < 11:\n        low = mid + 1\n    else:\n        high = mid - 1\nprint(steps)"
+  },
+  {
+   "q": "What is divide and conquer?",
+   "options": [
+    "Recursively breaking a problem into smaller sub-problems",
+    "Splitting a team in two",
+    "Running two programs at once",
+    "Deleting half the data"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on divide and conquer and merge sort.",
+   "where": "What Is Divide and Conquer, and How Does Merge Sort Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-searching-and-sorting-algorithms/what-is-divide-and-conquer-and-how-does-merge-sort-work"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "[1, 2, 3, 4, 9, 10]",
+    "[1, 4, 9, 2, 3, 10]",
+    "[10, 9, 4, 3, 2, 1]",
+    "[1, 2, 3, 4]"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on merge sort: how two sorted halves are merged.",
+   "where": "What Is Divide and Conquer, and How Does Merge Sort Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-searching-and-sorting-algorithms/what-is-divide-and-conquer-and-how-does-merge-sort-work",
+   "code": "def merge(a, b):\n    out = []\n    while a and b:\n        out.append(a.pop(0) if a[0] <= b[0] else b.pop(0))\n    return out + a + b\n\nprint(merge([1, 4, 9], [2, 3, 10]))"
+  },
+  {
+   "q": "What is the Luhn algorithm used for?",
+   "options": [
+    "Validating identification numbers, like credit card numbers",
+    "Sorting lists",
+    "Encrypting passwords",
+    "Finding the shortest path"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the Luhn algorithm lab: its introduction.",
+   "where": "Implement the Luhn Algorithm",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-luhn-algorithm/implement-the-luhn-algorithm"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "True",
+    "False",
+    "[1, 2, 5, 8]",
+    "None"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Searching and Sorting review: what sorted() returns.",
+   "where": "What Is Divide and Conquer, and How Does Merge Sort Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-searching-and-sorting-algorithms/what-is-divide-and-conquer-and-how-does-merge-sort-work",
+   "code": "print(sorted([5, 2, 8, 1]) == [1, 2, 5, 8])"
+  }
+ ],
+ "fc15": [
+  {
+   "q": "In the Tower of Hanoi, which disks may you move?",
+   "options": [
+    "Only the top-most disks, one at a time",
+    "Any disk you like, as many at a time as fit in your hand",
+    "Only the largest disk",
+    "Two disks at once"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's rules.",
+   "where": "Implement the Tower of Hanoi Algorithm",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm"
+  },
+  {
+   "q": "Which move is never allowed?",
+   "options": [
+    "Placing a larger disk on top of a smaller one",
+    "Moving the smallest disk",
+    "Moving to the middle rod",
+    "Moving a disk back"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's rules.",
+   "where": "Implement the Tower of Hanoi Algorithm",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm"
+  },
+  {
+   "q": "In how many moves must hanoi_solver solve n disks?",
+   "options": [
+    "2^n - 1",
+    "n",
+    "n^2",
+    "2n"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's user stories.",
+   "where": "Implement the Tower of Hanoi Algorithm",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "7",
+    "8",
+    "6",
+    "5"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the project's user stories: the number of moves for n disks.",
+   "where": "Implement the Tower of Hanoi Algorithm",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm",
+   "code": "print(2 ** 3 - 1)"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "15",
+    "16",
+    "8",
+    "4"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the project: to move n disks, move n-1 out of the way, move the biggest, then move n-1 back on top.",
+   "where": "Implement the Tower of Hanoi Algorithm",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm",
+   "code": "def moves(n):\n    if n == 0:\n        return 0\n    return moves(n - 1) + 1 + moves(n - 1)\n\nprint(moves(4))"
+  },
+  {
+   "q": "Where do the disks start?",
+   "options": [
+    "Piled on the first rod, smallest on top",
+    "Spread over all three rods",
+    "On the last rod",
+    "In a random order"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's introduction.",
+   "where": "Implement the Tower of Hanoi Algorithm",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm"
+  },
+  {
+   "q": "Where must all the disks end up?",
+   "options": [
+    "On the last rod",
+    "On the middle rod",
+    "Back on the first rod",
+    "Anywhere"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's introduction.",
+   "where": "Implement the Tower of Hanoi Algorithm",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm"
+  },
+  {
+   "q": "What should hanoi_solver return?",
+   "options": [
+    "A string with every move, starting arrangement included, one per line",
+    "The number of moves only, as an integer, with no arrangement at all and no new lines",
+    "A list of disks",
+    "True when done"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the project's user stories.",
+   "where": "Implement the Tower of Hanoi Algorithm",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm"
+  }
+ ],
+ "fc16": [
+  {
+   "q": "What are graphs used to represent?",
+   "options": [
+    "Connections or relationships between objects",
+    "Only numbers arranged in a table of rows and columns, like a spreadsheet",
+    "Pictures",
+    "Passwords"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on graphs: its first line.",
+   "where": "What Are Graphs in Computer Science?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-graphs-and-trees/what-are-graphs-in-computer-science"
+  },
+  {
+   "q": "What is a directed acyclic graph?",
+   "options": [
+    "A directed graph with no cycles",
+    "A graph with no edges",
+    "A graph with only one node",
+    "An undirected graph with a cycle"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on graphs: Directed Acyclic Graph.",
+   "where": "What Are Graphs in Computer Science?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-graphs-and-trees/what-are-graphs-in-computer-science"
+  },
+  {
+   "q": "How does breadth-first search move through a graph?",
+   "options": [
+    "All neighbours at one level before the next level",
+    "As deep as possible down one branch first, then back up to try the next one",
+    "In random order",
+    "Only along weighted edges"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on depth-first and breadth-first search.",
+   "where": "How Do Depth First and Breadth First Search Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-graphs-and-trees/how-do-depth-first-and-breadth-first-search-work"
+  },
+  {
+   "q": "How does depth-first search move through a graph?",
+   "options": [
+    "As deep as possible down each branch before going back",
+    "Level by level",
+    "Only to the nearest node",
+    "Backwards from the end"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on depth-first and breadth-first search.",
+   "where": "How Do Depth First and Breadth First Search Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-graphs-and-trees/how-do-depth-first-and-breadth-first-search-work"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "A B C D",
+    "A B D C",
+    "D C B A",
+    "A C B D"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on breadth-first search: a queue hands out nodes level by level.",
+   "where": "How Do Depth First and Breadth First Search Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-graphs-and-trees/how-do-depth-first-and-breadth-first-search-work",
+   "code": "from collections import deque\ngraph = {\"A\": [\"B\", \"C\"], \"B\": [\"D\"], \"C\": [\"D\"], \"D\": []}\nseen, queue, order = {\"A\"}, deque([\"A\"]), []\nwhile queue:\n    node = queue.popleft()\n    order.append(node)\n    for nxt in graph[node]:\n        if nxt not in seen:\n            seen.add(nxt)\n            queue.append(nxt)\nprint(\" \".join(order))"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "A B D C",
+    "A B C D",
+    "A C B D",
+    "D B C A"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on depth-first search: it goes all the way down B's branch before C.",
+   "where": "How Do Depth First and Breadth First Search Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-graphs-and-trees/how-do-depth-first-and-breadth-first-search-work",
+   "code": "graph = {\"A\": [\"B\", \"C\"], \"B\": [\"D\"], \"C\": [], \"D\": []}\norder = []\ndef dfs(node):\n    order.append(node)\n    for nxt in graph[node]:\n        dfs(nxt)\ndfs(\"A\")\nprint(\" \".join(order))"
+  },
+  {
+   "q": "An agent's tools call other tools, which call others. To list every tool a single prompt could reach, which search fits?",
+   "options": [
+    "Either BFS or DFS: both visit every node you can reach",
+    "Binary search",
+    "Merge sort",
+    "None: graphs can't hold tools"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at the lesson on depth-first and breadth-first search: their purpose.",
+   "where": "How Do Depth First and Breadth First Search Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-graphs-and-trees/how-do-depth-first-and-breadth-first-search-work"
+  },
+  {
+   "q": "What are two common ways to store a graph in code?",
+   "options": [
+    "An adjacency matrix or an adjacency list",
+    "A stack or a string",
+    "A tuple or a set of passwords",
+    "A CSV file or an image"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on matrices and adjacency lists.",
+   "where": "How Do Matrices and Adjacency Lists Work?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-graphs-and-trees/how-do-matrices-and-adjacency-lists-work"
+  }
+ ],
+ "fc17": [
+  {
+   "q": "What is dynamic programming?",
+   "options": [
+    "Breaking a problem into simpler subproblems and storing their results to avoid redoing work",
+    "Writing code that rewrites itself while it runs, so the program can change its own behaviour later",
+    "Running code on many computers",
+    "Programming without types"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on dynamic programming: its first line.",
+   "where": "What Is Dynamic Programming and What Are Some Common Algorithms?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-dynamic-programming/what-is-dynamic-programming-and-what-are-some-common-algorithms"
+  },
+  {
+   "q": "What does memoization do?",
+   "options": [
+    "Stores results of expensive calls and returns the stored result for the same inputs",
+    "Deletes old results from memory as soon as a function returns, so memory never fills up",
+    "Prints every call",
+    "Sorts the inputs"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on dynamic programming: Memoization (Top-Down Approach).",
+   "where": "What Is Dynamic Programming and What Are Some Common Algorithms?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-dynamic-programming/what-is-dynamic-programming-and-what-are-some-common-algorithms"
+  },
+  {
+   "q": "What does tabulation do?",
+   "options": [
+    "Builds the solution from the ground up, filling a table",
+    "Guesses the answer",
+    "Calls the function at random",
+    "Stores the inputs only"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on dynamic programming: Tabulation (Bottom-Up Approach).",
+   "where": "What Is Dynamic Programming and What Are Some Common Algorithms?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-dynamic-programming/what-is-dynamic-programming-and-what-are-some-common-algorithms"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "55",
+    "89",
+    "34",
+    "10"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Nth Fibonacci lab: each number is the sum of the two before it, starting 0, 1.",
+   "where": "Build an Nth Fibonacci Number Calculator",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-nth-fibonacci-number/build-an-nth-fibonacci-number-calculator",
+   "code": "memo = {}\ndef fib(n):\n    if n < 2:\n        return n\n    if n not in memo:\n        memo[n] = fib(n - 1) + fib(n - 2)\n    return memo[n]\nprint(fib(10))"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "5",
+    "4",
+    "8",
+    "3"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on dynamic programming: the climbing stairs problem, 1 or 2 steps at a time.",
+   "where": "What Is Dynamic Programming and What Are Some Common Algorithms?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-dynamic-programming/what-is-dynamic-programming-and-what-are-some-common-algorithms",
+   "code": "def ways(n):\n    a, b = 1, 1\n    for _ in range(n - 1):\n        a, b = b, a + b\n    return b\nprint(ways(4))"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "True",
+    "False",
+    "55",
+    "None"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the lesson on dynamic programming: The Problem with Naive Recursion, and overlapping subproblems.",
+   "where": "What Is Dynamic Programming and What Are Some Common Algorithms?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-dynamic-programming/what-is-dynamic-programming-and-what-are-some-common-algorithms",
+   "code": "calls = 0\ndef slow(n):\n    global calls\n    calls += 1\n    return n if n < 2 else slow(n - 1) + slow(n - 2)\nslow(10)\nprint(calls > 100)"
+  },
+  {
+   "q": "Which two conditions must a problem have for dynamic programming to work?",
+   "options": [
+    "Overlapping subproblems and optimal substructure",
+    "A sorted list and a small input",
+    "Only strings and integers",
+    "A graph and a queue"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the lesson on dynamic programming: Core Principles.",
+   "where": "What Is Dynamic Programming and What Are Some Common Algorithms?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-dynamic-programming/what-is-dynamic-programming-and-what-are-some-common-algorithms"
+  },
+  {
+   "q": "Your scanner re-sends the same 50 prompts to the same model in every run. Which dynamic programming idea saves time and money?",
+   "options": [
+    "Memoization: cache each prompt's reply and reuse it",
+    "Recursion with no base case",
+    "Binary search",
+    "Bubble sort"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at the lesson on dynamic programming: Memoization.",
+   "where": "What Is Dynamic Programming and What Are Some Common Algorithms?",
+   "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-dynamic-programming/what-is-dynamic-programming-and-what-are-some-common-algorithms"
+  }
+ ],
+ "fc18": [
+  {
+   "q": "What does this code print?",
+   "options": [
+    "lab1",
+    "lab2",
+    "3",
+    "1"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Python Review: dictionaries and the built-in functions that take a key.",
+   "where": "Python Review",
+   "url": "https://www.freecodecamp.org/learn/python-v9/review-python/review-python",
+   "code": "scores = {\"lab1\": 3, \"lab2\": 1}\nbest = max(scores, key=scores.get)\nprint(best)"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "TEAM PATH",
+    "RED TEAM PATH",
+    "team path",
+    "RED"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Python Review: string methods, join(), and generator expressions with if.",
+   "where": "Python Review",
+   "url": "https://www.freecodecamp.org/learn/python-v9/review-python/review-python",
+   "code": "words = [\"red\", \"team\", \"path\"]\nprint(\" \".join(w.upper() for w in words if len(w) > 3))"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "2",
+    "1",
+    "3",
+    "-2"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Python Review: sorting in place and negative indexes.",
+   "where": "Python Review",
+   "url": "https://www.freecodecamp.org/learn/python-v9/review-python/review-python",
+   "code": "nums = [3, 1, 2]\nnums.sort()\nprint(nums[-1] - nums[0])"
+  },
+  {
+   "q": "What happens when this code runs?",
+   "options": [
+    "It stops with a TypeError",
+    "It makes a Target with no name",
+    "It stops with a NameError",
+    "It prints None"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Python Review: classes, __init__ and the arguments it needs.",
+   "where": "Python Review",
+   "url": "https://www.freecodecamp.org/learn/python-v9/review-python/review-python",
+   "code": "class Target:\n    def __init__(self, name):\n        self.name = name\n\nt = Target()"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "1",
+    "0",
+    "2",
+    "KeyError"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Python Review: try, except and finally, and which of them run here.",
+   "where": "Python Review",
+   "url": "https://www.freecodecamp.org/learn/python-v9/review-python/review-python",
+   "code": "try:\n    result = {\"a\": 1}[\"b\"]\nexcept KeyError:\n    result = 0\nfinally:\n    result += 1\nprint(result)"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "('b', 2)",
+    "('a', 1)",
+    "['b', 2]",
+    "b2"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Python Review: zip() and indexing a list of tuples.",
+   "where": "Python Review",
+   "url": "https://www.freecodecamp.org/learn/python-v9/review-python/review-python",
+   "code": "pairs = list(zip([\"a\", \"b\"], [1, 2]))\nprint(pairs[1])"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "3",
+    "4",
+    "2",
+    "1"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Python Review: sets and duplicates.",
+   "where": "Python Review",
+   "url": "https://www.freecodecamp.org/learn/python-v9/review-python/review-python",
+   "code": "s = {1, 2, 2, 3}\nprint(len(s))"
+  },
+  {
+   "q": "This should print the number of words longer than 3 letters (2), but prints 0. What is the fix?",
+   "options": [
+    "Change == to = in the line that adds one",
+    "Change > to < in the if",
+    "Start count at 1",
+    "Use words.count() instead"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Python Review: the difference between assignment and comparison.",
+   "where": "Python Review",
+   "url": "https://www.freecodecamp.org/learn/python-v9/review-python/review-python",
+   "code": "words = [\"red\", \"team\", \"path\"]\ncount = 0\nfor w in words:\n    if len(w) > 3:\n        count == count + 1\nprint(count)"
+  }
+ ],
  "gt1": [
   {
    "q": "In GitHub's exercise, what does a repository do?",
@@ -3743,6 +4682,825 @@ window.RTP_QUIZ = {
    "hint": "Look again at agents lesson 06: the defences that come after the list of threats.",
    "where": "ai-agents-for-beginners lesson 06",
    "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/06-building-trustworthy-agents"
+  }
+ ],
+ "pd1": [
+  {
+   "q": "What is safe harbor, according to disclose.io?",
+   "options": [
+    "Policy language that lets good-faith researchers report security issues without fear of legal repercussions",
+    "A free place to store your findings",
+    "A bug bounty that always pays",
+    "A law that makes all hacking legal"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at disclose.io: What is Safe Harbor?",
+   "where": "disclose.io",
+   "url": "https://disclose.io/"
+  },
+  {
+   "q": "Who decides what counts as good faith under safe harbor?",
+   "options": [
+    "The recipient: the company or program, in its policy",
+    "You, as the researcher",
+    "Any judge or police officer who looks at the case after the fact",
+    "Your internet provider"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at disclose.io: What is Safe Harbor?",
+   "where": "disclose.io",
+   "url": "https://disclose.io/"
+  },
+  {
+   "q": "Which safe harbor did HackerOne add for AI work?",
+   "options": [
+    "The AI Research Safe Harbor",
+    "The Chatbot Testing Freedom Act of 2026",
+    "The Prompt Licence",
+    "None: AI testing has no safe harbor"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Safe Harbor overview: the two kinds it lists.",
+   "where": "HackerOne: Safe Harbor overview and FAQ",
+   "url": "https://docs.hackerone.com/en/articles/8494502-safe-harbor-overview-faq"
+  },
+  {
+   "q": "Why does HackerOne say safe harbor matters?",
+   "options": [
+    "Many anti-hacking laws are outdated and broad, so even good-faith researchers could face legal liability",
+    "It makes reports pay more",
+    "It lets you test any website",
+    "It hides your name from the company"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Safe Harbor overview: why safe harbor is a first step.",
+   "where": "HackerOne: Safe Harbor overview and FAQ",
+   "url": "https://docs.hackerone.com/en/articles/8494502-safe-harbor-overview-faq"
+  },
+  {
+   "q": "A program's page has no safe harbor statement and no bounty. You found a flaw in its live site by testing it. What does this box teach?",
+   "options": [
+    "Safe harbor comes from the program's policy, so without it you have no promised protection: stop and don't test further",
+    "You are protected anyway",
+    "Post the flaw publicly so they fix it",
+    "Ask the company for money first"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at disclose.io: safe harbor is language added to a policy. Ask: is there one here?",
+   "where": "disclose.io",
+   "url": "https://disclose.io/"
+  }
+ ],
+ "pd2": [
+  {
+   "q": "What reputation does a new HackerOne profile start with?",
+   "options": [
+    "100",
+    "0",
+    "1000",
+    "50"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Reputation page: report states.",
+   "where": "HackerOne: Reputation",
+   "url": "https://docs.hackerone.com/hackers/reputation.html"
+  },
+  {
+   "q": "What does a high reputation unlock on HackerOne?",
+   "options": [
+    "Privileges, including eligibility for private bug bounty invitations",
+    "Free Burp Suite Pro forever",
+    "A HackerOne job",
+    "Nothing"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Reputation page: its opening.",
+   "where": "HackerOne: Reputation",
+   "url": "https://docs.hackerone.com/hackers/reputation.html"
+  },
+  {
+   "q": "What does HackerOne show about your Signal and Impact?",
+   "options": [
+    "Your percentile rank compared with other hackers",
+    "Your bank balance",
+    "Your home city",
+    "Nothing: they are secret"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Signal and Impact page.",
+   "where": "HackerOne: Signal and Impact",
+   "url": "https://docs.hackerone.com/hackers/signal-and-impact.html"
+  },
+  {
+   "q": "What is a Bugcrowd public profile's address now?",
+   "options": [
+    "bugcrowd.com/h/yourname",
+    "bugcrowd.com/yourname/profile",
+    "profile.bugcrowd.com/yourname",
+    "bugcrowd.com/user?id=yourname"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Bugcrowd's page on the public profile address change.",
+   "where": "Bugcrowd: Your Public Profile URL has changed",
+   "url": "https://docs.bugcrowd.com/researchers/new-public-profile-url"
+  },
+  {
+   "q": "Which Bugcrowd privacy setting makes your profile public?",
+   "options": [
+    "Everyone",
+    "Nobody",
+    "Only customers",
+    "Hidden"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at Bugcrowd's Setting Your Privacy: the three choices.",
+   "where": "Bugcrowd: Setting Your Privacy",
+   "url": "https://docs.bugcrowd.com/researchers/managing-account/account-settings/setting-your-privacy/"
+  }
+ ],
+ "pd3": [
+  {
+   "q": "What does Bugcrowd say a non-US individual must submit to receive payouts?",
+   "options": [
+    "The W-8BEN substitute tax form",
+    "A US passport",
+    "A Canadian tax return from the last three years",
+    "Nothing"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Bugcrowd's tax form page.",
+   "where": "Bugcrowd: Submitting Tax Form for Non-US Person (Individual)",
+   "url": "https://docs.bugcrowd.com/researchers/payments/setting-up-payment-methods/submitting-tax-form-for-non-us-person-individual/"
+  },
+  {
+   "q": "What does HackerOne need before it pays any award?",
+   "options": [
+    "A valid tax form, an approved identity check and a payment method",
+    "Only your email address",
+    "A reference from an employer",
+    "A minimum of 10 reports"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Tax Forms page: its first paragraph.",
+   "where": "HackerOne: Tax Forms",
+   "url": "https://docs.hackerone.com/en/articles/8395744-tax-forms"
+  },
+  {
+   "q": "Who gives Form W-8 BEN to whom, according to the IRS page?",
+   "options": [
+    "A foreign person gives it to the withholding agent or payer when they ask",
+    "You send it to the CRA each year",
+    "The platform sends it to you",
+    "Nobody: it is optional for everyone"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the IRS page About Form W-8 BEN.",
+   "where": "IRS: About Form W-8 BEN",
+   "url": "https://www.irs.gov/forms-pubs/about-form-w-8-ben"
+  },
+  {
+   "q": "Your bounty and contract income this year is $8,000, all in one quarter. Do you have to register for GST/HST, by the CRA's table?",
+   "options": [
+    "No: you are a small supplier while you stay at or under $30,000",
+    "Yes: anyone paid in USD must",
+    "Yes: anyone with a business must",
+    "Only if you live in Alberta"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at the CRA's page on when to register: the small supplier table.",
+   "where": "CRA: When to register for and start charging the GST/HST",
+   "url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+  },
+  {
+   "q": "Which CRA form reports business or professional income and expenses?",
+   "options": [
+    "T2125",
+    "W-8BEN",
+    "T4",
+    "GST34"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the CRA's T2125 page.",
+   "where": "CRA: T2125 Statement of Business or Professional Activities",
+   "url": "https://www.canada.ca/en/revenue-agency/services/forms-publications/forms/t2125.html"
+  }
+ ],
+ "pd4": [
+  {
+   "q": "How does Alignerr's AI Red Team Tester ad describe its screening?",
+   "options": [
+    "A quick screening process",
+    "A 3-month bootcamp",
+    "A university degree and transcript check",
+    "No screening at all"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Alignerr's ad: the end of the page.",
+   "where": "Alignerr: AI Red Team Tester",
+   "url": "https://www.alignerr.com/jobs/43c6c295-45e6-4a72-8d93-35e0138fc19c"
+  },
+  {
+   "q": "How long is Vettedlance's interview, by its ad?",
+   "options": [
+    "About 20 minutes",
+    "A full day",
+    "Two hours",
+    "There is no interview"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Vettedlance's ad: Role details.",
+   "where": "Vettedlance: AI Red-Teamer (Generalist)",
+   "url": "https://vettedlance.com/jobs/ai-red-teamer"
+  },
+  {
+   "q": "Who does Claru's LLM Jailbreak Red Teamer ad call the strongest candidates?",
+   "options": [
+    "People who think like adversaries: researchers, security people, former CTF players",
+    "People with a law degree",
+    "Only people from big tech companies",
+    "Only native English speakers"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Claru's ad: who they are looking for.",
+   "where": "Claru: LLM Jailbreak Red Teamer",
+   "url": "https://claru.ai/jobs/llm-jailbreak-red-teamer"
+  },
+  {
+   "q": "Syntony's engagements run under an NDA. What does that mean for your portfolio?",
+   "options": [
+    "You cannot publish findings from that work; your public proof must come from other places",
+    "You can post everything after a week",
+    "You must post a summary within 24 hours",
+    "Nothing changes"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at Syntony's page: confidentiality and reproducibility.",
+   "where": "Syntony: Trusted Red Team Network",
+   "url": "https://www.syntonyresearch.ai/work/trusted-red-team/"
+  },
+  {
+   "q": "Which tools or lists does Clera's Safety Testing ad call helpful?",
+   "options": [
+    "Burp Suite, Garak, PyRIT, similar tools, or the OWASP LLM Top 10",
+    "Photoshop and Excel",
+    "Only a university course",
+    "Nothing: no experience is helpful"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Clera's ad: what is helpful.",
+   "where": "Clera: Expert Talent Pool, Safety Testing (Associate)",
+   "url": "https://jobs.ashbyhq.com/Clera/998994f7-8a58-44b6-a0fc-9c3a46640ab8"
+  }
+ ],
+ "pd5": [
+  {
+   "q": "Are plain jailbreaks in scope for OpenAI's Safety Bug Bounty?",
+   "options": [
+    "No: jailbreaks are out of scope",
+    "Yes, all of them",
+    "Only in English",
+    "Only on weekends"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at OpenAI's Safety Bug Bounty page: what is out of scope.",
+   "where": "OpenAI: Safety Bug Bounty",
+   "url": "https://openai.com/index/safety-bug-bounty/"
+  },
+  {
+   "q": "How often must a behaviour reproduce for OpenAI's Safety Bug Bounty?",
+   "options": [
+    "At least 50% of the time",
+    "Every single time",
+    "Once is enough",
+    "At least 10 times in a row"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at OpenAI's Safety Bug Bounty page: Program overview.",
+   "where": "OpenAI: Safety Bug Bounty",
+   "url": "https://openai.com/index/safety-bug-bounty/"
+  },
+  {
+   "q": "A 'jailbreak' makes a model swear, or give facts anyone can find with a search engine. What does OpenAI's page say?",
+   "options": [
+    "Out of scope",
+    "Top reward",
+    "Send it to Microsoft",
+    "In scope if repeated twice"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OpenAI's Safety Bug Bounty page: the examples of what is out of scope.",
+   "where": "OpenAI: Safety Bug Bounty",
+   "url": "https://openai.com/index/safety-bug-bounty/"
+  },
+  {
+   "q": "What range of awards does Microsoft's Copilot bounty list?",
+   "options": [
+    "US$100 to US$30,000",
+    "US$1 to US$10",
+    "US$1,000,000",
+    "Gift cards only"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Microsoft's Copilot bounty page: Bounty awards.",
+   "where": "Microsoft Copilot bounty",
+   "url": "https://www.microsoft.com/en-us/msrc/bounty-ai"
+  },
+  {
+   "q": "What kind of account does Microsoft say to test Copilot with?",
+   "options": [
+    "A personal account (a test one is fine)",
+    "Your employer's account",
+    "Someone else's account",
+    "No account"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Microsoft's Copilot bounty page: Getting started.",
+   "where": "Microsoft Copilot bounty",
+   "url": "https://www.microsoft.com/en-us/msrc/bounty-ai"
+  },
+  {
+   "q": "What range does Mozilla 0DIN list for its rewards?",
+   "options": [
+    "US$500 to US$15,000",
+    "US$5 to US$50",
+    "US$100,000 and up",
+    "No money, only credit"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at 0DIN's terms: Vulnerability Bounty.",
+   "where": "Mozilla 0DIN: Bug Bounty Program Terms",
+   "url": "https://0din.ai/policy"
+  },
+  {
+   "q": "Which of these programs pays for jailbreaks themselves?",
+   "options": [
+    "Mozilla 0DIN",
+    "OpenAI's Safety Bug Bounty",
+    "Microsoft's Copilot bounty, for any prompt injection",
+    "None of them"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at the three programs' pages: which one is built around jailbreak findings, and which two rule them out.",
+   "where": "Mozilla 0DIN: Bug Bounty Program Terms",
+   "url": "https://0din.ai/policy"
+  },
+  {
+   "q": "Who can't take part in 0DIN's program?",
+   "options": [
+    "People on a US sanctions list or in a sanctioned country, among others",
+    "Anyone living in Canada",
+    "Anyone under 30",
+    "Anyone without a degree"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at 0DIN's terms: Eligible Participants.",
+   "where": "Mozilla 0DIN: Bug Bounty Program Terms",
+   "url": "https://0din.ai/policy"
+  }
+ ],
+ "tl1": [
+  {
+   "q": "What is a README for, according to GitHub?",
+   "options": [
+    "Telling people why your project is useful, what they can do with it and how to use it",
+    "Storing your API keys",
+    "Listing everyone who starred, forked or watched the project, with the date each one did it",
+    "Hiding code from other users"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at GitHub's page About READMEs: its first part.",
+   "where": "GitHub Docs: About READMEs",
+   "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes"
+  },
+  {
+   "q": "What should a README contain, according to GitHub?",
+   "options": [
+    "Only what developers need to get started using and contributing",
+    "Every note and idea you ever wrote about the project, in the order you wrote them",
+    "Your passwords, so others can test",
+    "Nothing: it should stay empty"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at GitHub's page About READMEs: the part on wikis.",
+   "where": "GitHub Docs: About READMEs",
+   "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes"
+  },
+  {
+   "q": "What does GitHub build for you from a Markdown file's section headings?",
+   "options": [
+    "A table of contents",
+    "A website",
+    "A test suite",
+    "A bounty report"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at GitHub's page About READMEs: the auto-generated table of contents.",
+   "where": "GitHub Docs: About READMEs",
+   "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "prompts.json 1",
+    "prompts.json",
+    "--tries 1",
+    "None"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at Python's argparse tutorial: positional arguments, and optional ones with a default.",
+   "where": "Python docs: argparse tutorial",
+   "url": "https://docs.python.org/3/howto/argparse.html",
+   "code": "import argparse\nparser = argparse.ArgumentParser()\nparser.add_argument(\"prompts\")\nparser.add_argument(\"--tries\", type=int, default=1)\nargs = parser.parse_args([\"prompts.json\"])\nprint(args.prompts, args.tries)"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "5",
+    "1",
+    "--tries",
+    "None"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at Python's argparse tutorial: optional arguments, and type=int.",
+   "where": "Python docs: argparse tutorial",
+   "url": "https://docs.python.org/3/howto/argparse.html",
+   "code": "import argparse\nparser = argparse.ArgumentParser()\nparser.add_argument(\"--tries\", type=int, default=1)\nprint(parser.parse_args([\"--tries\", \"5\"]).tries)"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "argparse stopped the script",
+    "None",
+    "prompts",
+    "[]"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at Python's argparse tutorial: what happens when a positional argument is missing.",
+   "where": "Python docs: argparse tutorial",
+   "url": "https://docs.python.org/3/howto/argparse.html",
+   "code": "import argparse\nparser = argparse.ArgumentParser()\nparser.add_argument(\"prompts\")\ntry:\n    parser.parse_args([])\nexcept SystemExit:\n    print(\"argparse stopped the script\")"
+  },
+  {
+   "q": "Which option does argparse give your tool for free?",
+   "options": [
+    "--help (or -h)",
+    "--version",
+    "--verbose",
+    "--debug"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Python's argparse tutorial: The basics.",
+   "where": "Python docs: argparse tutorial",
+   "url": "https://docs.python.org/3/howto/argparse.html"
+  },
+  {
+   "q": "In `probe.py prompts.json --tries 3`, what is prompts.json, in argparse's words?",
+   "options": [
+    "A positional argument",
+    "An optional argument",
+    "A flag",
+    "A subcommand"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at Python's argparse tutorial: Introducing Positional arguments.",
+   "where": "Python docs: argparse tutorial",
+   "url": "https://docs.python.org/3/howto/argparse.html"
+  }
+ ],
+ "tl2": [
+  {
+   "q": "What does HackerOne say a quality report provides?",
+   "options": [
+    "Clear, detailed and actionable information about a vulnerability",
+    "A long story of how you found it, from the first page you opened to the last",
+    "Only a screenshot",
+    "A guess at how much it should pay"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Quality Reports: What Makes a Quality Report?",
+   "where": "HackerOne: Quality Reports",
+   "url": "https://docs.hackerone.com/en/articles/8475116-quality-reports"
+  },
+  {
+   "q": "What should a good report title do?",
+   "options": [
+    "Quickly convey the nature of the vulnerability",
+    "Be as short as possible, one word",
+    "Name the person who found it",
+    "Use capital letters to stand out"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Quality Reports: Title.",
+   "where": "HackerOne: Quality Reports",
+   "url": "https://docs.hackerone.com/en/articles/8475116-quality-reports"
+  },
+  {
+   "q": "What belongs in Steps to Reproduce?",
+   "options": [
+    "Details like URLs, affected parameters and the user roles needed",
+    "Your opinion of the company's security team and how they should have built it",
+    "Only the final result",
+    "The bounty you expect"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Quality Reports: Steps to Reproduce.",
+   "where": "HackerOne: Quality Reports",
+   "url": "https://docs.hackerone.com/en/articles/8475116-quality-reports"
+  },
+  {
+   "q": "Which mistake does HackerOne warn about?",
+   "options": [
+    "Vague reports, like 'There's an XSS vulnerability.'",
+    "Reports with screenshots",
+    "Reports that state the impact",
+    "Reports with clear steps"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Quality Reports: Common Mistakes to Avoid.",
+   "where": "HackerOne: Quality Reports",
+   "url": "https://docs.hackerone.com/en/articles/8475116-quality-reports"
+  },
+  {
+   "q": "What must a qualifying report to Microsoft's Copilot bounty demonstrate?",
+   "options": [
+    "A qualifying security impact on the service",
+    "That the model used rude words",
+    "That the bug is famous",
+    "That you spent 40 hours"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Microsoft's Copilot bounty page: the program description.",
+   "where": "Microsoft Copilot bounty",
+   "url": "https://www.microsoft.com/en-us/msrc/bounty-ai"
+  },
+  {
+   "q": "What does Microsoft ask you to include in the Steps to reproduce of a Copilot report?",
+   "options": [
+    "The conversation ID (type /id in the chat to get it)",
+    "Your home address",
+    "A video of you typing",
+    "Nothing: steps are optional"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Microsoft's Copilot bounty page: how to submit.",
+   "where": "Microsoft Copilot bounty",
+   "url": "https://www.microsoft.com/en-us/msrc/bounty-ai"
+  },
+  {
+   "q": "Your Copilot prompt injection only changes what you yourself see. What does Microsoft's page say about that?",
+   "options": [
+    "Out of scope: it has no security impact on users other than the attacker",
+    "It pays the top award",
+    "It must be sent to OpenAI instead",
+    "It counts if you repeat it 3 times"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at Microsoft's Copilot bounty page: Out-of-scope submissions.",
+   "where": "Microsoft Copilot bounty",
+   "url": "https://www.microsoft.com/en-us/msrc/bounty-ai"
+  },
+  {
+   "q": "Before you send a report, which question does HackerOne's final check ask?",
+   "options": [
+    "Can the vulnerability be easily reproduced with the steps provided?",
+    "Is the report longer than 5 pages?",
+    "Did you use a fancy font?",
+    "Did you tell your friends first?"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Quality Reports: Final Checks Before Submission.",
+   "where": "HackerOne: Quality Reports",
+   "url": "https://docs.hackerone.com/en/articles/8475116-quality-reports"
+  }
+ ],
+ "tl3": [
+  {
+   "q": "What happens to a report's contents when you submit it on HackerOne?",
+   "options": [
+    "The security team sees it, and it stays non-public at first so they can fix it",
+    "It is published at once",
+    "It is emailed to the press",
+    "It is deleted after a week"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Disclosure Guidelines: Vulnerability Disclosure Process.",
+   "where": "HackerOne: Vulnerability Disclosure Guidelines",
+   "url": "https://www.hackerone.com/terms/disclosure-guidelines"
+  },
+  {
+   "q": "Where do a program's own rules about confidentiality and disclosure live?",
+   "options": [
+    "In the program policy the security team publishes",
+    "Only in your contract with HackerOne",
+    "Nowhere: everything is public",
+    "In the bug's title"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Disclosure Guidelines: Program Participation & Submission Process.",
+   "where": "HackerOne: Vulnerability Disclosure Guidelines",
+   "url": "https://www.hackerone.com/terms/disclosure-guidelines"
+  },
+  {
+   "q": "You want to put a write-up of a bounty finding on GitHub. What comes first?",
+   "options": [
+    "Check the program's policy and disclosure rules",
+    "Post it at once so nobody else claims it",
+    "Post it, then ask",
+    "Nothing: write-ups are always allowed"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at HackerOne's Disclosure Guidelines: what the program policy covers.",
+   "where": "HackerOne: Vulnerability Disclosure Guidelines",
+   "url": "https://www.hackerone.com/terms/disclosure-guidelines"
+  },
+  {
+   "q": "Which of these is one of HackerOne's conditions for public recognition of a report?",
+   "options": [
+    "You are the first to file a report for that vulnerability",
+    "Your report is the longest",
+    "You found it on a weekend",
+    "You tagged the company on social media"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Disclosure Guidelines: Public Recognition.",
+   "where": "HackerOne: Vulnerability Disclosure Guidelines",
+   "url": "https://www.hackerone.com/terms/disclosure-guidelines"
+  },
+  {
+   "q": "What does HackerOne say coordinated disclosure protects?",
+   "options": [
+    "Both researchers and programs",
+    "Only the company",
+    "Only the researcher",
+    "Only HackerOne"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Disclosure Guidelines: Vulnerability Disclosure Standards.",
+   "where": "HackerOne: Vulnerability Disclosure Guidelines",
+   "url": "https://www.hackerone.com/terms/disclosure-guidelines"
+  },
+  {
+   "q": "Which labs and practice sites are safest to write up publicly?",
+   "options": [
+    "Training labs like PortSwigger's and Microsoft's, if their rules allow sharing",
+    "A live bounty finding before it is fixed",
+    "A private program's bug under NDA",
+    "Anything, as long as you blur the company name"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at HackerOne's Disclosure Guidelines: private programs and program policies. Training labs are built to be shared about; live findings are not.",
+   "where": "HackerOne: Vulnerability Disclosure Guidelines",
+   "url": "https://www.hackerone.com/terms/disclosure-guidelines"
+  },
+  {
+   "q": "Some community members get invitations to what?",
+   "options": [
+    "Private programs",
+    "Free laptops",
+    "HackerOne's office",
+    "Job interviews only"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Disclosure Guidelines: Private Program.",
+   "where": "HackerOne: Vulnerability Disclosure Guidelines",
+   "url": "https://www.hackerone.com/terms/disclosure-guidelines"
+  },
+  {
+   "q": "What may some security teams offer for a disclosed vulnerability?",
+   "options": [
+    "Monetary rewards",
+    "Nothing ever",
+    "Only a thank-you email",
+    "Shares in the company"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Disclosure Guidelines: Bug Bounty.",
+   "where": "HackerOne: Vulnerability Disclosure Guidelines",
+   "url": "https://www.hackerone.com/terms/disclosure-guidelines"
+  }
+ ],
+ "tl4": [
+  {
+   "q": "What is a profile README for?",
+   "options": [
+    "Telling other people about yourself on your GitHub profile",
+    "Storing your passwords and keys so you can reach them from any computer",
+    "Running your code",
+    "Blocking other users"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at GitHub's page on managing your profile README: its first line.",
+   "where": "GitHub Docs: Managing your profile README",
+   "url": "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme"
+  },
+  {
+   "q": "What must the repository's name be for GitHub to show it on your profile?",
+   "options": [
+    "The same as your GitHub username",
+    "profile-readme",
+    "red-team-tools",
+    "Anything you like"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at GitHub's page: Prerequisites.",
+   "where": "GitHub Docs: Managing your profile README",
+   "url": "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme"
+  },
+  {
+   "q": "Where must the README.md file be in that repository?",
+   "options": [
+    "In its root",
+    "In a folder called docs",
+    "In a branch called profile",
+    "Anywhere"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at GitHub's page: Prerequisites.",
+   "where": "GitHub Docs: Managing your profile README",
+   "url": "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme"
+  },
+  {
+   "q": "What removes your profile README from your profile?",
+   "options": [
+    "Removing the README file or making it empty",
+    "Adding a picture",
+    "Starring another repository",
+    "Changing your password"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at GitHub's page: Removing a profile README.",
+   "where": "GitHub Docs: Managing your profile README",
+   "url": "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme"
+  },
+  {
+   "q": "You made a public repository named after yourself before July 2020 and its README doesn't show. What does GitHub's page say to do?",
+   "options": [
+    "Click Share to profile on the repository",
+    "Delete your account",
+    "Rename it to readme",
+    "Wait a year"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at GitHub's page: the note under Prerequisites.",
+   "where": "GitHub Docs: Managing your profile README",
+   "url": "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme"
   }
  ],
  "wb1": [
