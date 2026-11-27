@@ -451,7 +451,7 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 
 ---
 
-## 8. Fix log (in progress: 8 of 25 done, paused 27 Nov 2026, 4:16 pm Alberta)
+## 8. Fix log (in progress: 9 of 25 done, 27 Nov 2026)
 
 Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/ship.sh` (local test, push, live file compared, live test). "Failed before" means the new checks were run against the live site before the change went out.
 
@@ -463,7 +463,8 @@ Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/
 6. **A1, A3, D1, C6, lab text.** Commit 7dd1af7. 5 new checks, all failed before. Live: 373. The GPT-4o date and the line to change; "download your chat before you stop the labs" on every required lab, in the guide and in the Stop script; auto-reload; OpenAI's own words on losing access; Lab 7 hint 2; Lab 10; pull request 69 in place of issue 33. Left, waiting on your answers: a "Moving on, not solved" button (Q5), a re-test on a newer model (Q1), rewording hints that give the move away (Q6).
 8. **A8, a real HackerOne address is accepted.** Commit b42c029. 6 new checks, 3 failed before. Live: 379. The example address, pages that are not a profile and the dead `www` form are now refused.
 9. **A9 and A10, the API-key check and box ap3's counting rule.** Commit 4363507. 8 new checks, 5 failed before. Live: 387.
+10. **A13, B6, C10, wording on screen.** Commit b199a51. 4 new checks and 1 changed, all 5 failed before. Live: 392. Course-box quizzes no longer say "video"; a missed review says "comes back in 24 hours" (it returns 24 hours after the miss, not the next morning); Settings names everything stored online; the Library gives 27 Nov for its later sources; the GitHub limit message says to switch to the phone's data. Left: the 5 review questions a day are still counted per device (B6), and the slow-clock edge (B6) is unchanged.
 
 Also done, not a fix yet: garak and PyRIT were run for real on free local models on this PC (decision 1). Both worked with no key. The exact steps are in `helpers/real-runs.md` in the audit folder and go into boxes ag4 and ag5 at fix 17. One line of finding A6 was corrected from that run.
 
-Not started: fixes 7 and 10 to 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
+Not started: fixes 7 and 11 to 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.

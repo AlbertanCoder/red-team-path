@@ -108,7 +108,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 ### Where things stand (update as you go)
 
 - Tag `before-audit-fixes` on bf3d93e before any change.
-- **Paused 27 Nov 2026, 4:16 pm Alberta, at a clean point**: fixes 1, 2, 3, 4, 5, 6, 8 and 9 are live and proven (387 checks local and live). Usage could not be read; by the lead's own estimate it was close to the 75% line, so work stopped to ask Shad for the number. Next in order: 10 (wording), 7 (Steps 1 to 6 facts), then 11 onward. Fix 6 still waits on Q1, Q5 and Q6 for its last parts. The real garak and PyRIT runs for fix 17 are done (audit folder, `helpers/real-runs.md`); the boxes are not rewritten yet.
+- **Paused 27 Nov 2026, 4:16 pm Alberta, at a clean point**: fixes 1, 2, 3, 4, 5, 6, 8 and 9 are live and proven (387 checks local and live). Resumed 4:25 pm at Shad's 73%: fix 10 live (392 checks). Usage could not be read; by the lead's own estimate it was close to the 75% line, so work stopped to ask Shad for the number. Next in order: 7 (Steps 1 to 6 facts), then 11 onward. Fix 6 still waits on Q1, Q5 and Q6 for its last parts. The real garak and PyRIT runs for fix 17 are done (audit folder, `helpers/real-runs.md`); the boxes are not rewritten yet.
 - `AUDIT-FULL-PROMPT.md` is held back from the repository on this PC (`.git/info/exclude`) until Shad says whether to publish it (question Q4 in `AUDIT-FULL.md`).
 
 ### Done checklist (each one needs proof: the commit, the test that fails without it, the live check)
@@ -122,7 +122,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [ ] 7. A5, A11, A12, C3, C9 (Steps 1 to 6 rows): facts only.
 - [x] 8. A8: HackerOne and Bugcrowd address patterns. Proof: b42c029; 6 new checks (failing on the live site before the change); `tools/ship.sh` local and live ALL PASSED, 27 Nov 2026.
 - [x] 9. A9, A10: the key pattern; ap3's counting rule. Proof: 4363507; 8 new checks (5 failed on the live site before the change); `tools/ship.sh` local and live ALL PASSED (387 checks), 27 Nov 2026.
-- [ ] 10. A13, B6, C10: wording on screen.
+- [x] 10. A13, B6, C10: wording on screen. Proof: b199a51; 4 new checks and 1 changed, all 5 failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (392 checks), 27 Nov 2026. Course-box quizzes no longer say "video"; a missed review says it comes back in 24 hours; Settings names everything stored online; the Library gives 27 Nov for its later sources; the GitHub limit message says to switch to the phone's data.
 - [ ] 11. E2: a quiz retry asks everything again in a new order (decision 3).
 - [ ] 12. C5, E3: wrong and double-answer questions, give-away hints, project quizzes, guessable options, tighter builder guards (decision 3).
 - [ ] 13. A4: Git on the PC with GitHub Desktop (decision 5).
