@@ -1,7 +1,7 @@
 # This is docker/chat-copilot/webapi/Dockerfile from Microsoft's AI Red Teaming Playground Labs
 # (https://github.com/microsoft/AI-Red-Teaming-Playground-Labs, MIT licence, copyright Microsoft Corporation),
 # with the two changes marked LOCAL FIX below. Without them the build stops with "404 Not Found"
-# (Microsoft's own issue 33, open since September 2025). Copy this file over the original, keeping the name Dockerfile.
+# (a fix was proposed to Microsoft in pull request 69 and closed without being merged). Copy this file over the original, keeping the name Dockerfile.
 
 # docker build -f docker/webapi/Dockerfile -t chat-copilot-webapi .
 
@@ -26,7 +26,7 @@ WORKDIR /source
 COPY src/chat-copilot/webapi webapi
 COPY src/chat-copilot/shared shared
 # LOCAL FIX (18 Nov 2026): this step used to run 'apt-get install -y wget'. wget is already in the image, and asking the
-# retired Debian security address for an update to it fails with 404 (Microsoft's issue 33). The install was removed.
+# retired Debian security address for an update to it fails with 404 (see Microsoft's pull request 69). The install was removed.
 RUN cd webapi && \
   dotnet restore --use-current-runtime && \
   wget -P data https://raw.githubusercontent.com/tesseract-ocr/tessdata/main/eng.traineddata && \

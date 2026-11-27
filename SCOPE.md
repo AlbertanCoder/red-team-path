@@ -116,7 +116,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 2. B2: "Load this code" asks first and says it replaces. Proof: c1648df; 8 new checks (4 failed on the live site before the change); `tools/ship.sh` local and live ALL PASSED (357 checks), 27 Nov 2026.
 - [x] 3. B3: one rotation mark at a time. Proof: d38e5b3; 5 new checks, one a first link through a pretend store (4 failed on the live site before the change); `tools/ship.sh` local and live ALL PASSED (362 checks), 27 Nov 2026. Left as it is: review timing still restarts after a backup load or a first link after a clear.
 - [x] 4. B4: marks the app does not know are kept; no "I'm done" on a quiz box when the quiz file did not load. Proof: 5675cdf; 6 new checks (4 failed on the live site before the change); `tools/ship.sh` local and live ALL PASSED (368 checks), 27 Nov 2026.
-- [ ] 5. A2: the lab-proof checker stops refusing honest wins; its messages say what to do; new test cases.
+- [x] 5. A2: the lab-proof checker stops refusing honest wins; its messages say what to do; new test cases. Proof: bb92a4f; `tools/proof_test.js` 109 cases (23 new, 21 fail on the checker before the change); the audit's attack script: honest wins refused 26 to 12, cheats passing 37 to 31, none newly passing; `tools/ship.sh` local and live ALL PASSED, 27 Nov 2026. Left: a file typed by hand in the after-reload shape still passes; 9 rarer honest cases are still refused (listed in the fix log).
 - [ ] 6. A1, A3, D1, C6: lab text (the GPT-4o date, download the chat before stopping, auto-reload, lab 7 hint 2, lab 10, issue 33).
 - [ ] 7. A5, A11, A12, C3, C9 (Steps 1 to 6 rows): facts only.
 - [ ] 8. A8: HackerOne and Bugcrowd address patterns.

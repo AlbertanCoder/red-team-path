@@ -975,6 +975,23 @@ with sync_playwright() as p:
     up.wait_for_timeout(1500)
     check(ticks(up).get("zz9", 0) > 0 and ticks(up).get("v2", 0) > 0, "Scope 3: a mark this app does not know, saved by another device, is kept when it arrives (pretend store)")
     uctx.close()
+
+    # Scope 3, fix 6 (audit A1, A3, D1, C6): lab text that was missing or untrue.
+    def screen(page, box):
+        page.evaluate("location.hash = '#i-%s'" % box)
+        page.wait_for_timeout(250)
+        return page.inner_text("#view-now")
+
+    xctx, xp = new_page(b, blank({"ha7": T, "hb7": T}), start=False)   # Lab 7 with hints 1 and 2 open
+    setup_text = screen(xp, "m0")
+    check("auto-reload" in setup_text, "Scope 3: the set-up box says to switch off OpenAI's auto-reload")
+    check("14 Jan 2027" in setup_text and "GPT-4o" in setup_text, "Scope 3: the set-up box says GPT-4o is shut down on 14 Jan 2027")
+    check("before you stop the labs" in screen(xp, "m1"), "Scope 3: a required lab says to download the chat before stopping the labs")
+    lab7 = screen(xp, "m7")
+    check("Copilot" in lab7 and "may stay silent" not in lab7, "Scope 3: Lab 7's hint 2 no longer gives the untrue reason (may stay silent)")
+    lab10 = screen(xp, "m10")
+    check("description prints the key" in lab10 and "shows you its hidden instructions" not in lab10, "Scope 3: Lab 10 says the description prints the key, not that the lab shows its hidden instructions")
+    xctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
