@@ -2660,7 +2660,7 @@
     var qs = QUIZ[n];
     var need = passMark(qs.length);
     if (isDone("qz" + n)) {
-      var done = h("div", { class: "answer", id: "quiz-box" }, [h("p", null, [h("b", { text: "Quiz passed. " }), "You can tick this video."])]);
+      var done = h("div", { class: "answer", id: "quiz-box" }, [h("p", null, [h("b", { text: "Quiz passed. " }), "You can tick this " + (videoNo(it) ? "video." : "box.")])]);
       var rev = quizReview(n);
       if (rev.length) {
         done.appendChild(h("p", { class: "small", text: "The ones you got wrong on the way, now with the right answers:" }));
@@ -2672,7 +2672,7 @@
     }
     var box = h("div", { class: "block", id: "quiz-box" });
     if (!quizRun || quizRun.n !== n) {
-      box.appendChild(h("p", { class: "small", text: qs.length + " questions " + (videoNo(it) ? "about this video" : "from the course's own pages") + ". Get " + need + " right to tick it. A miss shows what you picked and where in the video to look, and the retry opens 2 minutes later; the right answers show once you pass." }));
+      box.appendChild(h("p", { class: "small", text: qs.length + " questions " + (videoNo(it) ? "about this video" : "from the course's own pages") + ". Get " + need + " right to tick it. A miss shows what you picked and " + (videoNo(it) ? "where in the video to look" : "which page to read again") + ", and the retry opens 2 minutes later; the right answers show once you pass." }));
       var startBtn = h("button", { type: "button", class: "wide", id: "quiz-start", text: "Start the quiz" });
       var startAt = quizWaitUntil(n);
       startBtn.addEventListener("click", function () {
@@ -2713,7 +2713,7 @@
       return box;
     }
     // A round is over and the score is still short.
-    box.appendChild(h("p", { id: "quiz-score" }, [h("b", { text: score + " of " + qs.length + " right. " }), "You need " + need + ". Rewatch these moments, then answer the ones you missed again. The retry opens 2 minutes after a missed round:"]));
+    box.appendChild(h("p", { id: "quiz-score" }, [h("b", { text: score + " of " + qs.length + " right. " }), "You need " + need + ". " + (videoNo(it) ? "Rewatch these moments" : "Read those pages again") + ", then answer the ones you missed again. The retry opens 2 minutes after a missed round:"]));
     var ul = h("ul", { id: "quiz-misses" });
     run.missed.forEach(function (qi) {
       ul.appendChild(h("li", null, [h("b", { text: qs[qi].q + " " }), "You answered “" + run.wrong[qi] + "”. " + qs[qi].hint,
@@ -2971,7 +2971,7 @@
       render("gh-result");
     }, function (e) {
       var why = e && e.message === "missing" ? "GitHub has no public repository like that for " + user + ". Check the spelling of your username and the repository's name, and that it is public." :
-        e && e.message === "busy" ? "GitHub is limiting checks from this network for a while (about 60 an hour). Try again later." : "GitHub could not be reached. Check your connection and try again.";
+        e && e.message === "busy" ? "GitHub is limiting checks from this network for a while (about 60 an hour, shared by everyone on the same Wi-Fi). Try again later, or switch to your phone's data and check again." : "GitHub could not be reached. Check your connection and try again.";
       ghRun[it.id] = { busy: false, lines: lines.concat([[false, why]]), note: "" };
       render("gh-result");
     });
@@ -3351,7 +3351,7 @@
     return card;
   }
 
-  // ----- Review: one question from a box you finished, 1 day, then 1 week, then 1 month after its quiz. A miss brings it back tomorrow. -----
+  // ----- Review: one question from a box you finished, 1 day, then 1 week, then 1 month after its quiz. A miss brings it back 24 hours later. -----
   var REVIEW_GAPS = [1, 7, 30];
   var REVIEW_MAX = 5; // questions a day
   var RV_KEY = "redTeamPath.reviewToday"; // on this device: how many answered today, and the question last asked per box
@@ -3399,7 +3399,7 @@
         return card;
       }
       card.appendChild(h("div", { class: "tag red", text: "REVIEW · " + Math.min(due.length, left) + " DUE TODAY" }));
-      card.appendChild(h("p", { class: "line", text: "One question each from boxes you finished earlier. A miss brings that topic back tomorrow. It never blocks your next step." }));
+      card.appendChild(h("p", { class: "line", text: "One question each from boxes you finished earlier. A miss brings that topic back 24 hours later. It never blocks your next step." }));
       var go1 = h("button", { type: "button", class: "primary", id: "review-start", text: "Start review" });
       go1.addEventListener("click", function () { startReview(); render("review-q"); });
       card.appendChild(go1);
@@ -3432,7 +3432,7 @@
       var after = reviewNow.k < 3 ? "This topic comes back in " + REVIEW_GAPS[reviewNow.k] + " days." : "That was its last review: it's learned.";
       card.appendChild(h("p", { class: "line", id: "review-result", tabindex: "-1" }, right
         ? [h("b", { text: "Right. " }), after]
-        : [h("b", { text: "Not this time. " }), q.hint + " ", q.url ? link("Open that lesson ↗", q.url, "", null) : null, " This topic comes back tomorrow."]));
+        : [h("b", { text: "Not this time. " }), q.hint + " ", q.url ? link("Open that lesson ↗", q.url, "", null) : null, " This topic comes back in 24 hours."]));
       var more = REVIEWED.some(function (x) { return reviewDue(x) > 0; }) && reviewToday().n < REVIEW_MAX;
       var next = h("button", { type: "button", id: "review-next", text: more ? "Next question" : "Done for today" });
       next.addEventListener("click", function () { reviewNow = null; if (more) { startReview(); } render(more ? "review-q" : "continue-btn"); });
@@ -3825,7 +3825,7 @@
     box.appendChild(pairBox);
     box.appendChild(h("div", { class: "btnrow" }, [pairBtn, pairStatus]));
     if (state.sync) {
-      box.appendChild(h("p", { class: "note", text: "What is stored online: which boxes are ticked, which hints are open, lab results, and on which days. No name, no email, no notes, nothing else about you." }));
+      box.appendChild(h("p", { class: "note", text: "What is stored online: which boxes are ticked, which hints are open, lab results, quiz passes, review answers, the checks you passed, your rotation, and the last time you studied on each weekday. No name, no email, no notes, nothing else about you." }));
       var offBtn = h("button", { type: "button", class: "ghost", id: "sync-off", text: "UNLINK THIS DEVICE" });
       offBtn.addEventListener("click", function () { stopSync(); render(); syncPanel(); });
       box.appendChild(h("div", { class: "btnrow" }, [offBtn]));
@@ -4207,7 +4207,7 @@
       });
       v.appendChild(h("div", { class: "block" }, [
         h("details", { class: "fold", id: "tutor-sources" }, [h("summary", { text: "Where these lessons come from: " + Object.keys(seen).length + " sources" }),
-          h("p", { class: "note", text: "Every page was opened on " + AUDIT_DATE + ". The lessons are this app's own summaries of them." }), list]),
+          h("p", { class: "note", text: "Every page was opened on " + AUDIT_DATE + " or, for the 15 sources added later, on 27 Nov 2026. The lessons are this app's own summaries of them." }), list]),
         h("details", { class: "fold", id: "tutor-rules" }, [h("summary", { text: "Rules that keep you safe and hireable" }), bullets(RULES)])
       ]));
       return;
