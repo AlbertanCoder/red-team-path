@@ -752,6 +752,43 @@ with sync_playwright() as p:
     check(not dp.evaluate("document.documentElement.scrollWidth > innerWidth + 1"), "desktop: no sideways scrolling")
     check(not dp.errors, "desktop: no page errors %s" % dp.errors[:2])
     dctx.close()
+
+    # Scope 3, fix 1 (audit B1): an address ending #sync=<code> must ask before it links this device. It used to link at once,
+    # swapping the device's own private code for the one in the link. This test never reaches the real store.
+    STORE = "https://red-team-path-default-rtdb.firebaseio.com/**"
+    MINE, THEIRS = "a" * 32, "b" * 32
+
+    def linked_device(hash_):
+        ctx = b.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        ctx.route(STORE, lambda route: route.abort())
+        seed = json.dumps({"m": {"v1": T}, "y": {}, "r": 0, "best": 0, "theme": "dark", "open": {}, "test": False, "sync": MINE, "nolink": True})
+        ctx.add_init_script("if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1'); localStorage.setItem('redTeamPath.v2', %s); }" % json.dumps(seed))
+        page = ctx.new_page()
+        page.goto(base + hash_)
+        page.wait_for_selector("#top-title")
+        page.wait_for_timeout(700)
+        return ctx, page
+
+    def code_of(page):
+        return page.evaluate("JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}').sync || ''")
+
+    lctx, lp = linked_device("#sync=" + THEIRS)
+    check(lp.locator("#join-ask").count() == 1 and code_of(lp) == MINE, "Scope 3: a #sync= link does not link by itself: the device keeps its own private code and is asked first")
+    check("sync=" not in lp.url, "Scope 3: the code from the link is taken out of the address bar")
+    if lp.locator("#join-no").count():
+        lp.click("#join-no")
+        lp.wait_for_timeout(200)
+    check(lp.locator("#join-ask").count() == 0 and code_of(lp) == MINE, "Scope 3: saying no keeps the device's own private code")
+    lctx.close()
+    lctx, lp = linked_device("#sync=" + THEIRS)
+    if lp.locator("#join-yes").count():
+        lp.click("#join-yes")
+        lp.wait_for_timeout(300)
+    check(lp.locator("#join-ask").count() == 0 and code_of(lp) == THEIRS, "Scope 3: saying yes links the device to the code in the link")
+    lctx.close()
+    lctx, lp = linked_device("#sync=" + MINE)
+    check(lp.locator("#join-ask").count() == 0 and code_of(lp) == MINE, "Scope 3: a link holding the device's own code asks nothing")
+    lctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")

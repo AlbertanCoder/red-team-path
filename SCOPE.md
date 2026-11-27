@@ -96,3 +96,53 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 ### Change requests
 
 - 2026-11-27 about 11:37 Alberta: Shad approved a second Step 5 change (beyond the install line): box a1 gets one numbered step adding `use_tls=False` to the notebook's HTTPTarget line, because labs on his own PC use http. Tested: the Lab 1 notebook runs to the end with it. No id, tick or order changes.
+
+---
+
+## Scope 3: audit fixes (opened 27 Nov 2026)
+
+**Goal:** Fix every error found by the full audit (`AUDIT-FULL.md`), one fix at a time, each proven, and play each official lesson video inside the app. Go-ahead: Shad's instruction of 27 Nov 2026 ("when it writes its report, then it fixes everything it found"), his six decisions and the in-app videos change, all recorded in section 0 of the audit prompt. New ideas are not errors: they go to `IDEAS.md`.
+
+**Usage at the start (Shad's screenshot, 27 Nov 2026 2:40 pm):** 71% all models, 93% Fable only. Full stop at 75% all models; nothing after 10 pm Alberta.
+
+### Where things stand (update as you go)
+
+- Tag `before-audit-fixes` on bf3d93e before any change.
+- `AUDIT-FULL-PROMPT.md` is held back from the repository on this PC (`.git/info/exclude`) until Shad says whether to publish it (question Q4 in `AUDIT-FULL.md`).
+
+### Done checklist (each one needs proof: the commit, the test that fails without it, the live check)
+
+- [ ] 1. B1: an address ending `#sync=` asks before it links this device.
+- [ ] 2. B2: "Load this code" asks first and says it replaces.
+- [ ] 3. B3: one rotation mark at a time.
+- [ ] 4. B4: marks the app does not know are kept; no "I'm done" on a quiz box when the quiz file did not load.
+- [ ] 5. A2: the lab-proof checker stops refusing honest wins; its messages say what to do; new test cases.
+- [ ] 6. A1, A3, D1, C6: lab text (the GPT-4o date, download the chat before stopping, auto-reload, lab 7 hint 2, lab 10, issue 33).
+- [ ] 7. A5, A11, A12, C3, C9 (Steps 1 to 6 rows): facts only.
+- [ ] 8. A8: HackerOne and Bugcrowd address patterns.
+- [ ] 9. A9, A10: the key pattern; ap3's counting rule.
+- [ ] 10. A13, B6, C10: wording on screen.
+- [ ] 11. E2: a quiz retry asks everything again in a new order (decision 3).
+- [ ] 12. C5, E3: wrong and double-answer questions, give-away hints, project quizzes, guessable options, tighter builder guards (decision 3).
+- [ ] 13. A4: Git on the PC with GitHub Desktop (decision 5).
+- [ ] 14. E1, A7: tighter GitHub checks, each with a nonsense repository that fails and an honest one that passes (decision 4).
+- [ ] 15. C1: OWASP 2026 (decision 2).
+- [ ] 16. C2: PortSwigger's 8 labs (decision 2).
+- [ ] 17. A6, A7: garak and PyRIT run for real on a free model; steps rewritten from what worked; `PROOF.md` (decision 1).
+- [ ] 18. C4, C9 (Steps 7 to 14 rows), D2: box text.
+- [ ] 19. C7, C8: Library lessons and words.
+- [ ] 20. H: videos inside the app for py1 to py8, md1 to md7, wb2, wb6, gt1 and c50; `tools/walk_test.py` plays each one on the live site.
+- [ ] 21. D3: Jobs tools.
+- [ ] 22. G: ease-of-use fixes.
+- [ ] 23. E5: tests that can fail for what the records claim.
+- [ ] 24. F: records made true.
+- [ ] 25. Every test local and live; tag `audit-fixes-done`; fix log at the end of `AUDIT-FULL.md`.
+
+### Out of scope
+
+- Any change to the meaning or order of Steps 1 to 6 beyond proven errors of fact, without Shad's answer. Removing a box. Anything that could reset saved progress. Spending money or using his keys or accounts. Any other project.
+- Any new idea: it goes in `IDEAS.md`.
+
+### Change requests
+
+(none yet)

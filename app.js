@@ -2061,6 +2061,7 @@
   var justMarked = ""; // the box marked a moment ago: its screen stays up and the bottom bar shows what is next
   var tickedAt = 0;    // a fast double tap must not mark two boxes
   var pairNote = "";   // one line shown in Settings right after this device is linked
+  var pendingJoin = ""; // a private code that came in on an old-style link (…#sync=code): held until you say yes in Settings
   var playing = "";    // the box whose video is open in the player, so a re-draw does not restart it
 
   // Where every box sits: its step, and the label of its group. Boxes off the main line are here too.
@@ -3643,6 +3644,26 @@
     box.appendChild(h("h2", { text: "Link my devices" }));
     box.appendChild(h("p", { class: "status-line", id: "sync-status", role: "status", "data-sync": sync.status, text: STATUS_TEXT[sync.status] }));
     if (pairNote) { box.appendChild(h("p", { class: "ticked", id: "pair-note", role: "status", text: pairNote })); pairNote = ""; }
+    if (pendingJoin) {
+      // A link must never link this device by itself: whoever made the link holds its code and could change or clear the ticks.
+      var joinYes = h("button", { type: "button", class: "primary", id: "join-yes", text: "Link this device" });
+      var joinNo = h("button", { type: "button", id: "join-no", text: state.sync ? "No, keep my own" : "No" });
+      joinYes.addEventListener("click", function () {
+        var code = pendingJoin;
+        pendingJoin = "";
+        startSync(code, true);
+        pairNote = "Linked. Ticks from both devices are being combined.";
+        render();
+        syncPanel();
+      });
+      joinNo.addEventListener("click", function () { pendingJoin = ""; syncPanel(); });
+      box.appendChild(h("div", { class: "panel", id: "join-ask", role: "alert" }, [
+        h("p", null, [h("b", { text: "The link you opened wants to link this device to another set of ticks. " }),
+          "Say yes only if you made that link yourself, on your own device. " + (state.sync
+            ? "This device is already linked. Saying yes swaps its private code for the one in the link, and whoever holds that code can change or clear your ticks."
+            : "Whoever holds that code can change or clear the ticks on this device.")]),
+        h("div", { class: "also" }, [joinYes, joinNo])]));
+    }
 
     var pinShow = h("div", { class: "pin", id: "pair-show", hidden: "" });
     var getBtn = h("button", { type: "button", class: "primary", id: "link-start", text: state.sync ? "Get a code for another device" : "Get a code for my other device" });
@@ -4195,13 +4216,14 @@
     showScreen();
   }
   function takeLink() {
-    // An older version linked devices with a long link (…#sync=code). Such a link still works: it joins that code,
-    // keeping every tick, then removes the code from the address bar.
+    // An older version linked devices with a long link (…#sync=code). Such a link no longer links by itself: a link from
+    // someone else would swap this device's private code for theirs. The code is taken out of the address bar and held,
+    // and Settings asks before joining it.
     var m = /^#sync=(.*)$/.exec(window.location.hash || "");
     if (!m) { return false; }
     var code = findCode(m[1]);
     window.history.replaceState(null, "", "#menu");
-    if (code) { startSync(code, true); }
+    if (code && code !== state.sync) { pendingJoin = code; }
     return true;
   }
   // Hints opened in the older lab coach were remembered on this device only (lab -> 0 to 4). Carry them over once,
@@ -4248,10 +4270,10 @@
   applyLayout();
   measureTop();
   carryOverHints();
-  var joined = takeLink();
+  takeLink();
   renderTutor();
   renderJobs();
   renderMenu();
   route();
-  if (!joined && state.sync) { setStatus("saving"); pull(); listen(); } else { setStatus(sync.status); }
+  if (state.sync) { setStatus("saving"); pull(); listen(); } else { setStatus(sync.status); }
 })();
