@@ -115,7 +115,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 1. B1: an address ending `#sync=` asks before it links this device. Proof: d46ed3a; 5 new checks in `tools/app_test.py` (2 failed on the live site before the change); `tools/ship.sh` local and live ALL PASSED (349 checks), 27 Nov 2026.
 - [x] 2. B2: "Load this code" asks first and says it replaces. Proof: c1648df; 8 new checks (4 failed on the live site before the change); `tools/ship.sh` local and live ALL PASSED (357 checks), 27 Nov 2026.
 - [x] 3. B3: one rotation mark at a time. Proof: d38e5b3; 5 new checks, one a first link through a pretend store (4 failed on the live site before the change); `tools/ship.sh` local and live ALL PASSED (362 checks), 27 Nov 2026. Left as it is: review timing still restarts after a backup load or a first link after a clear.
-- [ ] 4. B4: marks the app does not know are kept; no "I'm done" on a quiz box when the quiz file did not load.
+- [x] 4. B4: marks the app does not know are kept; no "I'm done" on a quiz box when the quiz file did not load. Proof: 5675cdf; 6 new checks (4 failed on the live site before the change); `tools/ship.sh` local and live ALL PASSED (368 checks), 27 Nov 2026.
 - [ ] 5. A2: the lab-proof checker stops refusing honest wins; its messages say what to do; new test cases.
 - [ ] 6. A1, A3, D1, C6: lab text (the GPT-4o date, download the chat before stopping, auto-reload, lab 7 hint 2, lab 10, issue 33).
 - [ ] 7. A5, A11, A12, C3, C9 (Steps 1 to 6 rows): facts only.
