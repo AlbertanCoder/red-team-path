@@ -51,7 +51,7 @@ Scope 1 closed on Thu Nov 19 2026 at 09:28 Alberta, after 121 minutes, with ever
 
 ---
 
-## Scope 2: Curriculum to paid work (approved 27 Nov 2026)
+## Scope 2: Curriculum to paid work (approved and closed 27 Nov 2026)
 
 **Goal:** New steps after Step 6 that take Shad from the end of the path to AI bug bounties and small contract red-team gigs: Python properly (freeCodeCamp's Python Certification, CS50P optional), Python that talks to AI models, how models work, web security and the OWASP LLM list, attacking AI agents, his own tool and portfolio, and getting paid from Canada. The app stays the coach: real courses linked, real proof, review questions, an on-track check for his 14-on / 7-off rotation, and Explain it back.
 
@@ -64,7 +64,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - **Part 2 DONE 27 Nov 2026** (about 11:57 Alberta): Steps 8 (gt1, lx1, ap1-ap3, xb8) and 9 (md1-md7, xb9), 78 quiz questions (shell questions run in Git Bash), the GitHub check (gt1, ap1-ap3; marks pf + box id; username in state.gh, device only), Library lessons t30-t33 and 14 words. Commit: see git log "Scope 2, part 2".
 - **Part 3 DONE 27 Nov 2026** (about 12:13 Alberta): Steps 10 (wb1-wb6, xb10) and 11 (ag1-ag5, xb11), 85 quiz questions, the link proof (wb6, pf mark, link kept in notes), GitHub checks for ag1 (threat-model.md), ag4 (garak report from a real model) and ag5 (PyRIT script and result), Library lessons t34-t36 and 11 words. garak 0.17.1 and PyRIT 1.2.1 run on this PC first (PROOF.md). Venvs: ~/redteam/pyrit-check (new = PyRIT 1.2.1, old = 0.9.0, garak).
 - **Part 4 DONE 27 Nov 2026** (about 27 Nov 2026 about 12:54 Alberta Alberta, cf16ed5): Steps 12-14, 121 quiz questions, GitHub checks tl1-tl4, two-link proof (pd2), practice answers (pd4), lesson t37, 11 words, README rewritten. Build time for Scope 2: about 2 h from the go-ahead at 10:50 to the tag at 12:54 (budget 16 h).
-- **Next: item 12**: AUDIT-SCOPE-2-PROMPT.md, then a fresh audit session in a new window (Shad picks the model).
+- **Scope 2 CLOSED 27 Nov 2026**: all 12 checklist items proven. Next: read the auditor's AUDIT-SCOPE-2.md; fixes only after Shad's OK.
 - Quiz sources: ~/redteam/learn/sources (fcc/ holds freeCodeCamp's lesson files; make_fcc_sources.py builds fc1.txt to fc18.txt; digest.py and findq.py help write questions). Question files: ~/redteam/learn/quizzes/<box>.json.
 
 ### Done checklist (each one needs proof)
@@ -80,7 +80,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 9. Library: 8 new lessons and about 25 new words, each with sources. Proof: lessons t30-t37 with sources and one question each; 36 new words (84 in all); app_test checks the Library lists them.
 - [x] 10. AUDIT.md records every new source; README updated; `tools/linkcheck.py` finds 0 dead links. Proof: AUDIT.md "Scope 2 research checks" (Steps 7-14); README rewritten (cf16ed5); linkcheck: 232 links, 0 dead, 4 refuse scripts (Indeed, aitraining.jobs, and the two CRA pages, read in Chrome). Note: github.com answered 504 to scripts for about 40 minutes at midday, then 200 again.
 - [x] 11. Final commit pushed, tagged `scope-2-done`, live site checked. Proof: tag scope-2-done (see `git ls-remote --tags origin scope-2-done`), live app.js matches the pushed file, all tests above passed live on 27 Nov 2026 about 12:54 Alberta.
-- [ ] 12. `AUDIT-SCOPE-2-PROMPT.md` written and a fresh audit session opened in a new window.
+- [x] 12. `AUDIT-SCOPE-2-PROMPT.md` written and a fresh audit session opened in a new window. Proof: commit 2111bb3; Shad picked Fable 5.2; the new PowerShell window started `claude --model claude-fable-5-2` on 27 Nov 2026 (PC clock 12:55). Its report will be AUDIT-SCOPE-2.md.
 
 ### Out of scope
 
