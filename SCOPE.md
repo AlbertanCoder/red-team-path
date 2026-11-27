@@ -57,6 +57,13 @@ Scope 1 closed on Thu Nov 19 2026 at 09:28 Alberta, after 121 minutes, with ever
 
 Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Research checks: `AUDIT.md`, "Scope 2 research checks".
 
+### Where things stand (update as you go)
+
+- **Part 1 DONE 27 Nov 2026** (a26ce47, 1d1160f, 2b8f18f, all live, app_test 324 checks local and live, sync_test and walk_test passed live): Step 7 (fc1-fc10, xb7) with 80 quiz questions; quizzes on any box; review ladder; on-track card and rotation; Explain it back; Step 5 PyRIT fix (install 0.9.0, plus use_tls=False).
+- Moved from Part 1 to Part 2: the GitHub proof check and the link-shape check (first used by Step 8's boxes, so they are built and tested there).
+- **Next: Part 2** = Steps 8 (gt1, lx1, ap1-ap3, xb8) and 9 (md1-md7, xb9), their quizzes (sources saved under ~/redteam/learn/sources as `@@@ <title> | <address>` lessons; `python tools/build_quizzes.py`), the GitHub check, Library lessons t30-t33 and words. Box details: SCOPE-2-PLAN.md.
+- Quiz sources: ~/redteam/learn/sources (fcc/ holds freeCodeCamp's lesson files; make_fcc_sources.py builds fc1.txt to fc18.txt; digest.py and findq.py help write questions). Question files: ~/redteam/learn/quizzes/<box>.json.
+
 ### Done checklist (each one needs proof)
 
 - [x] 1. Safety tag `before-scope-2` pushed before any change. Proof: `git ls-remote --tags origin before-scope-2` shows 0c60528 (27 Nov 2026).
