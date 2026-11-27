@@ -85,4 +85,4 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 
 ### Change requests
 
-None yet.
+- 2026-11-27 about 11:37 Alberta: Shad approved a second Step 5 change (beyond the install line): box a1 gets one numbered step adding `use_tls=False` to the notebook's HTTPTarget line, because labs on his own PC use http. Tested: the Lab 1 notebook runs to the end with it. No id, tick or order changes.

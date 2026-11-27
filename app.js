@@ -287,6 +287,7 @@
           "Visual Studio Code offers to install what notebooks need. Accept.",
           "Install Microsoft's tool PyRIT, version 0.9.0: in Visual Studio Code's terminal, type pip install pyrit==0.9.0 and press Enter. Use that version: newer ones (0.10 and later) removed parts these notebooks use, so they stop at their first line (tested 27 Nov 2026).",
           "Read the comments in the notebook's code. They list 7 steps for connecting it to your running lab. Follow them.",
+          "Your labs run on your own computer, so they use http, not https. In the line that starts http_prompt_target = HTTPTarget(, add use_tls=False before the closing bracket, like this: timeout=20.0, use_tls=False). Without it the notebook stops with an SSL error (tested 27 Nov 2026).",
           "You are done when the first piece of code runs without a red error."
         ] }),
       item("a2", "auto", "Run the Lab 1 notebook from top to bottom",

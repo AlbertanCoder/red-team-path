@@ -128,5 +128,5 @@ Checked on Shad's PC (Windows 11, Python 3.12) in two fresh virtual environments
 - PyRIT's code: `pyrit/orchestrator` exists at the v0.9.0 tag and is gone from v0.10.0 onwards. Microsoft's notebooks import `PromptSendingOrchestrator`, `RedTeamingOrchestrator` and `CrescendoOrchestrator` from it.
 - For labs running on your own computer, the notebook's `HTTPTarget(...)` line also needs `use_tls=False`: without it PyRIT 0.9.0 sends https to the lab's plain http address and fails with an SSL "wrong version number" error. Microsoft's notebooks were written for its hosted labs, which use https.
 - Not run: the Lab 5 notebook to the end (its Crescendo attack makes many paid calls to OpenAI). Its first cell loads with 0.9.0.
-- Step 5's install line now names PyRIT 0.9.0 (box a1, step 4). Check script: `~/redteam/pyrit-check/run_lab1.py` (outside the repo; it reads the lab sign-in key from the labs' settings file and never prints it).
+- Step 5's install line now names PyRIT 0.9.0 (box a1, step 4), and box a1 has one more step for `use_tls=False` (approved by Shad on 27 Nov 2026). Check script: `~/redteam/pyrit-check/run_lab1.py` (outside the repo; it reads the lab sign-in key from the labs' settings file and never prints it).
 
