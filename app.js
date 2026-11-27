@@ -1636,6 +1636,9 @@
   var GH_USER_RE = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/;
   var SYNC_RE = /^[a-z2-9]{32}$/;
   var DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+  // The shape of every id this app has ever saved. A mark with an id of this shape is kept even when this copy of the app
+  // does not know it (the quiz file failed to load, or another device runs a newer version), so a save can never throw it away.
+  var ID_RE = /^[a-z][a-z0-9]{0,23}$/;
   var state = { m: {}, y: {}, r: 0, best: 0, theme: "dark", open: {}, test: false, sync: "", nolink: false, gh: "" };
   var KNOWN = {};
   var SEQ = []; // every box that counts, in path order
@@ -1690,7 +1693,7 @@
     if (!p || typeof p !== "object") { return; }
     var now = Date.now();
     if (p.m && typeof p.m === "object") {
-      Object.keys(p.m).forEach(function (id) { if (KNOWN[id] && typeof p.m[id] === "number") { state.m[id] = p.m[id]; } });
+      Object.keys(p.m).forEach(function (id) { if ((KNOWN[id] || ID_RE.test(id)) && typeof p.m[id] === "number") { state.m[id] = p.m[id]; } });
     } else if (p.done && typeof p.done === "object") {
       // Saved by an earlier version of the app, which kept ticks without times.
       Object.keys(p.done).forEach(function (id) { if (KNOWN[id]) { state.m[id] = now; } });
@@ -1928,7 +1931,7 @@
         if (seenAt > rotAt) { rotAt = seenAt; rotBest = q; }
       }
       Object.keys(rm).forEach(function (id) {
-        if (KNOWN[id] && typeof rm[id] === "number" && rm[id] > 0 && !(state.m[id] > 0)) { state.m[id] = rm[id]; }
+        if ((KNOWN[id] || ID_RE.test(id)) && typeof rm[id] === "number" && rm[id] > 0 && !(state.m[id] > 0)) { state.m[id] = rm[id]; }
       });
       Object.keys(state.m).forEach(function (id) {
         if (!(state.m[id] > 0)) { delete state.m[id]; return; }
@@ -1956,7 +1959,7 @@
     var change = {};
     Object.keys(rm).forEach(function (id) {
       var ts = rm[id];
-      if (!KNOWN[id] || typeof ts !== "number" || Math.abs(ts) <= state.r) { return; }
+      if (!(KNOWN[id] || ID_RE.test(id)) || typeof ts !== "number" || Math.abs(ts) <= state.r) { return; }
       if (Math.abs(ts) > Math.abs(state.m[id] || 0)) { state.m[id] = ts; changed = true; }
     });
     Object.keys(ry).forEach(function (k) {
@@ -2515,6 +2518,9 @@
 
   // ----- the quiz after each video: written from the video's own subtitles; you need 80% to tick the video -----
   var QUIZ = window.RTP_QUIZ && typeof window.RTP_QUIZ === "object" ? window.RTP_QUIZ : {};
+  // quizzes.js is a separate file. On a bad connection the page can load without it; then no box may be ticked until a reload,
+  // because which boxes have a quiz is not known.
+  var QUIZ_MISSING = !(window.RTP_QUIZ && typeof window.RTP_QUIZ === "object");
   var quizRun = null; // the quiz in progress: survives a redraw, not a reload
   function videoNo(it) { var m = it && it.kind === "video" ? /^v(\d+)$/.exec(it.id) : null; return m ? parseInt(m[1], 10) : 0; }
   // A video's quiz is filed under its number (1 to 10); any other box's under its id (fc1 and so on). Its pass mark is qz + that.
@@ -3104,6 +3110,8 @@
         d.appendChild(h("div", { class: "two" }, [
           dockBtn("I beat it", "ok", "beat-btn", function () { finish(it, false); }),
           dockBtn("Moving on, not solved", "", "moved-btn", function () { finish(it, true); })]));
+      } else if (QUIZ_MISSING) {
+        d.appendChild(dockBtn("Reload the page to finish: the quizzes did not load", "", "done-btn", function () { window.location.reload(); }));
       } else if (it.proof && !isDone("pf" + it.id)) {
         var proofFirst = dockBtn(it.proof === "link" ? "Add your link above to finish" : "Pass the GitHub check above to finish", "", "done-btn", function () {});
         proofFirst.disabled = true;
@@ -3864,7 +3872,7 @@
       clearAll();
       var now = state.r + 1;
       var rots = p.d.filter(function (id) { return /^rt\d+$/.test(id) && KNOWN[id]; });
-      p.d.forEach(function (id) { if (KNOWN[id] && (!/^rt\d+$/.test(id) || id === rots[rots.length - 1])) { state.m[id] = now; } });
+      p.d.forEach(function (id) { if ((KNOWN[id] || ID_RE.test(String(id))) && (!/^rt\d+$/.test(id) || id === rots[rots.length - 1])) { state.m[id] = now; } });
       p.y.forEach(function (k) { if (DAY_RE.test(k)) { state.y[k] = now; } });
       state.best = best;
       save();
@@ -4306,6 +4314,7 @@
   window.addEventListener("pageshow", function (e) { if (e.persisted) { wake(); } });
 
   load();
+  if (QUIZ_MISSING && $("quiz-warning")) { $("quiz-warning").hidden = false; }
   applyLayout();
   measureTop();
   carryOverHints();

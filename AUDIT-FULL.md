@@ -54,8 +54,8 @@ Each one: what is wrong, where, how it was proven, the smallest fix, and whether
 - Smallest fix: name the versions that work on both boxes, and say what to do if `pip` answers "no matching distribution".
 
 **A6. Box ag5 (PyRIT) fails as written.** Was part of A4 in the last audit. Confirmed, with more.
-- What: PyRIT's example is notebook code. Saved as `attack.py` it stops with "'await' outside function". The secret-word system instruction is on a different PyRIT page. Step 4 sends the output to a file; PyRIT prints emoji, and on Windows that stops with UnicodeEncodeError. No box teaches how to make a "virtual environment", which step 1 asks for. Quiz question ag5 q1 marks "3.11 to 3.15" as right; that is the unreleased version.
-- Proof: the `await` error and the emoji crash reproduced by me on this PC (`scripts/await_top.py`, `scripts/emoji_out.py`). The rest from the helper with saved pages (`helpers/steps11-14.md`).
+- What: PyRIT's example is notebook code. Saved as `attack.py` it stops with "'await' outside function". The secret-word system instruction is on a different PyRIT page. Step 4 sends the output to a file with `>`; in PowerShell that makes an unreadable file (corrected after the real run on 27 Nov: PyRIT itself does not crash on its emoji, it prints `?`; a plain Python script does crash). No box teaches how to make a "virtual environment", which step 1 asks for. Quiz question ag5 q1 marks "3.11 to 3.15" as right; that is the unreleased version.
+- Proof: the `await` error reproduced by me on this PC (`scripts/await_top.py`); the unreadable file seen in the real run (`helpers/real-runs.md`). The rest from the helper with saved pages (`helpers/steps11-14.md`).
 - Fix: your decision 1: run it for real on a free model, then write the steps from what worked.
 
 **A7. Box ag4 (garak): the steps have holes and the check refuses an honest folder.** Was A3 and part of A4. Confirmed.

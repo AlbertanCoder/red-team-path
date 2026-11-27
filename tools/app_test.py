@@ -936,6 +936,45 @@ with sync_playwright() as p:
     check(rotation_line(phone) == before and rotation_line(comp) == before, "Scope 3: first link with a device that had cleared keeps the rotation set last (%s), on both devices" % before)
     pctx.close()
     cctx.close()
+
+    # Scope 3, fix 4 (audit B4): on a bad connection the page can load without quizzes.js. The app then did not know the quiz and
+    # review marks, dropped them, and the next save wrote them away for good; every course box also offered "I'm done" with no quiz.
+    KEEP = {"v1": T, "qz1": T, "fc1": T + 1, "qzfc1": T + 1, "r1fc1": T + 2, "r1v1": T + 3, "zz9": T + 4}   # zz9: a mark from a newer app
+    saved = dict(blank(KEEP))
+    state = json.loads(saved["redTeamPath.v2"])
+    state["m"]["Bad id!"] = T
+    saved["redTeamPath.v2"] = json.dumps(state)
+    qctx = b.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+    qctx.route("**/quizzes.js*", lambda route: route.abort())
+    qctx.add_init_script("if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1'); var d = %s; Object.keys(d).forEach(function (k) { localStorage.setItem(k, d[k]); }); }" % json.dumps(saved))
+    qp = qctx.new_page()
+    qp.goto(base + "#i-fc2")
+    qp.wait_for_selector("#top-title")
+    qp.wait_for_timeout(500)
+    check(qp.locator("#quiz-warning").count() == 1 and qp.locator("#quiz-warning").is_visible(), "Scope 3: when the quiz file does not load, the page says so")
+    check("Reload" in qp.inner_text("#done-btn") and "I'm done" not in qp.inner_text("#done-btn"), "Scope 3: and no box can be ticked without its quiz: the button says to reload")
+    qp.evaluate("location.hash = '#menu'")
+    qp.wait_for_selector("#theme-btn")
+    qp.click("#theme-btn")   # any save
+    qp.wait_for_timeout(200)
+    qctx.unroute("**/quizzes.js*")
+    qp.reload()
+    qp.wait_for_selector("#top-title")
+    qp.wait_for_timeout(400)
+    after = ticks(qp)
+    check(all(after.get(k, 0) > 0 for k in KEEP), "Scope 3: after a save in that state, every quiz pass, review mark and unknown mark is still saved (missing: %s)" % sorted(k for k in KEEP if not after.get(k, 0) > 0))
+    check("Bad id!" not in after, "Scope 3: a mark whose id has the wrong shape is still dropped")
+    check(not qp.locator("#quiz-warning").is_visible(), "Scope 3: with the quiz file back, the warning is gone")
+    qctx.close()
+    shelf["sync"]["c" * 32] = {"m": {"zz9": T + 9, "v2": T + 9}, "r": 0}
+    saved = dict(blank({"v1": T}))
+    state = json.loads(saved["redTeamPath.v2"])
+    state["sync"] = "c" * 32
+    saved["redTeamPath.v2"] = json.dumps(state)
+    uctx, up = store_device(saved)
+    up.wait_for_timeout(1500)
+    check(ticks(up).get("zz9", 0) > 0 and ticks(up).get("v2", 0) > 0, "Scope 3: a mark this app does not know, saved by another device, is kept when it arrives (pretend store)")
+    uctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")

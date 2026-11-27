@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <link rel="stylesheet" href="style.css?v=20261127i">
+  <link rel="stylesheet" href="style.css?v=20261127j">
   <script>
     // Apply the saved theme before the first paint so the page never flashes the wrong one.
     try {
@@ -39,6 +39,7 @@
       <nav class="side side-nav" id="nav" aria-label="Menu"></nav>
       <main id="main">
         <p class="warning" id="storage-warning" hidden>Saving is not working in this browser (private mode, or storage is full). You can keep using the app, but ticks will be lost when you close it. Open the menu, then Settings, and link a device or copy a backup code to keep them.</p>
+        <p class="warning" id="quiz-warning" hidden>Part of the app did not load (the quizzes), most likely a weak connection. Nothing is lost. Reload the page before you tick anything.</p>
         <noscript><p class="warning">This app needs JavaScript turned on to show your path.</p></noscript>
         <section class="view" id="view-home" aria-label="Main menu" hidden></section>
         <section class="view" id="view-now" aria-label="Now"></section>
@@ -53,7 +54,7 @@
     <div class="dock" id="dock"><div class="dock-in" id="dock-in"></div></div>
   </div>
   <script src="jobs.js"></script>
-  <script src="quizzes.js?v=20261127i"></script>
-  <script src="app.js?v=20261127i"></script>
+  <script src="quizzes.js?v=20261127j"></script>
+  <script src="app.js?v=20261127j"></script>
 </body>
 </html>
