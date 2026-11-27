@@ -1,11 +1,18 @@
 """Two-device test on the LIVE site: links two throwaway browsers with a short code, then checks that an opened hint and a
 lab result made on one show up on the other. Usage: python tools/sync_test.py https://albertancoder.github.io/red-team-path/
 It uses the app's real online store under a brand-new private code, and deletes that record at the end.
+Scope 2 adds: a rotation set on one device (a new kind of mark) reaches the other, and a third device still running the app from
+before Scope 2 (the before-scope-2 tag, opened from a local copy) links in without the new marks being lost from the store.
 """
 import json
+import pathlib
+import subprocess
+import tempfile
+import time
 import uuid
 import sys
 import urllib.request
+import zipfile
 
 from playwright.sync_api import sync_playwright
 
@@ -108,6 +115,49 @@ with sync_playwright() as p:
         phone.click("#nav-home")
         phone.click("#path-btn")
         check(phone.locator("#link-prompt").count() == 0, "a linked device no longer shows the link prompt")
+        # Scope 2: a rotation set on the phone, a new kind of mark, reaches the computer
+        phone.evaluate("location.hash = '#menu'")
+        phone.wait_for_selector("#rotation-date")
+        phone.fill("#rotation-date", "2026-11-23")
+        phone.click("#rotation-save")
+        rt = [k for k, v in saved(phone)["m"].items() if k.startswith("rt") and v > 0]
+        computer.evaluate("location.hash = '#menu'")
+        computer.wait_for_function("(JSON.parse(localStorage.getItem('redTeamPath.v2')).m || {})['%s'] > 0" % rt[0], timeout=25000)
+        computer.evaluate("location.hash = '#home'")
+        computer.wait_for_selector("#track-week", timeout=10000)
+        check(len(rt) == 1 and "WEEK" in computer.inner_text("#track-week"), "the rotation set on the phone shows on the computer")
+        # Scope 2: a third device still on the app from before Scope 2 links in. It drops marks it does not know, so its first
+        # full send can leave them out of the store; the phone and computer, which hold them, must send them back.
+        old_dir = pathlib.Path(tempfile.mkdtemp())
+        repo = pathlib.Path(__file__).resolve().parent.parent
+        subprocess.run(["git", "-C", str(repo), "archive", "--format=zip", "-o", str(old_dir / "old.zip"), "before-scope-2"], check=True)
+        zipfile.ZipFile(old_dir / "old.zip").extractall(old_dir)
+        ctx_c = b.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        oldp = ctx_c.new_page()
+        oldp.goto((old_dir / "index.html").as_uri())
+        oldp.wait_for_selector("#continue-btn")
+        check(oldp.evaluate("typeof window.RTP_QUIZ.fc1") == "undefined", "the third device really runs the app from before Scope 2")
+        phone.click("#link-start")
+        phone.wait_for_selector("#pair-code", timeout=20000)
+        pin = phone.inner_text("#pair-code")
+        oldp.evaluate("location.hash = '#menu'")
+        oldp.fill("#pair-box", pin)
+        oldp.click("#pair-btn")
+        oldp.wait_for_function("(JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}').sync || '').length === 32", timeout=20000)
+        oldp.wait_for_function("(JSON.parse(localStorage.getItem('redTeamPath.v2')).m || {}).v1 > 0", timeout=25000)
+        check(saved(oldp).get("sync") == code and rt[0] not in saved(oldp)["m"], "the old-app device links and keeps the old ticks, without the new mark it does not know")
+        store = "https://red-team-path-default-rtdb.firebaseio.com/sync/%s.json" % code
+        back, waited = False, 0
+        while waited < 40 and not back:
+            time.sleep(4)
+            waited += 4
+            rec = json.loads(urllib.request.urlopen(store, timeout=20).read().decode() or "{}") or {}
+            back = (rec.get("m") or {}).get(rt[0], 0) > 0
+        check(back, "after the old-app device links, the new mark is in the store (sent back by the devices that hold it, %d s)" % waited)
+        computer.reload()
+        computer.wait_for_selector("#top-title")
+        check(saved(computer)["m"].get(rt[0], 0) > 0 and saved(phone)["m"].get(rt[0], 0) > 0, "the phone and computer still hold the new mark")
+        ctx_c.close()
     finally:
         if code:
             req = urllib.request.Request("https://red-team-path-default-rtdb.firebaseio.com/sync/%s.json" % code, method="DELETE")

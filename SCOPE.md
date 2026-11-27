@@ -48,3 +48,41 @@ Scope 1 closed on Thu Nov 19 2026 at 09:28 Alberta, after 121 minutes, with ever
 ### Change requests
 
 - 2026-11-18 11:50 pm Alberta (stated by Shad; written down 2026-11-19): one-day pause of session cap, daily cap, scope hour budget and checklist size limit, for this repo, on 2026-11-19 only. Reason and limits are at the top of this file.
+
+---
+
+## Scope 2: Curriculum to paid work (approved 27 Nov 2026)
+
+**Goal:** New steps after Step 6 that take Shad from the end of the path to AI bug bounties and small contract red-team gigs: Python properly (freeCodeCamp's Python Certification, CS50P optional), Python that talks to AI models, how models work, web security and the OWASP LLM list, attacking AI agents, his own tool and portfolio, and getting paid from Canada. The app stays the coach: real courses linked, real proof, review questions, an on-track check for his 14-on / 7-off rotation, and Explain it back.
+
+Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Research checks: `AUDIT.md`, "Scope 2 research checks".
+
+### Done checklist (each one needs proof)
+
+- [x] 1. Safety tag `before-scope-2` pushed before any change. Proof: `git ls-remote --tags origin before-scope-2` shows 0c60528 (27 Nov 2026).
+- [x] 2. Gap check done and Shad's 5 picks recorded. Proof: `SCOPE-2-GAPS.md`, "Shad's picks".
+- [x] 3. Plan approved before index.html, app.js, style.css or quizzes.js change. Proof: Shad picked "I agree, all 4 parts" on 27 Nov 2026 at about 10:50 Alberta (plan, Python split and 16-hour budget), with the app still at 0c60528.
+- [ ] 4. Step 5 proven: Microsoft's Lab 1 notebook run with the newest PyRIT; if it fails, the install line names the version that runs, and that run is in PROOF.md.
+- [ ] 5. All 58 new boxes live in the planned order; `tools/app_test.py` walks all 107 boxes on the live site and fails to tick each new box without its proof.
+- [ ] 6. Every new quiz built by `tools/build_quizzes.py` from saved source text, every quote found word for word, every code question run.
+- [ ] 7. Review questions, the on-track card and Explain it back work at phone width and across two linked devices (`tools/sync_test.py`).
+- [ ] 8. Progress saved before Scope 2 loads with every old tick, local and live (new test).
+- [ ] 9. Library: 8 new lessons and about 25 new words, each with sources.
+- [ ] 10. AUDIT.md records every new source; README updated; `tools/linkcheck.py` finds 0 dead links.
+- [ ] 11. Final commit pushed, tagged `scope-2-done`, live site checked.
+- [ ] 12. `AUDIT-SCOPE-2-PROMPT.md` written and a fresh audit session opened in a new window.
+
+### Out of scope
+
+- Any change to Steps 1 to 6 except the one proven Step 5 install line.
+- Copying any course into the app; accounts, servers or paid services; any paid course Shad has not approved with its price.
+- Anything that would reset saved progress. The Job Hunter project.
+- Any new idea not on the approved plan: it goes in IDEAS.md.
+
+### Hour budget
+
+16 hours of build time over several days, in 4 parts (6, 3, 4, 3 hours), each shipped and checked before the next. Weekly usage full stop at 75%; nothing after 10 pm Alberta; check-ins every 60 minutes.
+
+### Change requests
+
+None yet.

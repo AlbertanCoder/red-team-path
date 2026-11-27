@@ -1,4 +1,4 @@
-"""Link check for the learning material: every web address in app.js, README.md and labs/SETUP.md, opened once.
+"""Link check for the learning material: every web address in app.js, quizzes.js, README.md and labs/SETUP.md, opened once.
 Usage: python tools/linkcheck.py [repo folder]     Exit code 0 when no link is dead.
 
 dead            the page answers 404 or 410, or the site cannot be reached at all
@@ -23,7 +23,7 @@ BLOCKED = (401, 403, 405, 429, 999)  # the site refuses scripts: could not tell
 
 def urls_from(repo):
     found = {}
-    for name in ("app.js", "README.md", "labs/SETUP.md"):
+    for name in ("app.js", "quizzes.js", "README.md", "labs/SETUP.md"):
         p = repo / name
         if not p.exists():
             continue
@@ -40,6 +40,9 @@ def urls_from(repo):
             sets = text[text.index("var GRAYSWAN = ["):text.index("var KIND = ")]
             for m in re.finditer(r"\", \"([a-z0-9-]+)\", \"", sets):
                 found.setdefault("https://app.grayswan.ai/arena/challenge/" + m.group(1), name)
+            # freeCodeCamp boxes: the course address plus each box's first lesson
+            for m in re.finditer(r"\"((?:lecture|lab|workshop|review)-[a-z0-9-]+/[a-z0-9-]+)\"", text):
+                found.setdefault("https://www.freecodecamp.org/learn/python-v9/" + m.group(1), name)
     return {u: f for u, f in found.items()
             if not any(s in u for s in SKIP) and not u.endswith(("?id=", "/embed/", "challenge/", "/sync/", "/pair/"))}
 

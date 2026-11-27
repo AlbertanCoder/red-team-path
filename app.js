@@ -108,7 +108,35 @@
     ["Proving Ground: the Indirect set", "proving-ground", "A large set of indirect prompt injection targets."]
   ];
 
-  var KIND = { video: "VIDEO", lab: "LAB", writeup: "WRITE-UP", learn: "MICROSOFT LEARN", practice: "PRACTICE", auto: "AUTOMATION", proof: "PROOF", bounty: "BOUNTY" };
+  // freeCodeCamp's Python Certification (python-v9): its course feed and lesson files were read on 27 Nov 2026, and its own settings
+  // label the certificate 300 hours. Step 7 is the first half (basics to object-oriented code, 3 of the 5 certificate projects);
+  // the second half and the exam come later. [box id, title, hours, address of its first lesson, what it covers, certificate project, needs a PC]
+  var FCC = "https://www.freecodecamp.org/learn/python-v9/";
+  var FCC_PART1 = [
+    ["fc1", "Python basics 1: variables, data types and strings", 15, "lecture-introduction-to-python/what-is-python-and-what-are-some-common-uses-in-the-industry",
+      "What Python is, variables, data types and strings, with three workshops.", 0, false],
+    ["fc2", "Python basics 2: numbers, true and false, if and else", 15, "lecture-numbers-and-mathematical-operations/how-do-you-work-with-integers-and-floating-point-numbers",
+      "Numbers, booleans and conditionals, two workshops and the travel weather lab.", 0, false],
+    ["fc3", "Python basics 3: functions and scope", 20, "lecture-understanding-functions-and-scope/how-do-functions-work-in-python",
+      "Functions and scope, the Caesar cipher workshop, two labs, the review and freeCodeCamp's own quiz.", 0, false],
+    ["fc4", "Install Python, then loops and sequences", 12, "lecture-python-installation/how-do-you-install-configure-and-use-python-in-your-local-environment",
+      "Python on your own computer, then lists, tuples, loops and ranges.", 0, true],
+    ["fc5", "Dictionaries and sets", 12, "lecture-working-with-dictionaries-and-sets/what-are-dictionaries-and-how-do-they-work",
+      "Dictionaries, sets, the standard library and regular expressions.", 0, false],
+    ["fc6", "Certificate project 1: User Configuration Manager", 6, "lab-user-configuration-manager/build-a-user-configuration-manager",
+      "The first of the five projects the certificate needs.", 1, false],
+    ["fc7", "Error handling, then classes and objects", 20, "lecture-understanding-error-handling/what-are-some-common-error-messages-in-python",
+      "Errors, debugging and exceptions, then classes, objects, methods and attributes.", 0, false],
+    ["fc8", "Certificate project 2: Budget App", 8, "lab-budget-app/build-a-budget-app",
+      "The second certificate project.", 2, false],
+    ["fc9", "Object-oriented programming", 30, "lecture-understanding-object-oriented-programming-and-encapsulation/what-is-object-oriented-programming-and-how-does-encapsulation-work",
+      "Encapsulation, getters and setters, inheritance, polymorphism and abstraction.", 0, false],
+    ["fc10", "Certificate project 3: Polygon Area Calculator", 6, "lab-polygon-area-calculator/build-a-polygon-area-calculator",
+      "The third certificate project.", 3, false]
+  ];
+
+  var KIND = { video: "VIDEO", lab: "LAB", writeup: "WRITE-UP", learn: "MICROSOFT LEARN", practice: "PRACTICE", auto: "AUTOMATION", proof: "PROOF", bounty: "BOUNTY",
+    course: "COURSE", read: "READ", build: "BUILD", explain: "EXPLAIN IT BACK", paid: "GETTING PAID" };
 
   function item(id, kind, title, why, url, extra) {
     var it = { id: id, kind: kind, title: title, why: why || "", url: url || "", optional: false };
@@ -159,6 +187,19 @@
       "Work through the scenarios in order. Stop after about an hour, solved or not.",
       "You are done when you have tried every scenario in \"" + title + "\" at least once."
     ];
+  }
+
+  function fccSteps(project) {
+    var steps = [
+      "Open the lesson and sign in to freeCodeCamp. An account is free. Do the lessons of this box in order: lecture, then workshop, then lab.",
+      "Type every line of code yourself. Do not paste.",
+      "When a step fails its check, read the error message out loud before you change anything.",
+      "When this box's lessons are done, come back here and take the quiz. It is written from freeCodeCamp's own pages, with code to read."
+    ];
+    if (project) {
+      steps.splice(1, 1, "Write the project yourself, without looking at anyone else's answer. freeCodeCamp's own tests must all pass before it counts toward the certificate.");
+    }
+    return steps;
   }
 
   function buildSteps() {
@@ -302,6 +343,20 @@
       ] })
     ];
 
+    var python1 = FCC_PART1.map(function (f) {
+      var it = item(f[0], "course", "freeCodeCamp: " + f[1], f[4] + (f[5] ? " freeCodeCamp's certificate needs all five projects." : ""), FCC + f[3],
+        { mins: f[2] * 60, how: fccSteps(f[5]), openLabel: "Open it on freeCodeCamp" });
+      if (f[6]) { it.pc = true; } else { it.shift = true; }
+      return it;
+    });
+    python1[0].how = ["Make a free freeCodeCamp account. In its Settings, make your profile public, so your certificate can be shown later."].concat(python1[0].how);
+    var explain7 = item("xb7", "explain", "Explain it back: Step 7",
+      "Two short answers in your own words: what you learned in Step 7, and one thing you would do with it.", "", { mins: 15, shift: true, how: [
+        "In the first box, write what you learned in this step, as if telling a friend who has never coded.",
+        "In the second box, write one thing you would build or test with it.",
+        "At least 25 words in each. Nobody grades it: it is for you."
+      ] });
+
     return [
       { title: "Step 1: Microsoft's videos, each with its lab",
         goal: "Watch an episode here in the app, then do Microsoft's own lab for it. Write-ups are optional.",
@@ -330,7 +385,17 @@
       { title: "Step 6: proof and bounties",
         goal: "Gather what you can show, then try for a paid, credited finding. Only real findings that work every time.",
         why: "A paid or credited finding is the strongest proof there is.",
-        groups: [{ label: "", items: last }] }
+        groups: [{ label: "", items: last }] },
+      { title: "Step 7: Python, part 1 (freeCodeCamp)",
+        goal: "The first half of freeCodeCamp's free Python Certification: basics to object-oriented code, and 3 of its 5 certificate projects.",
+        why: "Every tool after this, and every red-team job ad that asks for code, needs you to read and write Python. freeCodeCamp labels its whole certificate 300 hours.",
+        groups: [
+          { label: "PYTHON BASICS", items: python1.slice(0, 3) },
+          { label: "LOOPS, DICTIONARIES AND PROJECT 1", items: python1.slice(3, 6) },
+          { label: "ERRORS, CLASSES AND PROJECT 2", items: python1.slice(6, 8) },
+          { label: "OBJECT-ORIENTED CODE AND PROJECT 3", items: python1.slice(8, 10) },
+          { label: "EXPLAIN IT BACK", items: [explain7] }
+        ] }
     ];
   }
 
@@ -1113,6 +1178,26 @@
   // tr + n = you typed what you tried, so the full answer is unlocked; un + n = you moved on without solving it.
   VIDEOS.forEach(function (_, i) { KNOWN["qz" + (i + 1)] = { id: "qz" + (i + 1) }; }); // a passed video quiz
   MS_LABS.forEach(function (l) { ["ha", "hb", "hc", "tr", "un", "pf", "ga"].forEach(function (k) { KNOWN[k + l[0]] = { id: k + l[0] }; }); });
+  // Marks added in Scope 2, saved and linked exactly like ticks (old ids are never reused):
+  // qz + box id: that box's quiz passed (videos keep qz1 to qz10). r1, r2, r3 + box id: its review question answered right on the
+  // 1-day, 1-week and 1-month rungs (a miss is the same mark, unticked). rt0 to rt20: where your 21-day rotation starts (the newest
+  // one counts). ac0 to ac6: the last time you studied on each weekday, Sunday first.
+  var QUIZ_BANK = window.RTP_QUIZ && typeof window.RTP_QUIZ === "object" ? window.RTP_QUIZ : {};
+  var REVIEWED = []; // every box whose quiz feeds the review questions, in path order
+  STEPS.forEach(function (step) {
+    step.groups.forEach(function (group) {
+      group.items.forEach(function (it) {
+        var v = /^v(\d+)$/.exec(it.id);
+        var key = it.kind === "video" && v ? v[1] : it.id;
+        if (!QUIZ_BANK[key] || !QUIZ_BANK[key].length) { return; }
+        if (key === it.id) { KNOWN["qz" + it.id] = { id: "qz" + it.id }; }
+        ["r1", "r2", "r3"].forEach(function (k) { KNOWN[k + it.id] = { id: k + it.id }; });
+        REVIEWED.push(it);
+      });
+    });
+  });
+  for (var rti = 0; rti < 21; rti += 1) { KNOWN["rt" + rti] = { id: "rt" + rti }; }
+  for (var aci = 0; aci < 7; aci += 1) { KNOWN["ac" + aci] = { id: "ac" + aci }; }
 
   function storageFailed() {
     var w = document.getElementById("storage-warning");
@@ -1227,6 +1312,7 @@
     }
     save();
     push(change);
+    if (on) { studied(); }
   }
   // Sets or clears a mark. Saved and sent like a tick, but it never counts as a study day.
   function mark(id, on) {
@@ -1237,6 +1323,9 @@
     save();
     push(change);
   }
+  // A study day for the on-track card: each weekday's mark holds the newest time you did something there (a tick, a quiz round,
+  // a review answer or "I studied today"). It never ticks a box.
+  function studied() { mark("ac" + new Date().getDay(), true); }
   function hintsOpen(n) { return !isDone("ha" + n) ? 0 : !isDone("hb" + n) ? 1 : !isDone("hc" + n) ? 2 : 3; }
   function clearAll() {
     // The clear must be newer than every tick it wipes, even one stamped by a device whose clock runs fast.
@@ -1490,7 +1579,8 @@
 
   // ---------- Home: the app opens on the one thing to do now. A lab shows its tutor page. ----------
   var OPEN_LABEL = { lab: "Open Microsoft's lab guide", learn: "Open it on Microsoft Learn", practice: "Open the practice",
-    auto: "Open Microsoft's notebooks", proof: "Open Microsoft Learn", bounty: "Open the page" };
+    auto: "Open Microsoft's notebooks", proof: "Open Microsoft Learn", bounty: "Open the page",
+    course: "Open the course", read: "Open the page", build: "Open the guide", paid: "Open the page" };
   var shown = "";      // a box opened from the Path list. "" means the current one.
   var justMarked = ""; // the box marked a moment ago: its screen stays up and the bottom bar shows what is next
   var tickedAt = 0;    // a fast double tap must not mark two boxes
@@ -1944,7 +2034,9 @@
   var QUIZ = window.RTP_QUIZ && typeof window.RTP_QUIZ === "object" ? window.RTP_QUIZ : {};
   var quizRun = null; // the quiz in progress: survives a redraw, not a reload
   function videoNo(it) { var m = it && it.kind === "video" ? /^v(\d+)$/.exec(it.id) : null; return m ? parseInt(m[1], 10) : 0; }
-  function needsQuiz(it) { var n = videoNo(it); return !!(n && QUIZ[n] && QUIZ[n].length); }
+  // A video's quiz is filed under its number (1 to 10); any other box's under its id (fc1 and so on). Its pass mark is qz + that.
+  function quizKey(it) { var n = videoNo(it); return n ? String(n) : it ? it.id : ""; }
+  function needsQuiz(it) { var k = quizKey(it); return !!(k && QUIZ[k] && QUIZ[k].length); }
   function passMark(total) { return Math.ceil(total * 0.8); }
   function shuffled(list) {
     var a = list.slice();
@@ -1988,7 +2080,7 @@
     window.setTimeout(tick, 0);
   }
   function quizBox(it) {
-    var n = videoNo(it);
+    var n = quizKey(it);
     // Redraw just this box: the rest of the screen stays put, so a playing video keeps playing.
     var redraw = function () {
       var old = document.getElementById("quiz-box");
@@ -2010,7 +2102,7 @@
     }
     var box = h("div", { class: "block", id: "quiz-box" });
     if (!quizRun || quizRun.n !== n) {
-      box.appendChild(h("p", { class: "small", text: qs.length + " questions about this video. Get " + need + " right to tick it. A miss shows what you picked and where in the video to look, and the retry opens 2 minutes later; the right answers show once you pass." }));
+      box.appendChild(h("p", { class: "small", text: qs.length + " questions " + (videoNo(it) ? "about this video" : "from the course's own pages") + ". Get " + need + " right to tick it. A miss shows what you picked and where in the video to look, and the retry opens 2 minutes later; the right answers show once you pass." }));
       var startBtn = h("button", { type: "button", class: "wide", id: "quiz-start", text: "Start the quiz" });
       var startAt = quizWaitUntil(n);
       startBtn.addEventListener("click", function () {
@@ -2029,12 +2121,14 @@
       var q = qs[qi];
       box.appendChild(h("div", { class: "tag", id: "quiz-count", text: "QUESTION " + (run.at + 1) + " OF " + run.ask.length + (run.retry ? " (THE ONES YOU MISSED)" : "") }));
       box.appendChild(h("p", { id: "quiz-q", text: q.q }));
+      if (q.code) { box.appendChild(h("pre", { class: "msg qcode", id: "quiz-code", text: q.code })); }
       var opts = h("div", { class: "opts", id: "quiz-opts" });
       run.order[run.at].forEach(function (oi) {
-        var b = h("button", { type: "button", class: "opt", text: q.options[oi] });
+        var b = h("button", { type: "button", class: "opt" + (q.kind === "code" ? " mono" : ""), text: q.options[oi] });
         b.addEventListener("click", function () {
           if (oi === q.answer) { run.right[qi] = 1; } else { run.missed.push(qi); run.wrong[qi] = q.options[oi]; }
           run.at += 1;
+          if (run.at >= run.ask.length) { studied(); }
           if (run.at >= run.ask.length && Object.keys(run.right).length < need) { quizWaitUntil(n, Date.now() + WAIT_MS); }
           if (run.at >= run.ask.length && Object.keys(run.right).length >= need) {
             quizReview(n, Object.keys(run.wrong).map(function (k) { return { q: qs[k].q, picked: run.wrong[k], right: qs[k].options[qs[k].answer] }; }));
@@ -2051,7 +2145,10 @@
     // A round is over and the score is still short.
     box.appendChild(h("p", { id: "quiz-score" }, [h("b", { text: score + " of " + qs.length + " right. " }), "You need " + need + ". Rewatch these moments, then answer the ones you missed again. The retry opens 2 minutes after a missed round:"]));
     var ul = h("ul", { id: "quiz-misses" });
-    run.missed.forEach(function (qi) { ul.appendChild(h("li", null, [h("b", { text: qs[qi].q + " " }), "You answered “" + run.wrong[qi] + "”. " + qs[qi].hint])); });
+    run.missed.forEach(function (qi) {
+      ul.appendChild(h("li", null, [h("b", { text: qs[qi].q + " " }), "You answered “" + run.wrong[qi] + "”. " + qs[qi].hint,
+        qs[qi].url ? " " : null, qs[qi].url ? link("Open that lesson ↗", qs[qi].url, "", null) : null]));
+    });
     box.appendChild(ul);
     var label = "Answer the " + run.missed.length + " I missed again";
     var again = h("button", { type: "button", class: "wide", id: "quiz-retry", text: label });
@@ -2060,6 +2157,32 @@
     if (Date.now() < retryAt) { waitButton(again, retryAt, label); }
     box.appendChild(again);
     return box;
+  }
+
+  // ----- Explain it back: the last box of each new step. Two answers in your own words, saved as notes on this device. -----
+  var EXPLAIN_MIN = 25;
+  function explained(it) { return wordCount(notes[it.id + "-learned"]) >= EXPLAIN_MIN && wordCount(notes[it.id + "-use"]) >= EXPLAIN_MIN; }
+  function explainBox(it) {
+    var box = h("div", { class: "block", id: "explain-box" });
+    box.appendChild(h("p", { class: "small", text: "The app can't grade this: it only checks you wrote at least " + EXPLAIN_MIN +
+      " words in each box. The words stay on this device; the tick follows you to a linked device." }));
+    [["-learned", "What I learned in this step, in my own words"], ["-use", "One thing I would do with it"]].forEach(function (pt) {
+      var key = it.id + pt[0];
+      var count = function (text) { var n = wordCount(text); return n + " words" + (n >= EXPLAIN_MIN ? " ✓" : " (at least " + EXPLAIN_MIN + ")"); };
+      var status = h("span", { class: "status-line", role: "status", id: "explain-count" + pt[0], text: count(notes[key]) });
+      var area = h("textarea", { class: "note-area", id: "explain" + pt[0], "aria-label": pt[1], placeholder: pt[1] });
+      area.value = notes[key] || "";
+      area.addEventListener("input", function () {
+        var was = explained(it);
+        saveNote(key, area.value);
+        status.textContent = count(area.value);
+        if (explained(it) !== was) { renderDock(currentIndex(), it, "now"); }
+      });
+      box.appendChild(h("label", { class: "glabel", for: "explain" + pt[0], text: pt[1] }));
+      box.appendChild(area);
+      box.appendChild(status);
+    });
+    return part("Explain it back", [box]);
   }
 
   // ----- a video, and everything else -----
@@ -2093,6 +2216,8 @@
     if (WORDS_AT[it.id]) { v.appendChild(wordsFold(WORDS_AT[it.id])); }
     if (it.kind === "writeup") { v.appendChild(noteEditor(it, false)); v.appendChild(templateFold()); }
     if (it.url) { v.appendChild(link((it.openLabel || OPEN_LABEL[it.kind]) + " ↗", it.url, "big open", "open-link")); }
+    if (needsQuiz(it)) { v.appendChild(part("Quiz", [quizBox(it)])); }
+    if (it.kind === "explain") { v.appendChild(explainBox(it)); }
     if (it.id === "m0" && !isDone("m0")) {
       // Microsoft's labs cost money and need installing, so one tap can skip the whole set. A skipped lab is marked
       // "moved on, not solved" (never beaten) and waits on the come-back list; a passing chat file later makes it beaten.
@@ -2140,7 +2265,8 @@
     var n = labNo(it);
     var bits = [isNow ? "NOW" : isDone(it.id) ? "DONE" : "LATER", "STEP " + (PLACE[it.id].s + 1), KIND[it.kind]];
     if (n) { bits.push(labRow(n)[2].toUpperCase()); }
-    if (it.mins) { bits.push("ABOUT " + it.mins + " MIN"); }
+    if (it.mins) { bits.push(it.mins >= 120 ? "ABOUT " + Math.round(it.mins / 60) + " HOURS" : "ABOUT " + it.mins + " MIN"); }
+    if (it.pc) { bits.push("NEEDS YOUR PC"); } else if (it.shift) { bits.push("SHIFT WEEK OK"); }
     if (it.kind === "writeup") { bits.push("ABOUT 20 MIN"); }
     if (it.optional) { bits.push("OPTIONAL"); }
     if (isNow) { tag.className = "tag red"; }
@@ -2196,8 +2322,12 @@
         d.appendChild(h("div", { class: "two" }, [
           dockBtn("I beat it", "ok", "beat-btn", function () { finish(it, false); }),
           dockBtn("Moving on, not solved", "", "moved-btn", function () { finish(it, true); })]));
-      } else if (needsQuiz(it) && !isDone("qz" + videoNo(it))) {
-        // A video is ticked only after its quiz is passed.
+      } else if (it.kind === "explain" && !explained(it)) {
+        var write = dockBtn("Write " + EXPLAIN_MIN + " words in each box to finish", "", "done-btn", function () {});
+        write.disabled = true;
+        d.appendChild(write);
+      } else if (needsQuiz(it) && !isDone("qz" + quizKey(it))) {
+        // A box with a quiz (every video, and the course boxes) is ticked only after its quiz is passed.
         var locked = dockBtn("Pass the quiz above to finish", "", "done-btn", function () {});
         locked.disabled = true;
         d.appendChild(locked);
@@ -2252,6 +2382,9 @@
       h("div", { class: "tag", text: done + " OF " + SEQ.length + " DONE" + (run ? " · " + run + "-DAY STREAK" : "") }),
       h("div", { class: "meter", "aria-hidden": "true" }, [h("span", { style: "width:" + (SEQ.length ? (done / SEQ.length) * 100 : 0) + "%" })])
     ]));
+    v.appendChild(trackCard(it));
+    var rv = reviewCard();
+    if (rv) { v.appendChild(rv); }
     var openAds = JOBS.ads.filter(function (a) { return a.open !== false && a.canada !== "no"; }).length;
     var bars = h("div", { class: "bars" });
     [["path-btn", "path", "Path", "Every step in order, with ticks"],
@@ -2263,6 +2396,162 @@
       bars.appendChild(b);
     });
     v.appendChild(bars);
+  }
+
+  // ----- On track: a card for a 14-days-on, 7-days-off rotation. The app has no server, so it only shows this when you open it. -----
+  var DAY_MS = 86400000;
+  var WEEK_TARGET = [10, 10, 30]; // hours to aim for: on-shift week 1, on-shift week 2, the off week
+  var WEEK_NAME = ["ON-SHIFT WEEK 1 OF 2", "ON-SHIFT WEEK 2 OF 2", "OFF WEEK"];
+  var DAY_NAME = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  function dayNo(d) { return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY_MS); }
+  function dayFromKey(k) { var p = k.split("-"); return dayNo(new Date(+p[0], +p[1] - 1, +p[2])); }
+  function rotationStart() { // 0 to 20: where the rotation starts, counted in days; -1 when it is not set
+    var best = -1, at = 0;
+    for (var i = 0; i < 21; i += 1) { var t = state.m["rt" + i] || 0; if (t > at) { at = t; best = i; } }
+    return best;
+  }
+  function cycleDay(d) { var s = rotationStart(); return s < 0 ? -1 : (((dayNo(d) - s) % 21) + 21) % 21; }
+  function studyDays() { // every day number with a tick or other study activity
+    var days = {};
+    Object.keys(state.y).forEach(function (k) { if (DAY_RE.test(k)) { days[dayFromKey(k)] = 1; } });
+    for (var i = 0; i < 7; i += 1) { var t = state.m["ac" + i]; if (t > 0) { days[dayNo(new Date(t))] = 1; } }
+    return Object.keys(days).map(Number);
+  }
+  function hoursLeft(it) { // the hours left in the current step, when every box left in it has a time on it
+    if (!it) { return 0; }
+    var left = required(stepItems(STEPS[PLACE[it.id].s])).filter(function (x) { return !isDone(x.id); });
+    if (left.some(function (x) { return !x.mins; })) { return 0; }
+    return left.reduce(function (sum, x) { return sum + x.mins; }, 0) / 60;
+  }
+  function trackCard(it) {
+    var today = dayNo(new Date());
+    var cd = cycleDay(new Date());
+    var days = studyDays();
+    var card = h("div", { class: "panel track", id: "track-card" });
+    var studiedToday = days.indexOf(today) !== -1;
+    if (cd < 0) {
+      card.appendChild(h("div", { class: "tag", text: "ON TRACK" }));
+      card.appendChild(h("p", { class: "line", text: "Set your rotation (first day of your 14 days on) and this shows your week and a target." }));
+      var setBtn = h("button", { type: "button", id: "track-set", text: "Set my rotation" });
+      setBtn.addEventListener("click", function () { go("#menu"); });
+      card.appendChild(setBtn);
+    } else {
+      var week = Math.floor(cd / 7);
+      var weekStart = today - (cd % 7);
+      var inWeek = days.filter(function (n) { return n >= weekStart && n <= today; }).length;
+      card.appendChild(h("div", { class: "tag red", id: "track-week", text: WEEK_NAME[week] + " · TARGET ABOUT " + WEEK_TARGET[week] + " HOURS" }));
+      card.appendChild(h("p", { class: "line", id: "track-days", text: "You studied on " + inWeek + " of the " + (cd % 7 + 1) + (cd % 7 ? " days" : " day") + " of this week so far." }));
+      var hrs = hoursLeft(it);
+      if (hrs > 0) {
+        var d = new Date(), got = 0, guard = 0;
+        while (got < hrs && guard < 2000) { got += WEEK_TARGET[Math.floor(cycleDay(d) / 7)] / 7; d = new Date(d.getTime() + DAY_MS); guard += 1; }
+        card.appendChild(h("p", { class: "line small", id: "track-pace", text: "At these targets, " + STEPS[PLACE[it.id].s].title.split(":")[0] +
+          " is done around " + d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear() + " (about " + Math.round(hrs) + " hours left, from the estimate on each box)." }));
+      }
+      var last = days.length ? Math.max.apply(null, days) : -1;
+      var quiet = week === 2 ? 2 : 3;
+      if (last >= 0 && today - last >= quiet && it) {
+        var first = it.how && it.how.length ? it.how[0] : "open " + shortTitle(it) + " and read its first page.";
+        card.appendChild(h("p", { class: "line", id: "track-nudge" }, [h("b", { text: "You haven't studied since " + DAY_NAME[new Date(last * DAY_MS).getUTCDay()] + ". " }),
+          "Smallest next step: " + first + " Or answer today's review questions."]));
+      }
+    }
+    var logBtn = h("button", { type: "button", id: "track-log", text: studiedToday ? "Studied today ✓" : "I studied today" });
+    logBtn.disabled = studiedToday;
+    logBtn.addEventListener("click", function () { studied(); render("track-log"); });
+    card.appendChild(h("div", { class: "btnrow" }, [logBtn]));
+    card.appendChild(h("p", { class: "small line", text: "The app has no server and can't message you. It only shows this when you open it. \"I studied today\" never ticks a box." }));
+    return card;
+  }
+
+  // ----- Review: one question from a box you finished, 1 day, then 1 week, then 1 month after its quiz. A miss brings it back tomorrow. -----
+  var REVIEW_GAPS = [1, 7, 30];
+  var REVIEW_MAX = 5; // questions a day
+  var RV_KEY = "redTeamPath.reviewToday"; // on this device: how many answered today, and the question last asked per box
+  var reviewNow = null; // the review question on screen: { id, k, qi, order, picked }
+  function reviewDue(it) { // the rung (1, 2 or 3) due now for this box, or 0
+    var pass = state.m["qz" + quizKey(it)];
+    if (!(pass > 0)) { return 0; }
+    var base = pass;
+    for (var k = 1; k <= 3; k += 1) {
+      var r = state.m["r" + k + it.id];
+      if (r > 0) { base = r; continue; }
+      var due = base + REVIEW_GAPS[k - 1] * DAY_MS;
+      if (r < 0 && -r > base) { due = Math.max(due, -r + DAY_MS); }
+      return Date.now() >= due ? k : 0;
+    }
+    return 0;
+  }
+  function reviewToday() {
+    var r = {};
+    try { r = JSON.parse(window.localStorage.getItem(RV_KEY) || "{}") || {}; } catch (e) { r = {}; }
+    var day = dayKey(new Date());
+    if (r.day !== day) { r = { day: day, n: 0, last: r.last || {} }; }
+    r.last = r.last || {};
+    return r;
+  }
+  function saveReviewToday(r) { try { window.localStorage.setItem(RV_KEY, JSON.stringify(r)); } catch (e) { /* the count is a nicety */ } }
+  function startReview() {
+    var due = REVIEWED.filter(function (x) { return reviewDue(x) > 0; });
+    if (!due.length) { reviewNow = null; return; }
+    var it = due[0], bank = QUIZ[quizKey(it)], today = reviewToday();
+    var qi = Math.floor(Math.random() * bank.length);
+    if (bank.length > 1 && qi === today.last[it.id]) { qi = (qi + 1) % bank.length; }
+    reviewNow = { id: it.id, k: reviewDue(it), qi: qi, order: shuffled(bank[qi].options.map(function (_, i) { return i; })), picked: -1 };
+  }
+  function reviewCard() {
+    var today = reviewToday();
+    var due = REVIEWED.filter(function (x) { return reviewDue(x) > 0; });
+    var left = Math.max(0, REVIEW_MAX - today.n);
+    var card = h("div", { class: "panel review", id: "review-card" });
+    if (!reviewNow) {
+      if (!due.length && !today.n) { return null; }
+      if (!due.length || !left) {
+        card.appendChild(h("div", { class: "tag", text: "REVIEW" }));
+        card.appendChild(h("p", { class: "line", id: "review-done", text: !due.length ? "Review done for today ✓" : "That's " + REVIEW_MAX + " review questions today. The rest wait for tomorrow." }));
+        return card;
+      }
+      card.appendChild(h("div", { class: "tag red", text: "REVIEW · " + Math.min(due.length, left) + " DUE TODAY" }));
+      card.appendChild(h("p", { class: "line", text: "One question each from boxes you finished earlier. A miss brings that topic back tomorrow. It never blocks your next step." }));
+      var go1 = h("button", { type: "button", class: "primary", id: "review-start", text: "Start review" });
+      go1.addEventListener("click", function () { startReview(); render("review-q"); });
+      card.appendChild(go1);
+      return card;
+    }
+    var it = KNOWN[reviewNow.id], bank = QUIZ[quizKey(it)], q = bank[reviewNow.qi];
+    card.appendChild(h("div", { class: "tag red", text: "REVIEW · " + shortTitle(it).toUpperCase() }));
+    card.appendChild(h("p", { class: "line", id: "review-q", tabindex: "-1", text: q.q }));
+    if (q.code) { card.appendChild(h("pre", { class: "msg qcode", text: q.code })); }
+    var opts = h("div", { class: "opts", id: "review-opts" });
+    reviewNow.order.forEach(function (oi) {
+      var b = h("button", { type: "button", class: "opt" + (q.kind === "code" ? " mono" : ""), text: q.options[oi] });
+      b.disabled = reviewNow.picked !== -1;
+      b.addEventListener("click", function () {
+        if (reviewNow.picked !== -1) { return; }
+        reviewNow.picked = oi;
+        var t2 = reviewToday();
+        t2.n += 1;
+        t2.last[it.id] = reviewNow.qi;
+        saveReviewToday(t2);
+        mark("r" + reviewNow.k + it.id, oi === q.answer);
+        studied();
+        render("review-result");
+      });
+      opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if (reviewNow.picked !== -1) {
+      var right = reviewNow.picked === q.answer;
+      var after = reviewNow.k < 3 ? "This topic comes back in " + REVIEW_GAPS[reviewNow.k] + " days." : "That was its last review: it's learned.";
+      card.appendChild(h("p", { class: "line", id: "review-result", tabindex: "-1" }, right
+        ? [h("b", { text: "Right. " }), after]
+        : [h("b", { text: "Not this time. " }), q.hint + " ", q.url ? link("Open that lesson ↗", q.url, "", null) : null, " This topic comes back tomorrow."]));
+      var more = REVIEWED.some(function (x) { return reviewDue(x) > 0; }) && reviewToday().n < REVIEW_MAX;
+      var next = h("button", { type: "button", id: "review-next", text: more ? "Next question" : "Done for today" });
+      next.addEventListener("click", function () { reviewNow = null; if (more) { startReview(); } render(more ? "review-q" : "continue-btn"); });
+      card.appendChild(next);
+    }
+    return card;
   }
 
   // ----- Contents: the whole path, in the right-hand panel -----
@@ -2677,6 +2966,25 @@
     box.appendChild(h("h2", { text: "Settings" }));
     box.appendChild(h("div", { class: "btnrow" }, [themeBtn]));
     box.appendChild(h("p", { id: "streak-line", text: "Streak: " + run + (run === 1 ? " day" : " days") + " in a row with at least one box ticked. Best run: " + state.best + "." }));
+    // Your rotation: 14 days on, 7 off. Saved as one of 21 marks, so it follows you to a linked device.
+    var oldDate = document.getElementById("rotation-date");
+    var dateIn = h("input", { type: "date", id: "rotation-date", "aria-label": "First day of your current 14 days on" });
+    dateIn.value = oldDate ? oldDate.value : "";
+    var cdNow = cycleDay(new Date());
+    var rotStatus = h("span", { class: "status-line", role: "status", id: "rotation-status",
+      text: cdNow < 0 ? "Not set yet." : "Set. Today is day " + (cdNow + 1) + " of your 21-day rotation (" + WEEK_NAME[Math.floor(cdNow / 7)].toLowerCase() + ")." });
+    var saveRot = h("button", { type: "button", id: "rotation-save", text: "Save my rotation" });
+    saveRot.addEventListener("click", function () {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateIn.value);
+      if (!m) { rotStatus.textContent = "Pick a date first."; return; }
+      var start = dayNo(new Date(+m[1], +m[2] - 1, +m[3]));
+      mark("rt" + (((start % 21) + 21) % 21), true);
+      dateIn.value = "";
+      render("rotation-save");
+    });
+    box.appendChild(h("p", { class: "dim", text: "Your rotation: the first day of your current 14 days on. The main menu then shows which week it is and a target for it." }));
+    box.appendChild(h("div", { class: "btnrow" }, [dateIn, saveRot]));
+    box.appendChild(rotStatus);
     // Hints you opened can be hidden again, lab by lab. Ticks and notes are not touched.
     var opened = MS_LABS.filter(function (l) { return isDone("ha" + l[0]) || isDone("tr" + l[0]); });
     if (opened.length) {

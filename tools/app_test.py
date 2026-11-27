@@ -13,6 +13,10 @@ What it proves:
      labs), a verified or unverified label, and a full answer or a plain statement that there is none.
   6. The order: every video comes before its lab, optional boxes never block the way, and tapping through from the
      first video reaches the end in exactly the planned order with one Next at every point.
+  8. Scope 2: progress saved by the app as it was before Scope 2 (every one of the 49 boxes, quiz passes, lab marks, notes,
+     the streak) loads with every tick; a course box cannot be ticked before its quiz is passed; quiz code is shown;
+     Explain it back stays locked under 25 words a box; review questions come due and a miss never shows the answer;
+     the rotation setting and the on-track card, including the nudge after quiet days; no sideways scrolling.
 """
 import json
 import pathlib
@@ -40,7 +44,11 @@ STEP1 = "v1 v2 m0 v3 m1 w1 v4 m6 w2 v5 m2 w3 v6 m5 w4 v7 m7 m8 m11 m12 m3 m4 m9 
 STEP5 = "v8 a1 v9 a2 v10 a3 a4".split()
 OPTIONAL = "w1 w2 w3 w4 w5 m3 m4 m9 m10".split()
 ROAD = ("v1 v2 m0 v3 m1 v4 m6 v5 m2 v6 m5 v7 m7 m8 m11 m12 s0 s1 s2 s3 g1 g2 g3 g4 g5 g6 g7 g8 g9 "
-        "py1 py2 py3 py4 py5 py6 py7 py8 v8 a1 v9 a2 v10 a3 a4 p1 b1 b2 b3 b4").split()
+        "py1 py2 py3 py4 py5 py6 py7 py8 v8 a1 v9 a2 v10 a3 a4 p1 b1 b2 b3 b4 "
+        "fc1 fc2 fc3 fc4 fc5 fc6 fc7 fc8 fc9 fc10 xb7").split()
+OLD_COUNT = 49  # boxes that counted before Scope 2
+COUNT = len(ROAD)
+FC = ["fc%d" % i for i in range(1, 11)]
 VERIFIED = {1, 2, 5, 6, 7, 8, 11, 12}   # answers that were run in the real lab and won
 NO_ANSWER = {4, 10}                 # 4: toxin goal, no answer on purpose. 10: no known answer.
 PARTS = ["What this lab is", "The objective", "How to think about it", "Hints", "Full answer", "What's next"]
@@ -116,8 +124,8 @@ def ticks(page):
 
 # The page carries no mark of the right option, so the test looks the question up in the quiz data and taps by text.
 PICK = """(right) => {
-  var q = document.getElementById('quiz-q').textContent, hit = null;
-  Object.keys(window.RTP_QUIZ).forEach(function (n) { window.RTP_QUIZ[n].forEach(function (x) { if (x.q === q) { hit = x; } }); });
+  var q = document.getElementById('quiz-q').textContent, el = document.getElementById('quiz-code'), code = el ? el.textContent : "", hit = null;
+  Object.keys(window.RTP_QUIZ).forEach(function (n) { window.RTP_QUIZ[n].forEach(function (x) { if (x.q === q && (x.code || "") === code) { hit = x; } }); });
   var want = hit.options[hit.answer], opts = Array.prototype.slice.call(document.querySelectorAll('#quiz-opts .opt'));
   for (var i = 0; i < opts.length; i += 1) { if ((opts[i].textContent === want) === right) { return i; } }
   return -1;
@@ -146,7 +154,7 @@ with sync_playwright() as p:
     check("Episode 1" in page.inner_text("#continue-btn") and "CONTINUE" in page.inner_text("#continue-btn"), "the main menu's Continue card names the current step")
     check([t.split("\n")[0].strip() for t in page.locator("#view-home .mbar").all_inner_texts()] == ["Path", "Library", "Jobs", "Settings"], "the main menu is four full-width bars: Path, Library, Jobs, Settings")
     check(page.locator("#nav-btn").is_visible() and page.locator("#toc-btn").is_visible() and not page.locator("#dock").is_visible(), "the main menu has the Menu and Contents buttons and no bottom bar")
-    check("0 OF 49 DONE" in page.inner_text("#home-progress"), "the main menu shows how far along you are")
+    check(("0 OF %d DONE" % COUNT) in page.inner_text("#home-progress"), "the main menu shows how far along you are")
     no_side_scroll(page, "Main menu")
     shot(page, "0-main-menu")
     page.click("#continue-btn")
@@ -440,18 +448,21 @@ with sync_playwright() as p:
     rows = lambda step: page.evaluate("Array.from(document.querySelectorAll('#pstep-%d .prow')).map(function (r) { return r.id.slice(4); })" % step)
     check(rows(1) == STEP1, "Step 1 order: each video, then its lab; harder versions after Episode 7; harmful-goal labs last")
     check(rows(5) == STEP5, "Step 5 order: Episodes 8, 9 and 10 each sit right before the task they show")
-    check(page.inner_text("#sheet-count").endswith("0 OF 49 DONE"), "the count is out of 49 required boxes")
+    check(page.inner_text("#sheet-count").endswith("0 OF %d DONE" % COUNT), "the count is out of %d required boxes" % COUNT)
     opt = page.evaluate("Array.from(document.querySelectorAll('#sheet .prow')).filter(function (r) { return /OPTIONAL/.test(r.textContent); }).map(function (r) { return r.id.slice(4); })")
     check(sorted(opt) == sorted(OPTIONAL), "the 5 write-ups and labs 3, 4, 9, 10 are marked optional")
     page.click("#row-m3")
     check("OPTIONAL" in page.inner_text("#top-tag") and "EPISODE 1" in page.inner_text("#next-line").upper(), "an optional lab opens, and its Next still points at where you are")
     page.click("#back-now")
     # every required lab gets its proof, so the walk can tap I beat it
-    page.evaluate("(function () { var d = JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}'); d.m = d.m || {}; [1, 2, 5, 6, 7, 8, 11, 12].forEach(function (n) { d.m['pf' + n] = Date.now() + n; }); for (var v = 1; v <= 10; v += 1) { d.m['qz' + v] = Date.now() + 20 + v; } localStorage.setItem('redTeamPath.v2', JSON.stringify(d)); })()")
+    page.evaluate("(function () { var d = JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}'); d.m = d.m || {}; [1, 2, 5, 6, 7, 8, 11, 12].forEach(function (n) { d.m['pf' + n] = Date.now() + n; }); for (var f = 1; f <= 10; f += 1) { d.m['qzfc' + f] = Date.now() + 30 + f; } for (var v = 1; v <= 10; v += 1) { d.m['qz' + v] = Date.now() + 20 + v; } localStorage.setItem('redTeamPath.v2', JSON.stringify(d)); })()")
     page.reload()
     page.wait_for_selector("#top-title")
     walked = []
-    for _ in range(60):
+    page.evaluate("localStorage.setItem('redTeamPath.notes', JSON.stringify({'xb7-learned': %s, 'xb7-use': %s}))" % (json.dumps("word " * 30), json.dumps("word " * 30)))
+    page.reload()
+    page.wait_for_selector("#top-title")
+    for _ in range(COUNT + 10):
         box = page.get_attribute("#view-now", "data-id")
         if not box:
             break
@@ -459,10 +470,105 @@ with sync_playwright() as p:
         page.click("#beat-btn" if page.locator("#beat-btn").count() else "#done-btn")
         page.click("#next-btn")
         page.wait_for_timeout(720)
-    check(walked == ROAD, "tapping through from the first video visits all 49 boxes in the planned order (got %d)" % len(walked))
+    check(walked == ROAD, "tapping through from the first video visits all %d boxes in the planned order (got %d)" % (COUNT, len(walked)))
     check(page.inner_text("#top-title") == "Every box is ticked", "the path ends on the finish screen")
     check(not page.errors, "walking the path: no page errors %s" % page.errors[:2])
     ctx.close()
+
+    # ---- 8. Scope 2 ----
+    # Everything the app as it was before Scope 2 (commit 0c60528) saves when all 49 boxes are done: every tick, every video quiz,
+    # hints, tried, proof and a moved-on lab, a passed lesson, the streak, notes and the device-only quiz files.
+    now = 1795700000000
+    road_old = ROAD[:OLD_COUNT]
+    full = {bid: now - 100000 + i for i, bid in enumerate(road_old + OPTIONAL + ["t1", "t5"])}
+    full.update({"qz%d" % v: now - 50000 + v for v in range(1, 11)})
+    full.update({"ha1": now - 9, "hb1": now - 8, "hc1": now - 7, "tr1": now - 6, "pf1": now - 5, "un3": now - 4, "ga2": now - 3, "pf2": now - 2})
+    full.update({"un9": -(now - 1)})
+    FULL = {"redTeamPath.v2": json.dumps({"m": full, "y": {"2026-11-20": now - 300000, "2026-11-21": now - 200000}, "r": 0, "best": 2, "theme": "light",
+                                          "open": {}, "test": False, "sync": "", "nolink": True}),
+            "redTeamPath.notes": json.dumps({"m1": "lab 1 note", "w1": "write-up one"}),
+            "redTeamPath.quizReview": json.dumps({"1": []}), "redTeamPath.quizWait": json.dumps({})}
+    sctx, sp = new_page(b, FULL, start=False)
+    m = ticks(sp)
+    check(all(m.get(k) == v for k, v in full.items()), "Scope 2: progress saved before Scope 2 loads with every tick and mark unchanged (%d of %d)" % (sum(1 for k, v in full.items() if m.get(k) == v), len(full)))
+    check(("%d OF %d DONE" % (OLD_COUNT, COUNT)) in sp.inner_text("#home-progress") and "freeCodeCamp" in sp.inner_text("#continue-btn"), "Scope 2: all 49 old boxes still count, and Continue now points at Step 7")
+    check(sp.evaluate("JSON.parse(localStorage.getItem('redTeamPath.notes')).m1") == "lab 1 note" and sp.evaluate("JSON.parse(localStorage.getItem('redTeamPath.v2')).theme") == "light", "Scope 2: old notes and settings are untouched")
+    no_side_scroll(sp, "Scope 2 main menu with its cards")
+    sp.click("#continue-btn")
+    check(sp.get_attribute("#view-now", "data-id") == "fc1" and "ABOUT 15 HOURS" in sp.inner_text("#top-tag") and "SHIFT WEEK OK" in sp.inner_text("#top-tag"), "Scope 2: fc1 opens with its time and where you can do it")
+    check(sp.get_attribute("#open-link", "href").startswith("https://www.freecodecamp.org/learn/python-v9/"), "Scope 2: fc1 links to freeCodeCamp's own lesson")
+    check(sp.locator("#done-btn").is_disabled() and "quiz" in sp.inner_text("#done-btn").lower(), "Scope 2: a course box cannot be ticked before its quiz is passed")
+    sp.click("#done-btn", force=True)
+    check(ticks(sp).get("fc1", 0) <= 0, "Scope 2: pressing the locked button ticks nothing")
+    no_side_scroll(sp, "Scope 2 course box")
+    sp.click("#quiz-start")
+    seen_code, total = False, sp.evaluate("window.RTP_QUIZ.fc1.length")
+    for i in range(total):
+        seen_code = seen_code or sp.locator("#quiz-code").count() == 1
+        answer(sp, i >= 2)  # miss the first two: 6 of 8 is under the pass mark
+    check(seen_code, "Scope 2: code questions show the code to read")
+    check("Open that lesson" in sp.inner_text("#quiz-misses") and sp.locator("#quiz-misses a").count() == 2, "Scope 2: each miss says where to look and links freeCodeCamp's lesson")
+    misses = sp.inner_text("#quiz-misses")
+    sp.evaluate("(function () { var w = JSON.parse(localStorage.getItem('redTeamPath.quizWait') || '{}'); w.fc1 = 1; localStorage.setItem('redTeamPath.quizWait', JSON.stringify(w)); })()")
+    sp.evaluate("location.hash = '#i-fc2'"); sp.evaluate("location.hash = '#i-fc1'")
+    sp.wait_for_selector("#quiz-retry")
+    sp.click("#quiz-retry")
+    answer(sp, True)
+    answer(sp, True)
+    check(ticks(sp).get("qzfc1", 0) > 0 and sp.locator("#done-btn").is_enabled(), "Scope 2: passing fc1's quiz saves qzfc1 and unlocks the box")
+    sp.click("#done-btn")
+    check(ticks(sp).get("fc1", 0) > 0 and ticks(sp).get("ac%d" % sp.evaluate("new Date().getDay()"), 0) > 0, "Scope 2: fc1 ticks, and today counts as a study day")
+    # Explain it back
+    sp.evaluate("location.hash = '#i-xb7'")
+    sp.wait_for_selector("#explain-learned")
+    check(sp.locator("#done-btn").is_disabled() and "25 words" in sp.inner_text("#done-btn"), "Scope 2: Explain it back is locked until both answers have 25 words")
+    sp.fill("#explain-learned", "word " * 30)
+    sp.fill("#explain-use", "too short")
+    check(sp.locator("#done-btn").is_disabled(), "Scope 2: one long answer is not enough")
+    sp.fill("#explain-use", "word " * 26)
+    check(sp.locator("#done-btn").is_enabled() and "can't grade" in sp.inner_text("#explain-box"), "Scope 2: two answers of 25 words unlock it, and the box says it can't grade them")
+    # review: video 1's quiz passed two days ago is due on the 1-day rung
+    sp.evaluate("(function () { var d = JSON.parse(localStorage.getItem('redTeamPath.v2')); d.m.qz1 = Date.now() - 2 * 86400000; Object.keys(d.m).forEach(function (k) { if (/^qz/.test(k) && k !== 'qz1') { d.m[k] = Date.now() - 1000; } }); localStorage.setItem('redTeamPath.v2', JSON.stringify(d)); localStorage.removeItem('redTeamPath.reviewToday'); })()")
+    sp.reload()
+    sp.evaluate("location.hash = '#home'")
+    sp.wait_for_selector("#review-card")
+    check("1 DUE TODAY" in sp.inner_text("#review-card"), "Scope 2: a video quiz passed 2 days ago brings one review question due")
+    sp.click("#review-start")
+    q = sp.evaluate("(function () { var t = document.getElementById('review-q').textContent; return window.RTP_QUIZ[1].filter(function (x) { return x.q === t; })[0]; })()")
+    wrong = [o for k, o in enumerate(q["options"]) if k != q["answer"]][0]
+    sp.locator("#review-opts .opt", has_text=wrong).first.click()
+    res = sp.inner_text("#review-result")
+    check(ticks(sp).get("r1v1", 0) < 0 and "comes back tomorrow" in res and q["options"][q["answer"]] not in res, "Scope 2: a missed review is saved, comes back tomorrow, and never shows the right answer")
+    sp.click("#review-next")
+    sp.evaluate("(function () { var d = JSON.parse(localStorage.getItem('redTeamPath.v2')); d.m.r1v1 = -(Date.now() - 2 * 86400000); localStorage.setItem('redTeamPath.v2', JSON.stringify(d)); localStorage.removeItem('redTeamPath.reviewToday'); })()")
+    sp.reload()
+    sp.evaluate("location.hash = '#home'")
+    sp.wait_for_selector("#review-start")
+    sp.click("#review-start")
+    q = sp.evaluate("(function () { var t = document.getElementById('review-q').textContent; return window.RTP_QUIZ[1].filter(function (x) { return x.q === t; })[0]; })()")
+    sp.locator("#review-opts .opt", has_text=q["options"][q["answer"]]).first.click()
+    check(ticks(sp).get("r1v1", 0) > 0 and "7 days" in sp.inner_text("#review-result"), "Scope 2: a right review answer moves the topic to the 1-week rung")
+    # rotation and the on-track card
+    check("Set your rotation" in sp.inner_text("#track-card"), "Scope 2: with no rotation set, the on-track card asks for it")
+    sp.evaluate("location.hash = '#menu'")
+    start = sp.evaluate("(function () { var d = new Date(); d.setDate(d.getDate() - 2); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); })()")
+    sp.fill("#rotation-date", start)
+    sp.click("#rotation-save")
+    check("day 3 of your 21-day rotation" in sp.inner_text("#rotation-status") and any(k.startswith("rt") and v > 0 for k, v in ticks(sp).items()), "Scope 2: the rotation saves as a linked mark, and today is day 3")
+    home(sp)
+    card = sp.inner_text("#track-card")
+    check("ON-SHIFT WEEK 1 OF 2" in card and "10 HOURS" in card and "Step 7" in card and "can't message you" in card, "Scope 2: the on-track card shows the week, its target, when Step 7 should finish, and says it can't message you")
+    sp.evaluate("(function () { var d = JSON.parse(localStorage.getItem('redTeamPath.v2')); var old = Date.now() - 5 * 86400000; for (var i = 0; i < 7; i += 1) { if (d.m['ac' + i] > 0) { d.m['ac' + i] = old; } } d.y = {}; d.y[new Date(old).toISOString().slice(0, 10)] = old; localStorage.setItem('redTeamPath.v2', JSON.stringify(d)); })()")
+    sp.reload()
+    sp.evaluate("location.hash = '#home'")
+    sp.wait_for_selector("#track-card")
+    check(sp.locator("#track-nudge").count() == 1 and "Smallest next step" in sp.inner_text("#track-nudge"), "Scope 2: after quiet days on shift, the card says so and offers the smallest next step")
+    sp.click("#track-log")
+    check(sp.locator("#track-nudge").count() == 0 and sp.locator("#track-log").is_disabled(), "Scope 2: I studied today clears the nudge and never ticks a box")
+    no_side_scroll(sp, "Scope 2 main menu with the review and on-track cards")
+    shot(sp, "scope2-main-menu", True)
+    check(not sp.errors, "Scope 2: no page errors %s" % sp.errors[:2])
+    sctx.close()
 
     # ---- 5. a desktop: the menu panel on the left and the contents panel on the right, both open, each can be hidden ----
     dctx = b.new_context(viewport={"width": 1440, "height": 900})

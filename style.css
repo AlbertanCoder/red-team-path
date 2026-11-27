@@ -343,3 +343,11 @@ details.pstep > summary::-webkit-details-marker { display: none; }
 .also { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .also button { min-height: 48px; border-radius: 6px; }
 #link-prompt { display: flex; flex-direction: column; gap: 10px; }
+
+/* Scope 2: code in quizzes, the on-track and review cards, Explain it back */
+pre.qcode { margin: 0; }
+.opt.mono { font-family: var(--mono); white-space: pre-wrap; }
+.track, .review { display: flex; flex-direction: column; gap: 8px; }
+.track .line, .review .line { margin: 0; }
+.track .btnrow button, .review button { align-self: flex-start; }
+#rotation-date { min-height: 40px; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; font: inherit; }

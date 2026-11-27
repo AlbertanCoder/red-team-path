@@ -14,14 +14,19 @@ Built around one name, Microsoft, so you can say where you studied. Two named ex
 4. **Python, on Microsoft Learn**: 8 short modules with small projects.
 5. **Automation**: Episodes 8 to 10, each followed by the task it shows, using Microsoft's own PyRIT notebooks.
 6. **Proof and bounties** (not Microsoft): a Microsoft Learn transcript, then Mozilla 0DIN and an application to Anthropic's model safety bug bounty.
+7. **Python, part 1** (freeCodeCamp, added 27 Nov 2026): the first half of freeCodeCamp's free Python Certification, from basics to object-oriented code, with 3 of its 5 certificate projects. Steps 8 to 14 (Scope 2, see `SCOPE-2-PLAN.md`) are being added in parts.
 
-49 boxes count toward the path. 9 more are optional and never block the next step: 5 write-ups, and the 4 labs whose goal is harmful on purpose (labs 3, 4, 9 and 10).
+60 boxes count toward the path. 9 more are optional and never block the next step: 5 write-ups, and the 4 labs whose goal is harmful on purpose (labs 3, 4, 9 and 10).
 
 ## How the app works
 
 - **It opens on the main menu:** a Continue card for the step you are on, how far along you are, and four bars: Path, Library, Jobs, Settings.
 - **Every screen has a Menu button (top left)** for those five places, and a **Contents button (top right)** for the whole path with its ticks. Labs you moved on from are listed under "Come back to these". On a screen 1000 px wide or more, both panels sit open beside the lesson.
 - **A step** shows the video, the lab's tutor page, or a short card with numbered steps. **The bottom bar** says what is next and holds the button that finishes the step.
+- **Steps 1 to 6 are unchanged.** From Step 7 each box links to the real course page and says how long it takes and whether it needs your PC.
+- **A course box** (Step 7) is finished only after its quiz is passed: 8 questions written from freeCodeCamp's own lesson pages, with "what does this code print?" and "spot the bug" questions whose answers were checked by running the code. A miss links the lesson to look at. The last box of the step, **Explain it back**, needs two answers of at least 25 words each; the app cannot grade them and says so.
+- **Review**: one question from a box you finished comes back 1 day, then 1 week, then 1 month after its quiz, up to 5 a day, on the main menu. A miss shows where to look, never the answer, and brings the topic back tomorrow. It never blocks the next step.
+- **On track**: in Settings you set the first day of your 14 days on; the main menu then shows the week (on shift or off), a target (about 10 or 30 hours), the days you studied this week, when the current step should finish, and, after quiet days, the smallest next step. The app has no server and cannot message you; it only shows this when you open it.
 - **A video** is finished only after its quiz is passed (80%, written from the video's own words). A miss shows what you picked and where to rewatch; the retry opens 2 minutes later; the right answers show once you pass.
 - **A required lab (1, 2, 5, 6, 7, 8, 11, 12)** is finished only with proof: the chat file the lab's own download button saves, read by the app the way the lab's scorer, or Microsoft's written rule, decides a win. The harmful-goal labs (3, 4, 9, 10) stay optional with **I beat it** and **Moving on, not solved**. "Skip Microsoft's labs" on the set-up box marks the labs moved on, not solved.
 
@@ -59,9 +64,10 @@ Linking stores only which boxes are ticked, which hints are open, lab results, a
 
 The home-screen app and Safari keep separate progress, so link the one you use.
 
-## What works, and what is unfinished (19 Nov 2026)
+## What works, and what is unfinished (19 Nov 2026, Step 7 added 27 Nov 2026)
 
 Works, each with a check that passed on the live site:
+- Step 7 (27 Nov 2026): a course box cannot be ticked before its quiz; progress saved before Step 7 loads with every tick; review questions, the on-track card and Explain it back work at phone width (`tools/app_test.py`); a rotation set on one device shows on another, and a device still on the older app cannot make the new marks disappear from the store (`tools/sync_test.py`).
 - The app opens on the current step; progress saved by the older version carries over (`tools/app_test.py`).
 - All 12 lab tutor pages; 8 answers run in the real labs on 18 and 19 Nov 2026 (`tools/verify_labs.py`, `PROOF.md`). Lab 12, which had no known answer, was solved on 19 Nov: 9 of 9.
 - The order of the path, with one Next at every point: the test taps through all 49 boxes from the first video to the finish.
@@ -70,6 +76,7 @@ Works, each with a check that passed on the live site:
 - Jobs: daily link check and weekly scan for new ads, both running on GitHub.
 
 Unfinished, or not proven:
+- The app cannot see your freeCodeCamp progress; it checks you with its own quiz. Hours per box are estimates (freeCodeCamp labels the whole certificate 300 hours).
 - Lab 10 has no known answer. Its harmful goal was never run; only its key step was tested.
 - Labs 3 and 9 show Microsoft's published example, which was not run for this app.
 - The 8 Gray Swan practice links load, but a script cannot prove each set is still offered.
