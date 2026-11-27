@@ -409,9 +409,11 @@
         "https://aistudio.google.com/docs/get-started", { mins: 240, pc: true, proof: "github", openLabel: "Open Google's guide", how: [
           "Make a free Gemini API key on Google AI Studio's API keys page (aistudio.google.com/apikey). Free-tier prompts may be used by Google: send nothing private.",
           "Store the key as an environment variable called GEMINI_API_KEY, the way Google's key page shows for Windows. Never paste it into a file you will push.",
-          "On GitHub, make a new public repository called red-team-tools. Put it on your PC, and add a file called .gitignore with the line .env in it, as a safety net.",
+          "On GitHub, make a new public repository called red-team-tools.",
+          "Put it on your PC with GitHub Desktop, GitHub's free app: on desktop.github.com press Download for Windows, run the setup file, and sign in with your GitHub account. On your repository's GitHub page press Code, then Open with GitHub Desktop. Press Choose... to pick the folder it goes in, then Clone.",
+          "In that folder, add a file called .gitignore with the line .env in it, as a safety net.",
           "Install Google's library (pip install -U google-genai) and write hello_model.py: call the model once and print its reply. Run it.",
-          "Commit and push hello_model.py and .gitignore. Then press Check my GitHub below, and take the quiz."
+          "Commit and push hello_model.py and .gitignore: in GitHub Desktop, type a short note in the Summary box, press Commit to main, then press Push origin. Then press Check my GitHub below, and take the quiz."
         ] }),
       item("ap2", "build", "Send a list of test prompts and log every reply",
         "Testing at scale means many prompts, every reply saved. Your target is harmless and your own: an instruction you write that guards a made-up secret word, like Microsoft's Lab 2.",
@@ -419,7 +421,9 @@
           "In red-team-tools, write prompts.json: a list of at least 10 attack prompts from the labs (encodings, another language, a story).",
           "Write run_prompts.py: give the model a system instruction you write that guards a made-up secret word. Send each prompt and add one line per reply to results.jsonl, holding prompt, reply, model and time.",
           "Run it. Open results.jsonl and read every reply yourself.",
-          "Commit and push prompts.json, run_prompts.py and results.jsonl. Then press Check my GitHub below, and take the quiz."
+          "Commit and push prompts.json, run_prompts.py and results.jsonl, in GitHub Desktop as in your first project.",
+          "Good to know: job ads and tools expect the typed commands too. In a terminal they do the same job: git clone followed by the repository's address, once; then each time git add ., git commit -m \"what changed\" and git push.",
+          "Then press Check my GitHub below, and take the quiz."
         ] }),
       item("ap3", "build", "Score the replies",
         "Reading results back and scoring them is the core of every red-team tool: did the secret leak, did it refuse?",

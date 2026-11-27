@@ -1152,6 +1152,13 @@ with sync_playwright() as p:
     SOLUTION = [".center(", ":>7.2f", "super().__init__(side, side)", "sum(ord(c)", "moves(n - 1)", 'item["amount"] for item']
     shown = [t for t in SOLUTION if any(t in x.get("code", "") for k in ("fc8", "fc10", "fc12", "fc15") for x in QZ[k])]
     check(not shown, "Scope 3: certificate-project quizzes show no working line of the project's answer (found: %s)" % shown)
+    # Scope 3, fix 13 (audit A4, decision 5): no box said how code gets from the PC to GitHub.
+    gctx, gp = new_page(b, None, start=False)
+    ap1 = box_text(gp, "ap1")
+    check("GitHub Desktop" in ap1 and "Open with GitHub Desktop" in ap1 and "Commit to main" in ap1 and "Push origin" in ap1, "Scope 3: box ap1 teaches copying, saving and sending with GitHub Desktop")
+    ap2 = box_text(gp, "ap2")
+    check("git clone" in ap2 and "git commit" in ap2 and "git push" in ap2, "Scope 3: box ap2 shows the typed git commands once")
+    gctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
