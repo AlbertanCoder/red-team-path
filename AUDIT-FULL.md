@@ -451,7 +451,7 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 
 ---
 
-## 8. Fix log (in progress: 10 of 25 done, paused 27 Nov 2026)
+## 8. Fix log (in progress: 33 of 25 done, 27 Nov 2026)
 
 Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/ship.sh` (local test, push, live file compared, live test). "Failed before" means the new checks were run against the live site before the change went out.
 
@@ -465,7 +465,8 @@ Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/
 8. **A8, a real HackerOne address is accepted.** Commit b42c029. 6 new checks, 3 failed before. Live: 379. The example address, pages that are not a profile and the dead `www` form are now refused.
 9. **A9 and A10, the API-key check and box ap3's counting rule.** Commit 4363507. 8 new checks, 5 failed before. Live: 387.
 10. **A13, B6, C10, wording on screen.** Commit b199a51. 4 new checks and 1 changed, all 5 failed before. Live: 392. Course-box quizzes no longer say "video"; a missed review says "comes back in 24 hours" (it returns 24 hours after the miss, not the next morning); Settings names everything stored online; the Library gives 27 Nov for its later sources; the GitHub limit message says to switch to the phone's data. Left: the 5 review questions a day are still counted per device (B6), and the slow-clock edge (B6) is unchanged.
+11. **E2, a quiz retry asks every question again, in a new order.** Commit f4ab685. 3 new checks and 2 changed; before the change 2 failed and the third stopped the run. Live: 402. Right answers from the round before no longer count; the review after a pass still lists every miss on the way. Anyone who passed before keeps the pass.
 
 Also done, not a fix yet: garak and PyRIT were run for real on free local models on this PC (decision 1). Both worked with no key. The exact steps are in `helpers/real-runs.md` in the audit folder and go into boxes ag4 and ag5 at fix 17. One line of finding A6 was corrected from that run.
 
-Not started: fixes 11 to 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
+Not started: fixes 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
