@@ -854,6 +854,577 @@ window.RTP_QUIZ = {
    "hint": "Around 8:00 to 8:30, before the crescendo attack runs."
   }
  ],
+ "ag1": [
+  {
+   "q": "Which question comes first in a threat model, according to OWASP's cheat sheet?",
+   "options": [
+    "What are we working on?",
+    "Who is to blame?",
+    "How much will it cost?",
+    "Which tool should we buy?"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at OWASP's cheat sheet: the four questions from the Threat Modeling Manifesto.",
+   "where": "OWASP Threat Modeling Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
+  },
+  {
+   "q": "After the system is modelled, which question does threat identification answer?",
+   "options": [
+    "What can go wrong?",
+    "Who built it?",
+    "When does it launch?",
+    "What does it cost to run?"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at OWASP's cheat sheet: Threat Identification.",
+   "where": "OWASP Threat Modeling Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
+  },
+  {
+   "q": "What does OWASP call arguably the most common way to model a system?",
+   "options": [
+    "Data flow diagrams (DFDs)",
+    "Spreadsheets of passwords",
+    "Photos of the server room",
+    "A list of employees"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at OWASP's cheat sheet: System Modeling.",
+   "where": "OWASP Threat Modeling Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
+  },
+  {
+   "q": "A good system model shows trust boundaries. For an email agent, where is one?",
+   "options": [
+    "Where emails from strangers enter what the model reads",
+    "Between two lines of the same Python file",
+    "Between the screen and the keyboard",
+    "There are none in an agent"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP's cheat sheet: System Modeling. Ask: where does data you do not control come in?",
+   "where": "OWASP Threat Modeling Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
+  },
+  {
+   "q": "What does Microsoft's AI/ML threat modeling page tell you to assume about training data and its provider?",
+   "options": [
+    "Assume they may be compromised or poisoned",
+    "Assume they are always safe",
+    "Assume they are secret",
+    "Assume they are too big to attack"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Microsoft's page: Changing the way you view Trust Boundaries.",
+   "where": "Microsoft: Threat Modeling AI/ML Systems and Dependencies",
+   "url": "https://learn.microsoft.com/en-us/security/engineering/threat-modeling-aiml"
+  },
+  {
+   "q": "Which threat does Microsoft's page call the greatest in machine learning today?",
+   "options": [
+    "Data poisoning",
+    "Slow servers",
+    "Stolen laptops",
+    "Bad passwords"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Microsoft's page: Key New Considerations in Threat Modeling.",
+   "where": "Microsoft: Threat Modeling AI/ML Systems and Dependencies",
+   "url": "https://learn.microsoft.com/en-us/security/engineering/threat-modeling-aiml"
+  },
+  {
+   "q": "You threat-model PortSwigger's shop chatbot before testing it. Which line belongs under 'what could go wrong'?",
+   "options": [
+    "It could be talked into calling an API that deletes a user",
+    "The shop's logo is the wrong colour",
+    "The page loads in 2 seconds",
+    "The chatbot uses English"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP's cheat sheet: Threat Identification. Think about what the chatbot can do, not how it looks.",
+   "where": "OWASP Threat Modeling Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
+  },
+  {
+   "q": "What is the last of the four threat modeling questions?",
+   "options": [
+    "Did we do a good enough job?",
+    "What is the budget?",
+    "Who owns the server?",
+    "Which model is fastest?"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at OWASP's cheat sheet: the four questions, and the phase after mitigation.",
+   "where": "OWASP Threat Modeling Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
+  }
+ ],
+ "ag2": [
+  {
+   "q": "What is the first step of PortSwigger's method for finding LLM vulnerabilities?",
+   "options": [
+    "Identify the LLM's inputs, direct and indirect",
+    "Send it the strongest jailbreak you know, again and again",
+    "Read its source code",
+    "Ask for its system prompt"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's Web LLM attacks page: Detecting LLM vulnerabilities.",
+   "where": "PortSwigger: Web LLM attacks",
+   "url": "https://portswigger.net/web-security/llm-attacks"
+  },
+  {
+   "q": "What does PortSwigger mean by excessive agency?",
+   "options": [
+    "The LLM can reach APIs with sensitive data and can be persuaded to use them unsafely",
+    "The LLM types too fast",
+    "The LLM refuses too often",
+    "The LLM has too many users"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's page: Mapping LLM API attack surface.",
+   "where": "PortSwigger: Web LLM attacks",
+   "url": "https://portswigger.net/web-security/llm-attacks"
+  },
+  {
+   "q": "What is the first stage of using an LLM to attack APIs?",
+   "options": [
+    "Work out which APIs and plugins the LLM can use",
+    "Guess the admin password from the names of the site's staff",
+    "Overload the server",
+    "Read the site's privacy policy"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's page: Mapping LLM API attack surface.",
+   "where": "PortSwigger: Web LLM attacks",
+   "url": "https://portswigger.net/web-security/llm-attacks"
+  },
+  {
+   "q": "A chatbot's reply is shown on a page without escaping, and you get it to include HTML. Which flaw from PortSwigger's page is that?",
+   "options": [
+    "Insecure output handling",
+    "Excessive agency",
+    "Training data poisoning",
+    "A missing API"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at PortSwigger's page: the section on output.",
+   "where": "PortSwigger: Web LLM attacks",
+   "url": "https://portswigger.net/web-security/llm-attacks"
+  },
+  {
+   "q": "In what two ways can prompt injection be delivered, according to PortSwigger?",
+   "options": [
+    "Directly, like a chat message, or indirectly, through data the model reads",
+    "Only by email",
+    "Only by phone",
+    "Only through the admin panel, after logging in with the owner's account details"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's page: Indirect prompt injection.",
+   "where": "PortSwigger: Web LLM attacks",
+   "url": "https://portswigger.net/web-security/llm-attacks"
+  },
+  {
+   "q": "Why is indirect prompt injection especially dangerous, according to PortSwigger?",
+   "options": [
+    "It often enables attacks on other users",
+    "It is always visible to the user, who can stop it in time",
+    "It only works on old models",
+    "It needs the admin's password"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's page: Indirect prompt injection.",
+   "where": "PortSwigger: Web LLM attacks",
+   "url": "https://portswigger.net/web-security/llm-attacks"
+  },
+  {
+   "q": "What does PortSwigger say about any API an LLM can call?",
+   "options": [
+    "Treat it as publicly accessible",
+    "Treat it as safe, because the LLM decides when to call it",
+    "Hide it in the system prompt",
+    "Rename it often"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's page: Defending against LLM attacks.",
+   "where": "PortSwigger: Web LLM attacks",
+   "url": "https://portswigger.net/web-security/llm-attacks"
+  },
+  {
+   "q": "Training data poisoning is a kind of what, according to PortSwigger?",
+   "options": [
+    "Indirect prompt injection",
+    "Cross-site scripting",
+    "SQL injection",
+    "Denial of service"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's page: Training data poisoning.",
+   "where": "PortSwigger: Web LLM attacks",
+   "url": "https://portswigger.net/web-security/llm-attacks"
+  }
+ ],
+ "ag3": [
+  {
+   "q": "What are MCP server vulnerabilities, in PortSwigger's words?",
+   "options": [
+    "Flaws in the MCP servers websites expose so AI assistants and agents can use their functionality",
+    "Bugs in a computer's graphics card",
+    "Weak Wi-Fi passwords",
+    "Errors in a model's training data"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's MCP page: its first lines.",
+   "where": "PortSwigger: MCP server vulnerabilities",
+   "url": "https://portswigger.net/web-security/mcp"
+  },
+  {
+   "q": "How do remote MCP servers talk, according to PortSwigger?",
+   "options": [
+    "JSON-RPC 2.0 messages over HTTP, usually to one endpoint such as /mcp",
+    "Plain emails",
+    "Text messages to a phone",
+    "Files on a USB stick"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's MCP page: How MCP servers work.",
+   "where": "PortSwigger: MCP server vulnerabilities",
+   "url": "https://portswigger.net/web-security/mcp"
+  },
+  {
+   "q": "In MCP, what is a tool?",
+   "options": [
+    "A named function the client can call with arguments, like update_email",
+    "A password for the server",
+    "A picture the server sends",
+    "A browser add-on"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's MCP page: the kinds of capability a server can offer.",
+   "where": "PortSwigger: MCP server vulnerabilities",
+   "url": "https://portswigger.net/web-security/mcp"
+  },
+  {
+   "q": "An MCP server leaves a tool out of tools/list for normal users, but still runs it if they call it by name. What does PortSwigger call this?",
+   "options": [
+    "Hidden tools are not restricted tools",
+    "Authentication that fails open",
+    "A session ID used for authentication",
+    "Insecure output handling"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at PortSwigger's MCP page: the section on limiting which tools a user can use.",
+   "where": "PortSwigger: MCP server vulnerabilities",
+   "url": "https://portswigger.net/web-security/mcp"
+  },
+  {
+   "q": "A server can't validate a token and uses a default identity instead of rejecting the request. What is that called?",
+   "options": [
+    "Failing open",
+    "Failing closed",
+    "Rate limiting",
+    "Single sign-on"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's MCP page: Authentication that fails open.",
+   "where": "PortSwigger: MCP server vulnerabilities",
+   "url": "https://portswigger.net/web-security/mcp"
+  },
+  {
+   "q": "Some MCP servers check your token only at initialize. What do they trust after that?",
+   "options": [
+    "The Mcp-Session-Id header alone",
+    "The user's IP address",
+    "Nothing: every request is checked again",
+    "The model's own judgement"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's MCP page: the section on session IDs.",
+   "where": "PortSwigger: MCP server vulnerabilities",
+   "url": "https://portswigger.net/web-security/mcp"
+  },
+  {
+   "q": "Where do MCP servers that need to know who you are usually expect your token?",
+   "options": [
+    "A bearer token in the Authorization header",
+    "In the tool's description",
+    "In the page's footer",
+    "In a cookie called mcp"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's MCP page: MCP authorization.",
+   "where": "PortSwigger: MCP server vulnerabilities",
+   "url": "https://portswigger.net/web-security/mcp"
+  },
+  {
+   "q": "When an MCP tool runs, what does it typically do?",
+   "options": [
+    "Query a database or perform an action on behalf of the user",
+    "Show an advert",
+    "Train the model again",
+    "Restart the server"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's MCP page: the kinds of capability a server can offer.",
+   "where": "PortSwigger: MCP server vulnerabilities",
+   "url": "https://portswigger.net/web-security/mcp"
+  }
+ ],
+ "ag4": [
+  {
+   "q": "What does garak probe a model for?",
+   "options": [
+    "Hallucination, data leakage, prompt injection, misinformation, toxicity, jailbreaks and more",
+    "Only spelling mistakes",
+    "Only how fast it answers",
+    "Only its price"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at garak's README: its opening.",
+   "where": "NVIDIA garak README",
+   "url": "https://github.com/NVIDIA/garak"
+  },
+  {
+   "q": "garak's README compares it to which security tools, but for language models?",
+   "options": [
+    "nmap and Metasploit",
+    "Word and Excel",
+    "Chrome and Firefox",
+    "Zoom and Teams"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at garak's README: its opening.",
+   "where": "NVIDIA garak README",
+   "url": "https://github.com/NVIDIA/garak"
+  },
+  {
+   "q": "Which command lists garak's probes?",
+   "options": [
+    "garak --list_probes",
+    "garak --help-me",
+    "pip list probes",
+    "garak --show all"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at garak's README: Getting started.",
+   "where": "NVIDIA garak README",
+   "url": "https://github.com/NVIDIA/garak"
+  },
+  {
+   "q": "Which options tell garak which model to test?",
+   "options": [
+    "--target_type and --target_name",
+    "--user and --password",
+    "--url and --port",
+    "--model_file only"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at garak's README: Getting started.",
+   "where": "NVIDIA garak README",
+   "url": "https://github.com/NVIDIA/garak"
+  },
+  {
+   "q": "You want garak to run only the PromptInject probes, not all of them. What do you add?",
+   "options": [
+    "--spec probes.promptinject",
+    "--only injection",
+    "--fast",
+    "Nothing: it always runs one probe"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at garak's README: the part after it says garak runs all the probes by default.",
+   "where": "NVIDIA garak README",
+   "url": "https://github.com/NVIDIA/garak"
+  },
+  {
+   "q": "How does garak's report of a run come out?",
+   "options": [
+    "As a JSONL file, a new one each run",
+    "As a PDF emailed to you",
+    "Only on the screen",
+    "As one file that grows forever"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at garak's README: the part about the kinds of log it makes.",
+   "where": "NVIDIA garak README",
+   "url": "https://github.com/NVIDIA/garak"
+  },
+  {
+   "q": "garak needs an API key for the model you test. Where does its README say such keys go?",
+   "options": [
+    "In an environment variable",
+    "In the command, typed in full",
+    "In a public GitHub file",
+    "In the report"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at garak's README: Getting started.",
+   "where": "NVIDIA garak README",
+   "url": "https://github.com/NVIDIA/garak"
+  },
+  {
+   "q": "What does this code print? (A garak report has one JSON line per entry.)",
+   "options": [
+    "2",
+    "3",
+    "1",
+    "0"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at garak's README: what the report holds for each probing attempt; then count the lines whose entry_type is attempt.",
+   "where": "NVIDIA garak README",
+   "url": "https://github.com/NVIDIA/garak",
+   "code": "import json\nreport = '{\"entry_type\": \"start_run setup\"}\\n{\"entry_type\": \"attempt\"}\\n{\"entry_type\": \"attempt\"}\\n{\"entry_type\": \"eval\"}'\nrows = [json.loads(line) for line in report.splitlines()]\nprint(sum(1 for r in rows if r[\"entry_type\"] == \"attempt\"))"
+  }
+ ],
+ "ag5": [
+  {
+   "q": "Which Python versions does PyRIT's install page list?",
+   "options": [
+    "3.11 to 3.15",
+    "2.7 only",
+    "3.6 to 3.8",
+    "Any version at all"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PyRIT's install page: Prerequisites.",
+   "where": "PyRIT: Install locally",
+   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/getting_started/install_local.md"
+  },
+  {
+   "q": "What does PyRIT's install page say about notebooks and your installed PyRIT?",
+   "options": [
+    "They must be on the same version",
+    "Any notebook works with any version",
+    "Notebooks need no PyRIT",
+    "Only old notebooks work"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PyRIT's install page: Matching Notebooks to Your Version. Step 5 taught you why.",
+   "where": "PyRIT: Install locally",
+   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/getting_started/install_local.md"
+  },
+  {
+   "q": "In PyRIT, what is an executor?",
+   "options": [
+    "An algorithm for interacting with an objective target",
+    "The person who runs the test",
+    "A kind of language model",
+    "A file of prompts"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PyRIT's executor page: its first line.",
+   "where": "PyRIT: Attacks and executors",
+   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/code/executor/0_executor.md"
+  },
+  {
+   "q": "How does PyRIT tell a single-turn attack from a multi-turn one?",
+   "options": [
+    "It counts requests to the objective target: one, or more than one",
+    "By the length of the prompt",
+    "By the model's name",
+    "By how long the attack takes"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PyRIT's executor page: the simple rule attacks split by.",
+   "where": "PyRIT: Attacks and executors",
+   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/code/executor/0_executor.md"
+  },
+  {
+   "q": "Which of these is a multi-turn attack strategy in PyRIT?",
+   "options": [
+    "CrescendoAttack",
+    "PromptSendingAttack",
+    "TextTarget",
+    "SelfAskTrueFalseScorer"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at PyRIT's executor page: the attack strategies it names; remember Microsoft's Episode 6.",
+   "where": "PyRIT: Attacks and executors",
+   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/code/executor/0_executor.md"
+  },
+  {
+   "q": "What does a single-turn attack do, according to PyRIT's docs?",
+   "options": [
+    "Sends one prompt to the target and scores the response",
+    "Sends prompts until the target gives up",
+    "Rewrites the target's code",
+    "Trains a new model"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PyRIT's executor page: Single-Turn.",
+   "where": "PyRIT: Attacks and executors",
+   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/code/executor/0_executor.md"
+  },
+  {
+   "q": "When does a multi-turn attack stop?",
+   "options": [
+    "When the objective is met or a turn limit is hit",
+    "After exactly two turns",
+    "Never: you must stop it by hand",
+    "When the model says hello"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PyRIT's executor page: Multi-Turn.",
+   "where": "PyRIT: Attacks and executors",
+   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/code/executor/0_executor.md"
+  },
+  {
+   "q": "You want to test one model against a fixed set of prompts and compare it with last month. Which kind of PyRIT executor fits?",
+   "options": [
+    "Benchmark",
+    "Compound",
+    "Modality Feedback",
+    "Multi-turn"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at PyRIT's executor page: the list of executor kinds.",
+   "where": "PyRIT: Attacks and executors",
+   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/code/executor/0_executor.md"
+  }
+ ],
  "ap1": [
   {
    "q": "How does Google's page say to treat your Gemini API key?",
@@ -3172,6 +3743,652 @@ window.RTP_QUIZ = {
    "hint": "Look again at agents lesson 06: the defences that come after the list of threats.",
    "where": "ai-agents-for-beginners lesson 06",
    "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/06-building-trustworthy-agents"
+  }
+ ],
+ "wb1": [
+  {
+   "q": "HTTP is stateless. What lets a website remember that two of your requests belong together?",
+   "options": [
+    "The IP address alone",
+    "HTTP cookies",
+    "The colour of the page",
+    "The request's length"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at MDN's overview: HTTP is stateless, but not sessionless.",
+   "where": "MDN: Overview of HTTP",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview"
+  },
+  {
+   "q": "What is the start-line of an HTTP request?",
+   "options": [
+    "A single line with the method, the target and the HTTP version",
+    "The first word of the page's text",
+    "The cookie the browser sends first",
+    "The status code, like 404"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at MDN's HTTP messages: Anatomy of an HTTP message.",
+   "where": "MDN: HTTP messages",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "GET",
+    "/api/books",
+    "HTTP/1.1",
+    "books"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at MDN's HTTP messages: the three parts of a request's start-line, in order.",
+   "where": "MDN: HTTP messages",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages",
+   "code": "start_line = \"GET /api/books HTTP/1.1\"\nmethod, target, version = start_line.split()\nprint(target)"
+  },
+  {
+   "q": "In an HTTP message, what is the head and what is the body?",
+   "options": [
+    "Head: start-line and headers. Body: the content after them",
+    "Head: the page title. Body: the page text",
+    "Head: the server. Body: the browser",
+    "Head: cookies only. Body: everything else"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at MDN's HTTP messages: the part on head and body.",
+   "where": "MDN: HTTP messages",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages"
+  },
+  {
+   "q": "What makes HTTP easy to extend with new features, according to MDN?",
+   "options": [
+    "Headers",
+    "Status codes",
+    "Port numbers",
+    "Cookies only"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at MDN's overview: HTTP is extensible.",
+   "where": "MDN: Overview of HTTP",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview"
+  }
+ ],
+ "wb2": [
+  {
+   "q": "What does this code print?",
+   "options": [
+    "/var/www/images/../../../etc/passwd",
+    "/etc/passwd",
+    "/var/www/etc/passwd",
+    "../../../etc/passwd"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at PortSwigger's path traversal page: what ../ does to a file path, step by step.",
+   "where": "PortSwigger: Path traversal",
+   "url": "https://portswigger.net/web-security/file-path-traversal",
+   "code": "import posixpath\nprint(posixpath.normpath(\"/var/www/images/\" + \"../../../etc/passwd\"))"
+  },
+  {
+   "q": "What is path traversal also known as?",
+   "options": [
+    "Directory traversal",
+    "Cross-site scripting",
+    "Request forgery",
+    "Mass assignment"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's path traversal page: its first lines.",
+   "where": "PortSwigger: Path traversal",
+   "url": "https://portswigger.net/web-security/file-path-traversal"
+  },
+  {
+   "q": "Your account page is /account?id=1041. You change it to id=1042 and see someone else's details. What is that?",
+   "options": [
+    "Cross-site scripting",
+    "An insecure direct object reference (IDOR)",
+    "SQL injection",
+    "A file upload vulnerability"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at PortSwigger's IDOR page: what IDOR is.",
+   "where": "PortSwigger: Insecure direct object references (IDOR)",
+   "url": "https://portswigger.net/web-security/access-control/idor"
+  },
+  {
+   "q": "What is access control?",
+   "options": [
+    "Who or what is authorized to perform actions or access resources",
+    "How fast a page loads",
+    "How passwords are stored",
+    "Which browser a user has"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's access control page: its definition.",
+   "where": "PortSwigger: Access control",
+   "url": "https://portswigger.net/web-security/access-control"
+  },
+  {
+   "q": "What is server-side request forgery (SSRF)?",
+   "options": [
+    "Making the server send requests to a place it should not",
+    "Sending a user a fake email",
+    "Guessing a user's password",
+    "Uploading a picture with a virus"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's SSRF page: what SSRF is.",
+   "where": "PortSwigger: Server-side request forgery (SSRF)",
+   "url": "https://portswigger.net/web-security/ssrf"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "SELECT * FROM users WHERE name = 'x' OR 1=1--'",
+    "SELECT * FROM users WHERE name = 'x'",
+    "x' OR 1=1--",
+    "SELECT * FROM users"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at PortSwigger's SQL injection page: what happens when user input is pasted straight into a query.",
+   "where": "PortSwigger: SQL injection",
+   "url": "https://portswigger.net/web-security/sql-injection",
+   "code": "name = \"x' OR 1=1--\"\nprint(f\"SELECT * FROM users WHERE name = '{name}'\")"
+  },
+  {
+   "q": "SQL injection lets an attacker interfere with what?",
+   "options": [
+    "The queries an application makes to its database",
+    "The colours of a web page",
+    "The user's keyboard",
+    "The server's power supply"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's SQL injection page: its definition.",
+   "where": "PortSwigger: SQL injection",
+   "url": "https://portswigger.net/web-security/sql-injection"
+  },
+  {
+   "q": "A site lets you upload a profile picture but never checks the file's type or contents. Which kind of vulnerability is that?",
+   "options": [
+    "A file upload vulnerability",
+    "Path traversal",
+    "SSRF",
+    "IDOR"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at PortSwigger's file upload page: what makes an upload dangerous.",
+   "where": "PortSwigger: File upload vulnerabilities",
+   "url": "https://portswigger.net/web-security/file-upload"
+  }
+ ],
+ "wb3": [
+  {
+   "q": "What does cross-site scripting (XSS) let an attacker do?",
+   "options": [
+    "Compromise the interactions users have with a vulnerable application",
+    "Read the server's database directly",
+    "Guess users' passwords faster",
+    "Make the website load slowly"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's XSS page: what XSS is.",
+   "where": "PortSwigger: Cross-site scripting",
+   "url": "https://portswigger.net/web-security/cross-site-scripting"
+  },
+  {
+   "q": "A search page shows 'You searched for: <your words>' straight from the address, unescaped. Which kind of XSS can that be?",
+   "options": [
+    "Stored XSS",
+    "Reflected XSS",
+    "DOM-based XSS only",
+    "None: search pages are safe"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at PortSwigger's XSS pages: where the data comes from, and whether it comes straight back or is saved for later.",
+   "where": "PortSwigger: Reflected XSS",
+   "url": "https://portswigger.net/web-security/cross-site-scripting/reflected"
+  },
+  {
+   "q": "A comment you post is shown to every later visitor without escaping. Which kind of XSS is that?",
+   "options": [
+    "Reflected XSS",
+    "Stored XSS",
+    "DOM-based XSS",
+    "SSRF"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at PortSwigger's stored XSS page.",
+   "where": "PortSwigger: Stored XSS",
+   "url": "https://portswigger.net/web-security/cross-site-scripting/stored"
+  },
+  {
+   "q": "DOM-based XSS usually arises when JavaScript takes attacker data from a source, such as the URL, and passes it to what?",
+   "options": [
+    "A sink that can run code, like eval() or innerHTML",
+    "The server's database",
+    "A cookie",
+    "The browser's history"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's DOM-based XSS page.",
+   "where": "PortSwigger: DOM-based XSS",
+   "url": "https://portswigger.net/web-security/cross-site-scripting/dom-based"
+  },
+  {
+   "q": "Why do PortSwigger's XSS labs usually ask you to call alert()?",
+   "options": [
+    "It is short, harmless and hard to miss when it runs",
+    "It steals the user's cookies",
+    "It is the only JavaScript that works",
+    "It turns off the browser's protections"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's XSS page: how you prove XSS works.",
+   "where": "PortSwigger: Cross-site scripting",
+   "url": "https://portswigger.net/web-security/cross-site-scripting"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "<script>alert(1)</script>",
+    "&lt;script&gt;alert(1)&lt;/script&gt;",
+    "alert(1)",
+    "script"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at PortSwigger's XSS page, the part on preventing XSS: what encoding the output does to < and >.",
+   "where": "PortSwigger: Cross-site scripting",
+   "url": "https://portswigger.net/web-security/cross-site-scripting",
+   "code": "import html\nprint(html.escape(\"<script>alert(1)</script>\"))"
+  },
+  {
+   "q": "A chatbot's reply is put into a web page as HTML, unescaped. You get the model to write <img src=x onerror=alert(1)>. What have you found?",
+   "options": [
+    "Nothing: chatbot replies are always safe",
+    "XSS through the model's output",
+    "SQL injection",
+    "A missing cookie"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at PortSwigger's XSS page; then think of the model's reply as data from an untrusted source.",
+   "where": "PortSwigger: Cross-site scripting",
+   "url": "https://portswigger.net/web-security/cross-site-scripting"
+  },
+  {
+   "q": "Which kind of XSS needs no server response at all to carry the attack?",
+   "options": [
+    "Stored XSS",
+    "Reflected XSS",
+    "DOM-based XSS",
+    "All three need one"
+   ],
+   "answer": 2,
+   "kind": "apply",
+   "hint": "Look again at PortSwigger's XSS pages: which kind happens entirely in the browser's own JavaScript.",
+   "where": "PortSwigger: DOM-based XSS",
+   "url": "https://portswigger.net/web-security/cross-site-scripting/dom-based"
+  }
+ ],
+ "wb4": [
+  {
+   "q": "What is the first thing PortSwigger says to do when you start API testing?",
+   "options": [
+    "Find out as much about the API as you can (API recon)",
+    "Send thousands of requests at once to see what breaks first",
+    "Log in as an admin and look around",
+    "Delete test accounts"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's API testing page: API recon.",
+   "where": "PortSwigger: API testing",
+   "url": "https://portswigger.net/web-security/api-testing"
+  },
+  {
+   "q": "In GET /api/books HTTP/1.1, what is the API endpoint?",
+   "options": [
+    "GET",
+    "/api/books",
+    "HTTP/1.1",
+    "example.com"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's API testing page: identifying endpoints.",
+   "where": "PortSwigger: API testing",
+   "url": "https://portswigger.net/web-security/api-testing"
+  },
+  {
+   "q": "Which paths does PortSwigger suggest looking for, because they may hold an API's documentation?",
+   "options": [
+    "/api, /swagger/index.html, /openapi.json",
+    "/login, /logout, /home, /contact-us, /about",
+    "/images, /css, /fonts",
+    "/admin, /root, /etc/passwd"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's API testing page: discovering API documentation.",
+   "where": "PortSwigger: API testing",
+   "url": "https://portswigger.net/web-security/api-testing"
+  },
+  {
+   "q": "You find /api/swagger/v1/users/123. What else does PortSwigger say to try?",
+   "options": [
+    "The base paths: /api/swagger/v1, /api/swagger and /api",
+    "Only /users/124",
+    "Nothing: one endpoint is enough",
+    "The same path again with POST and PUT, and nothing else at all"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's API testing page: the example after the documentation paths.",
+   "where": "PortSwigger: API testing",
+   "url": "https://portswigger.net/web-security/api-testing"
+  },
+  {
+   "q": "What is mass assignment?",
+   "options": [
+    "A framework automatically binding request fields to object fields, creating hidden parameters",
+    "Sending one request to many servers",
+    "Giving every user of a site the same password so that support can log in to help them quickly",
+    "Uploading many files at once"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's API testing page: Mass assignment vulnerabilities.",
+   "where": "PortSwigger: API testing",
+   "url": "https://portswigger.net/web-security/api-testing"
+  },
+  {
+   "q": "GET /api/users/me returns {\"name\": \"Sam\", \"isAdmin\": false}. Which test does PortSwigger's mass assignment section suggest?",
+   "options": [
+    "Send an update that includes \"isAdmin\": true and see if it sticks",
+    "Reload the page ten times in a row and compare what comes back each time",
+    "Change your name to Admin",
+    "Delete your account"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at PortSwigger's API testing page: Identifying hidden parameters.",
+   "where": "PortSwigger: API testing",
+   "url": "https://portswigger.net/web-security/api-testing"
+  },
+  {
+   "q": "How does PortSwigger say to prevent mass assignment?",
+   "options": [
+    "Allowlist the properties a user may update, and blocklist sensitive ones",
+    "Hide the API documentation from search engines and from anyone not logged in",
+    "Use longer passwords",
+    "Only accept GET requests"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's API testing page: preventing mass assignment.",
+   "where": "PortSwigger: API testing",
+   "url": "https://portswigger.net/web-security/api-testing"
+  },
+  {
+   "q": "Which documentation format does PortSwigger say Burp Scanner can crawl and audit?",
+   "options": [
+    "OpenAPI documentation, or other docs in JSON or YAML",
+    "Only PDF files",
+    "Only handwritten notes",
+    "Only HTML help pages written for people, never machine-readable files"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's API testing page: using machine-readable documentation.",
+   "where": "PortSwigger: API testing",
+   "url": "https://portswigger.net/web-security/api-testing"
+  }
+ ],
+ "wb5": [
+  {
+   "q": "According to OWASP, can a prompt injection work even if a human cannot see it?",
+   "options": [
+    "Yes: it only has to be parsed by the model",
+    "No: it must be visible on the screen",
+    "Only if it is in English",
+    "Only if it is in an image"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at OWASP LLM01: Description.",
+   "where": "OWASP LLM01: PromptInjection",
+   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM01_PromptInjection.md"
+  },
+  {
+   "q": "A chatbot's hidden instructions include an internal discount code, and a user gets the bot to reveal them. Which OWASP risk is that?",
+   "options": [
+    "LLM07: System Prompt Leakage",
+    "LLM10: Unbounded Consumption",
+    "LLM03: Supply Chain",
+    "LLM09: Misinformation"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP LLM07: Description.",
+   "where": "OWASP LLM07: SystemPromptLeakage",
+   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM07_SystemPromptLeakage.md"
+  },
+  {
+   "q": "A model's reply goes straight into a web page as HTML and runs a script. Which OWASP risk is that?",
+   "options": [
+    "LLM05: Improper Output Handling",
+    "LLM04: Data and Model Poisoning",
+    "LLM02: Sensitive Information Disclosure",
+    "LLM08: Vector and Embedding Weaknesses"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP LLM05: Description.",
+   "where": "OWASP LLM05: ImproperOutputHandling",
+   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM05_ImproperOutputHandling.md"
+  },
+  {
+   "q": "An email assistant can send, delete and forward mail, though it only needs to read. Which OWASP risk does that point to?",
+   "options": [
+    "LLM06: Excessive Agency",
+    "LLM01: Prompt Injection",
+    "LLM09: Misinformation",
+    "LLM03: Supply Chain"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP LLM06: Description, and its causes.",
+   "where": "OWASP LLM06: ExcessiveAgency",
+   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM06_ExcessiveAgency.md"
+  },
+  {
+   "q": "Which OWASP risk covers attacks on how a RAG system's vectors and embeddings are made, stored or retrieved?",
+   "options": [
+    "LLM08: Vector and Embedding Weaknesses",
+    "LLM07: System Prompt Leakage",
+    "LLM10: Unbounded Consumption",
+    "LLM05: Improper Output Handling"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at OWASP LLM08: Description.",
+   "where": "OWASP LLM08: VectorAndEmbeddingWeaknesses",
+   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM08_VectorAndEmbeddingWeaknesses.md"
+  },
+  {
+   "q": "Training or fine-tuning data is changed on purpose to add a backdoor. Which OWASP risk is that?",
+   "options": [
+    "LLM04: Data and Model Poisoning",
+    "LLM02: Sensitive Information Disclosure",
+    "LLM06: Excessive Agency",
+    "LLM01: Prompt Injection"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP LLM04: Description.",
+   "where": "OWASP LLM04: DataModelPoisoning",
+   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM04_DataModelPoisoning.md"
+  },
+  {
+   "q": "A model repeats a customer's health record to a different user. Which OWASP risk is that?",
+   "options": [
+    "LLM02: Sensitive Information Disclosure",
+    "LLM09: Misinformation",
+    "LLM10: Unbounded Consumption",
+    "LLM03: Supply Chain"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP LLM02: Description.",
+   "where": "OWASP LLM02: SensitiveInformationDisclosure",
+   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM02_SensitiveInformationDisclosure.md"
+  },
+  {
+   "q": "Someone floods a chatbot with huge requests to run up its costs. Which OWASP risk is that?",
+   "options": [
+    "LLM10: Unbounded Consumption",
+    "LLM07: System Prompt Leakage",
+    "LLM05: Improper Output Handling",
+    "LLM08: Vector and Embedding Weaknesses"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP LLM10: Description.",
+   "where": "OWASP LLM10: UnboundedConsumption",
+   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM10_UnboundedConsumption.md"
+  }
+ ],
+ "wb6": [
+  {
+   "q": "What does Hacker101 cost?",
+   "options": [
+    "It is free",
+    "US$30 a month",
+    "Free for 7 days, then paid",
+    "It is free only for students"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Hacker101 page: what Hacker101 is.",
+   "where": "Hacker101 for Hackers (HackerOne)",
+   "url": "https://www.hackerone.com/hackers/hacker101"
+  },
+  {
+   "q": "How many points in the Hacker101 CTF make you eligible for invitations to private bug bounty programs?",
+   "options": [
+    "10",
+    "26",
+    "50",
+    "100"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's help page on Hacker 101: the Hacker101 CTF part.",
+   "where": "HackerOne Help Center: Hacker 101",
+   "url": "https://docs.hackerone.com/en/articles/8456935-hacker-101"
+  },
+  {
+   "q": "What do you need to log in to the Hacker101 CTF?",
+   "options": [
+    "A HackerOne account",
+    "A paid Burp Suite licence",
+    "A university email address",
+    "Nothing: it has no log-in"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's help page on Hacker 101: getting started on the CTF.",
+   "where": "HackerOne Help Center: Hacker 101",
+   "url": "https://docs.hackerone.com/en/articles/8456935-hacker-101"
+  },
+  {
+   "q": "When you start the CTF, what does Hacker101 ask permission to access?",
+   "options": [
+    "Your HackerOne public profile and flags",
+    "Your email inbox",
+    "Your bank details",
+    "Your computer's files"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's help page on Hacker 101: the steps to start the CTF.",
+   "where": "HackerOne Help Center: Hacker 101",
+   "url": "https://docs.hackerone.com/en/articles/8456935-hacker-101"
+  },
+  {
+   "q": "Do you have to watch Hacker101's video lessons in order?",
+   "options": [
+    "No: you can watch the topics you want",
+    "Yes, or the CTF stays locked",
+    "Yes, one a day",
+    "There are no videos"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's help page on Hacker 101: how the course is taught.",
+   "where": "HackerOne Help Center: Hacker 101",
+   "url": "https://docs.hackerone.com/en/articles/8456935-hacker-101"
+  },
+  {
+   "q": "You are stuck on a CTF level. What does Hacker101 offer?",
+   "options": [
+    "Hints you can select",
+    "A refund",
+    "The flag after one minute",
+    "Nothing: you must quit the level"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's help page on Hacker 101: the last steps.",
+   "where": "HackerOne Help Center: Hacker 101",
+   "url": "https://docs.hackerone.com/en/articles/8456935-hacker-101"
+  },
+  {
+   "q": "Which topic does HackerOne's help page list among Hacker101's lessons, one bounty programs judge you on?",
+   "options": [
+    "Report writing",
+    "Cooking",
+    "Video editing",
+    "Cryptocurrency trading"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's help page on Hacker 101: the list of topics.",
+   "where": "HackerOne Help Center: Hacker 101",
+   "url": "https://docs.hackerone.com/en/articles/8456935-hacker-101"
+  },
+  {
+   "q": "What are the Hacker101 CTF levels inspired by?",
+   "options": [
+    "Real-world vulnerabilities",
+    "Board games",
+    "Old exam papers",
+    "Movie plots"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at HackerOne's Hacker101 page: Capture the Flag.",
+   "where": "Hacker101 for Hackers (HackerOne)",
+   "url": "https://www.hackerone.com/hackers/hacker101"
   }
  ]
 };

@@ -422,6 +422,81 @@
       ["md7", "Why prompt injection works, and how agents are secured", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/13-securing-ai-applications", 180, "The threats and the defences. Read lesson 13, then agents lessons 06 and 18."]
     ].map(function (m) { return item(m[0], "read", m[1], m[4], m[2], { mins: m[3], shift: true, how: MD_HOW, openLabel: "Open the lesson" }); });
 
+    var explain10 = item("xb10", "explain", "Explain it back: Step 10", "Two short answers in your own words: what you learned in Step 10, and one thing you would do with it.", "", { mins: 15, shift: true, how: EXPLAIN_HOW });
+    var explain11 = item("xb11", "explain", "Explain it back: Step 11", "Two short answers in your own words: what you learned in Step 11, and one thing you would do with it.", "", { mins: 15, shift: true, how: EXPLAIN_HOW });
+    var PS_HOW = [
+      "Make a free PortSwigger account and install Burp Suite Community Edition (free). PortSwigger's labs are free.",
+      "Do each topic in order: read it, then do its lab. Use Burp to watch every request a lab page sends before you change one.",
+      "A lab counts when PortSwigger marks it solved. Stuck for an hour? Read the lab's own solution, then do the lab again from the start without it.",
+      "When this box's labs are done, take the quiz here. The app cannot see your PortSwigger account; its questions are written from PortSwigger's pages."
+    ];
+    var step10 = [
+      item("wb1", "read", "How the web talks: HTTP requests and replies",
+        "Every web attack is a request you change. MDN, the reference web developers use, explains the requests and replies your browser sends.",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview", { mins: 120, shift: true, openLabel: "Open MDN's guide", how: [
+          "Read MDN's Overview of HTTP, then its page on HTTP messages (linked from the overview).",
+          "In Chrome, press F12, open the Network tab and load any page: find one request's method, address, status code and headers.",
+          "Take the quiz here."
+        ] }),
+      item("wb2", "practice", "PortSwigger: server-side vulnerabilities, the Apprentice path",
+        "Path traversal, access control and IDOR, authentication, SSRF, file upload, command injection and SQL injection: the flaws an AI agent's tools can open up.",
+        "https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice", { mins: 900, pc: true, openLabel: "Open PortSwigger's path", how: PS_HOW }),
+      item("wb3", "practice", "PortSwigger: cross-site scripting (XSS), the Apprentice labs",
+        "XSS is what happens when a chatbot's reply, or anything a user can control, runs as code in someone else's browser.",
+        "https://portswigger.net/web-security/cross-site-scripting", { mins: 360, pc: true, openLabel: "Open PortSwigger's XSS topic", how: PS_HOW }),
+      item("wb4", "practice", "PortSwigger: API testing",
+        "Agents act through APIs. This path teaches how to find an API's endpoints and the parameters it never meant to accept.",
+        "https://portswigger.net/web-security/learning-paths/api-testing", { mins: 360, pc: true, openLabel: "Open PortSwigger's path", how: PS_HOW }),
+      item("wb5", "read", "OWASP Top 10 for LLM applications (the 2025 list)",
+        "The ten risks every AI security ad and bounty program refers to. One job ad you read asks for it by name.",
+        "https://genai.owasp.org/llm-top-10/", { mins: 180, shift: true, openLabel: "Open OWASP's list", how: [
+          "Open the list and read all ten entries: the description, the examples and how to prevent it.",
+          "For each one, write one line: how would I test for this in a chatbot or agent?",
+          "Take the quiz here."
+        ] }),
+      item("wb6", "practice", "Hacker101: the newcomer videos, then its CTF to 26 points",
+        "HackerOne's free class and capture-the-flag game. 26 points makes your HackerOne account eligible for invitations to private bug bounty programs.",
+        "https://www.hacker101.com/", { mins: 1080, pc: true, proof: "link", openLabel: "Open Hacker101", linkLabel: "Your public HackerOne profile address",
+          linkExample: "https://hackerone.com/yourname", linkRx: "^https://(www\\.)?hackerone\\.com/[A-Za-z0-9_.-]{2,40}/?$", how: [
+          "Make a free HackerOne account. Set a username you are happy for an employer to see.",
+          "On Hacker101, watch the newcomer videos (any order), including the one on writing reports.",
+          "Open the Hacker101 CTF, sign in with HackerOne, and earn 26 points. Use its hints when stuck. Keep flags and solutions to yourself.",
+          "Paste your public HackerOne profile address below, then take the quiz. The app checks the address's shape only: it cannot open HackerOne or see your points."
+        ] })
+    ];
+    var step11 = [
+      item("ag1", "build", "Threat model an AI agent before you test it",
+        "Four of the job ads you read ask for threat modelling. Before testing PortSwigger's shop chatbot, write down what it can do and what could go wrong.",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html", { mins: 180, proof: "github", openLabel: "Open OWASP's cheat sheet", how: [
+          "Read OWASP's Threat Modeling Cheat Sheet (the four questions), and the trust boundaries part of Microsoft's AI/ML threat modeling page.",
+          "Open PortSwigger's first Web LLM lab and use its chatbot like a customer: what can it do, and what data can it reach?",
+          "In red-team-tools, write threat-model.md with six headings: What it is; What it can do; Who might attack it; What could go wrong; What would hurt most; What I test first. At least 150 words.",
+          "Commit and push it. Press Check my GitHub below, then take the quiz."
+        ] }),
+      item("ag2", "practice", "PortSwigger: Web LLM attacks, all 4 labs",
+        "Attacks on a chatbot that can call APIs: excessive agency, API flaws, indirect prompt injection, insecure output handling. What OpenAI, Google and Microsoft pay for.",
+        "https://portswigger.net/web-security/llm-attacks", { mins: 480, pc: true, openLabel: "Open PortSwigger's LLM topic", how: PS_HOW }),
+      item("ag3", "practice", "PortSwigger: MCP server vulnerabilities, all 6 labs",
+        "Agents reach tools through MCP servers. These labs attack the server side: hidden tools, broken access control, and sign-in that fails open.",
+        "https://portswigger.net/web-security/mcp", { mins: 480, pc: true, openLabel: "Open PortSwigger's MCP topic", how: PS_HOW }),
+      item("ag4", "build", "Scan a model with NVIDIA's garak",
+        "garak is a free scanner that sends hundreds of known attack prompts and records what got through: what Clera's safety-testing ad lists by name.",
+        "https://github.com/NVIDIA/garak", { mins: 240, pc: true, proof: "github", openLabel: "Open garak", how: [
+          "In a new folder on your PC, make a Python virtual environment and install garak (python -m pip install -U garak). It is large: it brings PyTorch.",
+          "Run one small probe against a model you are allowed to test, once each: --target_type openai --target_name <model> --probes encoding.InjectBase64 --generations 1 (the OpenAI form from garak's README; about 256 prompts, cents on your OpenAI key). Without --generations 1 garak asks 5 times each. Its litellm option may reach Gemini; this app has not tested that.",
+          "garak prints where it saved the run's report (a .report.jsonl file). Read its hit log: which prompts got through?",
+          "Copy the report into red-team-tools/scans/, commit and push. Press Check my GitHub below, then take the quiz."
+        ] }),
+      item("ag5", "build", "One attack with today's PyRIT",
+        "Step 5 used an old PyRIT for Microsoft's notebooks. Here you use the current one (1.2.1) the way its own docs do: an attack with an objective, against your own guarded-secret target.",
+        "https://github.com/microsoft/PyRIT", { mins: 240, pc: true, proof: "github", openLabel: "Open PyRIT", how: [
+          "In a new virtual environment (Python 3.11 or newer), pip install pyrit. Keep it apart from Step 5's PyRIT 0.9.0.",
+          "Put your model's settings in ~/.pyrit/.env, never in your repository: OPENAI_CHAT_ENDPOINT, OPENAI_CHAT_KEY and OPENAI_CHAT_MODEL (PyRIT's own setup page).",
+          "Write red-team-tools/pyrit/attack.py from PyRIT's single-turn example: a PromptSendingAttack with an objective against OpenAIChatTarget, with your secret-word system instruction from Step 8.",
+          "Run it and save what it prints to red-team-tools/pyrit/results.txt. Commit and push both. Press Check my GitHub below, then take the quiz."
+        ] })
+    ];
+
     return [
       { title: "Step 1: Microsoft's videos, each with its lab",
         goal: "Watch an episode here in the app, then do Microsoft's own lab for it. Write-ups are optional.",
@@ -476,6 +551,24 @@
           { label: "HOW MODELS WORK", items: step9.slice(0, 4) },
           { label: "AGENTS", items: step9.slice(4) },
           { label: "EXPLAIN IT BACK", items: [explain9] }
+        ] },
+      { title: "Step 10: Web security basics",
+        goal: "How the web talks, how sites and APIs get hacked (PortSwigger's free labs), OWASP's Top 10 risks for AI apps, and Hacker101's CTF on your HackerOne account.",
+        why: "OpenAI, Google and Microsoft pay for attacks with a security impact, and that impact is web security: leaking data, taking actions, running code.",
+        groups: [
+          { label: "HOW THE WEB WORKS", items: [step10[0]] },
+          { label: "HOW SITES AND APIS GET HACKED", items: step10.slice(1, 4) },
+          { label: "AI APPS AND BUG BOUNTY PRACTICE", items: step10.slice(4) },
+          { label: "EXPLAIN IT BACK", items: [explain10] }
+        ] },
+      { title: "Step 11: Attacking AI agents",
+        goal: "Threat-model an agent, do PortSwigger's AI and MCP labs, then use two real red-team tools, garak and PyRIT, on a model you are allowed to test.",
+        why: "This is what the big bounty programs pay for: an agent made to leak data or act, through text it reads.",
+        groups: [
+          { label: "BEFORE YOU TEST", items: [step11[0]] },
+          { label: "PORTSWIGGER'S AGENT LABS", items: step11.slice(1, 3) },
+          { label: "RED-TEAM TOOLS", items: step11.slice(3) },
+          { label: "EXPLAIN IT BACK", items: [explain11] }
         ] }
     ];
   }
@@ -566,6 +659,19 @@
       ["Function calling", "", "A model asking your code to run a named function with some values. The code runs it, not the model.", "md4"],
       ["Agent", "", "A model that can act through tools: search, send, buy, run code.", "md5"],
       ["MCP", "", "Model Context Protocol: an open standard for connecting agents to tools and data through servers.", "md6"]
+    ]],
+    ["Web security and agents (Steps 10 and 11)", [
+      ["HTTP request", "", "What your browser sends to a site: a method (like GET), an address, headers and sometimes a body.", "wb1"],
+      ["Status code", "", "The number a site sends back with its reply: 200 means OK, 404 means not found.", "wb1"],
+      ["Burp Suite", "", "PortSwigger's tool for watching and changing the requests your browser sends. The Community Edition is free.", "wb2"],
+      ["IDOR", "", "Insecure direct object reference: changing an id in a request gets you something that is not yours.", "wb2"],
+      ["SSRF", "", "Server-side request forgery: making the server fetch an address it should not.", "wb2"],
+      ["SQL injection", "", "Getting your own text run as part of a site's database query.", "wb2"],
+      ["XSS", "", "Cross-site scripting: making a page run your script in someone else's browser.", "wb3"],
+      ["Threat model", "", "A short written answer to: what is this, what can go wrong, what are we doing about it, and did we do enough?", "ag1"],
+      ["Excessive agency", "", "An AI that can reach tools or data it doesn't need, and can be talked into using them.", "ag2"],
+      ["Data exfiltration", "", "Getting private data sent out of a system, for example by an agent that was tricked into it.", "ag2"],
+      ["garak", "", "NVIDIA's free scanner that sends many known attack prompts to a model and records what got through.", "ag4"]
     ]]
   ];
 
@@ -645,7 +751,13 @@
     genai11: ["Microsoft: Function calling (lesson 11)", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/11-integrating-with-function-calling"],
     agents01: ["Microsoft: Intro to AI agents (agents lesson 01)", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/01-intro-to-ai-agents"],
     agents06: ["Microsoft: Building trustworthy agents (agents lesson 06)", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/06-building-trustworthy-agents"],
-    agents11: ["Microsoft: Agentic protocols, MCP (agents lesson 11)", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols"]
+    agents11: ["Microsoft: Agentic protocols, MCP (agents lesson 11)", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols"],
+    portswiggerLlm: ["PortSwigger: Web LLM attacks", "https://portswigger.net/web-security/llm-attacks"],
+    portswiggerIdor: ["PortSwigger: Insecure direct object references (IDOR)", "https://portswigger.net/web-security/access-control/idor"],
+    portswiggerXss: ["PortSwigger: Cross-site scripting", "https://portswigger.net/web-security/cross-site-scripting"],
+    mdnHttp: ["MDN: Overview of HTTP", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview"],
+    owasp05: ["OWASP LLM05:2025 Improper Output Handling", "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM05_ImproperOutputHandling.md"],
+    owasp06: ["OWASP LLM06:2025 Excessive Agency", "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM06_ExcessiveAgency.md"]
   };
   var LESSONS = [
     { id: "t1", group: "Start here", title: "What you are actually attacking",
@@ -981,7 +1093,34 @@
       quiz: { q: "Where could a dishonest MCP server hide instructions that the model reads?",
         options: ["In a tool's description", "In the user's password", "Nowhere: models ignore tool lists"],
         right: 0, because: "MCP servers advertise each tool's name and description, and the model reads them to decide what to call." },
-      src: ["agents11"] }
+      src: ["agents11"] },
+    { id: "t34", group: "How models work", title: "Excessive agency and insecure output handling",
+      idea: "Excessive agency: an AI can reach APIs or tools that can do harm or reach sensitive data, and it can be talked into using them. Insecure output handling: the AI's reply is passed to a web page, a database or a shell without being checked.",
+      why: "In both, the model is a door. Whatever you can make it say or ask for lands somewhere that trusts it: a tool call, an HTML page, a query.",
+      when: "First map what the AI can do (ask it, read its tools), then aim at the most dangerous one. For output, check where replies end up: shown as HTML, stored, or run.",
+      stops: "Giving the AI only the tools and permissions it needs, treating every API it can reach as public, and escaping or checking its output like any user input.",
+      quiz: { q: "A chatbot's reply is put into a web page as HTML without escaping. What can an attacker who steers the reply cause?",
+        options: ["Cross-site scripting in a user's browser", "Nothing: replies are only text", "A slower page"],
+        right: 0, because: "If the reply is not escaped, HTML or script in it runs in the browser, just like any other XSS." },
+      src: ["portswiggerLlm", "owasp05", "owasp06"] },
+    { id: "t35", group: "How models work", title: "Data leaks through an agent",
+      idea: "An agent reads something an attacker wrote (an email, a page, a review) and the hidden text tells it to send private data somewhere: in a link, an image address, a tool call or a forwarded email.",
+      why: "The user never typed anything bad: the attacker's words arrived as data, and the agent treated them as instructions. That is the 'data exfiltration' and 'rogue action' Google and OpenAI pay for.",
+      when: "Any agent that reads outside content AND can send, post, fetch or forward. Both halves are needed.",
+      stops: "Keeping outside content clearly marked as data, asking a person before anything is sent out, and blocking links and images to unknown addresses in replies.",
+      quiz: { q: "Which two things does an agent need for a data leak through indirect prompt injection?",
+        options: ["It reads outside content, and it can send or fetch something", "It has a long system prompt, and it uses English", "It runs on a phone, and it has a name"],
+        right: 0, because: "The attacker's words must reach it through what it reads, and it must have a way to send the data out." },
+      src: ["portswiggerLlm", "owasp01"] },
+    { id: "t36", group: "How models work", title: "Web basics a bounty hunter needs",
+      idea: "Every web attack is a request you change: its address, parameters, headers or body. IDOR: changing an id gets you someone else's data. SSRF: making the server fetch an address it should not. XSS: making a page run your script in someone else's browser.",
+      why: "AI agents call APIs and fetch pages for you, so these old flaws come back through them: the agent can be the one sending the changed request.",
+      when: "With Burp open: watch the requests an agent's page makes, then change one thing at a time.",
+      stops: "Checking on the server, every time, that this user may see this object; allowlists for what the server may fetch; escaping output.",
+      quiz: { q: "You change /orders?id=500 to id=501 and see a stranger's order. What is that?",
+        options: ["An insecure direct object reference (IDOR)", "Cross-site scripting", "A strong password"],
+        right: 0, because: "The app used your input to fetch the object directly, without checking it was yours." },
+      src: ["portswiggerIdor", "portswiggerXss", "mdnHttp"] }
   ];
 
   // One tutor page per lab, and nothing else on it: what the lab is, the objective, how to think about it, three hints
@@ -2315,8 +2454,13 @@
     gt1: ["your copy of the exercise, " + INTRO_REPO + ", made from GitHub's template", "a merged pull request in it", "its front page says you completed the exercise"],
     ap1: ["a public repository called " + TOOLS_REPO, "hello_model.py, which calls a model", ".gitignore with a line .env", "no file that holds an API key"],
     ap2: ["prompts.json: a list of 10 or more prompts", "run_prompts.py", "results.jsonl: one line per prompt, each with prompt, reply, model and time", "every prompt in prompts.json has a reply in results.jsonl", "no file that holds an API key"],
-    ap3: ["score.py", "summary.json with total, leaked, refused and secret", "the totals match results.jsonl: the app recounts the leaks itself", "no file that holds an API key"]
+    ap3: ["score.py", "summary.json with total, leaked, refused and secret", "the totals match results.jsonl: the app recounts the leaks itself", "no file that holds an API key"],
+    ag1: ["threat-model.md with the six headings", "at least 150 words", "no file that holds an API key"],
+    ag4: ["a garak report in scans/ (a .jsonl file garak wrote)", "it ran against a real model, not garak's test generator", "it holds probe attempts and their evaluations", "no file that holds an API key"],
+    ag5: ["a Python file in pyrit/ that imports PyRIT and runs an attack", "a saved result in pyrit/", "no file that holds an API key"]
   };
+  var TM_HEADINGS = [["What it is", /what it is/i], ["What it can do", /what it can do/i], ["Who might attack it", /who might attack/i],
+    ["What could go wrong", /could go wrong/i], ["What would hurt most", /hurt most/i], ["What I test first", /test first/i]];
   var ghRun = {}; // the last check's result per box, this visit only: { busy, lines: [[ok, text]], note }
   function ghGet(url, asText) {
     return fetch(url, asText ? {} : { headers: { Accept: "application/vnd.github+json" } }).then(function (r) {
@@ -2417,6 +2561,51 @@
       });
     }
   };
+  GH_CHECKS.ag1 = function (user, lines) {
+    return ghFiles(user, TOOLS_REPO).then(function (files) {
+      var f = findFile(files, "threat-model.md");
+      return (f ? ghFile(user, TOOLS_REPO, f) : Promise.resolve(null)).then(function (text) {
+        if (text === null) { lines.push([false, "No threat-model.md at the top of the repository."]); return noKeys(user, files, lines); }
+        var heads = text.split(/\r?\n/).filter(function (l) { return /^#{1,6}\s/.test(l); });
+        var missing = TM_HEADINGS.filter(function (hd) { return !heads.some(function (l) { return hd[1].test(l); }); }).map(function (hd) { return hd[0]; });
+        lines.push([!missing.length, missing.length ? "threat-model.md is missing these headings: " + missing.join("; ") + "." : "threat-model.md has all six headings."]);
+        var words = wordCount(text.replace(/^#.*$/gm, " "));
+        lines.push([words >= 150, words + " words under the headings (150 or more needed)."]);
+        return noKeys(user, files, lines);
+      });
+    });
+  };
+  GH_CHECKS.ag4 = function (user, lines) {
+    return ghFiles(user, TOOLS_REPO).then(function (files) {
+      var reports = files.filter(function (f) { return /^scans\/[^/]+\.jsonl$/i.test(f.path); });
+      if (!reports.length) { lines.push([false, "No .jsonl report in scans/."]); return noKeys(user, files, lines); }
+      return ghFile(user, TOOLS_REPO, reports[0].path).then(function (text) {
+        var rows = jsonLines(text).filter(Boolean);
+        var kinds = {};
+        rows.forEach(function (r) { kinds[String(r.entry_type)] = (kinds[String(r.entry_type)] || 0) + 1; });
+        var setup = rows.filter(function (r) { return /start_run/.test(String(r.entry_type)); })[0] || {};
+        var target = String(setup["plugins.target_type"] || setup["plugins.model_type"] || setup.target_type || "");
+        lines.push([!!setup.entry_type, setup.entry_type ? reports[0].path + " is a garak report." : reports[0].path + " does not look like a garak report (no start_run entry)."]);
+        lines.push([!!target && !/^test/.test(target), !target ? "The report does not say which model it tested." : /^test/.test(target) ? "It ran against garak's test generator (" + target + "), not a real model." : "It ran against a real model (" + target + ")."]);
+        lines.push([(kinds.attempt || 0) > 0 && (kinds.eval || 0) > 0, (kinds.attempt || 0) + " attempts and " + (kinds.eval || 0) + " evaluations in the report (both needed)."]);
+        return noKeys(user, files, lines);
+      });
+    });
+  };
+  GH_CHECKS.ag5 = function (user, lines) {
+    return ghFiles(user, TOOLS_REPO).then(function (files) {
+      var pys = files.filter(function (f) { return /^pyrit\/[^/]+\.py$/i.test(f.path); });
+      var outs = files.filter(function (f) { return /^pyrit\/[^/]+\.(txt|json|jsonl|md|log)$/i.test(f.path); });
+      return Promise.all(pys.slice(0, 5).map(function (f) { return ghFile(user, TOOLS_REPO, f.path).catch(function () { return ""; }); })).then(function (texts) {
+        var ok = texts.some(function (s) { return /^\s*(from|import)\s+pyrit\b/m.test(s) && /\w+Attack\s*\(/.test(s) && /execute_async\s*\(/.test(s); });
+        lines.push([ok, ok ? "A Python file in pyrit/ imports PyRIT and runs an attack." : pys.length ? "No Python file in pyrit/ both imports PyRIT and runs an attack with execute_async." : "No Python file in pyrit/."]);
+        return outs.length ? ghFile(user, TOOLS_REPO, outs[0].path).catch(function () { return ""; }) : "";
+      }).then(function (out) {
+        lines.push([String(out).trim().length >= 200, outs.length ? outs[0].path + ": " + String(out).trim().length + " characters (200 or more needed)." : "No saved result (a .txt, .json, .jsonl, .md or .log file) in pyrit/."]);
+        return noKeys(user, files, lines);
+      });
+    });
+  };
   function runGithubCheck(it) {
     var user = state.gh;
     var lines = [];
@@ -2461,6 +2650,31 @@
       if (run.note) { box.appendChild(h("p", { class: "small", text: run.note })); }
       if (isDone("pf" + it.id)) { box.appendChild(h("p", null, [h("b", { text: "GitHub check passed ✓" })])); }
     }
+    return box;
+  }
+
+  // ----- Proof by link: the app checks the address has the right shape. It cannot open the page (those sites block it), and says so.
+  // The address is kept as a note on this device; the proof mark (pf + box id) follows you to a linked device. -----
+  function linkBox(it) {
+    var box = h("div", { class: "block", id: "link-box" });
+    var rx = new RegExp(it.linkRx);
+    var saved = notes[it.id + "-link"] || "";
+    box.appendChild(h("p", { class: "small", text: "The app checks that the address has the right shape, like " + it.linkExample +
+      ". It cannot open the page or see what is on it. The address stays on this device; the tick follows you to a linked device." }));
+    var input = h("input", { type: "url", id: "proof-link", "aria-label": it.linkLabel, placeholder: it.linkExample, autocomplete: "off", spellcheck: "false" });
+    input.value = saved;
+    var status = h("span", { class: "status-line", role: "status", id: "proof-link-status", text: isDone("pf" + it.id) ? "Saved ✓" : "" });
+    var btn = h("button", { type: "button", class: "primary", id: "proof-link-save", text: "Save my link" });
+    btn.addEventListener("click", function () {
+      var v = input.value.trim();
+      if (!rx.test(v)) { status.textContent = "That does not look like " + it.linkExample + ". Copy the address from the page itself."; return; }
+      saveNote(it.id + "-link", v);
+      if (!isDone("pf" + it.id)) { mark("pf" + it.id, true); studied(); }
+      render("proof-link-status");
+    });
+    box.appendChild(h("label", { class: "glabel", for: "proof-link", text: it.linkLabel }));
+    box.appendChild(h("div", { class: "btnrow" }, [input, btn]));
+    box.appendChild(status);
     return box;
   }
 
@@ -2522,6 +2736,7 @@
     if (it.kind === "writeup") { v.appendChild(noteEditor(it, false)); v.appendChild(templateFold()); }
     if (it.url) { v.appendChild(link((it.openLabel || OPEN_LABEL[it.kind]) + " ↗", it.url, "big open", "open-link")); }
     if (it.proof === "github") { v.appendChild(part("Proof on GitHub", [githubBox(it)])); }
+    if (it.proof === "link") { v.appendChild(part("Proof: your link", [linkBox(it)])); }
     if (needsQuiz(it)) { v.appendChild(part("Quiz", [quizBox(it)])); }
     if (it.kind === "explain") { v.appendChild(explainBox(it)); }
     if (it.id === "m0" && !isDone("m0")) {
@@ -2629,7 +2844,7 @@
           dockBtn("I beat it", "ok", "beat-btn", function () { finish(it, false); }),
           dockBtn("Moving on, not solved", "", "moved-btn", function () { finish(it, true); })]));
       } else if (it.proof && !isDone("pf" + it.id)) {
-        var proofFirst = dockBtn("Pass the GitHub check above to finish", "", "done-btn", function () {});
+        var proofFirst = dockBtn(it.proof === "link" ? "Add your link above to finish" : "Pass the GitHub check above to finish", "", "done-btn", function () {});
         proofFirst.disabled = true;
         d.appendChild(proofFirst);
       } else if (it.kind === "explain" && !explained(it)) {

@@ -356,3 +356,6 @@ pre.qcode { margin: 0; }
 #gh-result li { overflow-wrap: anywhere; }
 #gh-result li.ok { color: var(--ok); }
 #gh-result li.bad { color: var(--warn); }
+
+/* Scope 2, Part 3: the link proof */
+#proof-link { min-height: 40px; min-width: 0; flex: 1 1 16em; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; font: inherit; }

@@ -44,7 +44,7 @@ def urls_from(repo):
             for m in re.finditer(r"\"((?:lecture|lab|workshop|review)-[a-z0-9-]+/[a-z0-9-]+)\"", text):
                 found.setdefault("https://www.freecodecamp.org/learn/python-v9/" + m.group(1), name)
     return {u: f for u, f in found.items()
-            if not any(s in u for s in SKIP) and not u.endswith(("?id=", "/embed/", "challenge/", "/sync/", "/pair/", "api.github.com/repos/", "raw.githubusercontent.com/"))}
+            if not any(s in u for s in SKIP) and not u.endswith(("?id=", "/embed/", "challenge/", "/sync/", "/pair/", "api.github.com/repos/", "raw.githubusercontent.com/", "/yourname"))}
 
 
 # GitHub answers 503 to scripts for every file page (github.com/.../blob/...), Microsoft's too, so the file itself is checked instead.

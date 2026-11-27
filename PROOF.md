@@ -130,3 +130,9 @@ Checked on Shad's PC (Windows 11, Python 3.12) in two fresh virtual environments
 - Not run: the Lab 5 notebook to the end (its Crescendo attack makes many paid calls to OpenAI). Its first cell loads with 0.9.0.
 - Step 5's install line now names PyRIT 0.9.0 (box a1, step 4), and box a1 has one more step for `use_tls=False` (approved by Shad on 27 Nov 2026). Check script: `~/redteam/pyrit-check/run_lab1.py` (outside the repo; it reads the lab sign-in key from the labs' settings file and never prints it).
 
+## Step 11: garak and today's PyRIT, run before their boxes went live (27 Nov 2026)
+
+On Shad's PC (Windows 11, Python 3.12), each in its own virtual environment:
+
+- **garak 0.17.1** (`python -m pip install garak==0.17.1`, which brings PyTorch): `python -m garak --target_type test.Repeat --probes encoding.InjectBase64` ran in 3 seconds and wrote a report of 523 JSON lines: one `start_run setup` entry (its `plugins.target_type` names the model type, here `test.Repeat`), 512 `attempt` entries and 2 `eval` entries. That one probe sent 256 prompts, 5 times each by default, so the box says to add `--generations 1`. Box ag4's GitHub check reads exactly these fields and refuses a report whose target type starts with `test`. Not run: garak against a paid or Gemini model (no key on this PC).
+- **PyRIT 1.2.1**: its documented single-turn attack (`PromptSendingAttack(objective_target=...)` then `execute_async(objective=...)`, with `initialize_pyrit_async(memory_db_type=IN_MEMORY)`) ran end to end against PyRIT's `TextTarget`, which needs no model. Its OpenAI-style target reads `OPENAI_CHAT_ENDPOINT`, `OPENAI_CHAT_KEY` and `OPENAI_CHAT_MODEL` (PyRIT's own setup page and its code). Not run: against a real model (no key on this PC).

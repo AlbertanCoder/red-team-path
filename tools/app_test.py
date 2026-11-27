@@ -48,13 +48,15 @@ OPTIONAL = "w1 w2 w3 w4 w5 m3 m4 m9 m10".split()
 ROAD = ("v1 v2 m0 v3 m1 v4 m6 v5 m2 v6 m5 v7 m7 m8 m11 m12 s0 s1 s2 s3 g1 g2 g3 g4 g5 g6 g7 g8 g9 "
         "py1 py2 py3 py4 py5 py6 py7 py8 v8 a1 v9 a2 v10 a3 a4 p1 b1 b2 b3 b4 "
         "fc1 fc2 fc3 fc4 fc5 fc6 fc7 fc8 fc9 fc10 xb7 "
-        "gt1 lx1 ap1 ap2 ap3 xb8 md1 md2 md3 md4 md5 md6 md7 xb9").split()
+        "gt1 lx1 ap1 ap2 ap3 xb8 md1 md2 md3 md4 md5 md6 md7 xb9 "
+        "wb1 wb2 wb3 wb4 wb5 wb6 xb10 ag1 ag2 ag3 ag4 ag5 xb11").split()
 OLD_COUNT = 49  # boxes that counted before Scope 2
 COUNT = len(ROAD)
 FC = ["fc%d" % i for i in range(1, 11)]
-QUIZZED = FC + ["gt1", "lx1", "ap1", "ap2", "ap3"] + ["md%d" % i for i in range(1, 8)]   # new boxes with a quiz
-GITHUB = ["gt1", "ap1", "ap2", "ap3"]                                                   # new boxes with a GitHub check
-EXPLAIN = ["xb7", "xb8", "xb9"]
+QUIZZED = (FC + ["gt1", "lx1", "ap1", "ap2", "ap3"] + ["md%d" % i for i in range(1, 8)] +
+           ["wb%d" % i for i in range(1, 7)] + ["ag%d" % i for i in range(1, 6)])        # new boxes with a quiz
+GITHUB = ["gt1", "ap1", "ap2", "ap3", "ag1", "ag4", "ag5", "wb6"]                       # new boxes with a proof check (wb6: a link)
+EXPLAIN = ["xb7", "xb8", "xb9", "xb10", "xb11"]
 VERIFIED = {1, 2, 5, 6, 7, 8, 11, 12}   # answers that were run in the real lab and won
 NO_ANSWER = {4, 10}                 # 4: toxin goal, no answer on purpose. 10: no known answer.
 PARTS = ["What this lab is", "The objective", "How to think about it", "Hints", "Full answer", "What's next"]
@@ -223,7 +225,7 @@ with sync_playwright() as p:
     page.click("#tutor-tab-words")
     check(page.locator("#word-search").is_visible() and page.locator("#view-tutor details.word").count() >= 40, "Words (search and the full list) is inside the Library")
     page.click("#tutor-tab-lessons")
-    check(page.locator("#tutor-rules").count() == 1 and page.locator("#view-tutor .rowbtn").count() == 32, "Lessons lists the 32 lessons and the safety rules")
+    check(page.locator("#tutor-rules").count() == 1 and page.locator("#view-tutor .rowbtn").count() == 35, "Lessons lists the 35 lessons and the safety rules")
     page.click("#back-now")
     open_side(page, "menu")
     check(page.locator("#menu-sync").is_visible() and page.locator("#menu-settings").is_visible() and page.locator("#view-menu > *").count() == 2, "Settings holds two panels only: link devices, and settings")
@@ -614,10 +616,55 @@ with sync_playwright() as p:
     check("notes.md" in sp.inner_text("#gh-result") and "make a new key" in sp.inner_text("#gh-result"), "Scope 2: a key in any file fails the check, names the file and says to make a new key")
     sp.unroute("https://api.github.com/**")
     sp.unroute("https://raw.githubusercontent.com/**")
+    # Step 11's threat model check, and garak's report check, against the same pretend GitHub
+    TM = "# What it is\nA shop chatbot.\n# What it can do\nIt can call APIs.\n# Who might attack it\nAny user.\n# What could go wrong\nIt deletes users.\n# What would hurt most\nLost accounts.\n# What I test first\nThe delete API.\n"
+    FILES.clear()
+    FILES.update({"threat-model.md": TM})
+    sp.route("https://api.github.com/**", fake_api)
+    sp.route("https://raw.githubusercontent.com/**", fake_raw)
+    sp.evaluate("location.hash = '#i-ag1'")
+    sp.wait_for_selector("#gh-check")
+    sp.click("#gh-check")
+    sp.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled")
+    res = sp.inner_text("#gh-result")
+    check("all six headings" in res and "150 or more needed" in res and ticks(sp).get("pfag1", 0) <= 0, "Scope 2: a threat model with all six headings but too few words fails, and says why")
+    FILES["threat-model.md"] = TM + ("This part is about what the agent could do with its tools and who would be hurt. " * 12)
+    sp.click("#gh-check")
+    sp.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled && /passed/.test(document.getElementById('gh-box').textContent)")
+    check(ticks(sp).get("pfag1", 0) > 0, "Scope 2: a full threat model passes ag1's check")
+    def report(target):
+        rows = [{"entry_type": "start_run setup", "plugins.target_type": target}, {"entry_type": "init"},
+                {"entry_type": "attempt", "status": 1}, {"entry_type": "attempt", "status": 2}, {"entry_type": "eval", "probe": "encoding"}]
+        return "\n".join(json.dumps(r) for r in rows) + "\n"
+    FILES.clear()
+    FILES.update({"scans/garak.test.report.jsonl": report("test.Repeat")})
+    sp.evaluate("location.hash = '#i-ag4'")
+    sp.wait_for_selector("#gh-check")
+    sp.click("#gh-check")
+    sp.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled")
+    check("test generator" in sp.inner_text("#gh-result") and ticks(sp).get("pfag4", 0) <= 0, "Scope 2: a garak report from garak's test generator does not count")
+    FILES["scans/garak.test.report.jsonl"] = report("openai")
+    sp.click("#gh-check")
+    sp.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled && /passed/.test(document.getElementById('gh-box').textContent)")
+    check(ticks(sp).get("pfag4", 0) > 0 and "real model" in sp.inner_text("#gh-result"), "Scope 2: a garak report from a real model passes ag4's check")
+    sp.unroute("https://api.github.com/**")
+    sp.unroute("https://raw.githubusercontent.com/**")
+    # the link proof (wb6): the shape is checked, nothing more, and the box says so
+    sp.evaluate("location.hash = '#i-wb6'")
+    sp.wait_for_selector("#proof-link")
+    check(sp.locator("#done-btn").is_disabled() and "cannot open the page" in sp.inner_text("#link-box"), "Scope 2: wb6 needs its link first, and says the app cannot open the page")
+    sp.fill("#proof-link", "https://hackerone.com.evil.example/me")
+    sp.click("#proof-link-save")
+    check(ticks(sp).get("pfwb6", 0) <= 0 and "does not look like" in sp.inner_text("#proof-link-status"), "Scope 2: a link of the wrong shape is refused")
+    sp.fill("#proof-link", "https://hackerone.com/test-hunter")
+    sp.click("#proof-link-save")
+    check(ticks(sp).get("pfwb6", 0) > 0 and sp.evaluate("JSON.parse(localStorage.getItem('redTeamPath.notes'))['wb6-link']") == "https://hackerone.com/test-hunter",
+          "Scope 2: a HackerOne profile address is saved on this device and the proof mark is set")
     # Library: the new lessons and words
     sp.evaluate("location.hash = '#tutor'")
     sp.wait_for_selector("#view-tutor .rowbtn")
-    check("Tokens and the context window" in sp.inner_text("#view-tutor") and "MCP: how agents plug into tools" in sp.inner_text("#view-tutor"), "Scope 2: the Library lists the 4 new lessons")
+    check(all(x in sp.inner_text("#view-tutor") for x in ["Tokens and the context window", "MCP: how agents plug into tools", "Data leaks through an agent", "Web basics a bounty hunter needs"]),
+          "Scope 2: the Library lists the new lessons")
     sp.evaluate("location.hash = '#i-md6'")
     sp.wait_for_selector("#quiz-start")
     check("MCP" in sp.inner_text("#view-now") and sp.get_attribute("#open-link", "href").startswith("https://github.com/microsoft/ai-agents-for-beginners/"), "Scope 2: md6 opens Microsoft's lesson and shows its new word")
