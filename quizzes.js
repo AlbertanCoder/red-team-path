@@ -1149,7 +1149,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 0,
    "kind": "recall",
-   "hint": "Look again at PortSwigger's MCP page: Authentication that fails open.",
+   "hint": "Look again at PortSwigger's MCP page: the part on tokens the server cannot validate.",
    "where": "PortSwigger: MCP server vulnerabilities",
    "url": "https://portswigger.net/web-security/mcp"
   },
@@ -1767,7 +1767,7 @@ window.RTP_QUIZ = {
    "options": [
     "Check \"plum\" in r.lower()",
     "Change sum to len",
-    "Change \"plum\" to \"PLU\"",
+    "Change \"plum\" to \"Plum\"",
     "Put the replies in a set"
    ],
    "answer": 0,
@@ -1892,7 +1892,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 2,
    "kind": "recall",
-   "hint": "Look again at the lesson on strings and immutability: the difference between changing a value and pointing a variable at a new one.",
+   "hint": "Look again at the lesson on strings and immutability: its first lines, on what mutable and immutable mean.",
    "where": "What Are Strings and What Is String Immutability?",
    "url": "https://www.freecodecamp.org/learn/python-v9/lecture-introduction-to-python-strings/what-are-strings-and-what-is-string-immutability"
   }
@@ -1982,7 +1982,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 1,
    "kind": "code",
-   "hint": "Look again at the lesson on conditionals: the list of comparison operators, and which one includes the number itself.",
+   "hint": "Look again at the lesson on conditionals: the full list of comparison operators.",
    "where": "How Do Conditional Statements and Comparison Operators Work?",
    "url": "https://www.freecodecamp.org/learn/python-v9/lecture-booleans-and-conditionals/how-do-conditional-statements-and-logical-operators-work",
    "code": "age = 18\nif age > 18:\n    print(\"Adult\")\nelse:\n    print(\"Minor\")"
@@ -2012,7 +2012,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 2,
    "kind": "apply",
-   "hint": "Look again at the lesson on identity operators: the part called Checking for None, and why falsy is not the same as missing.",
+   "hint": "Look again at the lesson on identity operators: the part on values that are missing.",
    "where": "How Do Identity Operators Work?",
    "url": "https://www.freecodecamp.org/learn/python-v9/lecture-booleans-and-conditionals/how-do-identity-operators-work"
   }
@@ -2109,14 +2109,14 @@ window.RTP_QUIZ = {
    "code": "print(isinstance(True, int))"
   },
   {
-   "q": "You want to write a function now and fill in its body later. What can go in the body so the file still runs?",
+   "q": "You want to write a function now and fill in its body later. Which word does the review give as the placeholder for an empty body?",
    "options": [
-    "return",
     "pass",
-    "None",
-    "skip"
+    "skip",
+    "continue",
+    "break"
    ],
-   "answer": 1,
+   "answer": 0,
    "kind": "recall",
    "hint": "Look again at the Python Basics review: the part called Empty Function Bodies.",
    "where": "Python Basics Review",
@@ -2577,7 +2577,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 0,
    "kind": "code",
-   "hint": "Look again at the lesson on special methods: how their names are written, and which one Python uses when an object is printed.",
+   "hint": "Look again at the lesson on special methods and its list of the common ones.",
    "where": "What Are Special Methods and What Are They Used For?",
    "url": "https://www.freecodecamp.org/learn/python-v9/lecture-classes-and-objects/what-are-special-methods-and-what-are-they-used-for",
    "code": "class Lab:\n    def __init__(self, n):\n        self.n = n\n    def str(self):\n        return f\"Lab {self.n}\"\n\nprint(Lab(1))"
@@ -2651,24 +2651,24 @@ window.RTP_QUIZ = {
    ],
    "answer": 2,
    "kind": "recall",
-   "hint": "Look again at the project's user stories: the last method listed for the Category class.",
+   "hint": "Look again at the project's user stories for the Category class.",
    "where": "Build a Budget App",
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-budget-app/build-a-budget-app"
   },
   {
    "q": "What does this code print?",
    "options": [
-    "115.5",
-    "84.5",
-    "100",
-    "-15.5"
+    "15",
+    "19",
+    "17",
+    "-2"
    ],
-   "answer": 1,
+   "answer": 0,
    "kind": "code",
-   "hint": "Look again at the project's user stories: how get_balance works out the balance from the ledger.",
+   "hint": "Look again at the project's user stories: how a balance comes from adding up amounts, some of them below zero.",
    "where": "Build a Budget App",
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-budget-app/build-a-budget-app",
-   "code": "ledger = [{\"amount\": 100, \"description\": \"pay\"}, {\"amount\": -15.5, \"description\": \"food\"}]\nprint(sum(item[\"amount\"] for item in ledger))"
+   "code": "print(sum([12, -2, 5]))"
   },
   {
    "q": "What does this code print?",
@@ -2680,10 +2680,10 @@ window.RTP_QUIZ = {
    ],
    "answer": 0,
    "kind": "code",
-   "hint": "Look again at the project's user stories: how the title line puts the category name between * characters.",
+   "hint": "Look again at the project's user stories: the title line, with the category name between * characters.",
    "where": "Build a Budget App",
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-budget-app/build-a-budget-app",
-   "code": "print(\"Food\".center(10, \"*\"))"
+   "code": "print(\"*\" * 3 + \"Food\" + \"*\" * 3)"
   },
   {
    "q": "In create_spend_chart, which transactions count toward the percentages?",
@@ -2716,17 +2716,17 @@ window.RTP_QUIZ = {
   {
    "q": "What does this code print?",
    "options": [
-    "15.50  |",
-    "  15.50|",
-    "15.5|",
-    "15.500|"
+    "15.46",
+    "15.45",
+    "15.5",
+    "15.456"
    ],
-   "answer": 1,
+   "answer": 0,
    "kind": "code",
-   "hint": "Look again at the project's user stories: how each ledger amount is lined up and how many decimal places it shows.",
+   "hint": "Look again at the project's user stories: amounts are shown with two decimal places.",
    "where": "Build a Budget App",
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-budget-app/build-a-budget-app",
-   "code": "amount = 15.5\nprint(f\"{amount:>7.2f}|\")"
+   "code": "print(round(15.456, 2))"
   }
  ],
  "fc9": [
@@ -2908,17 +2908,17 @@ window.RTP_QUIZ = {
   {
    "q": "What does this code print?",
    "options": [
-    "4",
-    "8",
-    "16",
-    "None"
+    "shape",
+    "Circle",
+    "None",
+    "circle"
    ],
-   "answer": 2,
+   "answer": 0,
    "kind": "code",
-   "hint": "Look again at the project's user stories: how a Square stores its side, and what it can use from Rectangle.",
+   "hint": "Look again at the project's user stories: what the Square class gets from the class it is built on.",
    "where": "Build a Polygon Area Calculator",
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-polygon-area-calculator/build-a-polygon-area-calculator",
-   "code": "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n    def get_area(self):\n        return self.width * self.height\n\nclass Square(Rectangle):\n    def __init__(self, side):\n        super().__init__(side, side)\n\nprint(Square(4).get_area())"
+   "code": "class Shape:\n    def name(self):\n        return \"shape\"\n\nclass Circle(Shape):\n    pass\n\nprint(Circle().name())"
   },
   {
    "q": "Changing a Square's width with set_width must also change what?",
@@ -2951,17 +2951,17 @@ window.RTP_QUIZ = {
   {
    "q": "What does this code print?",
    "options": [
-    "7.0",
-    "5.0",
-    "25",
-    "12"
+    "3.0",
+    "4.5",
+    "81",
+    "18"
    ],
-   "answer": 1,
+   "answer": 0,
    "kind": "code",
    "hint": "Look again at the project's user stories: the formula for get_diagonal.",
    "where": "Build a Polygon Area Calculator",
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-polygon-area-calculator/build-a-polygon-area-calculator",
-   "code": "w, h = 3, 4\nprint((w ** 2 + h ** 2) ** 0.5)"
+   "code": "print(9 ** 0.5)"
   }
  ],
  "fc11": [
@@ -3113,17 +3113,17 @@ window.RTP_QUIZ = {
   {
    "q": "What does this code print?",
    "options": [
-    "195",
-    "ab",
-    "2",
-    "97"
+    "1",
+    "98",
+    "b",
+    "-1"
    ],
    "answer": 0,
    "kind": "code",
-   "hint": "Look again at the project's user stories: how the hash is computed. ord('a') is 97.",
+   "hint": "Look again at the project's user stories: what ord gives back for one character.",
    "where": "Build a Hash Table",
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table",
-   "code": "print(sum(ord(c) for c in \"ab\"))"
+   "code": "print(ord(\"b\") - ord(\"a\"))"
   },
   {
    "q": "What does the collection attribute start as?",
@@ -3154,19 +3154,19 @@ window.RTP_QUIZ = {
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table"
   },
   {
-   "q": "Two different keys can give the same hash in this project. What does this code print?",
+   "q": "In this project two different keys can give the same hash value. What does this code print?",
    "options": [
-    "True",
-    "False",
+    "1",
+    "2",
     "195",
     "None"
    ],
    "answer": 0,
    "kind": "code",
-   "hint": "Look again at the project's user stories: the hash adds up code points, so the order of the letters does not change the sum.",
+   "hint": "Look again at the project's user stories: what the table does when two keys give the same hash value.",
    "where": "Build a Hash Table",
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-hash-table/build-a-hash-table",
-   "code": "print(sum(ord(c) for c in \"ab\") == sum(ord(c) for c in \"ba\"))"
+   "code": "print(len({97 + 98, 98 + 97}))"
   },
   {
    "q": "Why does add store a dictionary (holding the key-value pair) under the hash, instead of the value alone?",
@@ -3491,19 +3491,18 @@ window.RTP_QUIZ = {
    "code": "print(2 ** 3 - 1)"
   },
   {
-   "q": "What does this code print?",
+   "q": "In the project's example for 3 disks, how many lines does the returned string have?",
    "options": [
-    "15",
-    "16",
     "8",
-    "4"
+    "7",
+    "3",
+    "9"
    ],
    "answer": 0,
-   "kind": "code",
-   "hint": "Look again at the project: to move n disks, move n-1 out of the way, move the biggest, then move n-1 back on top.",
+   "kind": "apply",
+   "hint": "Look again at the project's user stories: the example output for 3 disks.",
    "where": "Implement the Tower of Hanoi Algorithm",
-   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm",
-   "code": "def moves(n):\n    if n == 0:\n        return 0\n    return moves(n - 1) + 1 + moves(n - 1)\n\nprint(moves(4))"
+   "url": "https://www.freecodecamp.org/learn/python-v9/lab-tower-of-hanoi/implement-the-tower-of-hanoi-algorithm"
   },
   {
    "q": "Where do the disks start?",
@@ -4704,7 +4703,7 @@ window.RTP_QUIZ = {
    "options": [
     "The recipient: the company or program, in its policy",
     "You, as the researcher",
-    "Any judge or police officer who looks at the case after the fact",
+    "A national registry that licenses security researchers",
     "Your internet provider"
    ],
    "answer": 0,
@@ -4988,16 +4987,16 @@ window.RTP_QUIZ = {
    "url": "https://openai.com/index/safety-bug-bounty/"
   },
   {
-   "q": "How often must a behaviour reproduce for OpenAI's Safety Bug Bounty?",
+   "q": "OpenAI's Safety Bug Bounty asks for a behaviour that reproduces at least 50% of the time. For which kind of report does its page say that?",
    "options": [
-    "At least 50% of the time",
-    "Every single time",
-    "Once is enough",
-    "At least 10 times in a row"
+    "Third-party prompt injection and data exfiltration",
+    "Jailbreaks that get past the content rules",
+    "Bugs in the login page of OpenAI's website",
+    "Answers that are slow or factually wrong"
    ],
    "answer": 0,
    "kind": "recall",
-   "hint": "Look again at OpenAI's Safety Bug Bounty page: Program overview.",
+   "hint": "Look again at OpenAI's Safety Bug Bounty page: the list of what is in scope.",
    "where": "OpenAI: Safety Bug Bounty",
    "url": "https://openai.com/index/safety-bug-bounty/"
   },
@@ -5058,16 +5057,16 @@ window.RTP_QUIZ = {
    "url": "https://0din.ai/policy"
   },
   {
-   "q": "Which of these programs pays for jailbreaks themselves?",
+   "q": "Which program's public terms list guardrail jailbreaks among the findings it pays for?",
    "options": [
     "Mozilla 0DIN",
     "OpenAI's Safety Bug Bounty",
-    "Microsoft's Copilot bounty, for any prompt injection",
-    "None of them"
+    "Microsoft's Copilot bounty",
+    "None of these three"
    ],
    "answer": 0,
    "kind": "apply",
-   "hint": "Look again at the three programs' pages: which one is built around jailbreak findings, and which two rule them out.",
+   "hint": "Look again at the three programs' pages: what each one says about jailbreaks.",
    "where": "Mozilla 0DIN: Bug Bounty Program Terms",
    "url": "https://0din.ai/policy"
   },
@@ -5398,7 +5397,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 0,
    "kind": "apply",
-   "hint": "Look again at HackerOne's Disclosure Guidelines: private programs and program policies. Training labs are built to be shared about; live findings are not.",
+   "hint": "Look again at HackerOne's Disclosure Guidelines: private programs, program policies, and who decides what may be shared.",
    "where": "HackerOne: Vulnerability Disclosure Guidelines",
    "url": "https://www.hackerone.com/terms/disclosure-guidelines"
   },
@@ -5793,16 +5792,16 @@ window.RTP_QUIZ = {
    "url": "https://portswigger.net/web-security/cross-site-scripting"
   },
   {
-   "q": "Which kind of XSS needs no server response at all to carry the attack?",
+   "q": "In DOM-based XSS, where does the dangerous step happen?",
    "options": [
-    "Stored XSS",
-    "Reflected XSS",
-    "DOM-based XSS",
-    "All three need one"
+    "In the page's own JavaScript, which writes the data into the page",
+    "In the server's database, which saves the data for later visitors",
+    "In the server's template, which builds the page before it is sent",
+    "In the browser's cache, which keeps an old copy of the page"
    ],
-   "answer": 2,
-   "kind": "apply",
-   "hint": "Look again at PortSwigger's XSS pages: which kind happens entirely in the browser's own JavaScript.",
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at PortSwigger's DOM-based XSS page: the first lines, on where the data comes from and where it goes.",
    "where": "PortSwigger: DOM-based XSS",
    "url": "https://portswigger.net/web-security/cross-site-scripting/dom-based"
   }

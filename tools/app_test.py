@@ -1132,6 +1132,26 @@ with sync_playwright() as p:
     t29 = fp.inner_text("#view-tutor") if fp.locator("#view-tutor").count() else fp.inner_text("body")
     check("by application" in t29 and "AI safety bounty" not in t29, "Scope 3: Library lesson t29 points at Anthropic's live program, not the one that ended")
     fctx.close()
+    # Scope 3, fix 12 part 1 (audit C5, E3): wrong or double answers, hints that hand over the answer, and project quizzes
+    # that showed working lines of freeCodeCamp's own answers.
+    zctx, zp = new_page(b, None, start=False)
+    QZ = zp.evaluate("window.RTP_QUIZ")
+    zctx.close()
+    def opts(box): return [o for x in QZ[box] for o in x["options"]]
+    check(not ({"return", "None"} & set(o for x in QZ["fc3"] if x["q"].startswith("You want to write a function now") for o in x["options"])), "Scope 3: fc3's empty-body question has no second option that also runs")
+    check('Change "plum" to "PLU"' not in opts("ap3"), "Scope 3: ap3's bug question has no second fix that also prints 1")
+    check(not any("needs no server response" in x["q"] for x in QZ["wb3"]), "Scope 3: wb3 no longer says DOM-based XSS needs no server response")
+    check(not any(x["q"].startswith("How often must a behaviour reproduce") for x in QZ["pd5"]) and "Third-party prompt injection and data exfiltration" in opts("pd5"),
+          "Scope 3: pd5 ties OpenAI's 50% rule to the one kind of report it covers")
+    check(not any("police officer" in o for o in opts("pd1")), "Scope 3: pd1 has no wrong option that is arguably right in law")
+    GIVEAWAYS = ["Authentication that fails open", "Training labs are built to be shared", "order of the letters does not change the sum",
+                 "which one includes the number itself", "ord('a') is 97", "move n-1 out of the way", "why falsy is not the same as missing",
+                 "between changing a value and pointing a variable", "which one Python uses when an object is printed", "the last method listed"]
+    leaks = [g for g in GIVEAWAYS if any(g in x["hint"] for xs in QZ.values() for x in xs)]
+    check(not leaks, "Scope 3: no hint hands over its answer (found: %s)" % leaks)
+    SOLUTION = [".center(", ":>7.2f", "super().__init__(side, side)", "sum(ord(c)", "moves(n - 1)", 'item["amount"] for item']
+    shown = [t for t in SOLUTION if any(t in x.get("code", "") for k in ("fc8", "fc10", "fc12", "fc15") for x in QZ[k])]
+    check(not shown, "Scope 3: certificate-project quizzes show no working line of the project's answer (found: %s)" % shown)
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
