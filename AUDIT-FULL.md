@@ -451,7 +451,7 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 
 ---
 
-## 8. Fix log (in progress: 11 of 25 done, 27 Nov 2026)
+## 8. Fix log (in progress: 12 of 25 done, 27 Nov 2026)
 
 Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/ship.sh` (local test, push, live file compared, live test). "Failed before" means the new checks were run against the live site before the change went out.
 
@@ -467,7 +467,8 @@ Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/
 10. **A13, B6, C10, wording on screen.** Commit b199a51. 4 new checks and 1 changed, all 5 failed before. Live: 392. Course-box quizzes no longer say "video"; a missed review says "comes back in 24 hours" (it returns 24 hours after the miss, not the next morning); Settings names everything stored online; the Library gives 27 Nov for its later sources; the GitHub limit message says to switch to the phone's data. Left: the 5 review questions a day are still counted per device (B6), and the slow-clock edge (B6) is unchanged.
 11. **E2, a quiz retry asks every question again, in a new order.** Commit f4ab685. 3 new checks and 2 changed; before the change 2 failed and the third stopped the run. Live: 402. Right answers from the round before no longer count; the review after a pass still lists every miss on the way. Anyone who passed before keeps the pass.
 12 (part 1). **C5, E3, wrong answers, give-away hints, project solution lines.** Commit 81a77f6. 21 questions in 14 quiz files rewritten and rebuilt (428 kept). 7 new checks, all failed before. Live: 409. Passes already earned stay; anyone who passed fc8, fc10, fc12 or fc15 before saw the old questions. Left for part 2: guessable options and tighter builder guards; video questions wait on Q6.
+13. **A4, Git on the PC with GitHub Desktop.** Commit 305961e. 2 new checks, both failed before. Live: 411. Box ap1 now teaches GitHub Desktop: download, sign in, Code then Open with GitHub Desktop, Choose... then Clone, Summary, Commit to main, Push origin (GitHub's help pages, 27 Nov 2026). Box ap2 adds one line of the typed commands (git clone, add, commit, push). Left: the sign-in step is not spelled out on GitHub's install page, so the box says only to sign in with your GitHub account.
 
 Also done, not a fix yet: garak and PyRIT were run for real on free local models on this PC (decision 1). Both worked with no key. The exact steps are in `helpers/real-runs.md` in the audit folder and go into boxes ag4 and ag5 at fix 17. One line of finding A6 was corrected from that run.
 
-Not started: fixes 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
+Not started: fixes 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
