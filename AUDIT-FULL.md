@@ -257,7 +257,21 @@ Each one: what is wrong, where, how it was proven, the smallest fix, and whether
 - `tools/ship.sh` runs four tests before a release. It does not run the path walk, the two-device test, the link check or the quiz build. Nothing in a release checks that `quizzes.js` is what the build makes (today it is: 428 of 428 match).
 - Linking has no test that runs on the PC. The only one uses the live site and the real store, and checks one rotation mark.
 - `tools/jobs_test.py` cannot fail for the faults in D3.
-- A helper is breaking a scratch copy of the app on purpose, one way at a time (33 ways), to see which test notices. So far the proof locks hold up: a lower pass mark, a GitHub box, a link box, "Explain it back", a required lab and the retry wait were each caught by the phone test. The full list of breaks that no test noticed will be added here when the run ends: MUTATION-PENDING.
+- **Breaking the app on purpose** (added after the first report, 27 Nov, 4:05 pm). A helper broke a scratch copy of the app one way at a time, 46 ways, and ran the tests the release script runs (`helpers/mutation.md`). 26 breaks were caught. 20 were not. Five of the 26 were caught only because the test timed out, not by a check that names the fault.
+- The 20 that no test noticed, most serious first:
+  1. A required lab other than Lab 1 can be finished with no chat file (the test only looks at Lab 1).
+  2. A wrong "right answer" in `quizzes.js` passes everything: the test reads the answer from the same file. The quiz build also accepts a wrong answer on any question without code.
+  3. The key check can stop seeing OpenAI keys (`sk-`): the test's only key is a Google one.
+  4. A missed course-box question can show the right answer (only Episode 1 is checked).
+  5. Seven of the 11 GitHub checks are never run by any test (gt1, ap2, ap3, ag5, tl1, tl2, tl3). Four were broken and nothing noticed.
+  6. The certificate link box (fc18) can accept any address.
+  7. Linking: with other devices ignored, or "clear all" never sent to the store, every local test passes.
+  8. A box whose link is dead passes (only the link check would see it, and the release script does not run it).
+  9. "I studied today" can tick a box; reviews can come only from videos; the 1-month review can come after 8 days; the 5-a-day limit can go; the on-track finish date can be 7 times too early.
+  10. The code that reads the oldest saved progress can be removed; a word can vanish from the word list.
+- Two checks are blind: "no sideways scrolling" does not see a fixed bar that is too wide, and "old progress loads unchanged" reads back what the test itself wrote, so it passed with a box renamed and with a box deleted (other checks caught those).
+- "344 checks" counts lines, not things proven: 182 of them are the 12 lab pages, and the walk through all 107 boxes is one.
+- Since then, fixes 1 to 8 added local tests for linking through a pretend store, the backup code, the quiz file, lab text and link shapes. The rest of this list is fix 23.
 
 ### F. Records that are not true
 

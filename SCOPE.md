@@ -119,7 +119,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 5. A2: the lab-proof checker stops refusing honest wins; its messages say what to do; new test cases. Proof: bb92a4f; `tools/proof_test.js` 109 cases (23 new, 21 fail on the checker before the change); the audit's attack script: honest wins refused 26 to 12, cheats passing 37 to 31, none newly passing; `tools/ship.sh` local and live ALL PASSED, 27 Nov 2026. Left: a file typed by hand in the after-reload shape still passes; 9 rarer honest cases are still refused (listed in the fix log).
 - [x] 6. A1, A3, D1, C6: lab text (the GPT-4o date, download the chat before stopping, auto-reload, lab 7 hint 2, lab 10, issue 33). Proof: 7dd1af7; 5 new checks, all failing on the live site before the change; `tools/ship.sh` local and live ALL PASSED (373 checks), 27 Nov 2026. Waiting on Shad: a "Moving on, not solved" button for required labs (Q5); a re-test of the answers on a newer model (Q1); rewording of the hints that give the move away (Q6).
 - [ ] 7. A5, A11, A12, C3, C9 (Steps 1 to 6 rows): facts only.
-- [ ] 8. A8: HackerOne and Bugcrowd address patterns.
+- [x] 8. A8: HackerOne and Bugcrowd address patterns. Proof: b42c029; 6 new checks (failing on the live site before the change); `tools/ship.sh` local and live ALL PASSED, 27 Nov 2026.
 - [ ] 9. A9, A10: the key pattern; ap3's counting rule.
 - [ ] 10. A13, B6, C10: wording on screen.
 - [ ] 11. E2: a quiz retry asks everything again in a new order (decision 3).

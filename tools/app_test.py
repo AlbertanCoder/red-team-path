@@ -1030,6 +1030,50 @@ with sync_playwright() as p:
     check(not try_link(hp, "fc18", "https://www.freecodecamp.org/certification/yourname/python-v9") and try_link(hp, "fc18", "https://www.freecodecamp.org/certification/somebody/python-v9"),
           "Scope 3: box fc18 refuses the example certificate address and accepts a real-shaped one")
     hctx.close()
+
+    # Scope 3, fix 9 (audit A9, A10): the key check called ordinary hyphenated writing a key and failed honest repositories;
+    # it missed some real key shapes; and ap3 refused an honest scorer without saying how the app counts a leak.
+    HELLO = "from google import genai\nclient = genai.Client()\nprint(client.interactions.create(model='m', input='hi').output_text)\n"
+
+    def github_run(box, files):
+        ctx, page = new_page(b, None, start=False)
+        hdr = {"Access-Control-Allow-Origin": "*"}
+
+        def api(route):
+            if "/git/trees/" in route.request.url:
+                route.fulfill(status=200, content_type="application/json", headers=hdr, body=json.dumps({"tree": [{"path": k, "type": "blob", "size": len(v)} for k, v in files.items()]}))
+            else:
+                route.fulfill(status=404, content_type="application/json", headers=hdr, body='{"message": "Not Found"}')
+
+        def raw(route):
+            body = files.get(route.request.url.split("/HEAD/", 1)[-1])
+            route.fulfill(status=200 if body is not None else 404, content_type="text/plain", headers=hdr, body=body if body is not None else "404")
+        page.route("https://api.github.com/**", api)
+        page.route("https://raw.githubusercontent.com/**", raw)
+        screen(page, box)
+        page.fill("#gh-user", "testuser")
+        page.click("#gh-check")
+        page.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled")
+        out = (ticks(page).get("pf" + box, 0) > 0, page.inner_text("#gh-result"), page.text_content("#view-now"))
+        ctx.close()
+        return out
+
+    HONEST = {"hello_model.py": HELLO, ".gitignore": ".env\n",
+              "README.md": "# red-team-tools\nEvery test follows a risk-assessment-and-mitigation-plan. See ask-me-anything-about-python-programming and flask-sqlalchemy-migrations-tutorial.\n"}
+    ok, res, _ = github_run("ap1", HONEST)
+    check(ok and "No file holds anything shaped like an API key" in res, "Scope 3: ordinary hyphenated writing (risk-assessment-and-mitigation-plan) is not called an API key")
+    for name, key in (("an OpenAI-style key", "sk-" + "proj-" + "Ab3dEf9h" * 6), ("a Hugging Face token", "hf_" + "aB3dE9" * 6), ("a short-word key inside quotes", '"sk-' + "9f8e7d6c" * 5 + '"')):
+        ok, res, _ = github_run("ap1", dict(HONEST, **{"notes.md": "my key " + key}))
+        check(not ok and "looks like an API key" in res and "notes.md" in res, "Scope 3: %s in a file still fails the check and names the file" % name)
+    ok, res, _ = github_run("ap1", dict(HONEST, **{"big.jsonl": "x" * 400000}))
+    check(ok and "1 not read" in res, "Scope 3: a file too big to read is counted as not read, not as clean")
+    AP3 = {"score.py": "print(1)\n", "summary.json": json.dumps({"total": 2, "leaked": 0, "refused": 1, "secret": "Plum"}),
+           "results.jsonl": json.dumps({"prompt": "a", "reply": "the word is PLUM", "model": "m", "time": "t"}) + "\n" + json.dumps({"prompt": "b", "reply": "no", "model": "m", "time": "t"}) + "\n"}
+    ok, res, box_text = github_run("ap3", AP3)
+    check(not ok and "ignoring capitals" in res, "Scope 3: when ap3's numbers differ, the result says how the app counts a leak")
+    check("capitals ignored" in box_text, "Scope 3: box ap3's steps say how the app counts a leak")
+    ok, res, _ = github_run("ap3", dict(AP3, **{"summary.json": json.dumps({"total": 2, "leaked": 1, "refused": 1, "secret": "Plum"})}))
+    check(ok, "Scope 3: an ap3 scorer that counts the app's way passes")
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
