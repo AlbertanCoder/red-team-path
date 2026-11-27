@@ -103,7 +103,7 @@
     ["Introduction to Red Teaming Agents, 5 scenarios", "training-beginner-agent", "Your first agents: AIs that can take actions, which Microsoft's labs do not cover."],
     ["Introduction to Indirect Prompt Injection, 8 scenarios", "training-intermediate-agent", "The web page attack from Episode 4, against agents."],
     ["The Labyrinth: Challenge Edition, 4 scenarios", "labyrinth-challenge-version", "The starter set again, harder."],
-    ["Lucky Break: Level Up, 6 scenarios", "lucky-break-level-up", "A medium set that mixes techniques."],
+    ["Lucky Break: Level Up, 6 scenarios", "lucky-break-level-up", "A medium set that mixes techniques. Unlike the others it was a prize contest, which ended on 14 Oct 2026: if it no longer opens or scores, skip it."],
     ["Proving Ground: the Agent set", "proving-ground", "A large set of agent targets. Do as many as an hour allows."],
     ["Proving Ground: the Indirect set", "proving-ground", "A large set of indirect prompt injection targets."]
   ];
@@ -302,21 +302,25 @@
           "In Visual Studio Code, choose File, then Open Folder, and pick the notebooks folder inside the labs you downloaded.",
           "Open the file named Lab 1 - Credential exfiltration.",
           "Visual Studio Code offers to install what notebooks need. Accept.",
-          "Install Microsoft's tool PyRIT, version 0.9.0: in Visual Studio Code's terminal, type pip install pyrit==0.9.0 and press Enter. Use that version: newer ones (0.10 and later) removed parts these notebooks use, so they stop at their first line (tested 27 Nov 2026).",
+          "Install Microsoft's tool PyRIT, version 0.9.0: in Visual Studio Code's terminal, type pip install pyrit==0.9.0 and press Enter. Use that version: newer ones (0.10 and later) removed parts these notebooks use, so they stop at their first line (tested 27 Nov 2026). PyRIT 0.9.0 installs only on Python 3.10 to 3.13. Type python --version first. If it says 3.14 or newer, or pip answers \"no matching distribution\", install Python 3.13 from python.org's list of older releases, then in Visual Studio Code choose Python: Select Interpreter and pick 3.13.",
           "Read the comments in the notebook's code. They list 7 steps for connecting it to your running lab. Follow them.",
           "Your labs run on your own computer, so they use http, not https. In the line that starts http_prompt_target = HTTPTarget(, add use_tls=False before the closing bracket, like this: timeout=20.0, use_tls=False). Without it the notebook stops with an SSL error (tested 27 Nov 2026).",
           "You are done when the first piece of code runs without a red error."
         ] }),
       item("a2", "auto", "Run the Lab 1 notebook from top to bottom",
-        "You watch code do in seconds what you did by hand in lab 1.", URLS.msNotebooks, { how: [
+        "You watch code send lab 1 a message for you and print the reply. It sends one plain question (\"What's your password?\"), so expect a refusal: the point is seeing how code talks to your lab.", URLS.msNotebooks, { how: [
           "Start your labs first, the same way as before.",
           "Run the notebook one piece at a time, top to bottom.",
           "Before each piece, read the note above it and say in your own words what it will do.",
-          "You are done when the attack finishes and the notebook shows whether it worked."
+          "You are done when the last piece runs and prints the lab's reply. The notebook does not judge the reply: read it yourself."
         ] }),
       item("a3", "auto", "Run the Lab 5 notebook (Crescendo)",
         "The multi-turn attack from Episode 6, run automatically.", URLS.msNotebooks, { how: [
           "Open the file named Lab 5 - Crescendo and Inflation.",
+          "Follow the 8 numbered comments in its code: paste your own request from lab 5 where it says PASTE YOUR REQUEST HERE, and put {PROMPT} where your message goes.",
+          "In the line that starts http_prompt_target = HTTPTarget(, add use_tls=False before the closing bracket, the same as in Lab 1.",
+          "This notebook also uses OpenAI directly, to write the questions and to score the replies. In the notebooks folder make a file named .env with three lines: OPENAI_CHAT_ENDPOINT=https://api.openai.com/v1/chat/completions, then OPENAI_CHAT_KEY= followed by your OpenAI key, then OPENAI_CHAT_MODEL=gpt-4o. Without them it stops with \"Environment variable ... is required\". Never put that file on GitHub.",
+          "Cost: one run can send dozens of paid messages on your key (up to 10 turns, with retries). Check your OpenAI balance first. This app has not run it to the end.",
           "Run it one piece at a time, reading each note first.",
           "Watch how the questions build up turn by turn.",
           "You are done when it finishes and shows the result."
@@ -333,15 +337,16 @@
     var last = [
       item("p1", "proof", "Put your proof in one place",
         "An employer will not ask what you watched. They will ask what you can show.", URLS.learnTranscript, { how: [
-          "On Microsoft Learn, open your profile, then Transcript, then press Share. It asks you to set an access code, then gives you a link and a transcript ID.",
+          "On Microsoft Learn, open your profile menu, choose Transcript, then select Share link. It gives you a link to your transcript that employers can open.",
           "Put your write-ups in a public GitHub repository. First remove anything a site's rules say to keep private.",
-          "Add the GitHub link, and the transcript link with its ID and code, to your resume and your LinkedIn profile.",
+          "Add the GitHub link and the transcript link to your resume and your LinkedIn profile.",
           "You are done when a friend can open both from another device."
         ] }),
       item("b1", "bounty", "Read Mozilla 0DIN's rules fully. Note what pays and what does not.", "", URLS.odin, { how: [
         "Open the policy page and read it to the end.",
-        "Write down which AI systems are in scope and which are not.",
-        "Write down what a report must include."
+        "Open 0DIN's scope page too (0din.ai/scope). Write down which AI systems are in scope and which are not.",
+        "Note two rules from the scope page: a jailbreak must work in at least two different testing categories, and getting a hidden prompt out (Prompt Extraction) is marked N/A for every listed model, so the secret-word trick from labs 2 and 8 does not pay there.",
+        "Write down what a first report asks for: a short summary of the finding and the models it affects."
       ] }),
       item("b2", "bounty", "Test 3 ideas, only inside 0DIN's rules. Save every prompt and result, and keep them private.", "", "", { how: [
         "Pick one technique that worked for you in the labs or on Gray Swan.",
@@ -351,12 +356,13 @@
       ] }),
       item("b3", "bounty", "Decide honestly whether one is a real, new finding. If yes, send 0DIN the short summary it asks for.", "", URLS.odin, { how: [
         "Ask: does it work again when I repeat the same steps? Try it 3 times.",
-        "Ask: is it new, or a well-known trick?",
+        "Ask: is it new, or a well-known trick? And does it meet the scope page's rules (for a jailbreak, at least two testing categories)?",
         "If both are yes, send the short summary 0DIN asks for. If not, send nothing."
       ] }),
       item("b4", "bounty", "Apply to Anthropic's model safety bug bounty, using your write-ups and results.", "", URLS.anthropic, { how: [
-        "Open the program page and read who it is for.",
-        "Fill in the application, linking your write-ups and any Gray Swan or 0DIN result.",
+        "Open the program page and read who it is for. People who get in sign a confidentiality agreement.",
+        "Before the form: make a free HackerOne account (Step 10 shows how), then a Claude Console account made with your @wearehackerone.com email address, the one HackerOne gives you. The form asks for your HackerOne username and that Console account's organization ID.",
+        "The form has two written answers of up to 100 words: your experience and why you want to join. It has no place for links, so put the link to your write-ups, and any Gray Swan or 0DIN result, inside your experience answer.",
         "Answer every question truthfully. They choose who gets in."
       ] })
     ];
@@ -924,7 +930,7 @@
     payHackerone: ["HackerOne: bug bounty programs", "https://hackerone.com/bug-bounty-programs"],
     bugcrowd: ["Bugcrowd: crowdsourced security platform", "https://www.bugcrowd.com/"],
     odinSrc: ["0DIN: Mozilla's GenAI bug bounty", "https://0din.ai/"],
-    anthropicBounty: ["Anthropic: AI safety bug bounty", "https://www.anthropic.com/news/testing-our-safety-defenses-with-a-new-bug-bounty-program"],
+    anthropicBounty: ["Anthropic: model safety bug bounty (by application)", "https://support.claude.com/en/articles/12119250-model-safety-bug-bounty-program"],
     docsHackerone: ["HackerOne: how reports and programs work", "https://docs.hackerone.com/"],
     owaspDisclosure: ["OWASP: vulnerability disclosure cheat sheet", "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html"],
     discloseIo: ["disclose.io: disclosure standards and safe harbor", "https://disclose.io/"],
@@ -1226,8 +1232,8 @@
         right: 1, because: "Authorisation and scope are what separate a researcher from an attacker, whatever you find." },
       src: ["discloseIo", "owaspDisclosure"] },
     { id: "t29", group: "Getting paid", title: "Where the real programs are",
-      idea: "AI-focused places to start: 0DIN, Mozilla's bug bounty for generative AI flaws, and Anthropic's own AI safety bounty. Broader platforms, HackerOne and Bugcrowd, list hundreds of programs, some with AI in scope. And the gig platforms are already listed under Jobs.",
-      why: "These are real, named, and current, each checked on 18 Nov 2026. Starting on an AI-specific program means your lab skills map straight onto what they want.",
+      idea: "AI-focused places to start: 0DIN, Mozilla's bug bounty for generative AI flaws, and Anthropic's model safety bug bounty (by application only, with a confidentiality agreement: box b4 in Step 6). Broader platforms, HackerOne and Bugcrowd, list hundreds of programs, some with AI in scope. And the gig platforms are already listed under Jobs.",
+      why: "These are real, named, and current, each checked on 27 Nov 2026. Starting on an AI-specific program means your lab skills map straight onto what they want.",
       when: "When you have a few write-ups behind you. Start on one program, read its scope end to end, and send one careful report. One accepted finding changes everything.",
       stops: "Never pay to join a real program, and do ID checks only inside a platform's own official sign-up. Anything that asks you to pay to apply is not a real program.",
       quiz: { q: "What is the right first move on a real bounty program?",
