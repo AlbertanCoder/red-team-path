@@ -992,6 +992,44 @@ with sync_playwright() as p:
     lab10 = screen(xp, "m10")
     check("description prints the key" in lab10 and "shows you its hidden instructions" not in lab10, "Scope 3: Lab 10 says the description prints the key, not that the lab shows its hidden instructions")
     xctx.close()
+
+    # Scope 3, fix 8 (audit A8): a real HackerOne profile address ends ?type=user and was refused; pages that are not a
+    # profile, the example itself and the dead www address were accepted.
+    hctx, hp = new_page(b, None, start=False)
+    screen(hp, "wb6")
+
+    def try_link(page, box, address):
+        page.fill("#proof-link", address)
+        page.click("#proof-link-save")
+        page.wait_for_timeout(200)
+        return ticks(page).get("pf" + box, 0) > 0
+
+    refused = [a for a in ("https://hackerone.com/yourname", "https://hackerone.com/hacktivity", "https://hackerone.com/reports",
+                           "https://www.hackerone.com/jobert", "http://hackerone.com/jobert", "https://hackerone.com/jobert?type=team") if try_link(hp, "wb6", a)]
+    check(not refused, "Scope 3: the example, pages that are not a profile, and the dead www address are refused (wrongly accepted: %s)" % refused)
+    check(try_link(hp, "wb6", "https://hackerone.com/jobert?type=user"), "Scope 3: a real HackerOne profile address, ending ?type=user as the address bar shows it, is accepted")
+    hctx.close()
+    hctx, hp = new_page(b, None, start=False)
+    screen(hp, "wb6")
+    check(try_link(hp, "wb6", "https://hackerone.com/jobert"), "Scope 3: the same address without the ending is accepted too")
+    hctx.close()
+    hctx, hp = new_page(b, None, start=False)
+    screen(hp, "pd2")
+    hp.fill("#proof-link", "https://hackerone.com/jobert?type=user")
+    hp.fill("#proof-link2", "https://bugcrowd.com/h/yourname")
+    hp.click("#proof-link-save")
+    hp.wait_for_timeout(200)
+    check(not ticks(hp).get("pfpd2", 0) > 0, "Scope 3: box pd2 refuses the Bugcrowd example address")
+    hp.fill("#proof-link2", "https://bugcrowd.com/h/somebody?tab=overview")
+    hp.click("#proof-link-save")
+    hp.wait_for_timeout(200)
+    check(ticks(hp).get("pfpd2", 0) > 0, "Scope 3: box pd2 accepts a HackerOne address ending ?type=user and a Bugcrowd address with an ending")
+    hctx.close()
+    hctx, hp = new_page(b, None, start=False)
+    screen(hp, "fc18")
+    check(not try_link(hp, "fc18", "https://www.freecodecamp.org/certification/yourname/python-v9") and try_link(hp, "fc18", "https://www.freecodecamp.org/certification/somebody/python-v9"),
+          "Scope 3: box fc18 refuses the example certificate address and accepts a real-shaped one")
+    hctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")

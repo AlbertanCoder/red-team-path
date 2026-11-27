@@ -474,7 +474,7 @@
       item("wb6", "practice", "Hacker101: the newcomer videos, then its CTF to 26 points",
         "HackerOne's free class and capture-the-flag game. 26 points makes your HackerOne account eligible for invitations to private bug bounty programs.",
         "https://www.hacker101.com/", { mins: 1080, pc: true, proof: "link", openLabel: "Open Hacker101", links: [
-          ["Your public HackerOne profile address", "https://hackerone.com/yourname", "^https://(www\\.)?hackerone\\.com/[A-Za-z0-9_.-]{2,40}/?$"]
+          ["Your public HackerOne profile address", "https://hackerone.com/yourname", "^https://hackerone\\.com/(?!(?:yourname|hacktivity|reports|bugs|opportunities|directory|leaderboard|users|settings|security|sign_in|sign_up)(?:[/?]|$))[A-Za-z0-9_.-]{2,40}/?(?:\\?type=user)?$"]
         ], how: [
           "Make a free HackerOne account. Set a username you are happy for an employer to see.",
           "On Hacker101, watch the newcomer videos (any order), including the one on writing reports.",
@@ -562,8 +562,8 @@
       item("pd2", "paid", "Public HackerOne and Bugcrowd profiles",
         "Contract networks recruit from these scoreboards. Make both profiles public now, so every accepted report from here on shows.",
         "https://docs.hackerone.com/hackers/reputation.html", { mins: 120, shift: true, proof: "link", openLabel: "Open HackerOne's reputation page", links: [
-          ["Your public HackerOne profile address", "https://hackerone.com/yourname", "^https://(www\\.)?hackerone\\.com/[A-Za-z0-9_.-]{2,40}/?$"],
-          ["Your public Bugcrowd profile address", "https://bugcrowd.com/h/yourname", "^https://(www\\.)?bugcrowd\\.com/h/[A-Za-z0-9_.-]{2,40}/?$"]
+          ["Your public HackerOne profile address", "https://hackerone.com/yourname", "^https://hackerone\\.com/(?!(?:yourname|hacktivity|reports|bugs|opportunities|directory|leaderboard|users|settings|security|sign_in|sign_up)(?:[/?]|$))[A-Za-z0-9_.-]{2,40}/?(?:\\?type=user)?$"],
+          ["Your public Bugcrowd profile address", "https://bugcrowd.com/h/yourname", "^https://(www\\.)?bugcrowd\\.com/h/(?!yourname(?:[/?]|$))[A-Za-z0-9_.-]{2,40}/?(?:\\?.*)?$"]
         ], how: [
           "You made a HackerOne account in Step 10. Make a Bugcrowd one too (free), with the same honest username.",
           "On Bugcrowd, set your profile's privacy to Everyone, so it is public. Read how HackerOne reputation and Signal work.",
@@ -622,7 +622,7 @@
     var exam = item("fc18", "course", "freeCodeCamp: Python Review, then the Python Certification Exam",
       "The last box of the certificate: freeCodeCamp's review, then its 50-question exam in its own desktop exam app. freeCodeCamp's staff review every passing exam.",
       FCC + "review-python/review-python", { mins: 1500, pc: true, proof: "link", openLabel: "Open the review on freeCodeCamp", links: [
-        ["Your freeCodeCamp Python certificate address", "https://www.freecodecamp.org/certification/yourname/python-v9", "^https://(www\\.)?freecodecamp\\.org/certification/[A-Za-z0-9_-]{1,40}/python-v9/?$"]
+        ["Your freeCodeCamp Python certificate address", "https://www.freecodecamp.org/certification/yourname/python-v9", "^https://(www\\.)?freecodecamp\\.org/certification/(?!yourname/)[A-Za-z0-9_-]{1,40}/python-v9/?$"]
       ], how: [
         "Do freeCodeCamp's Python Review. All five certificate projects must be done before the exam opens.",
         "Install freeCodeCamp's exam app and take the 50-question exam. One try a week; its staff review passing exams before the result is final.",
@@ -3013,7 +3013,7 @@
     var btn = h("button", { type: "button", class: "primary", id: "proof-link-save", text: it.links.length > 1 ? "Save my links" : "Save my link" });
     btn.addEventListener("click", function () {
       var bad = it.links.filter(function (l, i) { return !new RegExp(l[2]).test(inputs[i].value.trim()); });
-      if (bad.length) { status.textContent = "That does not look like " + bad[0][1] + ". Copy the address from the page itself."; return; }
+      if (bad.length) { status.textContent = "That does not look like " + bad[0][1] + " with your own name in it. Open your own profile page and copy the address from the address bar."; return; }
       it.links.forEach(function (l, i) { saveNote(linkKey(it, i), inputs[i].value.trim()); });
       if (!isDone("pf" + it.id)) { mark("pf" + it.id, true); studied(); }
       render("proof-link-status");
