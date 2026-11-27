@@ -448,3 +448,22 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 - **Q8.** Box g6 is a finished contest. Keep it with a note, or point it at another free Gray Swan set? (The id stays either way.)
 - **Q9.** Have you set up a free Gemini key yourself? If not, garak and PyRIT are run on a small free model on your PC only.
 - **Q10.** Hours on the freeCodeCamp boxes may be 3 times high. Leave them, or lower them now?
+
+---
+
+## 8. Fix log (in progress: 8 of 25 done, paused 27 Nov 2026, 4:16 pm Alberta)
+
+Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/ship.sh` (local test, push, live file compared, live test). "Failed before" means the new checks were run against the live site before the change went out.
+
+1. **B1, a `#sync=` link asks first.** Commit d46ed3a. 5 new checks, 2 failed before. Live: 349 checks passed.
+2. **B2, "Load this code" asks first and says it replaces.** Commit c1648df. 8 new checks, 4 failed before. Live: 357.
+3. **B3, the rotation survives a backup load and a first link.** Commit d38e5b3. 5 new checks, 4 failed before, one of them a first link through a pretend store. Live: 362. Left: review timing still restarts after a backup load or a first link after a clear, because every mark is restamped then.
+4. **B4, unknown marks are kept; nothing can be ticked when the quiz file did not load.** Commit 5675cdf. 6 new checks, 4 failed before. Live: 368.
+5. **A2, the lab-proof checker stops refusing honest wins.** Commit bb92a4f. `tools/proof_test.js`: 109 cases (23 new, 21 fail on the old checker). The audit's attack cases: honest wins refused 26 to 12, cheats passing 37 to 31, none newly passing. Left: a file typed by hand in the after-reload shape still passes; 9 rarer honest cases are still refused (an injection whose result shares no word with it, a chat saved in the second before the lab finished writing its record, and similar: listed in `helpers/fix5-lab-proof.md`).
+6. **A1, A3, D1, C6, lab text.** Commit 7dd1af7. 5 new checks, all failed before. Live: 373. The GPT-4o date and the line to change; "download your chat before you stop the labs" on every required lab, in the guide and in the Stop script; auto-reload; OpenAI's own words on losing access; Lab 7 hint 2; Lab 10; pull request 69 in place of issue 33. Left, waiting on your answers: a "Moving on, not solved" button (Q5), a re-test on a newer model (Q1), rewording hints that give the move away (Q6).
+8. **A8, a real HackerOne address is accepted.** Commit b42c029. 6 new checks, 3 failed before. Live: 379. The example address, pages that are not a profile and the dead `www` form are now refused.
+9. **A9 and A10, the API-key check and box ap3's counting rule.** Commit 4363507. 8 new checks, 5 failed before. Live: 387.
+
+Also done, not a fix yet: garak and PyRIT were run for real on free local models on this PC (decision 1). Both worked with no key. The exact steps are in `helpers/real-runs.md` in the audit folder and go into boxes ag4 and ag5 at fix 17. One line of finding A6 was corrected from that run.
+
+Not started: fixes 7 and 10 to 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
