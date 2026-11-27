@@ -285,7 +285,7 @@
           "In Visual Studio Code, choose File, then Open Folder, and pick the notebooks folder inside the labs you downloaded.",
           "Open the file named Lab 1 - Credential exfiltration.",
           "Visual Studio Code offers to install what notebooks need. Accept.",
-          "Install Microsoft's tool PyRIT. The notebook does not say how: the install steps are on Microsoft's PyRIT site, microsoft.github.io/PyRIT.",
+          "Install Microsoft's tool PyRIT, version 0.9.0: in Visual Studio Code's terminal, type pip install pyrit==0.9.0 and press Enter. Use that version: newer ones (0.10 and later) removed parts these notebooks use, so they stop at their first line (tested 27 Nov 2026).",
           "Read the comments in the notebook's code. They list 7 steps for connecting it to your running lab. Follow them.",
           "You are done when the first piece of code runs without a red error."
         ] }),

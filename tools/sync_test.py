@@ -137,13 +137,20 @@ with sync_playwright() as p:
         oldp.goto((old_dir / "index.html").as_uri())
         oldp.wait_for_selector("#continue-btn")
         check(oldp.evaluate("typeof window.RTP_QUIZ.fc1") == "undefined", "the third device really runs the app from before Scope 2")
+        before = phone.inner_text("#pair-code") if phone.locator("#pair-code").count() else ""
         phone.click("#link-start")
-        phone.wait_for_selector("#pair-code", timeout=20000)
+        phone.wait_for_function("(function (old) { var e = document.getElementById('pair-code'); return e && e.textContent && e.textContent !== old; })(%s)" % json.dumps(before), timeout=20000)
         pin = phone.inner_text("#pair-code")
+        oldp.errors = []
+        oldp.on("console", lambda m: oldp.errors.append(m.text) if m.type == "error" else None)
         oldp.evaluate("location.hash = '#menu'")
         oldp.fill("#pair-box", pin)
         oldp.click("#pair-btn")
-        oldp.wait_for_function("(JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}').sync || '').length === 32", timeout=20000)
+        try:
+            oldp.wait_for_function("(JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}').sync || '').length === 32", timeout=20000)
+        except Exception:
+            print("old-app device did not link. Its screen says: %s | errors: %s" % (" ".join(oldp.inner_text("#view-menu")[:300].split()), oldp.errors[:3]))
+            raise
         oldp.wait_for_function("(JSON.parse(localStorage.getItem('redTeamPath.v2')).m || {}).v1 > 0", timeout=25000)
         check(saved(oldp).get("sync") == code and rt[0] not in saved(oldp)["m"], "the old-app device links and keeps the old ticks, without the new mark it does not know")
         store = "https://red-team-path-default-rtdb.firebaseio.com/sync/%s.json" % code

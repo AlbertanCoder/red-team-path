@@ -42,7 +42,9 @@ Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. This is what was
 - **Linked devices store ticks and streak days only, under a private code that is never shown.** Tested on 17 and 18 Nov 2026: reading the whole store, listing other people's codes, and saving anything except numbers were all refused.
 - **The short code used to link a device works once and runs out in 10 minutes.** Tested on 18 Nov 2026: a used code, a made-up code, a backdated code and a list of all codes were all refused.
 
-## Corrected (6)
+## Corrected (7)
+
+- **Step 5 told you to install PyRIT without naming a version.** Checked 27 Nov 2026: the newest PyRIT (1.2.1) stops Microsoft's notebooks at their first line; PyRIT 0.9.0 runs the Lab 1 notebook to the end. The install line now names 0.9.0. Details in `PROOF.md`.
 
 - **An earlier version sent you to Microsoft's own instructions to install the labs.** Following them on 18 Nov 2026, the build stopped with 404 Not Found: one step asks a retired download address for an update. Microsoft has an open report about it (issue 33, since September 2025). The app now links to a set-up guide that includes the fix.
 - **An earlier version used a 21-day course from SecurityElites as step 2.** Removed on 18 Nov 2026. It is new, has no outside reviews, its author uses a pen name, and its labs could not be tested. Microsoft's labs and courses and Gray Swan's sets take its place.

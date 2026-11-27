@@ -62,7 +62,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 1. Safety tag `before-scope-2` pushed before any change. Proof: `git ls-remote --tags origin before-scope-2` shows 0c60528 (27 Nov 2026).
 - [x] 2. Gap check done and Shad's 5 picks recorded. Proof: `SCOPE-2-GAPS.md`, "Shad's picks".
 - [x] 3. Plan approved before index.html, app.js, style.css or quizzes.js change. Proof: Shad picked "I agree, all 4 parts" on 27 Nov 2026 at about 10:50 Alberta (plan, Python split and 16-hour budget), with the app still at 0c60528.
-- [ ] 4. Step 5 proven: Microsoft's Lab 1 notebook run with the newest PyRIT; if it fails, the install line names the version that runs, and that run is in PROOF.md.
+- [x] 4. Step 5 proven: Microsoft's Lab 1 notebook run with the newest PyRIT; if it fails, the install line names the version that runs, and that run is in PROOF.md. Proof: PROOF.md, "Step 5: which PyRIT runs Microsoft's notebooks" (1.2.1 stops at line 1; 0.9.0 runs Lab 1 to the end against the real lab, 27 Nov 2026); box a1 step 4 now names 0.9.0.
 - [ ] 5. All 58 new boxes live in the planned order; `tools/app_test.py` walks all 107 boxes on the live site and fails to tick each new box without its proof.
 - [ ] 6. Every new quiz built by `tools/build_quizzes.py` from saved source text, every quote found word for word, every code question run.
 - [ ] 7. Review questions, the on-track card and Explain it back work at phone width and across two linked devices (`tools/sync_test.py`).
