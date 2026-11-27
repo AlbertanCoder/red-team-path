@@ -1922,6 +1922,11 @@
     if (union) {
       // Stamp every tick, from both sides, as newer than any earlier untick or "clear all" on either side.
       var top = Math.max(state.r, rr);
+      var rotAt = 0, rotBest = -1; // the rotation set last, on either side, before the times are evened out below
+      for (var q = 0; q < 21; q += 1) {
+        var seenAt = Math.max(state.m["rt" + q] > 0 ? state.m["rt" + q] : 0, rm["rt" + q] > 0 ? rm["rt" + q] : 0);
+        if (seenAt > rotAt) { rotAt = seenAt; rotBest = q; }
+      }
       Object.keys(rm).forEach(function (id) {
         if (KNOWN[id] && typeof rm[id] === "number" && rm[id] > 0 && !(state.m[id] > 0)) { state.m[id] = rm[id]; }
       });
@@ -1930,6 +1935,7 @@
         var other = typeof rm[id] === "number" ? Math.abs(rm[id]) : 0;
         state.m[id] = Math.max(state.m[id], rm[id] > 0 ? other : other + 1, top + 1);
       });
+      if (rotBest >= 0) { state.m["rt" + rotBest] = Math.max(state.m["rt" + rotBest], top + 2); }
       Object.keys(ry).forEach(function (k) {
         if (DAY_RE.test(k) && typeof ry[k] === "number" && !state.y[k]) { state.y[k] = ry[k]; }
       });
@@ -3797,7 +3803,10 @@
       var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateIn.value);
       if (!m) { rotStatus.textContent = "Pick a date first."; return; }
       var start = dayNo(new Date(+m[1], +m[2] - 1, +m[3]));
-      mark("rt" + (((start % 21) + 21) % 21), true);
+      var pick = "rt" + (((start % 21) + 21) % 21);
+      // Only one rotation mark stays ticked. An old one left ticked could win a tie after a backup is loaded or a device is first linked.
+      for (var ri = 0; ri < 21; ri += 1) { if ("rt" + ri !== pick && isDone("rt" + ri)) { mark("rt" + ri, false); } }
+      mark(pick, true);
       dateIn.value = "";
       render("rotation-save");
     });
@@ -3832,7 +3841,8 @@
     box.appendChild(h("div", { class: "btnrow" }, [clearAsk, confirmRow]));
   }
   function makeCode() {
-    var done = Object.keys(state.m).filter(isDone);
+    var rot = "rt" + rotationStart(); // only the rotation in force goes into the code, never an older setting
+    var done = Object.keys(state.m).filter(isDone).filter(function (id) { return !/^rt\d+$/.test(id) || id === rot; });
     return "RTP1." + window.btoa(JSON.stringify({ d: done, y: Object.keys(state.y), b: state.best }));
   }
   // Reads a backup code without changing anything. Returns what it holds, or null when it is not a code.
@@ -3853,7 +3863,8 @@
       var best = typeof p.b === "number" ? p.b : 0;
       clearAll();
       var now = state.r + 1;
-      p.d.forEach(function (id) { if (KNOWN[id]) { state.m[id] = now; } });
+      var rots = p.d.filter(function (id) { return /^rt\d+$/.test(id) && KNOWN[id]; });
+      p.d.forEach(function (id) { if (KNOWN[id] && (!/^rt\d+$/.test(id) || id === rots[rots.length - 1])) { state.m[id] = now; } });
       p.y.forEach(function (k) { if (DAY_RE.test(k)) { state.y[k] = now; } });
       state.best = best;
       save();

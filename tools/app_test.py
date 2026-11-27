@@ -834,6 +834,108 @@ with sync_playwright() as p:
     bp.wait_for_timeout(200)
     check("did not work" in bp.inner_text("#backup-status") and done_ids(bp) == ["v1"], "Scope 3: a bad code changes nothing and says so")
     bctx.close()
+
+    # Scope 3, fix 3 (audit B3): the rotation must not flip to an older setting when a backup is loaded or a device is first
+    # linked. Both stamp every mark with one time, and an old rotation mark left ticked used to win the tie.
+    def rotation_line(page):
+        page.evaluate("location.hash = '#menu'")
+        page.wait_for_selector("#rotation-status")
+        return page.inner_text("#rotation-status")
+
+    def rotations(page):
+        return sorted(k for k, v in ticks(page).items() if k.startswith("rt") and v > 0)
+
+    def blank(m, r=0):
+        return {"redTeamPath.v2": json.dumps({"m": m, "y": {}, "r": r, "best": 0, "theme": "dark", "open": {}, "test": False, "sync": "", "nolink": True})}
+
+    TWO_ROT = {"v1": T, "qz1": T, "rt3": T + 1000, "rt10": T + 2000}   # the rotation was set twice; rt10 is the one in force
+    rctx, rp = new_page(b, blank(TWO_ROT), start=False)
+    before = rotation_line(rp)
+    rp.click("#backup-fold summary")
+    rp.click("#backup-copy")
+    rp.click("#backup-load")
+    rp.wait_for_timeout(200)
+    rp.click("#backup-yes")
+    rp.wait_for_timeout(300)
+    check(rotation_line(rp) == before and rotations(rp) == ["rt10"], "Scope 3: loading your own backup keeps the rotation (%s)" % before)
+    rp.click("#backup-fold summary") if not rp.locator("#backup-code").is_visible() else None
+    rp.fill("#backup-code", "RTP1." + base64.b64encode(json.dumps({"d": ["v1", "rt3", "rt10"], "y": [], "b": 0}).encode()).decode())
+    rp.click("#backup-load")
+    rp.wait_for_timeout(200)
+    rp.click("#backup-yes")
+    rp.wait_for_timeout(300)
+    check(rotation_line(rp) == before and rotations(rp) == ["rt10"], "Scope 3: a backup made before this fix, holding two rotations, loads the one set last")
+    for day in ("2026-11-20", "2026-11-21"):
+        rp.fill("#rotation-date", day)
+        rp.click("#rotation-save")
+        rp.wait_for_timeout(200)
+    check(len(rotations(rp)) == 1, "Scope 3: saving a new rotation leaves exactly one rotation mark ticked (found %s)" % rotations(rp))
+    rctx.close()
+
+    # The same on a first link, with a pretend online store served by this test (the real store is never reached).
+    shelf = {"sync": {}, "pair": {}}
+
+    def pretend_store(route, request):
+        cors = {"access-control-allow-origin": "*", "access-control-allow-methods": "GET,PUT,PATCH,DELETE,OPTIONS", "access-control-allow-headers": "*", "content-type": "application/json"}
+        if request.method == "OPTIONS":
+            return route.fulfill(status=204, headers=cors)
+        if "event-stream" in (request.headers.get("accept") or ""):
+            return route.abort()
+        top, _, key = request.url.split("firebaseio.com/", 1)[1].split(".json")[0].partition("/")
+        body = json.loads(request.post_data) if request.post_data else None
+        out = None
+        if request.method == "GET":
+            out = shelf[top].get(key)
+        elif request.method == "PUT":
+            if top == "pair" and key in shelf["pair"]:
+                return route.fulfill(status=401, headers=cors, body=json.dumps({"error": "Permission denied"}))
+            if top == "pair":
+                body["t"] = T
+            shelf[top][key] = out = body
+        elif request.method == "PATCH":
+            rec = shelf[top].get(key) if isinstance(shelf[top].get(key), dict) else {}
+            for path, value in body.items():
+                node, parts = rec, path.split("/")
+                for part in parts[:-1]:
+                    node = node.setdefault(part, {})
+                node[parts[-1]] = value
+            shelf[top][key] = rec
+            out = body
+        elif request.method == "DELETE":
+            shelf[top].pop(key, None)
+        route.fulfill(status=200, headers=cors, body=json.dumps(out))
+
+    def store_device(saved):
+        ctx = b.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        ctx.route(STORE, pretend_store)
+        ctx.add_init_script("if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1'); var d = %s; Object.keys(d).forEach(function (k) { localStorage.setItem(k, d[k]); }); }" % json.dumps(saved))
+        page = ctx.new_page()
+        page.goto(base)
+        page.wait_for_selector("#top-title")
+        page.wait_for_timeout(300)
+        return ctx, page
+
+    pctx, phone = store_device(blank(TWO_ROT))                    # old progress, rotation corrected once
+    cctx, comp = store_device(blank({"t1": T + 5000}, T + 3000))  # pressed "clear all" after the phone's marks were made
+    before = rotation_line(phone)
+    phone.click("#link-start")
+    phone.wait_for_selector("#pair-code")
+    pin = phone.inner_text("#pair-code")
+    phone.wait_for_timeout(1000)
+    rotation_line(comp)
+    comp.fill("#pair-box", pin)
+    comp.click("#pair-btn")
+    comp.wait_for_timeout(1800)
+    phone.reload()
+    phone.wait_for_selector("#top-title")
+    phone.wait_for_timeout(1800)
+    comp.reload()
+    comp.wait_for_selector("#top-title")
+    comp.wait_for_timeout(1200)
+    check(ticks(comp).get("v1", 0) > 0 and ticks(phone).get("t1", 0) > 0, "Scope 3: first link (pretend store): ticks from both devices are on both")
+    check(rotation_line(phone) == before and rotation_line(comp) == before, "Scope 3: first link with a device that had cleared keeps the rotation set last (%s), on both devices" % before)
+    pctx.close()
+    cctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
