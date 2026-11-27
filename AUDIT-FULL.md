@@ -451,7 +451,7 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 
 ---
 
-## 8. Fix log (in progress: 9 of 25 done, 27 Nov 2026)
+## 8. Fix log (in progress: 10 of 25 done, paused 27 Nov 2026)
 
 Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/ship.sh` (local test, push, live file compared, live test). "Failed before" means the new checks were run against the live site before the change went out.
 
@@ -461,10 +461,11 @@ Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/
 4. **B4, unknown marks are kept; nothing can be ticked when the quiz file did not load.** Commit 5675cdf. 6 new checks, 4 failed before. Live: 368.
 5. **A2, the lab-proof checker stops refusing honest wins.** Commit bb92a4f. `tools/proof_test.js`: 109 cases (23 new, 21 fail on the old checker). The audit's attack cases: honest wins refused 26 to 12, cheats passing 37 to 31, none newly passing. Left: a file typed by hand in the after-reload shape still passes; 9 rarer honest cases are still refused (an injection whose result shares no word with it, a chat saved in the second before the lab finished writing its record, and similar: listed in `helpers/fix5-lab-proof.md`).
 6. **A1, A3, D1, C6, lab text.** Commit 7dd1af7. 5 new checks, all failed before. Live: 373. The GPT-4o date and the line to change; "download your chat before you stop the labs" on every required lab, in the guide and in the Stop script; auto-reload; OpenAI's own words on losing access; Lab 7 hint 2; Lab 10; pull request 69 in place of issue 33. Left, waiting on your answers: a "Moving on, not solved" button (Q5), a re-test on a newer model (Q1), rewording hints that give the move away (Q6).
+7. **A5, A11, A12, C3, C9 (Steps 1 to 6 rows), facts.** Commit ec1cb25. 8 new checks, all failed before. Live: 400. a1 names Python 3.10 to 3.13 and what to do on a newer one; a2 says the Lab 1 notebook sends one plain question and does not judge the reply; a3 gives the notebook's 8 comments, `use_tls=False`, the three OpenAI settings and a cost warning; p1 "Share link", no access code; b1 and b3 0DIN's two rules (two testing categories, Prompt Extraction N/A); b4 the HackerOne and Console accounts, the 100-word answers and no link field; g6 an ended prize contest; t29 the live Anthropic program. m0 was already right after fix 6. Left: a3 was not run to the end (costs money, Q7); the `.env` place for a3 comes from reading PyRIT 0.9.0's code, not from a run; g6 kept with a note until Q8.
 8. **A8, a real HackerOne address is accepted.** Commit b42c029. 6 new checks, 3 failed before. Live: 379. The example address, pages that are not a profile and the dead `www` form are now refused.
 9. **A9 and A10, the API-key check and box ap3's counting rule.** Commit 4363507. 8 new checks, 5 failed before. Live: 387.
 10. **A13, B6, C10, wording on screen.** Commit b199a51. 4 new checks and 1 changed, all 5 failed before. Live: 392. Course-box quizzes no longer say "video"; a missed review says "comes back in 24 hours" (it returns 24 hours after the miss, not the next morning); Settings names everything stored online; the Library gives 27 Nov for its later sources; the GitHub limit message says to switch to the phone's data. Left: the 5 review questions a day are still counted per device (B6), and the slow-clock edge (B6) is unchanged.
 
 Also done, not a fix yet: garak and PyRIT were run for real on free local models on this PC (decision 1). Both worked with no key. The exact steps are in `helpers/real-runs.md` in the audit folder and go into boxes ag4 and ag5 at fix 17. One line of finding A6 was corrected from that run.
 
-Not started: fixes 7 and 11 to 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
+Not started: fixes 11 to 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
