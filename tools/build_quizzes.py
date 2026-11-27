@@ -12,7 +12,7 @@ Box questions (<box id>.json, for example fc1.json, checked against sources/<box
   - "where" names a lesson in the saved source; a recall or apply question's quote is in that lesson word for word
   - a code question's snippet was run here: "prints" means Python printed exactly the right option and none of the others;
     "raises" means it stopped with an error whose name is in the right option and in no other option;
-    "bug" (spot the bug) needs a "fixed" version;
+    "bug" (spot the bug) needs a "fixed" version; "lang": "bash" runs a shell question in Git Bash instead of Python;
     a "fixed" version, if given, must run and print "expect", while the snippet as shown must not
   - their hint does not give the right answer away
 """
@@ -52,15 +52,25 @@ def lessons(text):
     return out
 
 
-def run_py(code):
+# Shell questions run in Git Bash, named by its full path so Windows never starts WSL's bash instead.
+GIT_BASH = pathlib.Path("C:/Program Files/Git/bin/bash.exe")
+
+
+def run_py(code, lang="python"):
     """Runs a snippet in a fresh, empty folder. Returns (exit code, what it printed, the name of the error it stopped with)."""
+    if lang == "bash":
+        if not GIT_BASH.exists():
+            return 1, "", "NoGitBash"
+        cmd = [str(GIT_BASH), "--noprofile", "--norc", "-c", code]
+    else:
+        cmd = [sys.executable, "-I", "-c", code]
     with tempfile.TemporaryDirectory() as d:
         try:
-            r = subprocess.run([sys.executable, "-I", "-c", code], capture_output=True, text=True, timeout=10, cwd=d)
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=10, cwd=d)
         except subprocess.TimeoutExpired:
             return 1, "", "Timeout"
     last = (r.stderr.strip().splitlines() or [""])[-1]
-    m = re.match(r"(\w+(?:Error|Exception|Interrupt|Exit))\b", last)
+    m = re.match(r"(?:[\w.]+\.)?(\w+(?:Error|Exception|Interrupt|Exit))\b", last)  # json.decoder.JSONDecodeError -> JSONDecodeError
     return r.returncode, r.stdout.rstrip("\n"), m.group(1) if m else ""
 
 
@@ -90,7 +100,8 @@ def check_box(box, qs, lessons_by_title, problems):
                 bad.append("quote not found in the lesson '%s'" % where[:50])
         if kind == "code" and not bad:
             code, check = q.get("code", ""), q.get("check")
-            rc, out, err = run_py(code)
+            lang = q.get("lang", "python")
+            rc, out, err = run_py(code, lang)
             right = opts[q["answer"]].strip()
             if check == "prints":
                 if rc != 0:
@@ -110,7 +121,7 @@ def check_box(box, qs, lessons_by_title, problems):
             else:
                 bad.append("a code question needs check: prints, raises or bug")
             if not bad and q.get("fixed") is not None:
-                frc, fout, ferr = run_py(q["fixed"])
+                frc, fout, ferr = run_py(q["fixed"], lang)
                 if frc != 0 or fout.strip() != str(q.get("expect", "")).strip():
                     bad.append("the fixed version does not print what it should (%s)" % (ferr or repr(fout[:40])))
                 elif rc == 0 and out.strip() == str(q.get("expect", "")).strip():
@@ -125,6 +136,8 @@ def check_box(box, qs, lessons_by_title, problems):
             k = {"q": q["q"], "options": opts, "answer": q["answer"], "kind": kind, "hint": q["hint"], "where": where, "url": lessons_by_title[where][0]}
             if q.get("code"):
                 k["code"] = q["code"]
+            if q.get("setup"):
+                k["setup"] = q["setup"]
             kept.append(k)
     return kept
 

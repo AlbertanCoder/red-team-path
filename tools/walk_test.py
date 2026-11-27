@@ -1,7 +1,7 @@
 """Walk-through of the LIVE site at phone size, for the things tools/app_test.py does not cover:
 each of the 10 videos opens its player inside the app, and every box that has an Open button points at a real address.
 Usage: python tools/walk_test.py https://albertancoder.github.io/red-team-path/
-(tools/app_test.py already taps through all 60 boxes in order and opens all 12 lab pages. tools/linkcheck.py opens every link.)
+(tools/app_test.py already taps through all 74 boxes in order and opens all 12 lab pages. tools/linkcheck.py opens every link.)
 """
 import re
 import sys
@@ -48,7 +48,7 @@ with sync_playwright() as p:
     page.click("#path-btn")
     boxes = page.evaluate("Array.from(document.querySelectorAll('#sheet .prow')).map(function (r) { return r.id; }).filter(function (i) { return i.indexOf('row-') === 0; }).map(function (i) { return i.slice(4); })")
     page.click("#sheet-close")
-    check(len(boxes) == 69, "the Path list holds all 69 boxes (60 required and 9 optional)")
+    check(len(boxes) == 83, "the Path list holds all 83 boxes (74 required and 9 optional)")
     opened = 0
     for box in boxes:
         if re.match(r"^v\d+$", box) or (re.match(r"^m\d+$", box) and box != "m0"):

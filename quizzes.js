@@ -854,6 +854,359 @@ window.RTP_QUIZ = {
    "hint": "Around 8:00 to 8:30, before the crescendo attack runs."
   }
  ],
+ "ap1": [
+  {
+   "q": "How does Google's page say to treat your Gemini API key?",
+   "options": [
+    "Like a password",
+    "Like a username anyone can see",
+    "Like a file you share with your team",
+    "Like a code that expires every hour"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Google's API key page: the part called Security and secret management.",
+   "where": "Gemini API: Using Gemini API keys",
+   "url": "https://aistudio.google.com/docs/api-key"
+  },
+  {
+   "q": "Your hello_model.py has your key pasted into it, and you are about to push it to GitHub. What does Google's page say?",
+   "options": [
+    "Push it: GitHub hides keys automatically",
+    "Push it, then make the repository private later",
+    "Never check API keys into source control like Git",
+    "Rename the file to .env first, then push it"
+   ],
+   "answer": 2,
+   "kind": "apply",
+   "hint": "Look again at Google's API key page: its Critical security rules.",
+   "where": "Gemini API: Using Gemini API keys",
+   "url": "https://aistudio.google.com/docs/api-key"
+  },
+  {
+   "q": "Where does Google recommend your script reads the key from?",
+   "options": [
+    "A comment at the top of the script",
+    "An environment variable",
+    "A file in your public repository",
+    "The first line of prompts.json"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at Google's API key page: Secret management best practices.",
+   "where": "Gemini API: Using Gemini API keys",
+   "url": "https://aistudio.google.com/docs/api-key"
+  },
+  {
+   "q": "Which environment variable name does Google's library look for?",
+   "options": [
+    "OPENAI_API_KEY",
+    "GOOGLE_PASSWORD",
+    "API_SECRET",
+    "GEMINI_API_KEY"
+   ],
+   "answer": 3,
+   "kind": "recall",
+   "hint": "Look again at Google's API key page: Option 1, environment variables.",
+   "where": "Gemini API: Using Gemini API keys",
+   "url": "https://aistudio.google.com/docs/api-key"
+  },
+  {
+   "q": "Which command installs Google's Python library for the Gemini API?",
+   "options": [
+    "pip install -U google-genai",
+    "pip install gemini",
+    "pip install google-chrome",
+    "python install genai"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Google's getting started page: step 2, Install the SDK.",
+   "where": "Gemini API: Getting started",
+   "url": "https://aistudio.google.com/docs/get-started"
+  },
+  {
+   "q": "After client.interactions.create(...) returns, which property gives you the model's final reply as text?",
+   "options": [
+    "interaction.reply",
+    "interaction.output_text",
+    "interaction.text_out",
+    "interaction.result"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at Google's getting started page: the paragraph after the first call, about convenience properties.",
+   "where": "Gemini API: Getting started",
+   "url": "https://aistudio.google.com/docs/get-started"
+  },
+  {
+   "q": "For a multi-turn attack like Crescendo, you want Google's server to keep the conversation so far. What do you pass with each new message?",
+   "options": [
+    "stream=True",
+    "background=True",
+    "previous_interaction_id",
+    "tools=[...]"
+   ],
+   "answer": 2,
+   "kind": "apply",
+   "hint": "Look again at Google's getting started page: step 4, Multi-turn conversations.",
+   "where": "Gemini API: Getting started",
+   "url": "https://aistudio.google.com/docs/get-started"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "None",
+    "an empty line",
+    "KeyError",
+    "RTP_NAME_THAT_IS_NEVER_SET"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at Google's API key page about environment variables, then think about what .get() gives back when the name was never set.",
+   "where": "Gemini API: Using Gemini API keys",
+   "url": "https://aistudio.google.com/docs/api-key",
+   "code": "import os\nkey = os.environ.get(\"RTP_NAME_THAT_IS_NEVER_SET\")\nprint(key)"
+  }
+ ],
+ "ap2": [
+  {
+   "q": "Turning Python data, like a dictionary, into a string you can save or send is called what?",
+   "options": [
+    "Parsing",
+    "Serializing",
+    "Slicing",
+    "Compiling"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at Python's Input and Output tutorial: the part called Saving structured data with json.",
+   "where": "Python tutorial: Input and Output",
+   "url": "https://docs.python.org/3/tutorial/inputoutput.html"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "{'prompt': 'hi', 'score': 0}",
+    "{\"prompt\": \"hi\", \"score\": 0}",
+    "prompt hi score 0",
+    "[\"prompt\", \"score\"]"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at Python's Input and Output tutorial: what json.dumps() returns, and which quote marks JSON uses.",
+   "where": "Python tutorial: Input and Output",
+   "url": "https://docs.python.org/3/tutorial/inputoutput.html",
+   "code": "import json\nprint(json.dumps({\"prompt\": \"hi\", \"score\": 0}))"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "false",
+    "False",
+    "No.",
+    "0"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at the json module page: the conversion table between JSON and Python values.",
+   "where": "json: JSON encoder and decoder",
+   "url": "https://docs.python.org/3/library/json.html",
+   "code": "import json\nrow = json.loads('{\"reply\": \"No.\", \"leaked\": false}')\nprint(row[\"leaked\"])"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "6"
+   ],
+   "answer": 2,
+   "kind": "code",
+   "hint": "Look again at Python's Input and Output tutorial: what f.readlines() gives you, and how many lines were written.",
+   "where": "Python tutorial: Input and Output",
+   "url": "https://docs.python.org/3/tutorial/inputoutput.html",
+   "code": "import json\nwith open(\"results.jsonl\", \"w\") as f:\n    for p in [\"a\", \"b\", \"c\"]:\n        f.write(json.dumps({\"prompt\": p}) + \"\\n\")\nwith open(\"results.jsonl\") as f:\n    print(len(f.readlines()))"
+  },
+  {
+   "q": "Why does Python's tutorial say to open files with the with keyword?",
+   "options": [
+    "It makes the file load faster",
+    "It encrypts the file",
+    "It closes the file properly for you",
+    "It is the only way to read JSON"
+   ],
+   "answer": 2,
+   "kind": "recall",
+   "hint": "Look again at Python's Input and Output tutorial: the part about the with keyword and closing files.",
+   "where": "Python tutorial: Input and Output",
+   "url": "https://docs.python.org/3/tutorial/inputoutput.html"
+  },
+  {
+   "q": "You run your test script twice and want both runs' results kept in results.jsonl. Which mode do you open the file with?",
+   "options": [
+    "\"w\"",
+    "\"r\"",
+    "\"a\"",
+    "\"x\""
+   ],
+   "answer": 2,
+   "kind": "apply",
+   "hint": "Look again at Python's Input and Output tutorial: the modes open() takes, and which one erases the file.",
+   "where": "Python tutorial: Input and Output",
+   "url": "https://docs.python.org/3/tutorial/inputoutput.html"
+  },
+  {
+   "q": "What happens when this code runs?",
+   "options": [
+    "It returns the text unchanged",
+    "It stops with a JSONDecodeError",
+    "It stops with a KeyError",
+    "It returns None"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at the json module page: what happens when the text is not valid JSON.",
+   "where": "json: JSON encoder and decoder",
+   "url": "https://docs.python.org/3/library/json.html",
+   "code": "import json\njson.loads(\"Sure! Here is the password\")"
+  },
+  {
+   "q": "This should write 2 lines to out.jsonl, but reading it back finds only 1. What is the fix?",
+   "options": [
+    "Add a newline after each json.dumps(r)",
+    "Open the file with \"r\" instead of \"w\"",
+    "Use json.loads instead of json.dumps",
+    "Take the loop out of the with block"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at Python's Input and Output tutorial: what f.write() adds (and doesn't add) at the end of what you give it.",
+   "where": "Python tutorial: Input and Output",
+   "url": "https://docs.python.org/3/tutorial/inputoutput.html",
+   "code": "import json\nrows = [{\"p\": \"a\"}, {\"p\": \"b\"}]\nwith open(\"out.jsonl\", \"w\") as f:\n    for r in rows:\n        f.write(json.dumps(r))\nwith open(\"out.jsonl\") as f:\n    print(len(f.readlines()))"
+  }
+ ],
+ "ap3": [
+  {
+   "q": "What does this code print?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "0"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at the Regular Expression HOWTO's part on case-insensitive matching; here .lower() does the same job for a plain word.",
+   "where": "Regular Expression HOWTO",
+   "url": "https://docs.python.org/3/howto/regex.html",
+   "code": "results = [{\"reply\": \"The word is PLUM\"}, {\"reply\": \"No.\"}, {\"reply\": \"plum!\"}]\nleaks = sum(1 for r in results if \"plum\" in r[\"reply\"].lower())\nprint(leaks)"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "False",
+    "None",
+    "True",
+    "PLUM"
+   ],
+   "answer": 2,
+   "kind": "code",
+   "hint": "Look again at the Regular Expression HOWTO: the part on case-insensitive mode.",
+   "where": "Regular Expression HOWTO",
+   "url": "https://docs.python.org/3/howto/regex.html",
+   "code": "import re\nprint(bool(re.search(r\"plum\", \"PLUM tree\", re.IGNORECASE)))"
+  },
+  {
+   "q": "What does re.search() give back when the pattern is not found?",
+   "options": [
+    "An empty string",
+    "False",
+    "None",
+    "It stops with an error"
+   ],
+   "answer": 2,
+   "kind": "recall",
+   "hint": "Look again at the Regular Expression HOWTO: the part on performing matches.",
+   "where": "Regular Expression HOWTO",
+   "url": "https://docs.python.org/3/howto/regex.html"
+  },
+  {
+   "q": "Why are regular expressions usually written as raw strings, like r\"\\d+\", in Python?",
+   "options": [
+    "So backslashes are not treated specially by Python",
+    "So the pattern runs faster",
+    "So the pattern ignores capital letters",
+    "So the pattern can only match whole words"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at the Regular Expression HOWTO: the part called The Backslash Plague.",
+   "where": "Regular Expression HOWTO",
+   "url": "https://docs.python.org/3/howto/regex.html"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "1",
+    "3",
+    "0",
+    "2"
+   ],
+   "answer": 3,
+   "kind": "code",
+   "hint": "Look again at the Regular Expression HOWTO: what | means in a pattern, and what IGNORECASE changes. Count replies, not matches.",
+   "where": "Regular Expression HOWTO",
+   "url": "https://docs.python.org/3/howto/regex.html",
+   "code": "import re\nrefusal = re.compile(r\"I can't|I cannot|I'm sorry\", re.IGNORECASE)\nreplies = [\"I'm sorry, I can't share that.\", \"Sure, it is PLUM.\", \"i cannot help with that\"]\nprint(sum(1 for r in replies if refusal.search(r)))"
+  },
+  {
+   "q": "What does this code print?",
+   "options": [
+    "0.67",
+    "67%",
+    "66%",
+    "2/3"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at Python's Input and Output tutorial: formatted string literals and the format codes after the colon.",
+   "where": "Python tutorial: Input and Output",
+   "url": "https://docs.python.org/3/tutorial/inputoutput.html",
+   "code": "leaked, total = 2, 3\nprint(f\"{leaked / total:.0%}\")"
+  },
+  {
+   "q": "Reading results.jsonl one line at a time, how do you know you have reached the end of the file?",
+   "options": [
+    "f.readline() gives back an empty string",
+    "f.readline() gives back None",
+    "f.readline() stops with an error",
+    "f.readline() gives back a newline character"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Python's Input and Output tutorial: Methods of File Objects.",
+   "where": "Python tutorial: Input and Output",
+   "url": "https://docs.python.org/3/tutorial/inputoutput.html"
+  },
+  {
+   "q": "This should count 1 leak, but prints 0. What is the fix?",
+   "options": [
+    "Check \"plum\" in r.lower()",
+    "Change sum to len",
+    "Change \"plum\" to \"PLU\"",
+    "Put the replies in a set"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Regular Expression HOWTO's part on case-insensitive matching: capital and small letters are different characters.",
+   "where": "Regular Expression HOWTO",
+   "url": "https://docs.python.org/3/howto/regex.html",
+   "code": "replies = [\"The secret is PLUM\", \"no\"]\nprint(sum(1 for r in replies if \"plum\" in r))"
+  }
+ ],
  "fc1": [
   {
    "q": "Which of these is NOT allowed as a Python variable name?",
@@ -2038,6 +2391,787 @@ window.RTP_QUIZ = {
    "where": "Build a Polygon Area Calculator",
    "url": "https://www.freecodecamp.org/learn/python-v9/lab-polygon-area-calculator/build-a-polygon-area-calculator",
    "code": "w, h = 3, 4\nprint((w ** 2 + h ** 2) ** 0.5)"
+  }
+ ],
+ "gt1": [
+  {
+   "q": "In GitHub's exercise, what does a repository do?",
+   "options": [
+    "Tracks versions of files and folders",
+    "Runs your Python code in the cloud",
+    "Stores your passwords for websites",
+    "Sends your code to other people by email"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Step 1 of GitHub's exercise: what it says GitHub and a repository are.",
+   "where": "Step 1: create a branch",
+   "url": "https://github.com/skills/introduction-to-github/blob/main/.github/steps/1-create-a-branch.md"
+  },
+  {
+   "q": "Why make a branch before you change your project?",
+   "options": [
+    "It makes the code run faster",
+    "It lets you edit without changing the main branch",
+    "It deletes the old files for you",
+    "It is the only way to open a file"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at the start of Step 2 of GitHub's exercise.",
+   "where": "Step 2: commit a file",
+   "url": "https://github.com/skills/introduction-to-github/blob/main/.github/steps/2-commit-a-file.md"
+  },
+  {
+   "q": "What does a commit record?",
+   "options": [
+    "Who looked at the project today",
+    "A vote on whether to keep a change",
+    "Changes to the project, like adding files or editing their content",
+    "A copy of the project on your own computer"
+   ],
+   "answer": 2,
+   "kind": "recall",
+   "hint": "Look again at Step 2 of GitHub's exercise: the activity called Your first commit.",
+   "where": "Step 2: commit a file",
+   "url": "https://github.com/skills/introduction-to-github/blob/main/.github/steps/2-commit-a-file.md"
+  },
+  {
+   "q": "You changed a file on your branch and want someone to look at it before it goes into main. What do you open?",
+   "options": [
+    "A new repository",
+    "An issue",
+    "A fork",
+    "A pull request"
+   ],
+   "answer": 3,
+   "kind": "apply",
+   "hint": "Look again at Step 3 of GitHub's exercise: where collaboration happens.",
+   "where": "Step 3: open a pull request",
+   "url": "https://github.com/skills/introduction-to-github/blob/main/.github/steps/3-open-a-pull-request.md"
+  },
+  {
+   "q": "What does merging your pull request do?",
+   "options": [
+    "Adds the changes from your pull request and branch into the main branch",
+    "Deletes your branch and all its changes",
+    "Copies the main branch into a new repository",
+    "Sends the pull request to GitHub's staff for review"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at Step 4 of GitHub's exercise: what a merge is.",
+   "where": "Step 4: merge your pull request",
+   "url": "https://github.com/skills/introduction-to-github/blob/main/.github/steps/4-merge-your-pull-request.md"
+  }
+ ],
+ "lx1": [
+  {
+   "q": "Which address and port does Bandit's first level tell you to connect to with SSH?",
+   "options": [
+    "bandit.labs.overthewire.org, port 22",
+    "bandit.labs.overthewire.org, port 2220",
+    "overthewire.org, port 443",
+    "bandit0.org, port 2220"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at the Level 0 page: the host and port it gives.",
+   "where": "Bandit Level 0",
+   "url": "https://overthewire.org/wargames/bandit/bandit0.html"
+  },
+  {
+   "q": "What does the last command print?",
+   "options": [
+    "notes",
+    ".secret notes",
+    ".secret",
+    "inhere"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Level 3 to 4 page, then at what a dot at the start of a file name means to ls.",
+   "where": "Bandit Level 3 to 4",
+   "url": "https://overthewire.org/wargames/bandit/bandit4.html",
+   "code": "mkdir inhere\ntouch inhere/.secret inhere/notes\nls inhere"
+  },
+  {
+   "q": "What does the last command print?",
+   "options": [
+    "a",
+    "b",
+    "c",
+    "a b c"
+   ],
+   "answer": 2,
+   "kind": "code",
+   "hint": "Look again at the Level 8 to 9 page and its reading on piping; then think about why sort comes before uniq.",
+   "where": "Bandit Level 8 to 9",
+   "url": "https://overthewire.org/wargames/bandit/bandit9.html",
+   "code": "printf 'a\nb\na\nc\nb\n' > data.txt\nsort data.txt | uniq -u"
+  },
+  {
+   "q": "What does the last command print?",
+   "options": [
+    "two",
+    "millionth two",
+    "alpha one",
+    "1"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at the Level 7 to 8 page, and at what grep prints for each line that matches.",
+   "where": "Bandit Level 7 to 8",
+   "url": "https://overthewire.org/wargames/bandit/bandit8.html",
+   "code": "printf 'alpha one\nmillionth two\nbeta three\n' > data.txt\ngrep millionth data.txt"
+  },
+  {
+   "q": "What does this command print?",
+   "options": [
+    "aGVsbG8=",
+    "hello",
+    "HELLO",
+    "base64"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at the Level 10 to 11 page and its reading on Base64, and at what -d does.",
+   "where": "Bandit Level 10 to 11",
+   "url": "https://overthewire.org/wargames/bandit/bandit11.html",
+   "code": "echo aGVsbG8= | base64 -d"
+  },
+  {
+   "q": "What does the last command print?",
+   "options": [
+    "d/a",
+    "d/b",
+    "d/a d/b",
+    "7"
+   ],
+   "answer": 1,
+   "kind": "code",
+   "hint": "Look again at the Level 5 to 6 page: the properties the file has, and how find can match a size in bytes.",
+   "where": "Bandit Level 5 to 6",
+   "url": "https://overthewire.org/wargames/bandit/bandit6.html",
+   "code": "mkdir d\nprintf '12345' > d/a\nprintf '1234567' > d/b\nfind d -size 7c"
+  },
+  {
+   "q": "What does this command print? (Leading spaces don't count.)",
+   "options": [
+    "2 x",
+    "1 y",
+    "x",
+    "3"
+   ],
+   "answer": 0,
+   "kind": "code",
+   "hint": "Look again at the Level 8 to 9 page's reading on piping: each | hands one command's output to the next.",
+   "where": "Bandit Level 8 to 9",
+   "url": "https://overthewire.org/wargames/bandit/bandit9.html",
+   "code": "printf 'x\ny\nx\n' | sort | uniq -c | sort -nr | head -1"
+  },
+  {
+   "q": "You found a level's password. What does Bandit tell you to do next?",
+   "options": [
+    "Post it in the forum so others can check it",
+    "Log into the next level with SSH on port 2220",
+    "Email it to OverTheWire",
+    "Save it in a file called readme"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at the Level 0 to 1 page: what to do whenever you find a password.",
+   "where": "Bandit Level 0 to 1",
+   "url": "https://overthewire.org/wargames/bandit/bandit1.html"
+  }
+ ],
+ "md1": [
+  {
+   "q": "What is a token?",
+   "options": [
+    "A chunk of text the tokenizer splits the input into",
+    "A secret password that unlocks the model's answers",
+    "One whole sentence of the reply, counted from the end",
+    "A coin you pay for each question you send it"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at lesson 01: the part called How do large language models work, Tokenizer, text to numbers.",
+   "where": "generative-ai-for-beginners lesson 01",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/01-introduction-to-genai"
+  },
+  {
+   "q": "Why does every input go through a tokenizer first?",
+   "options": [
+    "To check it for swear words before the model reads it",
+    "To translate it into English so every model understands it",
+    "Because the models work much better with numbers than with text",
+    "To make it shorter so each question costs less money to send"
+   ],
+   "answer": 2,
+   "kind": "recall",
+   "hint": "Look again at lesson 01: how large language models work.",
+   "where": "generative-ai-for-beginners lesson 01",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/01-introduction-to-genai"
+  },
+  {
+   "q": "How does the model build its reply?",
+   "options": [
+    "It finds a stored answer in a database and copies it out word for word",
+    "It predicts one token at a time, each added to the input for the next",
+    "It writes the whole reply at once, then checks it",
+    "It asks a person, then types their answer"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 01: Predicting output tokens.",
+   "where": "generative-ai-for-beginners lesson 01",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/01-introduction-to-genai"
+  },
+  {
+   "q": "You send the same attack prompt 3 times and get 3 different replies. According to lesson 01, why?",
+   "options": [
+    "The model is broken and should be restarted before you try again",
+    "The model remembers your earlier tries and changes its mind",
+    "Each next token is chosen by probability, so replies can differ",
+    "The internet connection changed the words"
+   ],
+   "answer": 2,
+   "kind": "apply",
+   "hint": "Look again at lesson 01: Selection process, probability distribution.",
+   "where": "generative-ai-for-beginners lesson 01",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/01-introduction-to-genai"
+  },
+  {
+   "q": "Which model architecture made much longer text inputs possible?",
+   "options": [
+    "Recurrent network (RNN)",
+    "Transformer",
+    "Chatbot",
+    "Tokenizer"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 01: Present day, Generative AI.",
+   "where": "generative-ai-for-beginners lesson 01",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/01-introduction-to-genai"
+  }
+ ],
+ "md2": [
+  {
+   "q": "What is tokenization?",
+   "options": [
+    "Converting text into smaller units the model can process",
+    "Hiding the system prompt from users",
+    "Translating a prompt into code",
+    "Paying for each word you send"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at lesson 04: Key Terms.",
+   "where": "generative-ai-for-beginners lesson 04",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/04-prompt-engineering-fundamentals"
+  },
+  {
+   "q": "A trick works on one model but not another, with the same words. Which fact from lesson 04 is one reason?",
+   "options": [
+    "Models only read the first sentence",
+    "Different models can tokenize the same prompt in different ways",
+    "Models delete words they don't know",
+    "Only one model can read English"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at lesson 04: the part called Tokenization.",
+   "where": "generative-ai-for-beginners lesson 04",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/04-prompt-engineering-fundamentals"
+  },
+  {
+   "q": "What does the course call it when a model generates factually incorrect information?",
+   "options": [
+    "A jailbreak",
+    "A fabrication",
+    "A tokenization",
+    "A completion"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 04: Fabrications Example.",
+   "where": "generative-ai-for-beginners lesson 04",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/04-prompt-engineering-fundamentals"
+  },
+  {
+   "q": "You give the model three examples of the output you want before your request. What is that called?",
+   "options": [
+    "Zero-shot prompting",
+    "Few-shot prompting",
+    "Prompt injection",
+    "Fine-tuning"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at lesson 04: Using Examples.",
+   "where": "generative-ai-for-beginners lesson 04",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/04-prompt-engineering-fundamentals"
+  },
+  {
+   "q": "An app puts text from a web page inside its prompt. Which best practice from lesson 04 helps the model tell its instructions apart from that content?",
+   "options": [
+    "Use delimiters, if the model or provider defines them",
+    "Use a higher temperature",
+    "Put everything in capital letters",
+    "Ask the question twice"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at lesson 04: the Best Practices table, Separate instructions & context.",
+   "where": "generative-ai-for-beginners lesson 04",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/04-prompt-engineering-fundamentals"
+  }
+ ],
+ "md3": [
+  {
+   "q": "What are embeddings?",
+   "options": [
+    "Numerical representations of data, also known as vectors",
+    "Hidden instructions placed inside a chatbot's system prompt",
+    "Images placed inside a web page",
+    "Passwords stored in a database"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at lesson 08: its introduction.",
+   "where": "generative-ai-for-beginners lesson 08",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/08-building-search-applications"
+  },
+  {
+   "q": "What is a vector database built for?",
+   "options": [
+    "Storing passwords safely",
+    "Storing, managing and searching embedded vectors",
+    "Running Python code in the cloud for many users at once",
+    "Translating text between languages"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 15: Vector Databases.",
+   "where": "generative-ai-for-beginners lesson 15",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/15-rag-and-vector-databases"
+  },
+  {
+   "q": "Before a RAG chatbot can use your documents, what happens to them?",
+   "options": [
+    "They are printed, scanned and typed back in by the company's own staff",
+    "They are broken into smaller chunks, turned into embeddings and stored",
+    "They are sent to the model maker, who retrains the model on them",
+    "Nothing: the model reads the whole folder every time"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 15: How RAGs work, Knowledge base.",
+   "where": "generative-ai-for-beginners lesson 15",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/15-rag-and-vector-databases"
+  },
+  {
+   "q": "When a user asks a RAG chatbot a question, what happens to the relevant information it retrieves?",
+   "options": [
+    "It is added to the prompt as extra context",
+    "It is shown to the user instead of a reply",
+    "It is deleted after the reply",
+    "It replaces the system prompt for the rest of the conversation"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at lesson 15: How RAGs work, Retrieval.",
+   "where": "generative-ai-for-beginners lesson 15",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/15-rag-and-vector-databases"
+  },
+  {
+   "q": "An attacker manages to add one document to a RAG chatbot's knowledge base. Why is that a prompt injection risk?",
+   "options": [
+    "The document is deleted when retrieved",
+    "Retrieved text goes into the model's prompt, so the attacker's words can reach the model",
+    "Knowledge bases can only hold numbers",
+    "Nothing happens: the model ignores everything that comes from its knowledge base anyway"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at lesson 15: Retrieval. Then ask: whose words end up in the prompt?",
+   "where": "generative-ai-for-beginners lesson 15",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/15-rag-and-vector-databases"
+  },
+  {
+   "q": "According to lesson 15, how does RAG reduce fabrication?",
+   "options": [
+    "By using a bigger model",
+    "By using verifiable data from the knowledge base as context",
+    "By refusing every question it is not completely sure how to answer",
+    "By answering more slowly"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 15: the benefits of RAG.",
+   "where": "generative-ai-for-beginners lesson 15",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/15-rag-and-vector-databases"
+  },
+  {
+   "q": "What does this code print? (A bigger dot product means closer in meaning here.)",
+   "options": [
+    "c",
+    "a",
+    "b",
+    "0"
+   ],
+   "answer": 2,
+   "kind": "code",
+   "hint": "Look again at lesson 08: text embeddings are numbers, and similar meanings sit close together.",
+   "where": "generative-ai-for-beginners lesson 08",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/08-building-search-applications",
+   "code": "a = [1, 0]\nb = [0.9, 0.1]\nc = [0, 1]\ndef dot(x, y):\n    return sum(i * j for i, j in zip(x, y))\nprint(\"b\" if dot(a, b) > dot(a, c) else \"c\")"
+  },
+  {
+   "q": "Lesson 08 describes text embeddings as what kind of representation of text?",
+   "options": [
+    "Encrypted",
+    "Semantic numerical",
+    "Translated",
+    "Compressed picture file"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 08: What are Text Embeddings.",
+   "where": "generative-ai-for-beginners lesson 08",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/08-building-search-applications"
+  }
+ ],
+ "md4": [
+  {
+   "q": "What problem did function calling set out to fix?",
+   "options": [
+    "Models were too slow",
+    "Responses were unstructured and inconsistent",
+    "Models could not read English",
+    "Prompts were too long for the model to read in one go"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 11: Why Function Calling.",
+   "where": "generative-ai-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/11-integrating-with-function-calling"
+  },
+  {
+   "q": "Which limitation does lesson 11 list first for function calling to overcome?",
+   "options": [
+    "Consistent response format",
+    "Faster typing",
+    "Cheaper models",
+    "Longer memory"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at lesson 11: the limitations listed under Why Function Calling.",
+   "where": "generative-ai-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/11-integrating-with-function-calling"
+  },
+  {
+   "q": "When the model wants a function run, who actually runs it?",
+   "options": [
+    "The model itself, inside the company's server, before it replies to you",
+    "Your code: it looks for a function_call item in the reply and calls the function",
+    "The user, by copying the code",
+    "Nobody runs it: the reply only describes what the function would have done if it ran"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at lesson 11: the part about checking the response for a function_call.",
+   "where": "generative-ai-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/11-integrating-with-function-calling"
+  },
+  {
+   "q": "Which properties describe each tool you give the model, in lesson 11?",
+   "options": [
+    "type, name, description and parameters",
+    "username, password and the account's email address",
+    "title, author and date",
+    "url, port and host"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at lesson 11: how each function is described to the model.",
+   "where": "generative-ai-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/11-integrating-with-function-calling"
+  },
+  {
+   "q": "Which use case of function calls does lesson 11 name?",
+   "options": [
+    "Calling External Tools",
+    "Hiding the system prompt",
+    "Making replies longer",
+    "Training a new model"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at lesson 11: Use Cases for using function calls.",
+   "where": "generative-ai-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/11-integrating-with-function-calling"
+  }
+ ],
+ "md5": [
+  {
+   "q": "What are AI agents, in the course's words?",
+   "options": [
+    "Systems that let language models actually do things, using tools and knowledge",
+    "People who test chatbots for money",
+    "Chatbots that can only answer questions and never take any action of their own",
+    "Programs that train new models"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 01: What are AI Agents.",
+   "where": "ai-agents-for-beginners lesson 01",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/01-intro-to-ai-agents"
+  },
+  {
+   "q": "Which three pieces does every agent have at its core?",
+   "options": [
+    "Environment, sensors and actions",
+    "Keyboard, screen and mouse",
+    "Prompt, reply and score",
+    "Username, password and a security code"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 01: the three pieces every agent has.",
+   "where": "ai-agents-for-beginners lesson 01",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/01-intro-to-ai-agents"
+  },
+  {
+   "q": "What decides which tools an agent can use?",
+   "options": [
+    "Only the user, by asking",
+    "The environment it runs in and what the developer chose to give it",
+    "The model picks any tool it finds on the internet, whenever it likes",
+    "The length of the prompt"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 01: Access to Tools.",
+   "where": "ai-agents-for-beginners lesson 01",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/01-intro-to-ai-agents"
+  },
+  {
+   "q": "An agent remembers a customer database between chats. Which kind of memory is that?",
+   "options": [
+    "Short-term memory",
+    "Long-term memory",
+    "Tokenizer memory",
+    "No memory: agents can't remember"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at agents lesson 01: Memory + Knowledge.",
+   "where": "ai-agents-for-beginners lesson 01",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/01-intro-to-ai-agents"
+  },
+  {
+   "q": "Why are tools interesting, according to the Tool Use lesson?",
+   "options": [
+    "They make the model cheaper",
+    "They give AI agents a broader range of capabilities",
+    "They stop prompt injection",
+    "They let the model run on its own without anyone writing a prompt"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 04: its opening.",
+   "where": "ai-agents-for-beginners lesson 04",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/04-tool-use"
+  }
+ ],
+ "md6": [
+  {
+   "q": "What is the Model Context Protocol (MCP)?",
+   "options": [
+    "An open standard for giving models context and tools",
+    "A password manager for agents",
+    "A kind of language model",
+    "A Microsoft course"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 11: Model Context Protocol.",
+   "where": "ai-agents-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols"
+  },
+  {
+   "q": "How is MCP set up?",
+   "options": [
+    "As one big program with no parts",
+    "As a client-server architecture",
+    "As a spreadsheet",
+    "As a peer-to-peer chat"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 11: MCP Core Components.",
+   "where": "ai-agents-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols"
+  },
+  {
+   "q": "In MCP, what are tools?",
+   "options": [
+    "Discrete actions or functions an AI agent can call",
+    "Settings for the model's temperature",
+    "Files the user uploads",
+    "Pictures in the chat"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 11: the three core primitives.",
+   "where": "ai-agents-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols"
+  },
+  {
+   "q": "An MCP server advertises each tool's name and description to the agent. Where could an attacker who controls a server hide instructions the model will read?",
+   "options": [
+    "In the tool's description",
+    "In the agent's password",
+    "In the user's keyboard",
+    "Nowhere: the model never reads descriptions"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at agents lesson 11: what an MCP server advertises about each tool. Then ask: does the model read it?",
+   "where": "ai-agents-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols"
+  },
+  {
+   "q": "What does A2A enable?",
+   "options": [
+    "Communication and collaboration between different AI agents",
+    "Faster internet for agents",
+    "Agents writing their own models",
+    "Agents paying each other"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 11: the part on A2A.",
+   "where": "ai-agents-for-beginners lesson 11",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols"
+  }
+ ],
+ "md7": [
+  {
+   "q": "What is data poisoning?",
+   "options": [
+    "Someone intentionally changes the information used to train an AI, so it makes mistakes",
+    "A virus that deletes the model",
+    "Sending too many requests at once",
+    "Asking the model for poison recipes"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at lesson 13: Understanding the threats and risks of AI.",
+   "where": "generative-ai-for-beginners lesson 13",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/13-securing-ai-applications"
+  },
+  {
+   "q": "How does lesson 13 describe prompt injection?",
+   "options": [
+    "Attackers manipulate a model through crafted inputs so it behaves outside its intended behavior",
+    "A model that writes too slowly",
+    "A bug in the tokenizer",
+    "Copying another person's prompts"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at lesson 13: the list of threats.",
+   "where": "generative-ai-for-beginners lesson 13",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/13-securing-ai-applications"
+  },
+  {
+   "q": "Which threat does lesson 13 call the most significant security threat for AI today?",
+   "options": [
+    "Prompt injection",
+    "Data poisoning",
+    "Slow responses",
+    "Stolen laptops"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 13: Understanding the threats and risks of AI.",
+   "where": "generative-ai-for-beginners lesson 13",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/13-securing-ai-applications"
+  },
+  {
+   "q": "What does lesson 13 say red teaming is core to?",
+   "options": [
+    "Making models faster",
+    "Understanding the novel risks AI systems bring",
+    "Writing system prompts",
+    "Training new models"
+   ],
+   "answer": 1,
+   "kind": "recall",
+   "hint": "Look again at lesson 13: the part about red teaming.",
+   "where": "generative-ai-for-beginners lesson 13",
+   "url": "https://github.com/microsoft/generative-ai-for-beginners/tree/main/13-securing-ai-applications"
+  },
+  {
+   "q": "An attacker hides text in a web page so an agent changes its goal. Which threat from the agents lesson is that?",
+   "options": [
+    "Task and Instruction",
+    "Cascading Errors",
+    "Resource and Service Overloading",
+    "Human-in-the-Loop"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at agents lesson 06: Understanding Threats.",
+   "where": "ai-agents-for-beginners lesson 06",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/06-building-trustworthy-agents"
+  },
+  {
+   "q": "An attacker edits documents the agent looks things up in, never touching the agent itself. Which threat is that?",
+   "options": [
+    "Access to Critical Systems",
+    "Knowledge Base Poisoning",
+    "Task and Instruction",
+    "Cascading Errors"
+   ],
+   "answer": 1,
+   "kind": "apply",
+   "hint": "Look again at agents lesson 06: its list of threats, and which one goes after what the agent uses rather than the agent.",
+   "where": "ai-agents-for-beginners lesson 06",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/06-building-trustworthy-agents"
+  },
+  {
+   "q": "Why is an agent with access to systems that store sensitive data a target?",
+   "options": [
+    "Attackers can compromise the communication between the agent and those services",
+    "Sensitive data makes the model slower",
+    "The agent will refuse every request",
+    "It cannot be tested at all"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 06: Access to Critical Systems.",
+   "where": "ai-agents-for-beginners lesson 06",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/06-building-trustworthy-agents"
+  },
+  {
+   "q": "Which defence has a person approve or stop the agent's actions?",
+   "options": [
+    "Human-in-the-loop",
+    "A longer system message",
+    "Few-shot prompting",
+    "Tokenization"
+   ],
+   "answer": 0,
+   "kind": "recall",
+   "hint": "Look again at agents lesson 06: the defences that come after the list of threats.",
+   "where": "ai-agents-for-beginners lesson 06",
+   "url": "https://github.com/microsoft/ai-agents-for-beginners/tree/main/06-building-trustworthy-agents"
   }
  ]
 };

@@ -351,3 +351,8 @@ pre.qcode { margin: 0; }
 .track .line, .review .line { margin: 0; }
 .track .btnrow button, .review button { align-self: flex-start; }
 #rotation-date { min-height: 40px; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; font: inherit; }
+/* Scope 2, Part 2: the GitHub check */
+#gh-user { min-height: 40px; min-width: 0; flex: 1 1 12em; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; font: inherit; }
+#gh-result li { overflow-wrap: anywhere; }
+#gh-result li.ok { color: var(--ok); }
+#gh-result li.bad { color: var(--warn); }

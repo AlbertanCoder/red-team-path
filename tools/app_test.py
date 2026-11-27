@@ -13,6 +13,8 @@ What it proves:
      labs), a verified or unverified label, and a full answer or a plain statement that there is none.
   6. The order: every video comes before its lab, optional boxes never block the way, and tapping through from the
      first video reaches the end in exactly the planned order with one Next at every point.
+  8. Scope 2: the GitHub check (against a pretend GitHub served by the test) passes a good repository, fails a missing one,
+     and fails any repository with a key in a file; the new Library lessons and words show.
   8. Scope 2: progress saved by the app as it was before Scope 2 (every one of the 49 boxes, quiz passes, lab marks, notes,
      the streak) loads with every tick; a course box cannot be ticked before its quiz is passed; quiz code is shown;
      Explain it back stays locked under 25 words a box; review questions come due and a miss never shows the answer;
@@ -45,10 +47,14 @@ STEP5 = "v8 a1 v9 a2 v10 a3 a4".split()
 OPTIONAL = "w1 w2 w3 w4 w5 m3 m4 m9 m10".split()
 ROAD = ("v1 v2 m0 v3 m1 v4 m6 v5 m2 v6 m5 v7 m7 m8 m11 m12 s0 s1 s2 s3 g1 g2 g3 g4 g5 g6 g7 g8 g9 "
         "py1 py2 py3 py4 py5 py6 py7 py8 v8 a1 v9 a2 v10 a3 a4 p1 b1 b2 b3 b4 "
-        "fc1 fc2 fc3 fc4 fc5 fc6 fc7 fc8 fc9 fc10 xb7").split()
+        "fc1 fc2 fc3 fc4 fc5 fc6 fc7 fc8 fc9 fc10 xb7 "
+        "gt1 lx1 ap1 ap2 ap3 xb8 md1 md2 md3 md4 md5 md6 md7 xb9").split()
 OLD_COUNT = 49  # boxes that counted before Scope 2
 COUNT = len(ROAD)
 FC = ["fc%d" % i for i in range(1, 11)]
+QUIZZED = FC + ["gt1", "lx1", "ap1", "ap2", "ap3"] + ["md%d" % i for i in range(1, 8)]   # new boxes with a quiz
+GITHUB = ["gt1", "ap1", "ap2", "ap3"]                                                   # new boxes with a GitHub check
+EXPLAIN = ["xb7", "xb8", "xb9"]
 VERIFIED = {1, 2, 5, 6, 7, 8, 11, 12}   # answers that were run in the real lab and won
 NO_ANSWER = {4, 10}                 # 4: toxin goal, no answer on purpose. 10: no known answer.
 PARTS = ["What this lab is", "The objective", "How to think about it", "Hints", "Full answer", "What's next"]
@@ -217,7 +223,7 @@ with sync_playwright() as p:
     page.click("#tutor-tab-words")
     check(page.locator("#word-search").is_visible() and page.locator("#view-tutor details.word").count() >= 40, "Words (search and the full list) is inside the Library")
     page.click("#tutor-tab-lessons")
-    check(page.locator("#tutor-rules").count() == 1 and page.locator("#view-tutor .rowbtn").count() == 28, "Lessons lists the 28 lessons and the safety rules")
+    check(page.locator("#tutor-rules").count() == 1 and page.locator("#view-tutor .rowbtn").count() == 32, "Lessons lists the 32 lessons and the safety rules")
     page.click("#back-now")
     open_side(page, "menu")
     check(page.locator("#menu-sync").is_visible() and page.locator("#menu-settings").is_visible() and page.locator("#view-menu > *").count() == 2, "Settings holds two panels only: link devices, and settings")
@@ -455,11 +461,11 @@ with sync_playwright() as p:
     check("OPTIONAL" in page.inner_text("#top-tag") and "EPISODE 1" in page.inner_text("#next-line").upper(), "an optional lab opens, and its Next still points at where you are")
     page.click("#back-now")
     # every required lab gets its proof, so the walk can tap I beat it
-    page.evaluate("(function () { var d = JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}'); d.m = d.m || {}; [1, 2, 5, 6, 7, 8, 11, 12].forEach(function (n) { d.m['pf' + n] = Date.now() + n; }); for (var f = 1; f <= 10; f += 1) { d.m['qzfc' + f] = Date.now() + 30 + f; } for (var v = 1; v <= 10; v += 1) { d.m['qz' + v] = Date.now() + 20 + v; } localStorage.setItem('redTeamPath.v2', JSON.stringify(d)); })()")
+    page.evaluate("(function () { var d = JSON.parse(localStorage.getItem('redTeamPath.v2') || '{}'); d.m = d.m || {}; [1, 2, 5, 6, 7, 8, 11, 12].forEach(function (n) { d.m['pf' + n] = Date.now() + n; }); " + json.dumps(QUIZZED) + ".forEach(function (id, i) { d.m['qz' + id] = Date.now() + 30 + i; }); " + json.dumps(GITHUB) + ".forEach(function (id, i) { d.m['pf' + id] = Date.now() + 60 + i; }); for (var v = 1; v <= 10; v += 1) { d.m['qz' + v] = Date.now() + 20 + v; } localStorage.setItem('redTeamPath.v2', JSON.stringify(d)); })()")
     page.reload()
     page.wait_for_selector("#top-title")
     walked = []
-    page.evaluate("localStorage.setItem('redTeamPath.notes', JSON.stringify({'xb7-learned': %s, 'xb7-use': %s}))" % (json.dumps("word " * 30), json.dumps("word " * 30)))
+    page.evaluate("localStorage.setItem('redTeamPath.notes', JSON.stringify(%s))" % json.dumps({k + s: "word " * 30 for k in EXPLAIN for s in ("-learned", "-use")}))
     page.reload()
     page.wait_for_selector("#top-title")
     for _ in range(COUNT + 10):
@@ -566,6 +572,55 @@ with sync_playwright() as p:
     sp.click("#track-log")
     check(sp.locator("#track-nudge").count() == 0 and sp.locator("#track-log").is_disabled(), "Scope 2: I studied today clears the nudge and never ticks a box")
     no_side_scroll(sp, "Scope 2 main menu with the review and on-track cards")
+    # the GitHub check, against a pretend GitHub served by this test: a good repository, one with a key in a file, one that does not exist
+    FILES = {"hello_model.py": "from google import genai\nclient = genai.Client()\nprint(client.interactions.create(model='m', input='hi').output_text)\n",
+             ".gitignore": ".env\n__pycache__/\n", "notes.md": "my notes"}
+    leak = {"on": False}
+
+    def fake_api(route):
+        url = route.request.url
+        if "/repos/testuser/red-team-tools/git/trees/" in url:
+            route.fulfill(status=200, content_type="application/json", headers={"Access-Control-Allow-Origin": "*"},
+                          body=json.dumps({"tree": [{"path": k, "type": "blob", "size": len(v)} for k, v in FILES.items()]}))
+        else:
+            route.fulfill(status=404, content_type="application/json", headers={"Access-Control-Allow-Origin": "*"}, body='{"message": "Not Found"}')
+
+    def fake_raw(route):
+        name = route.request.url.split("/HEAD/", 1)[-1]
+        body = FILES.get(name)
+        if name == "notes.md" and leak["on"]:
+            body = "my key AIza" + "x" * 35
+        route.fulfill(status=200 if body is not None else 404, content_type="text/plain", headers={"Access-Control-Allow-Origin": "*"}, body=body or "404")
+    sp.route("https://api.github.com/**", fake_api)
+    sp.route("https://raw.githubusercontent.com/**", fake_raw)
+    sp.evaluate("location.hash = '#i-ap1'")
+    sp.wait_for_selector("#gh-check")
+    check(sp.locator("#done-btn").is_disabled() and "GitHub check" in sp.inner_text("#done-btn") and "cannot tell who typed the code" in sp.inner_text("#gh-box"),
+          "Scope 2: ap1 cannot be ticked before its GitHub check, and the box says what the check cannot tell")
+    sp.fill("#gh-user", "nobody-here")
+    sp.click("#gh-check")
+    sp.wait_for_selector("#gh-result")
+    check("no public repository" in sp.inner_text("#gh-result") and ticks(sp).get("pfap1", 0) <= 0, "Scope 2: a repository that does not exist fails the check and says why")
+    sp.errors[:] = [e for e in sp.errors if "status of 404" not in e]  # the browser logs the pretend GitHub's 404 on purpose
+    sp.fill("#gh-user", "testuser")
+    sp.click("#gh-check")
+    sp.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled")
+    res = sp.inner_text("#gh-result")
+    check("✗" not in res and "calls a model" in res and ".env" in res and ticks(sp).get("pfap1", 0) > 0, "Scope 2: a good repository passes ap1's check and saves its proof mark")
+    check(sp.evaluate("JSON.parse(localStorage.getItem('redTeamPath.v2')).gh") == "testuser", "Scope 2: the GitHub username is kept on this device")
+    leak["on"] = True
+    sp.click("#gh-check")
+    sp.wait_for_function("document.getElementById('gh-result') && /looks like an API key/.test(document.getElementById('gh-result').textContent)")
+    check("notes.md" in sp.inner_text("#gh-result") and "make a new key" in sp.inner_text("#gh-result"), "Scope 2: a key in any file fails the check, names the file and says to make a new key")
+    sp.unroute("https://api.github.com/**")
+    sp.unroute("https://raw.githubusercontent.com/**")
+    # Library: the new lessons and words
+    sp.evaluate("location.hash = '#tutor'")
+    sp.wait_for_selector("#view-tutor .rowbtn")
+    check("Tokens and the context window" in sp.inner_text("#view-tutor") and "MCP: how agents plug into tools" in sp.inner_text("#view-tutor"), "Scope 2: the Library lists the 4 new lessons")
+    sp.evaluate("location.hash = '#i-md6'")
+    sp.wait_for_selector("#quiz-start")
+    check("MCP" in sp.inner_text("#view-now") and sp.get_attribute("#open-link", "href").startswith("https://github.com/microsoft/ai-agents-for-beginners/"), "Scope 2: md6 opens Microsoft's lesson and shows its new word")
     shot(sp, "scope2-main-menu", True)
     check(not sp.errors, "Scope 2: no page errors %s" % sp.errors[:2])
     sctx.close()

@@ -61,7 +61,8 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 
 - **Part 1 DONE 27 Nov 2026** (a26ce47, 1d1160f, 2b8f18f, all live, app_test 324 checks local and live, sync_test and walk_test passed live): Step 7 (fc1-fc10, xb7) with 80 quiz questions; quizzes on any box; review ladder; on-track card and rotation; Explain it back; Step 5 PyRIT fix (install 0.9.0, plus use_tls=False).
 - Moved from Part 1 to Part 2: the GitHub proof check and the link-shape check (first used by Step 8's boxes, so they are built and tested there).
-- **Next: Part 2** = Steps 8 (gt1, lx1, ap1-ap3, xb8) and 9 (md1-md7, xb9), their quizzes (sources saved under ~/redteam/learn/sources as `@@@ <title> | <address>` lessons; `python tools/build_quizzes.py`), the GitHub check, Library lessons t30-t33 and words. Box details: SCOPE-2-PLAN.md.
+- **Part 2 DONE 27 Nov 2026** (about 11:57 Alberta): Steps 8 (gt1, lx1, ap1-ap3, xb8) and 9 (md1-md7, xb9), 78 quiz questions (shell questions run in Git Bash), the GitHub check (gt1, ap1-ap3; marks pf + box id; username in state.gh, device only), Library lessons t30-t33 and 14 words. Commit: see git log "Scope 2, part 2".
+- **Next: Part 3** = Steps 10 (wb1-wb6, xb10) and 11 (ag1-ag5, xb11): sources (MDN, PortSwigger, OWASP LLM Top 10, Hacker101, OWASP threat modeling cheat sheet, Microsoft threat modeling AI/ML, garak, PyRIT 1.2.1), quizzes, the link-shape check (wb6), GitHub checks for ag1, ag4, ag5, Library lessons t34-t36. Box details: SCOPE-2-PLAN.md. Source helpers: ~/redteam/learn/sources/make_web_sources.py, digest2.py, findq.py; question scripts in ~/redteam/learn/quiz-scripts.
 - Quiz sources: ~/redteam/learn/sources (fcc/ holds freeCodeCamp's lesson files; make_fcc_sources.py builds fc1.txt to fc18.txt; digest.py and findq.py help write questions). Question files: ~/redteam/learn/quizzes/<box>.json.
 
 ### Done checklist (each one needs proof)

@@ -358,6 +358,70 @@
         "At least 25 words in each. Nobody grades it: it is for you."
       ] });
 
+    var EXPLAIN_HOW = [
+      "In the first box, write what you learned in this step, as if telling a friend who has never coded.",
+      "In the second box, write one thing you would build or test with it.",
+      "At least 25 words in each. Nobody grades it: it is for you."
+    ];
+    var explain8 = item("xb8", "explain", "Explain it back: Step 8", "Two short answers in your own words: what you learned in Step 8, and one thing you would do with it.", "", { mins: 15, shift: true, how: EXPLAIN_HOW });
+    var explain9 = item("xb9", "explain", "Explain it back: Step 9", "Two short answers in your own words: what you learned in Step 9, and one thing you would do with it.", "", { mins: 15, shift: true, how: EXPLAIN_HOW });
+    var step8 = [
+      item("gt1", "build", "GitHub's Introduction to GitHub exercise",
+        "From here on your code lives on GitHub, where employers look and where this app checks your work. GitHub's own exercise takes under an hour.",
+        "https://github.com/skills/introduction-to-github", { mins: 60, shift: true, proof: "github", openLabel: "Open GitHub's exercise", how: [
+          "Open GitHub's exercise and press Copy Exercise. Keep the name skills-introduction-to-github and make it public.",
+          "Wait about 20 seconds, refresh, and follow its four steps: a branch, a commit, a pull request, a merge.",
+          "When your copy's front page says you completed the exercise, type your GitHub username below and press Check my GitHub. Then take the quiz."
+        ] }),
+      item("lx1", "practice", "Linux basics: OverTheWire Bandit, levels 0 to 10",
+        "Red-team tools and the servers you test run on Linux. Bandit is a free game for absolute beginners: each level is one command-line skill.",
+        "https://overthewire.org/wargames/bandit/", { mins: 360, pc: true, openLabel: "Open Bandit", how: [
+          "Read OverTheWire's rules first. Then open the Level 0 page. Windows has SSH built in: open PowerShell and use the ssh command the page describes.",
+          "Do levels 0 to 10 in order. Each level page lists the commands you may need; read about each one before guessing.",
+          "Keep level passwords and solutions to yourself: OverTheWire's rules say do not spoil the game for others.",
+          "When you reach level 11, take the quiz here. The app cannot see your Bandit levels; its questions show the commands you used."
+        ] }),
+      item("ap1", "build", "Your first Python call to an AI model",
+        "Calling a model from Python is the base of every automated red-team test. Google's Gemini API has a free tier and is open in Canada. GitHub Models, which older guides suggest, was retired on 30 Jul 2026.",
+        "https://aistudio.google.com/docs/get-started", { mins: 240, pc: true, proof: "github", openLabel: "Open Google's guide", how: [
+          "Make a free Gemini API key on Google AI Studio's API keys page (aistudio.google.com/apikey). Free-tier prompts may be used by Google: send nothing private.",
+          "Store the key as an environment variable called GEMINI_API_KEY, the way Google's key page shows for Windows. Never paste it into a file you will push.",
+          "On GitHub, make a new public repository called red-team-tools. Put it on your PC, and add a file called .gitignore with the line .env in it, as a safety net.",
+          "Install Google's library (pip install -U google-genai) and write hello_model.py: call the model once and print its reply. Run it.",
+          "Commit and push hello_model.py and .gitignore. Then press Check my GitHub below, and take the quiz."
+        ] }),
+      item("ap2", "build", "Send a list of test prompts and log every reply",
+        "Testing at scale means many prompts, every reply saved. Your target is harmless and your own: an instruction you write that guards a made-up secret word, like Microsoft's Lab 2.",
+        "https://docs.python.org/3/tutorial/inputoutput.html", { mins: 300, pc: true, proof: "github", openLabel: "Open Python's guide to files and JSON", how: [
+          "In red-team-tools, write prompts.json: a list of at least 10 attack prompts from the labs (encodings, another language, a story).",
+          "Write run_prompts.py: give the model a system instruction you write that guards a made-up secret word. Send each prompt and add one line per reply to results.jsonl, holding prompt, reply, model and time.",
+          "Run it. Open results.jsonl and read every reply yourself.",
+          "Commit and push prompts.json, run_prompts.py and results.jsonl. Then press Check my GitHub below, and take the quiz."
+        ] }),
+      item("ap3", "build", "Score the replies",
+        "Reading results back and scoring them is the core of every red-team tool: did the secret leak, did it refuse?",
+        "https://docs.python.org/3/howto/regex.html", { mins: 240, pc: true, proof: "github", openLabel: "Open Python's regular expression guide", how: [
+          "Write score.py: read results.jsonl back and, for each reply, decide whether the secret word leaked and whether the model refused.",
+          "Have it write summary.json holding total, leaked, refused, and secret (your made-up word, so the app can recount the leaks). Never a real password.",
+          "Run it, and compare its totals with what you read in results.jsonl yourself.",
+          "Commit and push score.py and summary.json. Then press Check my GitHub below, and take the quiz."
+        ] })
+    ];
+    var MD_HOW = [
+      "Open the lesson on GitHub and read its text page. Skip its code samples: they need paid Azure.",
+      "Write one sentence for each part as you go.",
+      "Take the quiz here. It is written from the lesson's own words."
+    ];
+    var step9 = [
+      ["md1", "Introduction to generative AI and LLMs: tokens", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/01-introduction-to-genai", 60, "What a token is, and how a model writes its reply one token at a time."],
+      ["md2", "Prompt engineering fundamentals: tokenization and the prompt", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/04-prompt-engineering-fundamentals", 90, "How prompts are built and tokenized, and why the same words can land differently on different models."],
+      ["md3", "Embeddings and RAG", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/08-building-search-applications", 180, "How a chatbot looks things up in your documents, and why that opens the door to indirect prompt injection. Read lesson 08, then lesson 15 (RAG and vector databases)."],
+      ["md4", "Function calling", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/11-integrating-with-function-calling", 90, "How a model asks your code to run a function. The model asks; your code does it."],
+      ["md5", "What an agent is, and tool use", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/01-intro-to-ai-agents", 150, "Agents are models that act. Read agents lesson 01, then lesson 04 (tool use)."],
+      ["md6", "MCP and other agent protocols", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols", 90, "How agents plug into tools through MCP servers: the thing PortSwigger's MCP labs attack in Step 11."],
+      ["md7", "Why prompt injection works, and how agents are secured", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/13-securing-ai-applications", 180, "The threats and the defences. Read lesson 13, then agents lessons 06 and 18."]
+    ].map(function (m) { return item(m[0], "read", m[1], m[4], m[2], { mins: m[3], shift: true, how: MD_HOW, openLabel: "Open the lesson" }); });
+
     return [
       { title: "Step 1: Microsoft's videos, each with its lab",
         goal: "Watch an episode here in the app, then do Microsoft's own lab for it. Write-ups are optional.",
@@ -396,6 +460,22 @@
           { label: "ERRORS, CLASSES AND PROJECT 2", items: python1.slice(6, 8) },
           { label: "OBJECT-ORIENTED CODE AND PROJECT 3", items: python1.slice(8, 10) },
           { label: "EXPLAIN IT BACK", items: [explain7] }
+        ] },
+      { title: "Step 8: Git, Linux, and Python that talks to an AI model",
+        goal: "Put your code on GitHub, learn the Linux command line, then write Python that sends test prompts to a real model, logs every reply and scores them.",
+        why: "This is the Python red-team work is made of. From here the app checks your public GitHub repository by itself.",
+        groups: [
+          { label: "GIT AND LINUX", items: step8.slice(0, 2) },
+          { label: "PYTHON THAT TALKS TO AN AI MODEL", items: step8.slice(2) },
+          { label: "EXPLAIN IT BACK", items: [explain8] }
+        ] },
+      { title: "Step 9: How AI models work",
+        goal: "Seven short lessons from Microsoft's free courses: tokens, embeddings and RAG, function calling, agents, MCP, and why prompt injection works.",
+        why: "You attack agents in Step 11. First know what they are made of. No maths, no model training.",
+        groups: [
+          { label: "HOW MODELS WORK", items: step9.slice(0, 4) },
+          { label: "AGENTS", items: step9.slice(4) },
+          { label: "EXPLAIN IT BACK", items: [explain9] }
         ] }
     ];
   }
@@ -470,6 +550,22 @@
       ["Attack success rate", "", "How often an attack works, such as 7 of 10 tries. Reports and tools use this number."],
       ["Responsible disclosure", "", "Reporting a flaw privately to the owner, and giving them time to fix it before saying anything in public."],
       ["CTF", "", "Capture the flag: a security game you win by reaching a hidden goal. Gray Swan's sets work this way."]
+    ]],
+    ["Code and models (Steps 8 and 9)", [
+      ["Repository", "", "A project's folder on GitHub, with the history of every change.", "gt1"],
+      ["Commit", "", "One saved change to a repository, with a note saying what changed.", "gt1"],
+      ["Pull request", "", "A proposed change that others can look at before it is merged into the main branch.", "gt1"],
+      ["Terminal", "", "A window where you type commands instead of clicking. PowerShell is one on Windows.", "lx1"],
+      ["SSH", "", "A safe way to log into another computer and type commands on it. Bandit uses it.", "lx1"],
+      ["API", "", "A way for one program to talk to another. Your Python script talks to the model through Google's API.", "ap1"],
+      ["Environment variable", "", "A named value your computer keeps outside your files. Keys belong there, never in code you push.", "ap1"],
+      ["JSON", "", "A plain-text way to write data, with {curly braces} and \"quotes\". Python reads and writes it with the json module.", "ap2"],
+      ["Token", "", "A chunk of text a model reads or writes, turned into a number.", "md1"],
+      ["Embedding", "", "A list of numbers that stands for a piece of text. Similar meanings sit close together.", "md3"],
+      ["RAG", "", "Retrieval augmented generation: a chatbot that looks things up in documents and puts what it finds into its prompt.", "md3"],
+      ["Function calling", "", "A model asking your code to run a named function with some values. The code runs it, not the model.", "md4"],
+      ["Agent", "", "A model that can act through tools: search, send, buy, run code.", "md5"],
+      ["MCP", "", "Model Context Protocol: an open standard for connecting agents to tools and data through servers.", "md6"]
     ]]
   ];
 
@@ -542,7 +638,14 @@
     anthropicBounty: ["Anthropic: AI safety bug bounty", "https://www.anthropic.com/news/testing-our-safety-defenses-with-a-new-bug-bounty-program"],
     docsHackerone: ["HackerOne: how reports and programs work", "https://docs.hackerone.com/"],
     owaspDisclosure: ["OWASP: vulnerability disclosure cheat sheet", "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html"],
-    discloseIo: ["disclose.io: disclosure standards and safe harbor", "https://disclose.io/"]
+    discloseIo: ["disclose.io: disclosure standards and safe harbor", "https://disclose.io/"],
+    genai01: ["Microsoft: Introduction to generative AI and LLMs (lesson 01)", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/01-introduction-to-genai"],
+    genai04: ["Microsoft: Prompt engineering fundamentals (lesson 04)", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/04-prompt-engineering-fundamentals"],
+    genai15: ["Microsoft: RAG and vector databases (lesson 15)", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/15-rag-and-vector-databases"],
+    genai11: ["Microsoft: Function calling (lesson 11)", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/11-integrating-with-function-calling"],
+    agents01: ["Microsoft: Intro to AI agents (agents lesson 01)", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/01-intro-to-ai-agents"],
+    agents06: ["Microsoft: Building trustworthy agents (agents lesson 06)", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/06-building-trustworthy-agents"],
+    agents11: ["Microsoft: Agentic protocols, MCP (agents lesson 11)", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols"]
   };
   var LESSONS = [
     { id: "t1", group: "Start here", title: "What you are actually attacking",
@@ -842,7 +945,43 @@
       quiz: { q: "A named attack from 2024 fails today. What do you keep?",
         options: ["Nothing: it is useless now", "The lever it pulled, to pull in a new way", "The exact wording, to try again next month"],
         right: 1, because: "Wording dies fast. The reason it worked usually still holds." },
-      src: ["ms100", "xteam", "sok", "classifiers", "owaspHome", "atlas", "msBlog"] }
+      src: ["ms100", "xteam", "sok", "classifiers", "owaspHome", "atlas", "msBlog"] },
+    { id: "t30", group: "How models work", title: "Tokens and the context window",
+      idea: "A model never sees your words. A tokenizer cuts the text into chunks called tokens and turns each into a number. The model then predicts the next token, one at a time, from everything it can see: its instructions, the chat so far and any documents.",
+      why: "Two things follow for an attacker. The same words can be cut differently by different models, so a trick can work on one and not another. And every token in view, wherever it came from, can steer what comes next.",
+      when: "When a trick works on one model and not another, or works one time in three: the next token is picked by probability, so try it several times.",
+      stops: "Nothing stops tokenization itself. Builders separate trusted instructions from other text with markers, and limit what goes into the window.",
+      quiz: { q: "The same attack prompt gets three different replies in three tries. Why?",
+        options: ["Each next token is picked by probability", "The model remembers you and changes its mind", "Your prompt is cut off at random"],
+        right: 0, because: "The model predicts a probability for every possible next token and picks from them, so replies can differ." },
+      src: ["genai01", "genai04"] },
+    { id: "t31", group: "How models work", title: "Embeddings and RAG",
+      idea: "RAG (retrieval augmented generation) lets a chatbot answer from documents. The documents are cut into chunks, turned into embeddings (lists of numbers where similar meanings sit close together) and stored. A question pulls the closest chunks into the prompt.",
+      why: "Whatever is in those documents ends up in the prompt next to the builder's instructions. If an attacker can get a document in, their words reach the model: that is indirect prompt injection.",
+      when: "Any chatbot that answers from files, web pages, emails or a help centre. Ask: who can write to what it reads?",
+      stops: "Treating retrieved text as data, not instructions; marking it clearly; and controlling who can add documents.",
+      quiz: { q: "An attacker adds one document to a chatbot's knowledge base. Why can that work as an attack?",
+        options: ["Retrieved text is put into the prompt, so the attacker's words reach the model", "The model deletes old documents", "Embeddings make the model forget its rules"],
+        right: 0, because: "RAG puts retrieved chunks into the prompt. Words placed there by an attacker are read like any other text." },
+      src: ["genai15"] },
+    { id: "t32", group: "How models work", title: "Agents and tool calling",
+      idea: "An agent is a model that can act: send an email, search, buy, run code. The builder describes each tool (its name, what it does, its parameters). The model replies with a request to call one, and the builder's code runs it.",
+      why: "The model asks and the code obeys. If an attacker can steer the model, through a chat message or text the agent reads, they steer which tool runs and with what. That is why the big bounty programs pay for agent attacks.",
+      when: "Whenever a chatbot can do more than talk. List its tools first: each is a possible action for an attacker.",
+      stops: "Giving agents only the tools they need, asking a person before risky actions (human in the loop), and checking tool requests in code.",
+      quiz: { q: "When an agent's model asks for a tool to be run, who runs it?",
+        options: ["The builder's code", "The model itself", "The user"],
+        right: 0, because: "The model only replies with a request. The application's code looks for it and calls the function." },
+      src: ["genai11", "agents01", "agents06"] },
+    { id: "t33", group: "How models work", title: "MCP: how agents plug into tools",
+      idea: "The Model Context Protocol (MCP) is an open standard for giving models tools and context. An MCP server lists its tools, each with a name and a description, and the agent's host connects to it as a client.",
+      why: "The model reads every tool description it is given. A server that lies in a description, or a tool that does more than it says, can steer the agent without the user ever typing a word.",
+      when: "Any agent that connects to outside MCP servers, and every MCP server you test, like PortSwigger's MCP labs in Step 11.",
+      stops: "Only connecting to trusted servers, checking what each tool really does, and asking a person before actions that matter.",
+      quiz: { q: "Where could a dishonest MCP server hide instructions that the model reads?",
+        options: ["In a tool's description", "In the user's password", "Nowhere: models ignore tool lists"],
+        right: 0, because: "MCP servers advertise each tool's name and description, and the model reads them to decide what to call." },
+      src: ["agents11"] }
   ];
 
   // One tutor page per lab, and nothing else on it: what the lab is, the objective, how to think about it, three hints
@@ -1161,9 +1300,10 @@
   // m: box id -> the time it was ticked (positive) or unticked (negative). The newest time wins when two devices disagree.
   // y: day -> time, for the streak. r: time of the last "clear all ticks". sync: this device's private sync code, or "".
   var STORE_KEY = "redTeamPath.v2";
+  var GH_USER_RE = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/;
   var SYNC_RE = /^[a-z2-9]{32}$/;
   var DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
-  var state = { m: {}, y: {}, r: 0, best: 0, theme: "dark", open: {}, test: false, sync: "", nolink: false };
+  var state = { m: {}, y: {}, r: 0, best: 0, theme: "dark", open: {}, test: false, sync: "", nolink: false, gh: "" };
   var KNOWN = {};
   var SEQ = []; // every box that counts, in path order
   STEPS.forEach(function (step, s) {
@@ -1190,6 +1330,7 @@
       group.items.forEach(function (it) {
         var v = /^v(\d+)$/.exec(it.id);
         var key = it.kind === "video" && v ? v[1] : it.id;
+        if (it.proof) { KNOWN["pf" + it.id] = { id: "pf" + it.id }; } // pf + box id: its GitHub check passed
         if (!QUIZ_BANK[key] || !QUIZ_BANK[key].length) { return; }
         if (key === it.id) { KNOWN["qz" + it.id] = { id: "qz" + it.id }; }
         ["r1", "r2", "r3"].forEach(function (k) { KNOWN[k + it.id] = { id: k + it.id }; });
@@ -1233,6 +1374,7 @@
     if (p.test === true) { state.test = true; }
     if (p.nolink === true) { state.nolink = true; } // "Not now" on the link prompt
     if (typeof p.sync === "string" && SYNC_RE.test(p.sync)) { state.sync = p.sync; }
+    if (typeof p.gh === "string" && GH_USER_RE.test(p.gh)) { state.gh = p.gh; } // your GitHub username, on this device only
   }
   function save() {
     try { window.localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { storageFailed(); }
@@ -2160,6 +2302,168 @@
     return box;
   }
 
+  // ----- Proof on GitHub: the app reads your public repository through GitHub's public API, which any web page may read.
+  // It checks the files are there and have the right shape. It cannot tell who typed the code, and says so. -----
+  var GH_API = "https://api.github.com/repos/";
+  var GH_RAW = "https://raw.githubusercontent.com/";
+  var TOOLS_REPO = "red-team-tools";
+  var INTRO_REPO = "skills-introduction-to-github";
+  var KEY_RX = /AIza[0-9A-Za-z_\-]{30,}|sk-[A-Za-z0-9_\-]{20,}|github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{30,}/;
+  var MODEL_CALL_RX = /interactions\.create|generate_content|chat\.completions\.create|responses\.create|messages\.create/;
+  var TEXT_FILE_RX = /(^|\/)(\.gitignore|\.env[^/]*|[^/]+\.(py|json|jsonl|md|txt|cfg|ini|toml|ya?ml|ipynb|csv))$/i;
+  var GH_WHAT = {
+    gt1: ["your copy of the exercise, " + INTRO_REPO + ", made from GitHub's template", "a merged pull request in it", "its front page says you completed the exercise"],
+    ap1: ["a public repository called " + TOOLS_REPO, "hello_model.py, which calls a model", ".gitignore with a line .env", "no file that holds an API key"],
+    ap2: ["prompts.json: a list of 10 or more prompts", "run_prompts.py", "results.jsonl: one line per prompt, each with prompt, reply, model and time", "every prompt in prompts.json has a reply in results.jsonl", "no file that holds an API key"],
+    ap3: ["score.py", "summary.json with total, leaked, refused and secret", "the totals match results.jsonl: the app recounts the leaks itself", "no file that holds an API key"]
+  };
+  var ghRun = {}; // the last check's result per box, this visit only: { busy, lines: [[ok, text]], note }
+  function ghGet(url, asText) {
+    return fetch(url, asText ? {} : { headers: { Accept: "application/vnd.github+json" } }).then(function (r) {
+      if (r.status === 404) { throw new Error("missing"); }
+      if (r.status === 403 || r.status === 429) { throw new Error("busy"); }
+      if (!r.ok) { throw new Error("http " + r.status); }
+      return asText ? r.text() : r.json();
+    });
+  }
+  function ghFile(user, repo, path) { return ghGet(GH_RAW + user + "/" + repo + "/HEAD/" + path.split("/").map(encodeURIComponent).join("/"), true); }
+  function ghFiles(user, repo) {
+    return ghGet(GH_API + user + "/" + repo + "/git/trees/HEAD?recursive=1").then(function (tr) {
+      return (tr.tree || []).filter(function (x) { return x.type === "blob"; });
+    });
+  }
+  function noKeys(user, files, lines) { // reads every small text file and looks for something shaped like an API key
+    var texts = files.filter(function (f) { return TEXT_FILE_RX.test(f.path) && (f.size || 0) < 300000; }).slice(0, 60);
+    return Promise.all(texts.map(function (f) { return ghFile(user, TOOLS_REPO, f.path).then(function (s) { return KEY_RX.test(s) ? f.path : ""; }, function () { return ""; }); }))
+      .then(function (hits) {
+        hits = hits.filter(Boolean);
+        lines.push([!hits.length, hits.length
+          ? "A file holds what looks like an API key: " + hits.join(", ") + ". Delete the key from the file AND make a new key on the provider's page: Git keeps old versions, so the old key stays public."
+          : "No file holds anything shaped like an API key (" + texts.length + " files read)."]);
+      });
+  }
+  function findFile(files, name) { var hit = files.filter(function (f) { return f.path === name; })[0]; return hit ? hit.path : ""; }
+  function jsonLines(text) {
+    return String(text || "").split(/\r?\n/).filter(function (l) { return l.trim(); }).map(function (l) { try { return JSON.parse(l); } catch (e) { return null; } });
+  }
+  function promptOf(x) { return typeof x === "string" ? x : x && typeof x === "object" && typeof x.prompt === "string" ? x.prompt : null; }
+  var GH_CHECKS = {
+    gt1: function (user, lines) {
+      return ghGet(GH_API + user + "/" + INTRO_REPO).then(function (repo) {
+        var fromTemplate = repo.template_repository && repo.template_repository.full_name === "skills/introduction-to-github";
+        var mine = repo.owner && String(repo.owner.login).toLowerCase() === user.toLowerCase();
+        lines.push([fromTemplate && mine, fromTemplate && mine ? "Your copy of the exercise is there, made from GitHub's template." : "There is a repository called " + INTRO_REPO + ", but it was not made from GitHub's exercise template."]);
+        return Promise.all([ghGet(GH_API + user + "/" + INTRO_REPO + "/pulls?state=closed&per_page=30"), ghFile(user, INTRO_REPO, "README.md").catch(function () { return ""; })]);
+      }).then(function (got) {
+        var merged = (got[0] || []).filter(function (pr) { return pr.merged_at; }).length;
+        lines.push([merged > 0, merged > 0 ? "A merged pull request: " + merged + "." : "No merged pull request yet. Step 4 of the exercise merges one."]);
+        var done = /completed the exercise/i.test(got[1] || "");
+        lines.push([done, done ? "Its front page says you completed the exercise." : "Its front page does not say the exercise is complete yet."]);
+      });
+    },
+    ap1: function (user, lines) {
+      return ghFiles(user, TOOLS_REPO).then(function (files) {
+        lines.push([true, "Repository " + user + "/" + TOOLS_REPO + " is public."]);
+        var py = findFile(files, "hello_model.py"), gi = findFile(files, ".gitignore");
+        return Promise.all([py ? ghFile(user, TOOLS_REPO, py) : Promise.resolve(null), gi ? ghFile(user, TOOLS_REPO, gi) : Promise.resolve(null)]).then(function (got) {
+          lines.push([got[0] !== null && MODEL_CALL_RX.test(got[0]), got[0] === null ? "No hello_model.py at the top of the repository." :
+            MODEL_CALL_RX.test(got[0]) ? "hello_model.py calls a model." : "hello_model.py is there but does not call a model (no interactions.create, generate_content or the like)."]);
+          var ignores = got[1] !== null && /^\s*\.env\s*$/m.test(got[1]);
+          lines.push([ignores, ignores ? ".gitignore keeps .env files out of Git." : got[1] === null ? "No .gitignore at the top of the repository." : ".gitignore has no line that is just .env."]);
+          return noKeys(user, files, lines);
+        });
+      });
+    },
+    ap2: function (user, lines) {
+      return ghFiles(user, TOOLS_REPO).then(function (files) {
+        var need = ["prompts.json", "run_prompts.py", "results.jsonl"].map(function (n) { return findFile(files, n); });
+        lines.push([!!need[1], need[1] ? "run_prompts.py is there." : "No run_prompts.py at the top of the repository."]);
+        return Promise.all([need[0] ? ghFile(user, TOOLS_REPO, need[0]) : Promise.resolve(null), need[2] ? ghFile(user, TOOLS_REPO, need[2]) : Promise.resolve(null)]).then(function (got) {
+          var list = null;
+          try { list = JSON.parse(got[0]); } catch (e) { list = null; }
+          var prompts = Array.isArray(list) ? list.map(promptOf).filter(function (x) { return x && x.trim(); }) : [];
+          lines.push([prompts.length >= 10, got[0] === null ? "No prompts.json at the top of the repository." : prompts.length >= 10 ? "prompts.json holds " + prompts.length + " prompts." : "prompts.json needs a list of 10 or more prompts (found " + prompts.length + ")."]);
+          var rows = jsonLines(got[1]);
+          var good = rows.filter(function (r) { return r && typeof r.prompt === "string" && typeof r.reply === "string" && r.model && r.time; });
+          var bad = rows.length - good.length;
+          lines.push([rows.length >= 10 && !bad, got[1] === null ? "No results.jsonl at the top of the repository." : !bad && rows.length >= 10 ? "results.jsonl has " + rows.length + " lines, each with prompt, reply, model and time." :
+            "results.jsonl: " + rows.length + " lines, " + bad + " of them not a JSON line with prompt, reply, model and time (10 or more needed)."]);
+          var asked = {};
+          good.forEach(function (r) { asked[r.prompt] = 1; });
+          var missing = prompts.filter(function (x) { return !asked[x]; }).length;
+          lines.push([prompts.length >= 10 && !missing, missing ? missing + " prompts from prompts.json have no reply in results.jsonl." : "Every prompt in prompts.json has a reply."]);
+          return noKeys(user, files, lines);
+        });
+      });
+    },
+    ap3: function (user, lines) {
+      return ghFiles(user, TOOLS_REPO).then(function (files) {
+        var sc = findFile(files, "score.py"), su = findFile(files, "summary.json"), re = findFile(files, "results.jsonl");
+        lines.push([!!sc, sc ? "score.py is there." : "No score.py at the top of the repository."]);
+        return Promise.all([su ? ghFile(user, TOOLS_REPO, su) : Promise.resolve(null), re ? ghFile(user, TOOLS_REPO, re) : Promise.resolve(null)]).then(function (got) {
+          var s = null;
+          try { s = JSON.parse(got[0]); } catch (e) { s = null; }
+          var shaped = s && typeof s === "object" && [s.total, s.leaked, s.refused].every(function (n) { return typeof n === "number" && n >= 0; }) && typeof s.secret === "string" && s.secret.trim().length >= 3;
+          lines.push([!!shaped, got[0] === null ? "No summary.json at the top of the repository." : shaped ? "summary.json has total, leaked, refused and secret." : "summary.json needs numbers for total, leaked and refused, and the made-up secret word (3 letters or more)."]);
+          var rows = jsonLines(got[1]).filter(function (r) { return r && typeof r.reply === "string"; });
+          if (!shaped) { lines.push([false, "The totals could not be recounted."]); return noKeys(user, files, lines); }
+          var word = s.secret.trim().toLowerCase();
+          var leaks = rows.filter(function (r) { return r.reply.toLowerCase().indexOf(word) !== -1; }).length;
+          var ok = rows.length === s.total && leaks === s.leaked && s.refused <= s.total;
+          lines.push([ok, ok ? "Recounted from results.jsonl: " + rows.length + " replies, " + leaks + " with the secret word. They match summary.json." :
+            "Recounted from results.jsonl: " + rows.length + " replies, " + leaks + " with the secret word. summary.json says total " + s.total + ", leaked " + s.leaked + (s.refused > s.total ? ", and refused is more than total" : "") + "."]);
+          return noKeys(user, files, lines);
+        });
+      });
+    }
+  };
+  function runGithubCheck(it) {
+    var user = state.gh;
+    var lines = [];
+    ghRun[it.id] = { busy: true, lines: [] };
+    render();
+    GH_CHECKS[it.id](user, lines).then(function () {
+      var passed = lines.length > 0 && lines.every(function (l) { return l[0]; });
+      ghRun[it.id] = { busy: false, lines: lines, note: passed ? "" : "Fix the lines marked ✗, push, and check again." };
+      if (passed && !isDone("pf" + it.id)) { mark("pf" + it.id, true); studied(); }
+      render("gh-result");
+    }, function (e) {
+      var why = e && e.message === "missing" ? "GitHub has no public repository like that for " + user + ". Check the spelling of your username and the repository's name, and that it is public." :
+        e && e.message === "busy" ? "GitHub is limiting checks from this network for a while (about 60 an hour). Try again later." : "GitHub could not be reached. Check your connection and try again.";
+      ghRun[it.id] = { busy: false, lines: lines.concat([[false, why]]), note: "" };
+      render("gh-result");
+    });
+  }
+  function githubBox(it) {
+    var box = h("div", { class: "block", id: "gh-box" });
+    var run = ghRun[it.id];
+    if (isDone("pf" + it.id) && !run) {
+      box.appendChild(h("div", { class: "answer", id: "gh-result", tabindex: "-1" }, [h("p", null, [h("b", { text: "GitHub check passed ✓ " }), "Change something and want to check again? Press the button."])]));
+    }
+    box.appendChild(h("p", { class: "small", text: "The app reads your public repository through GitHub and checks: " + GH_WHAT[it.id].join("; ") + ". It cannot tell who typed the code." }));
+    var userIn = h("input", { type: "text", id: "gh-user", "aria-label": "Your GitHub username", placeholder: "Your GitHub username", autocomplete: "off", autocapitalize: "none", spellcheck: "false" });
+    userIn.value = state.gh || "";
+    var go1 = h("button", { type: "button", class: "primary", id: "gh-check", text: run && run.busy ? "Checking…" : "Check my GitHub" });
+    go1.disabled = !!(run && run.busy);
+    var status = h("span", { class: "status-line", role: "status", id: "gh-status" });
+    go1.addEventListener("click", function () {
+      var u = userIn.value.trim().replace(/^@/, "");
+      if (!GH_USER_RE.test(u)) { status.textContent = "Type your GitHub username first (letters, numbers and dashes)."; return; }
+      state.gh = u;
+      save();
+      runGithubCheck(it);
+    });
+    box.appendChild(h("div", { class: "btnrow" }, [userIn, go1, status]));
+    if (run && !run.busy && run.lines.length) {
+      var ul = h("ul", { class: "plain", id: "gh-result", tabindex: "-1" });
+      run.lines.forEach(function (l) { ul.appendChild(h("li", { class: l[0] ? "ok" : "bad", text: (l[0] ? "✓ " : "✗ ") + l[1] })); });
+      box.appendChild(ul);
+      if (run.note) { box.appendChild(h("p", { class: "small", text: run.note })); }
+      if (isDone("pf" + it.id)) { box.appendChild(h("p", null, [h("b", { text: "GitHub check passed ✓" })])); }
+    }
+    return box;
+  }
+
   // ----- Explain it back: the last box of each new step. Two answers in your own words, saved as notes on this device. -----
   var EXPLAIN_MIN = 25;
   function explained(it) { return wordCount(notes[it.id + "-learned"]) >= EXPLAIN_MIN && wordCount(notes[it.id + "-use"]) >= EXPLAIN_MIN; }
@@ -2217,6 +2521,7 @@
     if (WORDS_AT[it.id]) { v.appendChild(wordsFold(WORDS_AT[it.id])); }
     if (it.kind === "writeup") { v.appendChild(noteEditor(it, false)); v.appendChild(templateFold()); }
     if (it.url) { v.appendChild(link((it.openLabel || OPEN_LABEL[it.kind]) + " ↗", it.url, "big open", "open-link")); }
+    if (it.proof === "github") { v.appendChild(part("Proof on GitHub", [githubBox(it)])); }
     if (needsQuiz(it)) { v.appendChild(part("Quiz", [quizBox(it)])); }
     if (it.kind === "explain") { v.appendChild(explainBox(it)); }
     if (it.id === "m0" && !isDone("m0")) {
@@ -2323,6 +2628,10 @@
         d.appendChild(h("div", { class: "two" }, [
           dockBtn("I beat it", "ok", "beat-btn", function () { finish(it, false); }),
           dockBtn("Moving on, not solved", "", "moved-btn", function () { finish(it, true); })]));
+      } else if (it.proof && !isDone("pf" + it.id)) {
+        var proofFirst = dockBtn("Pass the GitHub check above to finish", "", "done-btn", function () {});
+        proofFirst.disabled = true;
+        d.appendChild(proofFirst);
       } else if (it.kind === "explain" && !explained(it)) {
         var write = dockBtn("Write " + EXPLAIN_MIN + " words in each box to finish", "", "done-btn", function () {});
         write.disabled = true;
@@ -2984,6 +3293,11 @@
       render("rotation-save");
     });
     box.appendChild(h("p", { class: "dim", text: "Your rotation: the first day of your current 14 days on. The main menu then shows which week it is and a target for it." }));
+    if (state.gh) {
+      var forget = h("button", { type: "button", id: "gh-forget", class: "textbtn", text: "Forget it on this device" });
+      forget.addEventListener("click", function () { state.gh = ""; save(); render("rotation-save"); });
+      box.appendChild(h("p", { class: "dim", id: "gh-line" }, ["GitHub username for the proof checks: " + state.gh + " (on this device only). ", forget]));
+    }
     box.appendChild(h("div", { class: "btnrow" }, [dateIn, saveRot]));
     box.appendChild(rotStatus);
     // Hints you opened can be hidden again, lab by lab. Ticks and notes are not touched.
