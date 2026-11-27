@@ -3749,10 +3749,29 @@
       copyText(area.value, status, area);
     });
     var loadBtn = h("button", { type: "button", id: "backup-load", text: "Load this code" });
+    // A loaded code replaces what is here (and, on a linked device, what every linked device has), so it asks first.
+    var loadAsk = h("span", { class: "status-line", id: "backup-ask-text" });
+    var loadYes = h("button", { type: "button", id: "backup-yes", text: "Yes, replace them" });
+    var loadNo = h("button", { type: "button", id: "backup-no", text: "Keep what is here" });
+    var loadRow = h("div", { class: "btnrow", id: "backup-ask", hidden: "" }, [loadAsk, loadYes, loadNo]);
+    var badCode = "That code did not work. Copy the whole code and try again.";
+    var doLoad = function () {
+      if (readCode(area.value)) { render(); document.getElementById("backup-status").textContent = "Loaded. The ticks on this device are now the ones from the code."; }
+      else { status.textContent = badCode; }
+    };
     loadBtn.addEventListener("click", function () {
-      if (readCode(area.value)) { render(); document.getElementById("backup-status").textContent = "Loaded. Your ticks are back."; }
-      else { status.textContent = "That code did not work. Copy the whole code and try again."; }
+      var p = parseCode(area.value);
+      if (!p) { status.textContent = badCode; return; }
+      var boxes = function (ids) { return ids.filter(function (id) { return KNOWN[id] && KNOWN[id].kind; }).length; };
+      var mine = Object.keys(state.m).filter(isDone);
+      if (!mine.length && !state.sync) { doLoad(); return; } // nothing here to lose
+      loadAsk.textContent = "This replaces the " + boxes(mine) + " ticked boxes here with the " + boxes(p.d) + " in the code" +
+        (state.sync ? ", on every linked device" : "") + ". It does not add them together.";
+      status.textContent = "";
+      loadRow.hidden = false;
     });
+    loadYes.addEventListener("click", doLoad);
+    loadNo.addEventListener("click", function () { loadRow.hidden = true; });
 
     var clearAsk = h("button", { type: "button", class: "ghost", id: "clear-ask", text: "CLEAR ALL TICKS" });
     var clearYes = h("button", { type: "button", id: "clear-yes", text: "Yes, clear them" });
@@ -3805,8 +3824,9 @@
     }
     box.appendChild(h("details", { class: "fold", id: "backup-fold", open: foldOpen ? "" : null }, [
       h("summary", { text: "Backup code (works without linking devices)" }),
-      h("p", { class: "dim", text: "A code that holds your ticks. Copy it here and load it in this app on another device, or keep it somewhere safe." }),
+      h("p", { class: "dim", text: "A code that holds your ticks. Copy it here and load it in this app on another device, or keep it somewhere safe. Loading a code replaces the ticks on that device: it does not add to them." }),
       h("div", { class: "btnrow" }, [copyBtn, loadBtn, status]),
+      loadRow,
       area
     ]));
     box.appendChild(h("div", { class: "btnrow" }, [clearAsk, confirmRow]));
@@ -3815,12 +3835,20 @@
     var done = Object.keys(state.m).filter(isDone);
     return "RTP1." + window.btoa(JSON.stringify({ d: done, y: Object.keys(state.y), b: state.best }));
   }
-  function readCode(text) {
+  // Reads a backup code without changing anything. Returns what it holds, or null when it is not a code.
+  function parseCode(text) {
     try {
       var raw = String(text || "").trim();
-      if (raw.indexOf("RTP1.") !== 0) { return false; }
+      if (raw.indexOf("RTP1.") !== 0) { return null; }
       var p = JSON.parse(window.atob(raw.slice(5)));
-      if (!p || !Array.isArray(p.d) || !Array.isArray(p.y)) { return false; }
+      if (!p || !Array.isArray(p.d) || !Array.isArray(p.y)) { return null; }
+      return p;
+    } catch (e) { return null; }
+  }
+  function readCode(text) {
+    try {
+      var p = parseCode(text);
+      if (!p) { return false; }
       // A loaded code replaces what is here, the same as clearing and ticking again.
       var best = typeof p.b === "number" ? p.b : 0;
       clearAll();

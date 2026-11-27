@@ -112,7 +112,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 
 ### Done checklist (each one needs proof: the commit, the test that fails without it, the live check)
 
-- [ ] 1. B1: an address ending `#sync=` asks before it links this device.
+- [x] 1. B1: an address ending `#sync=` asks before it links this device. Proof: d46ed3a; 5 new checks in `tools/app_test.py` (2 failed on the live site before the change); `tools/ship.sh` local and live ALL PASSED (349 checks), 27 Nov 2026.
 - [ ] 2. B2: "Load this code" asks first and says it replaces.
 - [ ] 3. B3: one rotation mark at a time.
 - [ ] 4. B4: marks the app does not know are kept; no "I'm done" on a quiz box when the quiz file did not load.

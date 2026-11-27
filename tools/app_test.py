@@ -789,6 +789,51 @@ with sync_playwright() as p:
     lctx, lp = linked_device("#sync=" + MINE)
     check(lp.locator("#join-ask").count() == 0 and code_of(lp) == MINE, "Scope 3: a link holding the device's own code asks nothing")
     lctx.close()
+
+    # Scope 3, fix 2 (audit B2): "Load this code" replaces every tick, so it must ask first and say so. It used to wipe at once.
+    import base64
+    FIVE = {"v1": T, "qz1": T, "v2": T + 1, "qz2": T + 1, "m0": T + 2}
+    OLD_CODE = "RTP1." + base64.b64encode(json.dumps({"d": ["v1"], "y": [], "b": 0}).encode()).decode()
+
+    def done_ids(page):
+        return sorted(k for k, v in ticks(page).items() if v > 0 and not k.startswith("ac"))
+
+    bctx, bp = new_page(b, {"redTeamPath.v2": json.dumps({"m": FIVE, "y": {}, "r": 0, "best": 0, "theme": "dark", "open": {}, "test": False, "sync": "", "nolink": True})}, start=False)
+    bp.evaluate("location.hash = '#menu'")
+    bp.wait_for_selector("#backup-fold summary")
+    bp.click("#backup-fold summary")
+    check("replaces" in bp.inner_text("#backup-fold"), "Scope 3: the backup fold says a loaded code replaces the ticks")
+    bp.fill("#backup-code", OLD_CODE)
+    bp.click("#backup-load")
+    bp.wait_for_timeout(300)
+    asked = bp.locator("#backup-ask").count() == 1 and bp.locator("#backup-ask").is_visible()
+    check(asked and done_ids(bp) == sorted(FIVE), "Scope 3: Load this code asks first: nothing is replaced yet (5 marks still here)")
+    check(asked and "3 ticked boxes" in bp.inner_text("#backup-ask") and "the 1 in the code" in bp.inner_text("#backup-ask"), "Scope 3: the question says how many ticked boxes are here and how many are in the code")
+    if asked:
+        bp.click("#backup-no")
+        bp.wait_for_timeout(200)
+    check(done_ids(bp) == sorted(FIVE), "Scope 3: 'Keep what is here' keeps every mark")
+    bp.click("#backup-load")
+    bp.wait_for_timeout(200)
+    if bp.locator("#backup-yes").count() and bp.locator("#backup-yes").is_visible():
+        bp.click("#backup-yes")
+        bp.wait_for_timeout(300)
+    check(done_ids(bp) == ["v1"], "Scope 3: 'Yes, replace them' loads the code")
+    check(bp.inner_text("#backup-status").startswith("Loaded."), "Scope 3: and says it loaded")
+    bctx.close()
+    bctx, bp = new_page(b, None, start=False)
+    bp.evaluate("location.hash = '#menu'")
+    bp.wait_for_selector("#backup-fold summary")
+    bp.click("#backup-fold summary")
+    bp.fill("#backup-code", OLD_CODE)
+    bp.click("#backup-load")
+    bp.wait_for_timeout(300)
+    check(done_ids(bp) == ["v1"], "Scope 3: on a device with nothing to lose, a code loads without a question")
+    bp.fill("#backup-code", "not a code")
+    bp.click("#backup-load")
+    bp.wait_for_timeout(200)
+    check("did not work" in bp.inner_text("#backup-status") and done_ids(bp) == ["v1"], "Scope 3: a bad code changes nothing and says so")
+    bctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
