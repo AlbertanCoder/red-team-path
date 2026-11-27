@@ -451,7 +451,7 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 
 ---
 
-## 8. Fix log (in progress: 33 of 25 done, 27 Nov 2026)
+## 8. Fix log (in progress: 11 of 25 done, 27 Nov 2026)
 
 Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/ship.sh` (local test, push, live file compared, live test). "Failed before" means the new checks were run against the live site before the change went out.
 
