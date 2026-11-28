@@ -636,6 +636,8 @@ with sync_playwright() as p:
     sp.unroute("https://raw.githubusercontent.com/**")
     # Step 11's threat model check, and garak's report check, against the same pretend GitHub
     TM = "# What it is\nA shop chatbot.\n# What it can do\nIt can call APIs.\n# Who might attack it\nAny user.\n# What could go wrong\nIt deletes users.\n# What would hurt most\nLost accounts.\n# What I test first\nThe delete API.\n"
+    PARA = " It matters because the chatbot acts for real customers, so each line here names a thing I can test in the lab. " * 2
+    TM_FULL = "".join(l + (PARA + "\n" if not l.startswith("#") else "\n") for l in TM.splitlines())
     FILES.clear()
     FILES.update({"threat-model.md": TM})
     sp.route("https://api.github.com/**", fake_api)
@@ -646,13 +648,13 @@ with sync_playwright() as p:
     sp.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled")
     res = sp.inner_text("#gh-result")
     check("all six headings" in res and "150 or more needed" in res and ticks(sp).get("pfag1", 0) <= 0, "Scope 2: a threat model with all six headings but too few words fails, and says why")
-    FILES["threat-model.md"] = TM + ("This part is about what the agent could do with its tools and who would be hurt. " * 12)
+    FILES["threat-model.md"] = TM_FULL
     sp.click("#gh-check")
     sp.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled && /passed/.test(document.getElementById('gh-box').textContent)")
     check(ticks(sp).get("pfag1", 0) > 0, "Scope 2: a full threat model passes ag1's check")
     def report(target):
-        rows = [{"entry_type": "start_run setup", "plugins.target_type": target}, {"entry_type": "init"},
-                {"entry_type": "attempt", "status": 1}, {"entry_type": "attempt", "status": 2}, {"entry_type": "eval", "probe": "encoding"}]
+        rows = [{"entry_type": "start_run setup", "plugins.target_type": target}, {"entry_type": "init"}] + \
+               [{"entry_type": "attempt", "status": 1 + k % 2} for k in range(12)] + [{"entry_type": "eval", "probe": "encoding"}, {"entry_type": "completion"}]
         return "\n".join(json.dumps(r) for r in rows) + "\n"
     FILES.clear()
     FILES.update({"scans/garak.test.report.jsonl": report("test.Repeat")})
@@ -1080,7 +1082,7 @@ with sync_playwright() as p:
         check(not ok and "looks like an API key" in res and "notes.md" in res, "Scope 3: %s in a file still fails the check and names the file" % name)
     ok, res, _ = github_run("ap1", dict(HONEST, **{"big.jsonl": "x" * 400000}))
     check(ok and "1 not read" in res, "Scope 3: a file too big to read is counted as not read, not as clean")
-    AP3 = {"score.py": "print(1)\n", "summary.json": json.dumps({"total": 2, "leaked": 0, "refused": 1, "secret": "Plum"}),
+    AP3 = {"score.py": "import json\nrows = [json.loads(l) for l in open('results.jsonl')]\njson.dump({'total': len(rows)}, open('summary.json', 'w'))\n", "summary.json": json.dumps({"total": 2, "leaked": 0, "refused": 1, "secret": "Plum"}),
            "results.jsonl": json.dumps({"prompt": "a", "reply": "the word is PLUM", "model": "m", "time": "t"}) + "\n" + json.dumps({"prompt": "b", "reply": "no", "model": "m", "time": "t"}) + "\n"}
     ok, res, box_text = github_run("ap3", AP3)
     check(not ok and "ignoring capitals" in res, "Scope 3: when ap3's numbers differ, the result says how the app counts a leak")
@@ -1159,6 +1161,82 @@ with sync_playwright() as p:
     ap2 = box_text(gp, "ap2")
     check("git clone" in ap2 and "git commit" in ap2 and "git push" in ap2, "Scope 3: box ap2 shows the typed git commands once")
     gctx.close()
+    # Scope 3, fix 14 (audit E1, A7; decision 4): each GitHub check looks inside the files. Each rule has a nonsense repository
+    # that now fails and an honest one that still passes.
+    def gh2(box, files, commits=None, user="testuser"):
+        ctx, page = new_page(b, None, start=False)
+        hdr = {"Access-Control-Allow-Origin": "*"}
+        def api(route):
+            url = route.request.url
+            if "/git/trees/" in url:
+                route.fulfill(status=200, content_type="application/json", headers=hdr, body=json.dumps({"tree": [{"path": k, "type": "blob", "size": len(v)} for k, v in files.items()]}))
+            elif "/commits?" in url and "path=probe.py" in url and commits is not None:
+                route.fulfill(status=200, content_type="application/json", headers=hdr, body=json.dumps([{"commit": {"author": {"date": d}}} for d in commits]))
+            else:
+                route.fulfill(status=404, content_type="application/json", headers=hdr, body='{"message": "Not Found"}')
+        def raw(route):
+            body = files.get(route.request.url.split("/HEAD/", 1)[-1])
+            route.fulfill(status=200 if body is not None else 404, content_type="text/plain", headers=hdr, body=body if body is not None else "404")
+        page.route("https://api.github.com/**", api)
+        page.route("https://raw.githubusercontent.com/**", raw)
+        screen(page, box)
+        page.fill("#gh-user", user)
+        page.click("#gh-check")
+        page.wait_for_function("document.getElementById('gh-result') && !document.getElementById('gh-check').disabled")
+        out = (ticks(page).get("pf" + box, 0) > 0, page.inner_text("#gh-result"))
+        ctx.close()
+        return out
+
+    ok, res = gh2("ap1", dict(HONEST, **{"hello_model.py": "# client.interactions.create(model='m', input='hi')\nprint('hi')\n"}))
+    check(not ok and "comments do not count" in res, "Scope 3: ap1 with the model call only in a comment fails")
+    check(gh2("ap1", HONEST)[0], "Scope 3: an honest ap1 still passes")
+    PROMPTS = ["try %d" % k for k in range(10)]
+    AP2 = {"prompts.json": json.dumps(PROMPTS), "results.jsonl": "".join(json.dumps({"prompt": x, "reply": "no", "model": "m", "time": "t"}) + "\n" for x in PROMPTS),
+           "run_prompts.py": "import json\nfrom google import genai\nclient = genai.Client()\nfor p in json.load(open('prompts.json')):\n    r = client.interactions.create(model='m', input=p)\n"}
+    ok, res = gh2("ap2", dict(AP2, **{"run_prompts.py": "# sends every prompt with generate_content\n"}))
+    check(not ok and "no code line calls a model" in res, "Scope 3: ap2 with a run_prompts.py that is only a comment fails")
+    check(gh2("ap2", AP2)[0], "Scope 3: an honest ap2 still passes")
+    ok, res = gh2("ap3", dict(AP3, **{"score.py": "", "summary.json": json.dumps({"total": 2, "leaked": 1, "refused": 1, "secret": "Plum"})}))
+    check(not ok and "does not name both" in res, "Scope 3: ap3 with an empty score.py fails")
+    check(gh2("ap3", dict(AP3, **{"summary.json": json.dumps({"total": 2, "leaked": 1, "refused": 1, "secret": "Plum"})}))[0], "Scope 3: an honest ap3 still passes")
+    TM_THIN = TM + ("word " * 160)
+    ok, res = gh2("ag1", {"threat-model.md": TM_THIN})
+    check(not ok and "Fewer than 15 words under" in res, "Scope 3: a threat model with 160 words under one heading and almost none under the rest fails")
+    check(gh2("ag1", {"threat-model.md": TM_FULL})[0], "Scope 3: an honest threat model still passes")
+    HAND = "\n".join(json.dumps(r) for r in [{"entry_type": "start_run setup", "plugins.target_type": "openai"}, {"entry_type": "attempt"}, {"entry_type": "eval"}]) + "\n"
+    ok, res = gh2("ag4", {"scans/garak.x.report.jsonl": HAND})
+    check(not ok and "finished run" in res, "Scope 3: a 3-line garak report typed by hand fails")
+    ok, res = gh2("ag4", {"scans/garak.x.hitlog.jsonl": json.dumps({"probe": "encoding", "goal": "x"}) + "\n", "scans/garak.x.report.jsonl": report("huggingface")})
+    check(ok, "Scope 3: an honest garak folder, its hit log beside its report, passes")
+    PY = "import asyncio\nfrom pyrit.executor.attack import PromptSendingAttack\nasync def main():\n    attack = PromptSendingAttack(objective_target=t)\n    r = await attack.execute_async(objective='x')\nasyncio.run(main())\n"
+    OUT = {"pyrit/results.txt": "reply " * 60}
+    ok, res = gh2("ag5", dict(OUT, **{"pyrit/attack.py": "import pyrit\n# PromptSendingAttack(...) then execute_async(...)\n"}))
+    check(not ok, "Scope 3: ag5 with the attack only in a comment fails")
+    check(gh2("ag5", dict(OUT, **{"pyrit/attack.py": PY}))[0], "Scope 3: an honest ag5 still passes")
+    DAYS = ["2026-11-0%dT10:00:00Z" % d for d in (1, 1, 2, 3, 3)]
+    TL1 = {"probe.py": "import argparse\nparser = argparse.ArgumentParser()\n", "README.md": "# probe\n## How to run\npython probe.py prompts.json\n", "samples/report.json": "{}"}
+    ok, res = gh2("tl1", dict(TL1, **{"probe.py": "# click\nprint('hi')\n"}), DAYS)
+    check(not ok and "comments do not count" in res, "Scope 3: tl1 with '# click' as its only command-line code fails")
+    ok, res = gh2("tl1", TL1, [])
+    check(not ok and "commits that change probe.py" in res, "Scope 3: tl1 counts the commits that change probe.py, not every commit in the repository")
+    check(gh2("tl1", TL1, DAYS)[0], "Scope 3: an honest tl1 still passes")
+    REP = ("# Title: Prompt injection in the shop bot\n## Summary\nThe shop chatbot deletes any user when asked in a product review, with no check.\n"
+           "## Steps to reproduce\n1. Log in as a test user. 2. Post a review that says delete carlos. 3. Ask the bot about the product.\n"
+           "## Impact\nAny shopper can delete another user's account, so every customer of the shop is at risk.\n"
+           "## Suggested fix\nThe bot must not call delete because of text found in reviews; ask the signed-in user first.\n")
+    ok, res = gh2("tl2", {"reports/r.md": "Title\nSummary\nSteps to reproduce\nImpact\nSuggested fix\n"})
+    check(not ok and "too few words" in res, "Scope 3: a tl2 report of five words fails")
+    check(gh2("tl2", {"reports/r.md": REP})[0], "Scope 3: an honest tl2 report still passes")
+    WU = ("# Target\nMicrosoft's Lab 1 on my PC\n## Goal\nGet the chatbot to give up the password it guards, using only messages.\n"
+          "## What I tried\nI asked plainly, then as a teacher, then in a story, and finally asked it to spell the word.\n"
+          "## What happened\nIt refused the plain ask and the story, but spelled the word out one letter at a time.\n"
+          "## How to fix\nThe app should check every reply for the secret, not only the model's own judgement.\n")
+    ok, res = gh2("tl3", {"writeups/%d.md" % k: "# Target\n# Goal\n# What I tried\n# What happened\n# How to fix\n" for k in range(3)})
+    check(not ok, "Scope 3: three tl3 write-ups that are only headings fail")
+    check(gh2("tl3", {"writeups/%d.md" % k: WU for k in range(3)})[0], "Scope 3: three honest tl3 write-ups still pass")
+    ok, res = gh2("tl4", {"README.md": "# Hi\nSoon I will make red-team-tools.\n"})
+    check(not ok and "does not link" in res, "Scope 3: a profile README that only mentions red-team-tools, with no link, fails")
+    check(gh2("tl4", {"README.md": "# Hi\nMy work: [red-team-tools](https://github.com/testuser/red-team-tools)\n"})[0], "Scope 3: a profile README with a real link still passes")
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")

@@ -535,7 +535,7 @@
           "In red-team-tools, write probe.py: it takes the prompt file and the number of tries from the command line (argparse), sends every prompt, scores each reply and writes a report file.",
           "Put one report it made in the repository (for example samples/report.json), from your own harmless secret-word target.",
           "Write README.md: what the tool does, a part headed How to run, and what the report shows. Read GitHub's page on READMEs first.",
-          "Build it over several sessions and commit as you go: the check wants 5 or more commits on 3 or more different days. Then press Check my GitHub, and take the quiz."
+          "Build it over several sessions and commit as you go: the check wants 5 or more commits that change probe.py, on 3 or more different days. Then press Check my GitHub, and take the quiz."
         ] }),
       item("tl2", "build", "A report that gets paid",
         "Bounty programs pay for reports they can reproduce. Write one practice report, in the shape HackerOne asks for, about a PortSwigger LLM lab you solved.",
@@ -2764,13 +2764,13 @@
   var TEXT_FILE_RX = /(^|\/)(\.gitignore|\.env[^/]*|[^/]+\.(py|json|jsonl|md|txt|cfg|ini|toml|ya?ml|ipynb|csv))$/i;
   var GH_WHAT = {
     gt1: ["your copy of the exercise, " + INTRO_REPO + ", made from GitHub's template", "a merged pull request in it", "its front page says you completed the exercise"],
-    ap1: ["a public repository called " + TOOLS_REPO, "hello_model.py, which calls a model", ".gitignore with a line .env", "no file that holds an API key"],
-    ap2: ["prompts.json: a list of 10 or more prompts", "run_prompts.py", "results.jsonl: one line per prompt, each with prompt, reply, model and time", "every prompt in prompts.json has a reply in results.jsonl", "no file that holds an API key"],
-    ap3: ["score.py", "summary.json with total, leaked, refused and secret", "the totals match results.jsonl: the app recounts the leaks itself", "no file that holds an API key"],
-    ag1: ["threat-model.md with the six headings", "at least 150 words", "no file that holds an API key"],
-    ag4: ["a garak report in scans/ (a .jsonl file garak wrote)", "it ran against a real model, not garak's test generator", "it holds probe attempts and their evaluations", "no file that holds an API key"],
-    ag5: ["a Python file in pyrit/ that imports PyRIT and runs an attack", "a saved result in pyrit/", "no file that holds an API key"],
-    tl1: ["probe.py, which reads its settings from the command line", "README.md with a How to run part", "a report the tool made", "5 or more commits on 3 or more different days", "no file that holds an API key"],
+    ap1: ["a public repository called " + TOOLS_REPO, "hello_model.py, with a code line (not a comment) that calls a model", ".gitignore with a line .env", "no file that holds an API key"],
+    ap2: ["prompts.json: a list of 10 or more prompts", "run_prompts.py, with a code line that calls a model", "results.jsonl: one line per prompt, each with prompt, reply, model and time", "every prompt in prompts.json has a reply in results.jsonl", "no file that holds an API key"],
+    ap3: ["score.py, whose code reads results.jsonl and writes summary.json", "summary.json with total, leaked, refused and secret", "the totals match results.jsonl: the app recounts the leaks itself", "no file that holds an API key"],
+    ag1: ["threat-model.md with the six headings", "at least 150 words, with 15 or more under each heading", "no file that holds an API key"],
+    ag4: ["a garak report in scans/ (the .report.jsonl file garak wrote; its hit log is skipped)", "it ran against a real model, not garak's test generator", "a finished run: 10 or more probe attempts, their evaluations, and garak's completion line", "no file that holds an API key"],
+    ag5: ["a Python file in pyrit/ whose code lines (not comments) import PyRIT and run an attack", "a saved result in pyrit/", "no file that holds an API key"],
+    tl1: ["probe.py, whose code reads its settings from the command line", "README.md with a How to run part", "a report the tool made", "5 or more commits that change probe.py, on 3 or more different days", "no file that holds an API key"],
     tl2: ["a report in reports/ with Title, Summary, Steps to reproduce, Impact and Suggested fix", "no file that holds an API key"],
     tl3: ["3 write-ups in writeups/, each with the app's write-up parts: Target, Goal, What I tried, What happened, How to fix", "no file that holds an API key"],
     tl4: ["your profile repository (named like your username) with a README.md", "the README links red-team-tools"]
@@ -2804,6 +2804,30 @@
           : "No file holds anything shaped like an API key (" + texts.length + " files read" + (unread ? "; " + unread + " not read, because they are too big or too many" : "") + ")."]);
       });
   }
+  // A Python file's code lines: comments and triple-quoted text taken out, so a comment that names a call does not count as one.
+  function codeOf(src) {
+    return String(src || "").replace(/("""|\'\'\')[\s\S]*?\1/g, " ").split(/\r?\n/).map(function (l) {
+      var q = "";
+      for (var i = 0; i < l.length; i += 1) {
+        var c = l.charAt(i);
+        if (q) { if (c === "\\") { i += 1; } else if (c === q) { q = ""; } } else if (c === "'" || c === '"') { q = c; } else if (c === "#") { return l.slice(0, i); }
+      }
+      return l;
+    }).join("\n");
+  }
+  // The words under one part of a report or write-up: from the part's name to the next part's name.
+  function partWords(text, part, all) {
+    var start = new RegExp("(^|\\n)\\s*(#+\\s*|\\*\\*)?" + part + "\\b", "i").exec(text);
+    if (!start) { return 0; }
+    var rest = text.slice(start.index + start[0].length);
+    var next = rest.length;
+    all.forEach(function (pt) {
+      if (pt === part) { return; }
+      var m = new RegExp("(^|\\n)\\s*(#+\\s*|\\*\\*)?" + pt + "\\b", "i").exec(rest);
+      if (m && m.index < next) { next = m.index; }
+    });
+    return wordCount(rest.slice(0, next).replace(/[#*:]/g, " "));
+  }
   function findFile(files, name) { var hit = files.filter(function (f) { return f.path === name; })[0]; return hit ? hit.path : ""; }
   function jsonLines(text) {
     return String(text || "").split(/\r?\n/).filter(function (l) { return l.trim(); }).map(function (l) { try { return JSON.parse(l); } catch (e) { return null; } });
@@ -2828,8 +2852,9 @@
         lines.push([true, "Repository " + user + "/" + TOOLS_REPO + " is public."]);
         var py = findFile(files, "hello_model.py"), gi = findFile(files, ".gitignore");
         return Promise.all([py ? ghFile(user, TOOLS_REPO, py) : Promise.resolve(null), gi ? ghFile(user, TOOLS_REPO, gi) : Promise.resolve(null)]).then(function (got) {
-          lines.push([got[0] !== null && MODEL_CALL_RX.test(got[0]), got[0] === null ? "No hello_model.py at the top of the repository." :
-            MODEL_CALL_RX.test(got[0]) ? "hello_model.py calls a model." : "hello_model.py is there but does not call a model (no interactions.create, generate_content or the like)."]);
+          var calls = got[0] !== null && MODEL_CALL_RX.test(codeOf(got[0]));
+          lines.push([calls, got[0] === null ? "No hello_model.py at the top of the repository." :
+            calls ? "hello_model.py calls a model." : "hello_model.py is there but no code line calls a model (no interactions.create, generate_content or the like; comments do not count)."]);
           var ignores = got[1] !== null && /^\s*\.env\s*$/m.test(got[1]);
           lines.push([ignores, ignores ? ".gitignore keeps .env files out of Git." : got[1] === null ? "No .gitignore at the top of the repository." : ".gitignore has no line that is just .env."]);
           return noKeys(user, files, lines);
@@ -2839,8 +2864,10 @@
     ap2: function (user, lines) {
       return ghFiles(user, TOOLS_REPO).then(function (files) {
         var need = ["prompts.json", "run_prompts.py", "results.jsonl"].map(function (n) { return findFile(files, n); });
-        lines.push([!!need[1], need[1] ? "run_prompts.py is there." : "No run_prompts.py at the top of the repository."]);
-        return Promise.all([need[0] ? ghFile(user, TOOLS_REPO, need[0]) : Promise.resolve(null), need[2] ? ghFile(user, TOOLS_REPO, need[2]) : Promise.resolve(null)]).then(function (got) {
+        return Promise.all([need[0] ? ghFile(user, TOOLS_REPO, need[0]) : Promise.resolve(null), need[2] ? ghFile(user, TOOLS_REPO, need[2]) : Promise.resolve(null),
+          need[1] ? ghFile(user, TOOLS_REPO, need[1]) : Promise.resolve(null)]).then(function (got) {
+          var calls = got[2] !== null && MODEL_CALL_RX.test(codeOf(got[2]));
+          lines.push([calls, got[2] === null ? "No run_prompts.py at the top of the repository." : calls ? "run_prompts.py calls a model." : "run_prompts.py is there but no code line calls a model (comments do not count)."]);
           var list = null;
           try { list = JSON.parse(got[0]); } catch (e) { list = null; }
           var prompts = Array.isArray(list) ? list.map(promptOf).filter(function (x) { return x && x.trim(); }) : [];
@@ -2861,8 +2888,11 @@
     ap3: function (user, lines) {
       return ghFiles(user, TOOLS_REPO).then(function (files) {
         var sc = findFile(files, "score.py"), su = findFile(files, "summary.json"), re = findFile(files, "results.jsonl");
-        lines.push([!!sc, sc ? "score.py is there." : "No score.py at the top of the repository."]);
-        return Promise.all([su ? ghFile(user, TOOLS_REPO, su) : Promise.resolve(null), re ? ghFile(user, TOOLS_REPO, re) : Promise.resolve(null)]).then(function (got) {
+        return Promise.all([su ? ghFile(user, TOOLS_REPO, su) : Promise.resolve(null), re ? ghFile(user, TOOLS_REPO, re) : Promise.resolve(null),
+          sc ? ghFile(user, TOOLS_REPO, sc) : Promise.resolve(null)]).then(function (got) {
+          var code = codeOf(got[2]);
+          var reads = got[2] !== null && /results\.jsonl/.test(code) && /summary\.json/.test(code);
+          lines.push([reads, got[2] === null ? "No score.py at the top of the repository." : reads ? "score.py reads results.jsonl and writes summary.json." : "score.py is there but its code does not name both results.jsonl and summary.json."]);
           var s = null;
           try { s = JSON.parse(got[0]); } catch (e) { s = null; }
           var shaped = s && typeof s === "object" && [s.total, s.leaked, s.refused].every(function (n) { return typeof n === "number" && n >= 0; }) && typeof s.secret === "string" && s.secret.trim().length >= 3;
@@ -2889,13 +2919,18 @@
         lines.push([!missing.length, missing.length ? "threat-model.md is missing these headings: " + missing.join("; ") + "." : "threat-model.md has all six headings."]);
         var words = wordCount(text.replace(/^#.*$/gm, " "));
         lines.push([words >= 150, words + " words under the headings (150 or more needed)."]);
+        var blocks = [], cur = null;
+        text.split(/\r?\n/).forEach(function (l) { if (/^#{1,6}\s/.test(l)) { cur = { head: l, body: "" }; blocks.push(cur); } else if (cur) { cur.body += " " + l; } });
+        var thin = missing.length ? [] : TM_HEADINGS.filter(function (hd) { var bk = blocks.filter(function (x) { return hd[1].test(x.head); })[0]; return !bk || wordCount(bk.body) < 15; }).map(function (hd) { return hd[0]; });
+        if (!missing.length) { lines.push([!thin.length, thin.length ? "Fewer than 15 words under: " + thin.join("; ") + "." : "Every heading has 15 or more words under it."]); }
         return noKeys(user, files, lines);
       });
     });
   };
   GH_CHECKS.ag4 = function (user, lines) {
     return ghFiles(user, TOOLS_REPO).then(function (files) {
-      var reports = files.filter(function (f) { return /^scans\/[^/]+\.jsonl$/i.test(f.path); });
+      var reports = files.filter(function (f) { return /^scans\/[^/]+\.jsonl$/i.test(f.path) && !/hitlog/i.test(f.path); });
+      reports.sort(function (a, b) { return (/\.report\.jsonl$/i.test(b.path) ? 1 : 0) - (/\.report\.jsonl$/i.test(a.path) ? 1 : 0); });
       if (!reports.length) { lines.push([false, "No .jsonl report in scans/."]); return noKeys(user, files, lines); }
       return ghFile(user, TOOLS_REPO, reports[0].path).then(function (text) {
         var rows = jsonLines(text).filter(Boolean);
@@ -2905,7 +2940,8 @@
         var target = String(setup["plugins.target_type"] || setup["plugins.model_type"] || setup.target_type || "");
         lines.push([!!setup.entry_type, setup.entry_type ? reports[0].path + " is a garak report." : reports[0].path + " does not look like a garak report (no start_run entry)."]);
         lines.push([!!target && !/^test/.test(target), !target ? "The report does not say which model it tested." : /^test/.test(target) ? "It ran against garak's test generator (" + target + "), not a real model." : "It ran against a real model (" + target + ")."]);
-        lines.push([(kinds.attempt || 0) > 0 && (kinds.eval || 0) > 0, (kinds.attempt || 0) + " attempts and " + (kinds.eval || 0) + " evaluations in the report (both needed)."]);
+        var finished = (kinds.attempt || 0) >= 10 && (kinds.eval || 0) > 0 && (kinds.completion || 0) > 0;
+        lines.push([finished, (kinds.attempt || 0) + " attempts, " + (kinds.eval || 0) + " evaluations" + ((kinds.completion || 0) ? " and garak's completion line" : ", and no completion line") + " (a finished run: 10 or more attempts, evaluations and the completion line)."]);
         return noKeys(user, files, lines);
       });
     });
@@ -2915,7 +2951,7 @@
       var pys = files.filter(function (f) { return /^pyrit\/[^/]+\.py$/i.test(f.path); });
       var outs = files.filter(function (f) { return /^pyrit\/[^/]+\.(txt|json|jsonl|md|log)$/i.test(f.path); });
       return Promise.all(pys.slice(0, 5).map(function (f) { return ghFile(user, TOOLS_REPO, f.path).catch(function () { return ""; }); })).then(function (texts) {
-        var ok = texts.some(function (s) { return /^\s*(from|import)\s+pyrit\b/m.test(s) && /\w+Attack\s*\(/.test(s) && /execute_async\s*\(/.test(s); });
+        var ok = texts.map(codeOf).some(function (s) { return /^\s*(from|import)\s+pyrit\b/m.test(s) && /\w+Attack\s*\(/.test(s) && /execute_async\s*\(/.test(s); });
         lines.push([ok, ok ? "A Python file in pyrit/ imports PyRIT and runs an attack." : pys.length ? "No Python file in pyrit/ both imports PyRIT and runs an attack with execute_async." : "No Python file in pyrit/."]);
         return outs.length ? ghFile(user, TOOLS_REPO, outs[0].path).catch(function () { return ""; }) : "";
       }).then(function (out) {
@@ -2924,21 +2960,23 @@
       });
     });
   };
+  function thinParts(text, parts) { return parts.filter(function (pt, i) { return partWords(text, pt, parts) < (i === 0 ? 3 : 10); }); }
   function hasParts(text, parts) { return parts.filter(function (pt) { return !new RegExp("(^|\\n)\\s*(#+\\s*|\\*\\*)?" + pt + "\\b", "i").test(text); }); }
   GH_CHECKS.tl1 = function (user, lines) {
     return ghFiles(user, TOOLS_REPO).then(function (files) {
       var probe = findFile(files, "probe.py"), readme = findFile(files, "README.md");
       var report = files.filter(function (f) { return /^samples\/[^/]+\.(json|jsonl|md|txt|csv)$/i.test(f.path) || /^report[^/]*\.(json|jsonl|md|txt|csv)$/i.test(f.path); })[0];
       return Promise.all([probe ? ghFile(user, TOOLS_REPO, probe) : Promise.resolve(null), readme ? ghFile(user, TOOLS_REPO, readme) : Promise.resolve(null),
-        ghGet(GH_API + user + "/" + TOOLS_REPO + "/commits?per_page=100")]).then(function (got) {
-        lines.push([got[0] !== null && /argparse|sys\.argv|click|typer/.test(got[0]), got[0] === null ? "No probe.py at the top of the repository." :
-          /argparse|sys\.argv|click|typer/.test(got[0]) ? "probe.py reads its settings from the command line." : "probe.py does not read command-line settings (argparse or the like)."]);
+        ghGet(GH_API + user + "/" + TOOLS_REPO + "/commits?path=probe.py&per_page=100")]).then(function (got) {
+        var cli = got[0] !== null && /\b(argparse|sys\.argv|click|typer)\b/.test(codeOf(got[0]));
+        lines.push([cli, got[0] === null ? "No probe.py at the top of the repository." :
+          cli ? "probe.py reads its settings from the command line." : "probe.py does not read command-line settings in its code (argparse or the like; comments do not count)."]);
         lines.push([got[1] !== null && /(^|\n)#+\s*How to run/i.test(got[1]), got[1] === null ? "No README.md." : /(^|\n)#+\s*How to run/i.test(got[1]) ? "README.md has a How to run part." : "README.md has no heading called How to run."]);
         lines.push([!!report, report ? "A report the tool made: " + report.path + "." : "No report file in samples/ (or report.* at the top)."]);
         var days = {};
         (got[2] || []).forEach(function (c) { var d = c.commit && c.commit.author && c.commit.author.date; if (d) { days[d.slice(0, 10)] = 1; } });
         var n = (got[2] || []).length, nd = Object.keys(days).length;
-        lines.push([n >= 5 && nd >= 3, n + " commits on " + nd + " different days (5 on 3 or more needed: built over time, not pasted in one go)."]);
+        lines.push([n >= 5 && nd >= 3, n + " commits that change probe.py, on " + nd + " different days (5 on 3 or more needed: built over time, not pasted in one go)."]);
         return noKeys(user, files, lines);
       });
     });
@@ -2949,8 +2987,8 @@
       if (!reps.length) { lines.push([false, "No .md report in reports/."]); return noKeys(user, files, lines); }
       return Promise.all(reps.slice(0, 5).map(function (f) { return ghFile(user, TOOLS_REPO, f.path).catch(function () { return ""; }); })).then(function (texts) {
         var need = ["Title", "Summary", "Steps to reproduce", "Impact", "Suggested fix"];
-        var best = texts.map(function (s) { return hasParts(s, need); }).sort(function (a, b) { return a.length - b.length; })[0];
-        lines.push([!best.length, best.length ? "The report in reports/ is missing: " + best.join(", ") + "." : "A report with Title, Summary, Steps to reproduce, Impact and Suggested fix."]);
+        var best = texts.map(function (s) { return hasParts(s, need).concat(thinParts(s, need)); }).sort(function (a, b) { return a.length - b.length; })[0];
+        lines.push([!best.length, best.length ? "The report in reports/ is missing, or has too few words under: " + best.join(", ") + " (3 words for the title, 10 for each other part)." : "A report with Title, Summary, Steps to reproduce, Impact and Suggested fix, each with words under it."]);
         return noKeys(user, files, lines);
       });
     });
@@ -2960,8 +2998,8 @@
       var ws = files.filter(function (f) { return /^writeups\/[^/]+\.md$/i.test(f.path); });
       return Promise.all(ws.slice(0, 10).map(function (f) { return ghFile(user, TOOLS_REPO, f.path).catch(function () { return ""; }); })).then(function (texts) {
         var need = ["Target", "Goal", "What I tried", "What happened", "How to fix"];
-        var full = texts.filter(function (s) { return !hasParts(s, need).length; }).length;
-        lines.push([full >= 3, full + " of " + ws.length + " write-ups in writeups/ have Target, Goal, What I tried, What happened and How to fix (3 needed)."]);
+        var full = texts.filter(function (s) { return !hasParts(s, need).length && !thinParts(s, need).length; }).length;
+        lines.push([full >= 3, full + " of " + ws.length + " write-ups in writeups/ have Target, Goal, What I tried, What happened and How to fix, with 10 or more words under each part but Target (3 needed)."]);
         return noKeys(user, files, lines);
       });
     });
@@ -2969,7 +3007,7 @@
   GH_CHECKS.tl4 = function (user, lines) {
     return ghFile(user, user, "README.md").then(function (text) {
       lines.push([true, "Your profile repository " + user + "/" + user + " has a README.md."]);
-      var linked = /red-team-tools/i.test(text);
+      var linked = /github\.com\/[A-Za-z0-9-]+\/red-team-tools\b|\]\(\s*[^)\s]*red-team-tools[^)\s]*\s*\)/i.test(text);
       lines.push([linked, linked ? "It links red-team-tools." : "It does not link red-team-tools yet."]);
     }, function () { lines.push([false, "No README.md in a public repository called " + user + "/" + user + "."]); });
   };
