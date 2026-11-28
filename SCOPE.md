@@ -130,7 +130,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 15. C1: OWASP 2026 (decision 2). Proof: 97e8b61; 4 new checks, all failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (436 checks), 27 Nov 2026. New wb5 source from OWASP's 2026 pages (old source and questions kept in ~/redteam/learn/sources-archive/). A wb5 pass already earned stays.
 - [x] 16. C2: PortSwigger's 8 labs (decision 2). Proof: 2f71503; 3 new checks, all failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (439 checks), 27 Nov 2026. An ag2 pass already earned stays.
 - [x] 17. A6, A7: garak and PyRIT run for real on a free model; steps rewritten from what worked; `PROOF.md` (decision 1). Proof: ba4d791; 5 new checks, all failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (444 checks), 27 Nov 2026. `PROOF.md` records both real runs.
-- [ ] 18. C4, C9 (Steps 7 to 14 rows), D2: box text.
+- [x] 18. C4, C9 (Steps 7 to 14 rows), D2: box text. Proof: 1e851b1; 13 new checks, all failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (457 checks), 27 Nov 2026.
 - [ ] 19. C7, C8: Library lessons and words.
 - [ ] 20. H: videos inside the app for py1 to py8, md1 to md7, wb2, wb6, gt1 and c50; `tools/walk_test.py` plays each one on the live site.
 - [ ] 21. D3: Jobs tools.
