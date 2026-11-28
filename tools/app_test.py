@@ -1132,7 +1132,9 @@ with sync_playwright() as p:
     check("two different testing categories" in b1 and "Prompt Extraction" in b1, "Scope 3: box b1 gives 0DIN's two rules on what pays")
     b4 = box_text(fp, "b4")
     check("@wearehackerone.com" in b4 and "100 words" in b4 and "linking your write-ups" not in b4, "Scope 3: box b4 says what Anthropic's form needs")
-    check("prize contest" in box_text(fp, "g6"), "Scope 3: box g6 says it was a prize contest that ended")
+    g6 = box_text(fp, "g6")
+    check("certificate" in g6 and "Lucky Break" not in g6 and fp.get_attribute("#open-link", "href") == "https://app.grayswan.ai/training",
+          "Scope 3: box g6 no longer sends you to an ended prize contest: it opens Gray Swan's free Training page, Chat set (Q8)")
     fp.evaluate("location.hash = '#tutor'")
     fp.wait_for_selector("#lesson-t29")
     fp.click("#lesson-t29")

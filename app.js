@@ -103,7 +103,9 @@
     ["Introduction to Red Teaming Agents, 5 scenarios", "training-beginner-agent", "Your first agents: AIs that can take actions, which Microsoft's labs do not cover."],
     ["Introduction to Indirect Prompt Injection, 8 scenarios", "training-intermediate-agent", "The web page attack from Episode 4, against agents."],
     ["The Labyrinth: Challenge Edition, 4 scenarios", "labyrinth-challenge-version", "The starter set again, harder."],
-    ["Lucky Break: Level Up, 6 scenarios", "lucky-break-level-up", "A medium set that mixes techniques. Unlike the others it was a prize contest, which ended on 14 Oct 2026: if it no longer opens or scores, skip it."],
+    // g6 was "Lucky Break: Level Up", a prize contest that ended on 14 Oct 2026. Shad's answer (27 Nov 2026): point it at a free set.
+    // Gray Swan's only live free sets are g2 to g4, so g6 is the Chat set of its free Training page (read 27 Nov 2026: 26 scenarios, a certificate).
+    ["Training: the Chat set, 26 scenarios, with a certificate", "https://app.grayswan.ai/training", "Gray Swan's free training track for chatbots, graded from first attempt to expert. Finish every scenario in the set and you earn its free certificate, a public record you can attach to a job application. Do as many as an hour allows, and come back for the rest."],
     ["Proving Ground: the Agent set", "proving-ground", "A large set of agent targets. Do as many as an hour allows."],
     ["Proving Ground: the Indirect set", "proving-ground", "A large set of indirect prompt injection targets."]
   ];
@@ -275,7 +277,7 @@
 
     var practice = GRAYSWAN.map(function (g, i) {
       return item("g" + (i + 1), "practice", "Gray Swan: " + g[0], g[2] + " Stop when your time is up, solved or not: unsolved is normal.",
-        URLS.gs + g[1], { how: graySwanSteps(g[0]) });
+        g[1].indexOf("https://") === 0 ? g[1] : URLS.gs + g[1], { how: graySwanSteps(g[0]) });
     });
     practice.push(item("g9", "practice", "Gray Swan: a live prize contest if one is open, or your weakest set again",
       "A placing in a contest is proof you can show. Prize money goes mostly to top finishers.", URLS.gsChallenges, { how: [
