@@ -1273,6 +1273,29 @@ with sync_playwright() as p:
     q1 = rp2.evaluate("window.RTP_QUIZ.ag5")[0]
     check(q1["options"][q1["answer"]] == "3.11 to 3.14", "Scope 3: ag5's quiz gives the Python versions of PyRIT 1.2.1, the version the box installs")
     rctx2.close()
+    # Scope 3, fix 18 (audit C4, C9 Steps 7 to 14, D2): box text that was only partly true.
+    tctx, tp = new_page(b, None, start=False)
+    def has(box, *words):
+        t = box_text(tp, box)
+        return all(w in t for w in words)
+    check(has("fc1", "My certifications", "My timeline", "AI tools") and "make your profile public" not in box_text(tp, "fc1"), "Scope 3: fc1 names freeCodeCamp's real settings and its AI pledge")
+    check(has("fc18", "before the exam".capitalize().split()[0], "no AI tools"), "Scope 3: fc18 says the honesty policy comes before the exam and rules out AI tools")
+    check(has("lx1", "ssh bandit0@bandit.labs.overthewire.org -p 2220", "Write-ups"), "Scope 3: lx1 gives the ssh command and OverTheWire's real rule")
+    check(has("ap1", "aistudio.google.com/docs/api-key", "reopen Visual Studio Code", "may read free-tier prompts"), "Scope 3: ap1 points at Google's Windows key steps, says to reopen VS Code, and says Google may read free-tier prompts")
+    check(has("md1", "Foundry Local") and "paid Azure" not in box_text(tp, "md1"), "Scope 3: md boxes no longer say every code sample needs paid Azure")
+    check(has("md7", "signed records") and "how agents are secured" not in tp.inner_text("#top-title"), "Scope 3: md7 says what agents lesson 18 really covers")
+    check(has("wb4", "three Practitioner labs"), "Scope 3: wb4 says its labs are a step up")
+    check(has("c50", "GitHub account", "30 June 2027", "US$299"), "Scope 3: c50 names GitHub, the deadline and the paid certificate's price")
+    check(has("pd4", "six ads", "US driver's licences", "to be confirmed by counsel"), "Scope 3: pd4 counts its ads right and cautions before sending ID")
+    check(has("pd5", "classic web flaws", "sanctioned countries") and "All four are open to people in Canada" not in box_text(tp, "pd5"), "Scope 3: pd5 says who pays for what, and what 'open to Canada' rests on")
+    check(has("tl2", "expected and what happened instead"), "Scope 3: tl2 asks for HackerOne's expected and actual behaviour")
+    check(has("tl3", "Never publish a password"), "Scope 3: tl3 repeats OverTheWire's no-password rule")
+    tags = {}
+    for k in ("ag1", "tl2", "tl3", "tl4", "pd6", "pd7"):
+        screen(tp, k)
+        tags[k] = tp.inner_text("#top-tag")
+    check(all("NEEDS YOUR PC" in v or "SHIFT WEEK OK" in v for v in tags.values()) and "HOURS" in tags["pd7"], "Scope 3: ag1, tl2, tl3, tl4, pd6 and pd7 carry a PC or shift label, and pd7 a time (%s)" % tags)
+    tctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")

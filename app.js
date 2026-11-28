@@ -373,7 +373,7 @@
       if (f[6]) { it.pc = true; } else { it.shift = true; }
       return it;
     });
-    python1[0].how = ["Make a free freeCodeCamp account. In its Settings, make your profile public, so your certificate can be shown later."].concat(python1[0].how);
+    python1[0].how = ["Make a free freeCodeCamp account. In its Settings, add your name and set My certifications and My timeline to public: a certificate stays hidden until your name is filled in and both are public. A new profile is already public; choose a readable username too.", "freeCodeCamp's Academic Honesty pledge says you did not use AI tools to generate your solutions unless a lesson said it was OK. Write the projects yourself."].concat(python1[0].how);
     var explain7 = item("xb7", "explain", "Explain it back: Step 7",
       "Two short answers in your own words: what you learned in Step 7, and one thing you would do with it.", "", { mins: 15, shift: true, how: [
         "In the first box, write what you learned in this step, as if telling a friend who has never coded.",
@@ -399,16 +399,16 @@
       item("lx1", "practice", "Linux basics: OverTheWire Bandit, levels 0 to 10",
         "Red-team tools and the servers you test run on Linux. Bandit is a free game for absolute beginners: each level is one command-line skill.",
         "https://overthewire.org/wargames/bandit/", { mins: 360, pc: true, openLabel: "Open Bandit", how: [
-          "Read OverTheWire's rules first. Then open the Level 0 page. Windows has SSH built in: open PowerShell and use the ssh command the page describes.",
+          "Read OverTheWire's rules first. Then open the Level 0 page. In PowerShell type ssh bandit0@bandit.labs.overthewire.org -p 2220, type yes the first time, then the password bandit0 (it does not show as you type). If Windows says ssh is not found, add OpenSSH Client under Settings, System, Optional features.",
           "Do levels 0 to 10 in order. Each level page lists the commands you may need; read about each one before guessing.",
-          "Keep level passwords and solutions to yourself: OverTheWire's rules say do not spoil the game for others.",
+          "Never publish a level's password: OverTheWire's rules forbid it. Write-ups of how you solved a level are allowed, without passwords.",
           "When you reach level 11, take the quiz here. The app cannot see your Bandit levels; its questions show the commands you used."
         ] }),
       item("ap1", "build", "Your first Python call to an AI model",
         "Calling a model from Python is the base of every automated red-team test. Google's Gemini API has a free tier and is open in Canada. GitHub Models, which older guides suggest, was retired on 30 Jul 2026.",
         "https://aistudio.google.com/docs/get-started", { mins: 240, pc: true, proof: "github", openLabel: "Open Google's guide", how: [
-          "Make a free Gemini API key on Google AI Studio's API keys page (aistudio.google.com/apikey). Free-tier prompts may be used by Google: send nothing private.",
-          "Store the key as an environment variable called GEMINI_API_KEY, the way Google's key page shows for Windows. Never paste it into a file you will push.",
+          "Make a free Gemini API key on Google AI Studio's API keys page (aistudio.google.com/apikey). Google's terms say people at Google may read free-tier prompts and replies: send nothing private. You must be 18 or older.",
+          "Store the key as an environment variable called GEMINI_API_KEY: Google's Windows steps are on aistudio.google.com/docs/api-key, on its Windows tab. Then close and reopen Visual Studio Code, or its terminal will not see the key. Never paste the key into a file you will push.",
           "On GitHub, make a new public repository called red-team-tools.",
           "Put it on your PC with GitHub Desktop, GitHub's free app: on desktop.github.com press Download for Windows, run the setup file, and sign in with your GitHub account. On your repository's GitHub page press Code, then Open with GitHub Desktop. Press Choose... to pick the folder it goes in, then Clone.",
           "In that folder, add a file called .gitignore with the line .env in it, as a safety net.",
@@ -435,7 +435,7 @@
         ] })
     ];
     var MD_HOW = [
-      "Open the lesson on GitHub and read its text page. Skip its code samples: they need paid Azure.",
+      "Open the lesson on GitHub and read its text page. Skip its code samples for this box: most use a paid cloud service, though the course also names a free way to run models on your PC (Foundry Local).",
       "Write one sentence for each part as you go.",
       "Take the quiz here. It is written from the lesson's own words."
     ];
@@ -446,7 +446,7 @@
       ["md4", "Function calling", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/11-integrating-with-function-calling", 90, "How a model asks your code to run a function. The model asks; your code does it."],
       ["md5", "What an agent is, and tool use", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/01-intro-to-ai-agents", 150, "Agents are models that act. Read agents lesson 01, then lesson 04 (tool use)."],
       ["md6", "MCP and other agent protocols", "https://github.com/microsoft/ai-agents-for-beginners/tree/main/11-agentic-protocols", 90, "How agents plug into tools through MCP servers: the thing PortSwigger's MCP labs attack in Step 11."],
-      ["md7", "Why prompt injection works, and how agents are secured", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/13-securing-ai-applications", 180, "The threats and the defences. Read lesson 13, then agents lessons 06 and 18."]
+      ["md7", "Why prompt injection works, and keeping agents safe", "https://github.com/microsoft/generative-ai-for-beginners/tree/main/13-securing-ai-applications", 180, "The threats and the defences: read lesson 13, then agents lesson 06. Agents lesson 18 is about signed records of what an agent did: they help you check afterwards, and the lesson itself says they do not stop an injection."]
     ].map(function (m) { return item(m[0], "read", m[1], m[4], m[2], { mins: m[3], shift: true, how: MD_HOW, openLabel: "Open the lesson" }); });
 
     var explain10 = item("xb10", "explain", "Explain it back: Step 10", "Two short answers in your own words: what you learned in Step 10, and one thing you would do with it.", "", { mins: 15, shift: true, how: EXPLAIN_HOW });
@@ -472,7 +472,7 @@
         "XSS is what happens when a chatbot's reply, or anything a user can control, runs as code in someone else's browser.",
         "https://portswigger.net/web-security/cross-site-scripting", { mins: 360, pc: true, openLabel: "Open PortSwigger's XSS topic", how: PS_HOW }),
       item("wb4", "practice", "PortSwigger: API testing",
-        "Agents act through APIs. This path teaches how to find an API's endpoints and the parameters it never meant to accept.",
+        "Agents act through APIs. This path teaches how to find an API's endpoints and the parameters it never meant to accept. It is a step up from the two boxes before it: one Apprentice lab, then three Practitioner labs.",
         "https://portswigger.net/web-security/learning-paths/api-testing", { mins: 360, pc: true, openLabel: "Open PortSwigger's path", how: PS_HOW }),
       item("wb5", "read", "OWASP Top 10 for LLM applications (the 2026 list)",
         "The ten risks every AI security ad and bounty program refers to. One job ad you read asks for it by name.",
@@ -495,7 +495,7 @@
     var step11 = [
       item("ag1", "build", "Threat model an AI agent before you test it",
         "Four of the job ads you read ask for threat modelling. Before testing PortSwigger's shop chatbot, write down what it can do and what could go wrong.",
-        "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html", { mins: 180, proof: "github", openLabel: "Open OWASP's cheat sheet", how: [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html", { mins: 180, pc: true, proof: "github", openLabel: "Open OWASP's cheat sheet", how: [
           "Read OWASP's Threat Modeling Cheat Sheet (the four questions), and the trust boundaries part of Microsoft's AI/ML threat modeling page.",
           "Open PortSwigger's first Web LLM lab and use its chatbot like a customer: what can it do, and what data can it reach?",
           "In red-team-tools, write threat-model.md with six headings: What it is; What it can do; Who might attack it; What could go wrong; What would hurt most; What I test first. At least 150 words.",
@@ -543,24 +543,24 @@
           "Build it over several sessions and commit as you go: the check wants 5 or more commits that change probe.py, on 3 or more different days. Then press Check my GitHub, and take the quiz."
         ] }),
       item("tl2", "build", "A report that gets paid",
-        "Bounty programs pay for reports they can reproduce. Write one practice report, in the shape HackerOne asks for, about a PortSwigger LLM lab you solved.",
-        "https://docs.hackerone.com/en/articles/8475116-quality-reports", { mins: 240, proof: "github", openLabel: "Open HackerOne's guide", how: [
+        "Bounty programs pay for reports they can reproduce. Write one practice report about a PortSwigger LLM lab you solved, with the parts HackerOne's guide asks for, plus a summary and a suggested fix.",
+        "https://docs.hackerone.com/en/articles/8475116-quality-reports", { mins: 240, shift: true, proof: "github", openLabel: "Open HackerOne's guide", how: [
           "Read HackerOne's Quality Reports page, and the reporting rules on Microsoft's Copilot bounty page.",
           "Pick one PortSwigger Web LLM lab you solved. In red-team-tools/reports/, write a .md file with the headings Title, Summary, Steps to reproduce, Impact and Suggested fix.",
-          "Steps to reproduce must let a stranger do it again: the exact messages, in order. Impact says who is hurt, not just what happened.",
+          "Steps to reproduce must let a stranger do it again: the exact messages, in order, then what you expected and what happened instead, as HackerOne asks. Impact says who is hurt, not just what happened. Add screenshots if you have them.",
           "Commit and push it. Press Check my GitHub, then take the quiz."
         ] }),
       item("tl3", "build", "Three public write-ups",
         "Write-ups are the proof employers read. Three, from practice you are allowed to share: Microsoft's labs, PortSwigger's labs, Bandit-style practice. Never a live bounty finding, never anything under an NDA.",
-        "https://www.hackerone.com/terms/disclosure-guidelines", { mins: 360, proof: "github", openLabel: "Open HackerOne's disclosure rules", how: [
+        "https://www.hackerone.com/terms/disclosure-guidelines", { mins: 360, shift: true, proof: "github", openLabel: "Open HackerOne's disclosure rules", how: [
           "Read HackerOne's disclosure guidelines: what stays private until it is fixed, and why.",
-          "Pick three practice targets whose rules allow sharing. Your write-ups from Step 1 (Menu, Library, notes) are a good start.",
+          "Pick three practice targets whose rules allow sharing. Your write-ups from Step 1 (Menu, Library, notes) are a good start. Never publish a password or a flag: OverTheWire's rules forbid it.",
           "Put each in red-team-tools/writeups/ as a .md file with the app's write-up parts (its template): Target, Goal, What I tried, What happened, How to fix.",
           "Commit and push. Press Check my GitHub, then take the quiz."
         ] }),
       item("tl4", "build", "Your GitHub profile page points to all of it",
         "An employer who finds your GitHub should see your red-team work in one look.",
-        "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme", { mins: 120, proof: "github", openLabel: "Open GitHub's guide", how: [
+        "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme", { mins: 120, shift: true, proof: "github", openLabel: "Open GitHub's guide", how: [
           "Your profile page comes from a public repository named exactly like your username, with a README.md at its top. You may already have one.",
           "Add a short part about your red-team work: link red-team-tools, your write-ups, and your certificates when you have them. Only true things.",
           "Commit and push. Press Check my GitHub, then take the quiz."
@@ -570,7 +570,7 @@
       item("pd1", "read", "Rules, safe harbor and NDAs",
         "Before you test anything real: what a program allows, what safe harbor protects, and what an NDA stops you posting.",
         "https://disclose.io/", { mins: 120, shift: true, openLabel: "Open disclose.io", how: [
-          "Read disclose.io's page on safe harbor, then HackerOne's Safe Harbor overview and its Vulnerability Disclosure Guidelines.",
+          "Read the safe harbor part of disclose.io's front page (its questions and answers), then HackerOne's Safe Harbor overview and its Vulnerability Disclosure Guidelines.",
           "Write down, for yourself: what makes testing a site legal for you? (A program that invites it, in writing, inside its scope.)",
           "Take the quiz here."
         ] }),
@@ -601,12 +601,13 @@
           "Which tools have you used for red teaming, and what did each show you?",
           "This work runs under an NDA. What will you never post, and where does your public proof come from instead?"
         ], how: [
-          "Read the job pages in Jobs and the four ads this box quotes: what they screen for, how long, how they pay.",
+          "Read the job pages in Jobs and the six ads this box quotes, from five companies: what they screen for, how long, how they pay.",
+          "Before you send ID anywhere, ask first. Alignerr's own questions page says it accepts only US driver's licences, US state IDs, US work permits or US permanent residence cards. Vettedlance's terms name no company and say they are governed by laws \"to be confirmed by counsel\". Send ID only inside a platform's own sign-up, and never pay.",
           "Answer the six practice questions below in your own words, at least 20 words each, as if speaking to the interviewer. Your answers stay on this device.",
           "Take the quiz here. Then read your answers out loud once."
         ] }),
       item("pd5", "read", "What the big AI programs pay for",
-        "OpenAI, Google and Microsoft pay for security impact through agents; Mozilla 0DIN pays for jailbreaks. All four are open to people in Canada (checked 27 Nov 2026).",
+        "OpenAI and Google pay for harm done through an AI, such as leaking someone's data or taking an action they did not ask for. Microsoft's Copilot bounty pays mostly for classic web flaws, plus a few AI ones. Mozilla 0DIN pays for jailbreaks. None of the four shuts out Canada: Microsoft, Google and 0DIN exclude only sanctioned countries, and OpenAI's pages give no country rule (checked 27 Nov 2026).",
         "https://openai.com/index/safety-bug-bounty/", { mins: 180, shift: true, openLabel: "Open OpenAI's program", how: [
           "Read OpenAI's Safety Bug Bounty page, Microsoft's Copilot bounty page, and Mozilla 0DIN's terms. Google's AI VRP rules are at bughunters.google.com.",
           "For each, write one line: what pays, what is out of scope, and how a report must look.",
@@ -614,14 +615,14 @@
         ] }),
       item("pd6", "paid", "Optional: apply to 2 contract platforms that take people in Canada",
         "From the Jobs list, apply to two whose ads say remote and open to Canada. Never pay to join anything. The app cannot see your applications, so this box is optional.",
-        "", { mins: 120, optional: true, how: [
+        "", { mins: 120, shift: true, optional: true, how: [
           "Open Jobs from the main menu and pick two ads marked open to Canada.",
           "Apply with only true things. Use your GitHub, your profiles and your certificates as proof.",
           "Note in your calendar when to follow up."
         ] }),
       item("pd7", "bounty", "Optional: send your first real bounty report",
         "Only inside a program's scope and rules, only a finding that repeats. Paste the report's address when it is sent; the app checks its shape only.",
-        "", { optional: true, proof: "link", links: [
+        "", { mins: 240, pc: true, optional: true, proof: "link", links: [
           ["Your report's address on HackerOne or Bugcrowd", "https://hackerone.com/reports/1234567", "^https://(www\\.)?(hackerone\\.com/reports/[0-9]{4,}|bugcrowd\\.com/[A-Za-z0-9/_.-]*submissions/[A-Za-z0-9-]{6,})/?$"]
         ], how: [
           "Pick a program from Step 13 whose scope covers what you found. Read its rules again.",
@@ -641,15 +642,15 @@
       ], how: [
         "Do freeCodeCamp's Python Review. All five certificate projects must be done before the exam opens.",
         "Install freeCodeCamp's exam app and take the 50-question exam. One try a week; its staff review passing exams before the result is final.",
-        "Claim the certificate (it asks you to accept its Academic Honesty Pledge) and paste its address below. Then take the quiz here."
+        "Before the exam freeCodeCamp asks you to accept its Academic Honesty Policy: no AI tools to generate your solutions. After you pass, claim the certificate and paste its address below. Then take the quiz here."
       ] });
     var cs50 = item("c50", "course", "Optional: Harvard's CS50P, for a stronger certificate",
       "Free, from Harvard. A free CS50 Certificate at 70% or more on every problem and the final project. Its honesty rules forbid AI tools other than CS50's own (ChatGPT, Claude, Copilot and the like) for answers. It never blocks your next step.",
-      "https://cs50.harvard.edu/python/", { mins: 3600, pc: true, optional: true, proof: "link", openLabel: "Open CS50P", links: [
+      "https://cs50.harvard.edu/python/", { mins: 9000, pc: true, optional: true, proof: "link", openLabel: "Open CS50P", links: [
         ["Your CS50 certificate address", "https://certificates.cs50.io/...", "^https://certificates\\.cs50\\.io/[A-Za-z0-9-]{8,}(\\.pdf)?(\\?.*)?$"]
       ], how: [
         "Read CS50P's Academic Honesty page first: no AI helpers other than CS50's own.",
-        "Do weeks 0 to 9 and the final project. Submitting needs a free edX account.",
+        "Do weeks 0 to 9 and the final project. Submitting needs a free GitHub account and a free edX account. The course closes on 30 June 2027, and Harvard expects 10 to 20 hours a week for the problem sets. The free CS50 certificate is enough: edX's paid one costs US$299.",
         "When CS50 sends your certificate, paste its address below."
       ] });
 
@@ -701,7 +702,7 @@
           { label: "EXPLAIN IT BACK", items: [explain8] }
         ] },
       { title: "Step 9: How AI models work",
-        goal: "Seven short lessons from Microsoft's free courses: tokens, embeddings and RAG, function calling, agents, MCP, and why prompt injection works.",
+        goal: "Seven boxes, 11 short lessons from Microsoft's free courses: tokens, embeddings and RAG, function calling, agents, MCP, and why prompt injection works.",
         why: "You attack agents in Step 11. First know what they are made of. No maths, no model training.",
         groups: [
           { label: "HOW MODELS WORK", items: step9.slice(0, 4) },
@@ -1323,7 +1324,7 @@
         right: 0, because: "The app used your input to fetch the object directly, without checking it was yours." },
       src: ["portswiggerIdor", "portswiggerXss", "mdnHttp"] },
     { id: "t37", group: "How models work", title: "What bounty programs actually pay for",
-      idea: "OpenAI, Google and Microsoft pay for security impact: an AI made to leak someone's data or take an action they did not ask for. Plain jailbreaks (rude words, facts you could search for) are out of scope there. Mozilla 0DIN is the program built around jailbreaks.",
+      idea: "OpenAI and Google pay for security impact (Microsoft's Copilot bounty mostly for classic web flaws): an AI made to leak someone's data or take an action they did not ask for. Plain jailbreaks (rude words, facts you could search for) are out of scope there. Mozilla 0DIN is the program built around jailbreaks.",
       why: "Choosing the right program for a finding is half the work. A great jailbreak sent to the wrong program earns nothing; a small data leak through an agent can pay.",
       when: "Before you test: read the program's scope and out-of-scope list, and what a report must hold (OpenAI: the behaviour must repeat at least half the time).",
       stops: "Nothing stops a good report but the rules: test only inside scope, with a test account, and keep findings private until the program says otherwise.",
