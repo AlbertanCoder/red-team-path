@@ -1,7 +1,7 @@
 // Job ads for the Jobs tab. tools/check_jobs.py re-checks every link and rewrites this file,
 // so edit it by hand only to add or remove an ad. Everything after the equals sign is plain JSON.
 window.RTP_JOBS = {
-  "updated": "2026-11-27",
+  "updated": "2026-11-28",
   "ads": [
     {
       "id": "alignerr-red-team-tester",
@@ -19,7 +19,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "check",
       "where": "Alignerr says it welcomes people from around the world, but its FAQ lists only US ID cards for the identity check. Ask them before you count on it."
@@ -31,16 +31,15 @@ window.RTP_JOBS = {
       "who": "Clera",
       "pay": "$30 to $60 an hour as posted, depending on the project",
       "ask": "Asks for 0 to 5 years of work experience and says earlier AI data work is not required. A talent pool: you apply, then wait for a project.",
-      "url": "https://jobs.ashbyhq.com/Clera/05b49675-1360-40d6-8d2f-20b6a9d89a76",
+      "url": "https://jobs.ashbyhq.com/Clera/998994f7-8a58-44b6-a0fc-9c3a46640ab8",
       "check": {
         "type": "ashby",
         "board": "Clera",
         "title": "Expert Talent Pool, Safety Testing Associate"
       },
       "added": "2026-11-17",
-      "checked": "2026-11-22",
-      "open": false,
-      "closed": "2026-11-23"
+      "checked": "2026-11-28",
+      "open": true
     },
     {
       "id": "claru-llm-jailbreak-red-teamer",
@@ -57,7 +56,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "anywhere",
       "where": "The ad says remote and names no country limit."
@@ -76,7 +75,7 @@ window.RTP_JOBS = {
         "title": "Expert Talent Pool, Evals and Benchmarks (Associate)"
       },
       "added": "2026-11-17",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "anywhere",
       "where": "The ad says fully remote and names no country limit."
@@ -95,7 +94,7 @@ window.RTP_JOBS = {
         "title": "Data Annotation Specialist, Safety"
       },
       "added": "2026-11-17",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "yes",
       "where": "Open to people in Canada or the US, as the ad says."
@@ -116,7 +115,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "check",
       "where": "Alignerr says it welcomes people from around the world, but its FAQ lists only US ID cards for the identity check. Ask them before you count on it."
@@ -136,7 +135,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-26",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "yes",
       "where": "Canada is on the ad's list of countries that can apply."
@@ -175,7 +174,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-17",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "anywhere",
       "where": "The ad says remote and names no country limit; Turing hires worldwide."
@@ -196,7 +195,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -217,7 +216,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -238,7 +237,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -259,7 +258,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -280,7 +279,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -301,7 +300,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "anywhere",
       "where": "The ad says fully remote and names no country limit."
@@ -322,7 +321,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -343,7 +342,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -364,7 +363,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -385,7 +384,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-19",
       "found": "2026-11-19",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "anywhere",
       "where": "The ad says remote globally; outside the US you are hired through a partner company, so no US work permit is needed."
@@ -405,7 +404,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-23",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "anywhere",
       "where": "The ad says work from anywhere with a stable connection."
@@ -425,7 +424,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-23",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "check",
       "where": "The page names no place at all. Job sites list it as worldwide, but ask Trajectory Labs before you count on it."
@@ -445,7 +444,7 @@ window.RTP_JOBS = {
         ]
       },
       "added": "2026-11-23",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "check",
       "where": "The page names no place at all. Job sites list it as worldwide, but ask Syntony before you count on it."
@@ -466,7 +465,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-23",
       "found": "2026-11-23",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -487,7 +486,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-23",
       "found": "2026-11-23",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the US."
@@ -508,7 +507,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-23",
       "found": "2026-11-23",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden: needs you to live in, or be allowed to work in, the UK."
@@ -529,7 +528,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-23",
       "found": "2026-11-23",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "check",
       "where": "Location as posted: remote. The feed names no country: read the ad to be sure."
@@ -550,7 +549,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-23",
       "found": "2026-11-23",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden by the scan: location as posted is London, UK, which is not open to someone working from Canada."
@@ -571,7 +570,7 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-23",
       "found": "2026-11-23",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "open": true,
       "canada": "no",
       "where": "Hidden by the scan: location as posted is London, which is not open to someone working from Canada."
