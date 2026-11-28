@@ -60,7 +60,11 @@ def case(what, ok):
 boards = {b for _, b, _ in job_feeds.BOARDS}
 case("the two feeds that belong to other companies (cais, patronus) are gone", not ({"cais", "patronus"} & boards))
 for text, closed in (("We are no longer accepting applications.", True), ("This position has been filled.", True), ("This job has expired", True),
-                     ("We are no longer accepting applicants from California.", False), ("Apply now: the ad comes down once a position is filled.", False)):
+                     ("We are no longer accepting applicants from California.", False), ("Apply now: the ad comes down once a position is filled.", False),
+                     # After-fixes audit, finding 3:
+                     ("Applications will be reviewed on a rolling basis until the position is filled.", False),
+                     ("We review applications until this position is filled.", False), ("This position is closed to non-US residents.", False),
+                     ("Position filled", True), ("Applications are closed", True), ("Job expired", True)):
     case("the daily check reads %r as %s" % (text, "closed" if closed else "open"), bool(check_jobs.CLOSED.search(text)) == closed)
 case("a move from www. to the bare address is the same site", check_jobs.host("https://www.example.com/jobs/1") == check_jobs.host("https://example.com/jobs/1"))
 case("a title edited a little is the same ad", check_jobs.same_title("AI Red Teamer - Contract", "AI red teamer (contract)") and not check_jobs.same_title("AI Red Teamer", "Data Annotator"))

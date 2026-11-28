@@ -28,9 +28,12 @@ HEAD = ("// Job ads for the Jobs tab. tools/check_jobs.py re-checks every link a
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
       "Accept": "text/html,application/json"}
 # "no longer accepting applicants from California" and "once a position is filled" are not closed ads.
+# Nor are "until the position is filled" and "closed to non-US residents".
 CLOSED = re.compile(r"(?i)no longer (?:accepting (?:applications|applicants)(?! from| in| for)|available|open)"
-                    r"|(?<!once )(?<!once a )(?<!once the )(?<!until )(?<!until a )(?<!when )(?<!when a )(?<!when the )(?<!after )(?<!after a )(?:this )?position (?:has been |is now |is )(?:filled|closed)"
-                    r"|job (?:not found|has expired|is closed|is no longer)|posting (?:has |is )?(?:closed|expired)|this job has expired")
+                    r"|(?<!once )(?<!once a )(?<!once the )(?<!until )(?<!until a )(?<!until the )(?<!when )(?<!when a )(?<!when the )"
+                    r"(?<!after )(?<!after a )(?<!after the )(?<!this )(?:this )?position (?:has been |is now |is )?(?:filled|closed(?! to\b))"
+                    r"|job (?:not found|has expired|is closed|is no longer|expired)|posting (?:has |is )?(?:closed|expired)|this job has expired"
+                    r"|applications (?:are|have) (?:now )?closed")
 
 
 def load():
