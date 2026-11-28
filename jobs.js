@@ -39,7 +39,9 @@ window.RTP_JOBS = {
       },
       "added": "2026-11-17",
       "checked": "2026-11-28",
-      "open": true
+      "open": true,
+      "canada": "anywhere",
+      "where": "The ad says fully remote and names no country limit."
     },
     {
       "id": "claru-llm-jailbreak-red-teamer",
@@ -529,9 +531,10 @@ window.RTP_JOBS = {
       "added": "2026-11-23",
       "found": "2026-11-23",
       "checked": "2026-11-28",
-      "open": true,
+      "open": false,
       "canada": "check",
-      "where": "Location as posted: remote. The feed names no country: read the ad to be sure."
+      "where": "Location as posted: remote. The feed names no country: read the ad to be sure.",
+      "closed": "2026-11-28"
     },
     {
       "id": "uk-ai-security-institute-software-engineer-red-team",

@@ -113,20 +113,28 @@ def main():
     today = datetime.date.today().isoformat()
     data = load()
     counts = {"open": 0, "closed": 0, "unknown": 0}
+    shown = {}  # link -> id of the first ad still open with that link
     for ad in data["ads"]:
         try:
             result, why = (check_feed if ad["check"]["type"] in ("ashby", "feed") else check_page)(ad)
         except Exception as err:  # an ad or a feed in a shape nobody expected: leave that ad as it was, check the rest
             result, why = "unknown", "could not be checked (%s)" % type(err).__name__
+        if result != "closed" and ad.get("url") in shown:  # an old ad came back after the weekly scan had added the job again
+            result, why = "closed", "same job as %s" % shown[ad["url"]]
         counts[result] += 1
         if result == "open":
             ad["open"] = True
             ad["checked"] = today
             ad.pop("closed", None)
+            if ad.get("canada") not in ("yes", "anywhere", "check", "no") or not ad.get("where"):  # closed before ads had Canada tags, now back
+                ad["canada"] = "check"
+                ad["where"] = "This ad was closed and has come back: read it to see whether it can be done from Canada."
         elif result == "closed":
             if ad.get("open", True):
                 ad["closed"] = today
             ad["open"] = False
+        if ad.get("open", True) and ad.get("url"):
+            shown.setdefault(ad["url"], ad["id"])
         print("%-8s %-28s %s" % (result, ad["id"], why))
     if counts["open"] or counts["closed"]:
         data["updated"] = today  # the date at the top of the Jobs tab moves only when at least one ad was really checked

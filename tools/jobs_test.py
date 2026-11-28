@@ -76,17 +76,26 @@ def fake_page(ad):
     return "open", "fine"
 
 
-check_jobs.load = lambda: {"ads": [{"id": "bad", "check": {"type": "page"}, "url": "https://a.example"}, {"id": "good", "check": {"type": "page"}, "url": "https://b.example"}]}
+# "back" was closed before ads had Canada tags, then came back (as Clera's did on 28 Nov 2026).
+fake = {"ads": [{"id": "bad", "check": {"type": "page"}, "url": "https://a.example"}, {"id": "good", "check": {"type": "page"}, "url": "https://b.example"},
+                {"id": "back", "check": {"type": "page"}, "url": "https://c.example", "open": False, "closed": "2026-11-20"},
+                {"id": "twin", "check": {"type": "page"}, "url": "https://b.example", "canada": "check", "where": "x"}]}
+check_jobs.load = lambda: fake
 check_jobs.check_page = fake_page
 sys.argv = ["check_jobs.py", "--dry"]
 try:
     check_jobs.main()
-    went_on = calls == ["bad", "good"]
+    went_on = calls == ["bad", "good", "back", "twin"]
 except Exception:
     went_on = False
 finally:
     check_jobs.load, check_jobs.check_page, sys.argv = saved
 case("one ad that cannot be checked does not stop the daily check: the next ad is still checked", went_on)
+back = fake["ads"][2]
+case("an ad that comes back with no Canada tag is shown as check first, with a where line",
+     back.get("open") is True and back.get("canada") == "check" and bool(back.get("where")))
+case("two ads with the same link are not both shown: the later one is closed, the first stays open",
+     fake["ads"][1].get("open") is True and fake["ads"][3].get("open") is False)
 jobs = check_jobs.load()["ads"]
 uk = [a for a in jobs if a["id"] == "uk-ai-security-institute-research-residency-red-team"]
 case("the UK residency closes 13 December", bool(uk) and "13 December" in uk[0]["ask"])
