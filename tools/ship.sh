@@ -10,6 +10,7 @@ subject="$1"; body="${2:-}"
 node --check app.js || { echo "STOP: app.js has a syntax error"; exit 1; }
 node tools/proof_test.js > /tmp/rtp_proof.txt 2>&1 || { echo "STOP: the lab-proof checker failed"; grep -v "^ok" /tmp/rtp_proof.txt; exit 1; }
 python tools/jobs_test.py > /tmp/rtp_jobs.txt 2>&1 || { echo "STOP: the job tools' rules failed"; grep -v "^ok" /tmp/rtp_jobs.txt; exit 1; }
+python tools/build_quizzes.py --check > /tmp/rtp_quizbuild.txt 2>&1 || { echo "STOP: quizzes.js is not what the quiz build makes"; tail -3 /tmp/rtp_quizbuild.txt; exit 1; }
 python tools/app_test.py "file:///$(pwd -W 2>/dev/null || pwd)/index.html" > /tmp/rtp_local.txt 2>&1
 if [ $? -ne 0 ]; then echo "STOP: the test failed on the local copy"; grep -v "^ok" /tmp/rtp_local.txt | tail -20; exit 1; fi
 echo "local test: $(tail -1 /tmp/rtp_local.txt) ($(grep -c '^ok' /tmp/rtp_local.txt) checks)"

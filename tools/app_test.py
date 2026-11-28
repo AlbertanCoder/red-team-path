@@ -590,8 +590,12 @@ with sync_playwright() as p:
     sp.evaluate("location.hash = '#home'")
     sp.wait_for_selector("#track-card")
     check(sp.locator("#track-nudge").count() == 1 and "Smallest next step" in sp.inner_text("#track-nudge"), "Scope 2: after quiet days on shift, the card says so and offers the smallest next step")
+    BOXMARK = re.compile(r"^(?!ac\d|qz|pf|rt\d|tr\d|un\d|ga\d|r[123][a-z]|h[a-d]\d)[a-z]+\d+$")
+    boxes_before = sorted(k for k, v in ticks(sp).items() if v > 0 and BOXMARK.match(k))
     sp.click("#track-log")
-    check(sp.locator("#track-nudge").count() == 0 and sp.locator("#track-log").is_disabled(), "Scope 2: I studied today clears the nudge and never ticks a box")
+    boxes_after = sorted(k for k, v in ticks(sp).items() if v > 0 and BOXMARK.match(k))
+    check(sp.locator("#track-nudge").count() == 0 and sp.locator("#track-log").is_disabled() and boxes_after == boxes_before,
+          "Scope 2: I studied today clears the nudge and never ticks a box (Scope 3, fix 23: the ticked boxes are compared)")
     no_side_scroll(sp, "Scope 2 main menu with the review and on-track cards")
     # the GitHub check, against a pretend GitHub served by this test: a good repository, one with a key in a file, one that does not exist
     FILES = {"hello_model.py": "from google import genai\nclient = genai.Client()\nprint(client.interactions.create(model='m', input='hi').output_text)\n",
@@ -1382,6 +1386,54 @@ with sync_playwright() as p:
     rp3.wait_for_selector("#top-title")
     check(rp3.evaluate("getComputedStyle(document.getElementById('nav')).transitionDuration") in ("0s", "0s, 0s"), "Scope 3: the phone's reduce-motion setting is kept")
     rctx3.close()
+    # Scope 3, fix 23 (audit E5): checks that fail when what the records claim is broken.
+    zctx3, zp3 = new_page(b, blank({"m0": T}), start=False)
+    open_labs = []
+    for n in (2, 5, 6, 7, 8, 11, 12):
+        screen(zp3, "m%d" % n)
+        if not (zp3.locator("#beat-btn").count() == 1 and zp3.locator("#beat-btn").is_disabled() and zp3.locator("#moved-btn").count() == 0):
+            open_labs.append(n)
+    check(not open_labs, "Scope 3: every required lab, not only Lab 1, stays locked until a winning chat is added (open: %s)" % open_labs)
+    screen(zp3, "fc1")
+    zp3.evaluate("(function () { var w = JSON.parse(localStorage.getItem('redTeamPath.quizWait') || '{}'); delete w.fc1; localStorage.setItem('redTeamPath.quizWait', JSON.stringify(w)); })()")
+    screen(zp3, "fc2"); screen(zp3, "fc1")
+    zp3.click("#quiz-start")
+    for k in range(zp3.evaluate("window.RTP_QUIZ.fc1.length")):
+        answer(zp3, False)
+    misses = zp3.inner_text("#quiz-misses")
+    QF1 = zp3.evaluate("window.RTP_QUIZ.fc1")
+    said = " ".join(x["q"] + " " + x["hint"] for x in QF1)   # words the questions and hints show anyway
+    leaked = [x["options"][x["answer"]] for x in QF1 if len(x["options"][x["answer"]]) > 3 and x["options"][x["answer"]] in misses and x["options"][x["answer"]] not in said]
+    check(not leaked, "Scope 3: a missed course-box question never shows its right answer (shown: %s)" % leaked[:2])
+    zctx3.close()
+    DAY = 86400000
+    now = int(__import__("time").time() * 1000)
+    def review_line(m, extra=""):
+        ctx, page = new_page(b, blank(m), start=False)
+        if extra:
+            page.evaluate(extra)
+            page.reload()
+        page.evaluate("location.hash = '#home'")
+        page.wait_for_timeout(400)
+        out = page.inner_text("#review-card") if page.locator("#review-card").count() else ""
+        ctx.close()
+        return out
+    check("1 DUE TODAY" in review_line({"fc1": now - 3 * DAY, "qzfc1": now - 2 * DAY}), "Scope 3: a course box's quiz feeds the reviews, not only the videos")
+    check("DUE TODAY" not in review_line({"fc1": now - 50 * DAY, "qzfc1": now - 50 * DAY, "r1fc1": now - 40 * DAY, "r2fc1": now - 8 * DAY}),
+          "Scope 3: the one-month review does not come after 8 days")
+    FIVE = {"fc%d" % k: now - 3 * DAY for k in range(1, 8)}
+    FIVE.update({"qzfc%d" % k: now - 2 * DAY for k in range(1, 8)})
+    TODAY = "(function () { var d = new Date(); var k = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); localStorage.setItem('redTeamPath.reviewToday', JSON.stringify({ day: k, n: 5, last: {} })); })()"
+    check("That's 5 review questions today" in review_line(FIVE, TODAY), "Scope 3: after 5 review questions in a day the rest wait")
+    if base.startswith("file:"):
+        from urllib.parse import urlparse, unquote
+        appsrc = pathlib.Path(unquote(urlparse(base).path).lstrip("/")).parent.joinpath("app.js").read_text(encoding="utf-8")
+    else:
+        import urllib.request
+        appsrc = urllib.request.urlopen(base.rstrip("/") + "/app.js?nocache=" + str(uuid.uuid4())).read().decode("utf-8")
+    wi = appsrc.index("var WORDS = [")
+    names = re.findall(r'^      \["([^"]+)", "', appsrc[wi:appsrc.index("\n  ];", wi)], re.M)
+    check(len(names) >= 92 and len(set(names)) == len(names), "Scope 3: no word has dropped off the word list (%d words)" % len(names))
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
