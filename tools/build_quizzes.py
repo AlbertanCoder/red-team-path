@@ -128,7 +128,7 @@ def check_box(box, qs, lessons_by_title, problems):
                     bad.append("the code as shown already works, so there is no bug to spot")
         if not bad:
             right = norm(opts[q["answer"]])
-            if len(right) > 12 and right in norm(q["hint"]):
+            if gives_away(right, norm(q["hint"])):
                 bad.append("hint gives the answer away")
         if bad:
             problems.append("%s: %s  [%s]" % (tag, "; ".join(bad), q.get("q", "")[:70]))
@@ -142,10 +142,21 @@ def check_box(box, qs, lessons_by_title, problems):
     return kept
 
 
+def second_longest(options, key):
+    return sorted(options, key=key, reverse=True)[1]
+
+
+def gives_away(right, hint):
+    """The hint names the right answer: a long answer anywhere in it, a short one as whole words (audit E3: short answers were never checked)."""
+    if len(right) > 12:
+        return right in hint
+    return len(right) >= 3 and (" " + right + " ") in (" " + hint + " ")
+
+
 def guess_check(name, kept, problems):
-    # Guessing by length must not pass: always picking the longest, or the shortest, option has to stay under the pass mark (80%).
+    # Guessing by length must not pass: always picking the longest, the second longest, or the shortest option has to stay under the pass mark (80%).
     need = -(-len(kept) * 8 // 10)
-    for label, pick in (("longest", max), ("shortest", min)):
+    for label, pick in (("longest", max), ("second longest", second_longest), ("shortest", min)):
         hits = sum(1 for q in kept if pick(range(4), key=lambda i: len(q["options"][i])) == q["answer"])
         if kept and hits >= need:
             problems.append("%s: always picking the %s option gets %d of %d right, enough to pass. Even out the option lengths." % (name, label, hits, len(kept)))
@@ -188,7 +199,7 @@ def main():
                 bad.append("quote not found within 20 s of %s" % q.get("at"))
             if not bad:
                 right = norm(opts[q["answer"]])
-                if len(right) > 12 and right in norm(q["hint"]):
+                if gives_away(right, norm(q["hint"])):
                     bad.append("hint gives the answer away")
             if bad:
                 problems.append("%s: %s  [%s]" % (tag, "; ".join(bad), q.get("q", "")[:70]))
@@ -198,7 +209,7 @@ def main():
         spots = sorted({q["answer"] for q in kept})
         # Guessing by length must not pass: always picking the longest, or the shortest, option has to stay under the pass mark (80%).
         need = -(-len(kept) * 8 // 10)
-        for name, pick in (("longest", max), ("shortest", min)):
+        for name, pick in (("longest", max), ("second longest", second_longest), ("shortest", min)):
             hits = sum(1 for q in kept if pick(range(4), key=lambda i: len(q["options"][i])) == q["answer"])
             if kept and hits >= need:
                 problems.append("ep%d: always picking the %s option gets %d of %d right, enough to pass. Even out the option lengths." % (n, name, hits, len(kept)))

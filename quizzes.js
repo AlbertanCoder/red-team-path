@@ -1863,7 +1863,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 2,
    "kind": "apply",
-   "hint": "Look again at the lesson on type() and isinstance(): which one returns a boolean.",
+   "hint": "Look again at the lesson on checking a value's type: which of its two functions gives back True or False.",
    "where": "How Do the type() and isinstance() Functions Work?",
    "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-variables-and-data-types/how-do-the-type-and-isinstance-functions-work"
   },
@@ -2534,7 +2534,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 1,
    "kind": "apply",
-   "hint": "Look again at the lesson on the raise statement: its opening definition.",
+   "hint": "Look again at the lesson on making an error happen on purpose: its opening definition.",
    "where": "What Is the Raise Statement and How Does It Work?",
    "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-error-handling/what-is-the-raise-statement-and-how-does-it-work"
   },
@@ -3018,7 +3018,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 0,
    "kind": "code",
-   "hint": "Look again at the lesson on stacks and queues: which item leaves a queue first.",
+   "hint": "Look again at the lesson on stacks and queues: the order in which items leave a queue.",
    "where": "How Do Stacks and Queues Work?",
    "url": "https://www.freecodecamp.org/learn/python-v9/lecture-working-with-common-data-structures/how-do-stacks-and-queues-work",
    "code": "from collections import deque\nqueue = deque()\nqueue.append(\"first\")\nqueue.append(\"second\")\nprint(queue.popleft())"
@@ -3281,7 +3281,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 0,
    "kind": "recall",
-   "hint": "Look again at the lesson on recursion: Adding a Base Case.",
+   "hint": "Look again at the recursion lecture: the part on what stops a function calling itself.",
    "where": "What Is Recursion, and How Does It Work?",
    "url": "https://www.freecodecamp.org/learn/python-v9/lecture-understanding-recursion-and-the-call-stack-python/what-is-recursion-and-how-does-it-work"
   },
@@ -4098,7 +4098,7 @@ window.RTP_QUIZ = {
   {
    "q": "What is a token?",
    "options": [
-    "A chunk of text the tokenizer splits the input into",
+    "A small piece of text the input is split into",
     "A secret password that unlocks the model's answers",
     "One whole sentence of the reply, counted from the end",
     "A coin you pay for each question you send it"
@@ -4126,9 +4126,9 @@ window.RTP_QUIZ = {
   {
    "q": "How does the model build its reply?",
    "options": [
-    "It finds a stored answer in a database and copies it out word for word",
+    "It finds a stored answer in a database and copies it out to you word for word",
     "It predicts one token at a time, each added to the input for the next",
-    "It writes the whole reply at once, then checks it",
+    "It writes the whole reply at once, then checks it word by word for errors",
     "It asks a person, then types their answer"
    ],
    "answer": 1,
@@ -4359,7 +4359,7 @@ window.RTP_QUIZ = {
    "options": [
     "Models were too slow",
     "Responses were unstructured and inconsistent",
-    "Models could not read English",
+    "Models could not read English or any other language",
     "Prompts were too long for the model to read in one go"
    ],
    "answer": 1,
@@ -4401,7 +4401,7 @@ window.RTP_QUIZ = {
    "options": [
     "type, name, description and parameters",
     "username, password and the account's email address",
-    "title, author and date",
+    "title, author, date and the page it came from",
     "url, port and host"
    ],
    "answer": 0,
@@ -4894,7 +4894,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 0,
    "kind": "recall",
-   "hint": "Look again at the CRA's T2125 page.",
+   "hint": "Look again at the CRA's page on reporting business and professional income.",
    "where": "CRA: T2125 Statement of Business or Professional Activities",
    "url": "https://www.canada.ca/en/revenue-agency/services/forms-publications/forms/t2125.html"
   }
@@ -5010,7 +5010,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 0,
    "kind": "apply",
-   "hint": "Look again at OpenAI's Safety Bug Bounty page: the examples of what is out of scope.",
+   "hint": "Look again at OpenAI's Safety Bug Bounty page: the examples it will not reward.",
    "where": "OpenAI: Safety Bug Bounty",
    "url": "https://openai.com/index/safety-bug-bounty/"
   },
@@ -5730,7 +5730,7 @@ window.RTP_QUIZ = {
    ],
    "answer": 1,
    "kind": "apply",
-   "hint": "Look again at PortSwigger's stored XSS page.",
+   "hint": "Look again at PortSwigger's pages on the three kinds of XSS.",
    "where": "PortSwigger: Stored XSS",
    "url": "https://portswigger.net/web-security/cross-site-scripting/stored"
   },
@@ -5826,7 +5826,7 @@ window.RTP_QUIZ = {
    "options": [
     "GET",
     "/api/books",
-    "HTTP/1.1",
+    "HTTP/1.1 (the version)",
     "example.com"
    ],
    "answer": 1,
@@ -5854,7 +5854,7 @@ window.RTP_QUIZ = {
    "options": [
     "The base paths: /api/swagger/v1, /api/swagger and /api",
     "Only /users/124",
-    "Nothing: one endpoint is enough",
+    "Nothing more: one endpoint is all that ever needs testing",
     "The same path again with POST and PUT, and nothing else at all"
    ],
    "answer": 0,
@@ -5910,7 +5910,7 @@ window.RTP_QUIZ = {
    "options": [
     "OpenAPI documentation, or other docs in JSON or YAML",
     "Only PDF files",
-    "Only handwritten notes",
+    "Only handwritten notes kept by the developers who wrote it",
     "Only HTML help pages written for people, never machine-readable files"
    ],
    "answer": 0,
