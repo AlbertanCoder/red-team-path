@@ -132,8 +132,8 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 17. A6, A7: garak and PyRIT run for real on a free model; steps rewritten from what worked; `PROOF.md` (decision 1). Proof: ba4d791; 5 new checks, all failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (444 checks), 27 Nov 2026. `PROOF.md` records both real runs.
 - [x] 18. C4, C9 (Steps 7 to 14 rows), D2: box text. Proof: 1e851b1; 13 new checks, all failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (457 checks), 27 Nov 2026.
 - [x] 19. C7, C8: Library lessons and words. Proof: f0dd042; 5 new checks, all failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (462 checks), 27 Nov 2026.
-- [ ] 20. H: videos inside the app for py1 to py8, md1 to md7, wb2, wb6, gt1 and c50; `tools/walk_test.py` plays each one on the live site.
-- [ ] 21. D3: Jobs tools.
+- [x] 20. H: videos inside the app for py1 to py8, md1 to md7, wb2, wb6, gt1 and c50; `tools/walk_test.py` plays each one on the live site. Proof: 49219e4; 6 new checks in `tools/app_test.py` (the first fails on the app before the change and the run then stops); `tools/ship.sh` local and live ALL PASSED (467 checks); `tools/walk_test.py` on the live site at phone size played all 68 lesson videos inside the app, each staying on through a redraw, ALL PASSED, 27 Nov 2026.
+- [x] 21. D3: Jobs tools. Proof: 369264f; 17 new cases in `tools/jobs_test.py` (7 fail and the run then stops on the tools before the change); `tools/ship.sh` ALL PASSED; a dry run of the daily check on today's 28 ads found 27 open and 1 really gone (DataAnnotation, 410), 27 Nov 2026.
 - [ ] 22. G: ease-of-use fixes.
 - [ ] 23. E5: tests that can fail for what the records claim.
 - [ ] 24. F: records made true.
