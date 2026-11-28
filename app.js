@@ -3131,6 +3131,109 @@
   }
 
   // ----- a video, and everything else -----
+  // Official lesson videos, played inside the app on the owner's own player (Shad's change, 27 Nov 2026). From the full audit's
+  // inventory (helpers/videos.json): every one allows playing inside another page. [player, id, title, seconds, the owner's page]
+  var LESSON_VIDS = {
+    py1: [["ms", "4d3ddf64-47ae-4930-8085-f86c9618ba90", "Write Your First Python Code - 1 Introduction", 61, "https://learn-video.azurefd.net/vod/player?id=4d3ddf64-47ae-4930-8085-f86c9618ba90"],
+      ["ms", "3ad21eed-096a-462a-8b4a-d75ffee19b58", "Write Your First Python Code - 2 Display Output With Print", 101, "https://learn-video.azurefd.net/vod/player?id=3ad21eed-096a-462a-8b4a-d75ffee19b58"],
+      ["ms", "5d9c4b8c-b251-4fcc-911c-61b73684c527", "Write Your First Python Code - 3 Accept User Input", 111, "https://learn-video.azurefd.net/vod/player?id=5d9c4b8c-b251-4fcc-911c-61b73684c527"],
+      ["ms", "c45fc831-d02e-4f7b-be0e-48885c81d2ec", "Write Your First Python Code - 4 Manipulate Strings", 114, "https://learn-video.azurefd.net/vod/player?id=c45fc831-d02e-4f7b-be0e-48885c81d2ec"],
+      ["ms", "883a303d-e989-462e-a8c4-17f41dacec97", "Write Your First Python Code - 6 Summary", 46, "https://learn-video.azurefd.net/vod/player?id=883a303d-e989-462e-a8c4-17f41dacec97"]],
+    py2: [["ms", "c8f971d2-0018-4744-b00d-5086388268bb", "Work With Data in Python - 1 Introduction", 96, "https://learn-video.azurefd.net/vod/player?id=c8f971d2-0018-4744-b00d-5086388268bb"],
+      ["ms", "03ba3d9f-01c4-4db9-8ab7-fcdd8df25f5d", "Work With Data in Python - 2 Understand Variables and Dynamic Typing", 113, "https://learn-video.azurefd.net/vod/player?id=03ba3d9f-01c4-4db9-8ab7-fcdd8df25f5d"],
+      ["ms", "6845bbe9-2c37-4883-bd39-f3faa620ffa3", "Work With Data in Python - 3 Perform Operations With Numbers", 143, "https://learn-video.azurefd.net/vod/player?id=6845bbe9-2c37-4883-bd39-f3faa620ffa3"],
+      ["ms", "592c4bd9-fc53-4571-92ce-a5f4ee92fce9", "Work With Data in Python - 4 Convert Between Data Types", 127, "https://learn-video.azurefd.net/vod/player?id=592c4bd9-fc53-4571-92ce-a5f4ee92fce9"],
+      ["ms", "5c7482bd-6018-4202-942f-9d77b6df0e26", "Work With Data in Python - 7 Summary", 86, "https://learn-video.azurefd.net/vod/player?id=5c7482bd-6018-4202-942f-9d77b6df0e26"]],
+    py3: [["ms", "7b65cbe9-28f6-452d-9c9b-ee8b42107935", "Install and Configure Visual Studio Code - 1 Introduction", 61, "https://learn-video.azurefd.net/vod/player?id=7b65cbe9-28f6-452d-9c9b-ee8b42107935"],
+      ["ms", "8737c40c-2359-447e-96e3-8dc510fe56a2", "Install and Configure Visual Studio Code - 2 Install Python and VS Code", 108, "https://learn-video.azurefd.net/vod/player?id=8737c40c-2359-447e-96e3-8dc510fe56a2"],
+      ["ms", "65eb4cf1-a211-44c5-b771-2fd251b15859", "Install and Configure Visual Studio Code - 3 Understand Environments and Packages", 108, "https://learn-video.azurefd.net/vod/player?id=65eb4cf1-a211-44c5-b771-2fd251b15859"],
+      ["ms", "08b246bb-6a0a-4f49-81cc-b7f9a89533fe", "Install and Configure Visual Studio Code - 4 Create and Run a Python Application", 107, "https://learn-video.azurefd.net/vod/player?id=08b246bb-6a0a-4f49-81cc-b7f9a89533fe"],
+      ["ms", "eb64e5a6-a7b4-48b2-87ae-dbb06e81e4fc", "Install and Configure Visual Studio Code - 5 Write Code With GitHub Copilot", 141, "https://learn-video.azurefd.net/vod/player?id=eb64e5a6-a7b4-48b2-87ae-dbb06e81e4fc"],
+      ["ms", "cca6f8a7-1587-4fcb-b10c-b075ffe30a64", "Install and Configure Visual Studio Code - 8 Summary", 50, "https://learn-video.azurefd.net/vod/player?id=cca6f8a7-1587-4fcb-b10c-b075ffe30a64"]],
+    py4: [["ms", "9188df4e-dc61-4d84-9c54-ffe2340f4302", "Add Decision-Making to Your Code - 1 Introduction", 55, "https://learn-video.azurefd.net/vod/player?id=9188df4e-dc61-4d84-9c54-ffe2340f4302"],
+      ["ms", "c043e3b3-8cc1-4a17-927e-d05edbf7eb1f", "Add Decision-Making to Your Code - 2 Evaluate Conditions With Booleans and Comparison Operators", 98, "https://learn-video.azurefd.net/vod/player?id=c043e3b3-8cc1-4a17-927e-d05edbf7eb1f"],
+      ["ms", "3b52f83d-ee08-4ee5-8926-b6432594f63f", "Add Decision-Making to Your Code - 3 Control Code Flow With Conditional Logic", 104, "https://learn-video.azurefd.net/vod/player?id=3b52f83d-ee08-4ee5-8926-b6432594f63f"],
+      ["ms", "b5af48e3-f2de-44eb-ac5e-4a59ed4d19dd", "Add Decision-Making to Your Code - 4 Create Complex Conditions With Logical Operators", 125, "https://learn-video.azurefd.net/vod/player?id=b5af48e3-f2de-44eb-ac5e-4a59ed4d19dd"],
+      ["ms", "28730085-e8cd-4c51-8477-e70720b7998f", "Add Decision-Making to Your Code - 7 Summary", 44, "https://learn-video.azurefd.net/vod/player?id=28730085-e8cd-4c51-8477-e70720b7998f"]],
+    py5: [["ms", "641703d3-a317-434f-bf8c-a4337b9a31fa", "Repeat Actions With Loops - 1 Introduction", 39, "https://learn-video.azurefd.net/vod/player?id=641703d3-a317-434f-bf8c-a4337b9a31fa"],
+      ["ms", "9db37935-3aee-40b6-819b-96fe04d04bdc", "Repeat Actions With Loops - 2 Choose Between For and While Loops", 145, "https://learn-video.azurefd.net/vod/player?id=9db37935-3aee-40b6-819b-96fe04d04bdc"],
+      ["ms", "0b7e9abc-d8d4-41a2-a507-7b8413708bb2", "Repeat Actions With Loops - 3 Control Loop Execution With Break and Continue", 149, "https://learn-video.azurefd.net/vod/player?id=0b7e9abc-d8d4-41a2-a507-7b8413708bb2"],
+      ["ms", "822708be-7342-4d9a-9a0a-115ff455fcdf", "Repeat Actions With Loops - 6 Summary", 42, "https://learn-video.azurefd.net/vod/player?id=822708be-7342-4d9a-9a0a-115ff455fcdf"]],
+    py6: [["ms", "daa96e37-0096-4753-97dd-f5f01fbc19c8", "Organize Data with Collections - 1 Introduction", 47, "https://learn-video.azurefd.net/vod/player?id=daa96e37-0096-4753-97dd-f5f01fbc19c8"],
+      ["ms", "878622d8-da70-4b8f-9f1b-355baae147b9", "Organize Data with Collections - 2 Store and Manage Data with Lists", 169, "https://learn-video.azurefd.net/vod/player?id=878622d8-da70-4b8f-9f1b-355baae147b9"],
+      ["ms", "e99dc588-8bbc-484e-ba69-0274a84f521a", "Organize Data with Collections - 3 Store and Organize Data with Dictionaries", 131, "https://learn-video.azurefd.net/vod/player?id=e99dc588-8bbc-484e-ba69-0274a84f521a"],
+      ["ms", "72bc7c38-fd78-4dec-b2f7-e5b01aa3b9eb", "Organize Data with Collections - 6 Summary", 83, "https://learn-video.azurefd.net/vod/player?id=72bc7c38-fd78-4dec-b2f7-e5b01aa3b9eb"]],
+    py7: [["ms", "603823a2-c33d-4d9e-9671-999f64aa666f", "Read and Write Files in Python - 1 Introduction", 103, "https://learn-video.azurefd.net/vod/player?id=603823a2-c33d-4d9e-9671-999f64aa666f"],
+      ["ms", "292d09ba-6930-461b-b383-9f741b98dc49", "Read and Write Files in Python - 2 Open Files Safely with Context Managers", 187, "https://learn-video.azurefd.net/vod/player?id=292d09ba-6930-461b-b383-9f741b98dc49"],
+      ["ms", "ebd1933d-87d5-40ce-8a0d-e2b0186deeca", "Read and Write Files in Python - 3 Read Data from Files", 135, "https://learn-video.azurefd.net/vod/player?id=ebd1933d-87d5-40ce-8a0d-e2b0186deeca"],
+      ["ms", "cd8f36c8-a4cf-4508-8526-f3fb45240bfb", "Read and Write Files in Python - 4 Write Data to Files", 135, "https://learn-video.azurefd.net/vod/player?id=cd8f36c8-a4cf-4508-8526-f3fb45240bfb"],
+      ["ms", "f11a5d17-4a18-427b-8e57-bda15fffe862", "Read and Write Files in Python - 5 Summary", 58, "https://learn-video.azurefd.net/vod/player?id=f11a5d17-4a18-427b-8e57-bda15fffe862"]],
+    py8: [["ms", "3dd04d1c-eeaa-4f47-8fd3-6971bd79f38d", "Write Reusable Code in Python - 1 Introduction", 53, "https://learn-video.azurefd.net/vod/player?id=3dd04d1c-eeaa-4f47-8fd3-6971bd79f38d"],
+      ["ms", "215d82f7-45d2-479f-9fe7-6c80e2467b33", "Write Reusable Code in Python - 2 Create Functions with Parameters", 137, "https://learn-video.azurefd.net/vod/player?id=215d82f7-45d2-479f-9fe7-6c80e2467b33"],
+      ["ms", "6a33324b-a315-4889-b0e9-196cce0df029", "Write Reusable Code in Python - 3 Return Values from Functions", 132, "https://learn-video.azurefd.net/vod/player?id=6a33324b-a315-4889-b0e9-196cce0df029"],
+      ["ms", "30eb5725-cb00-4989-920a-fe6430ee9516", "Write Reusable Code in Python - 4 Manage Variable Scope", 132, "https://learn-video.azurefd.net/vod/player?id=30eb5725-cb00-4989-920a-fe6430ee9516"],
+      ["ms", "7ced8db5-a8c6-45dc-9585-ce0c416e7efb", "Write Reusable Code in Python - 5 Create Importable Modules", 136, "https://learn-video.azurefd.net/vod/player?id=7ced8db5-a8c6-45dc-9585-ce0c416e7efb"],
+      ["ms", "e8f98c62-25fb-43c5-af78-6a0fc202dd82", "Write Reusable Code in Python - 6 Summary", 82, "https://learn-video.azurefd.net/vod/player?id=e8f98c62-25fb-43c5-af78-6a0fc202dd82"]],
+    md1: [["yt", "lFXQkBvEe0o", "Introduction to Generative AI and LLMs [Pt 1]", 642, "https://www.youtube.com/watch?v=lFXQkBvEe0o"]],
+    md2: [["yt", "GElCu2kUlRs", "Understanding Prompt Engineering Fundamentals [Pt 4]", 1403, "https://www.youtube.com/watch?v=GElCu2kUlRs"]],
+    md3: [["yt", "W0-nzXjOjr0", "Building Search Apps Vector Databases [Pt 8]", 1088, "https://www.youtube.com/watch?v=W0-nzXjOjr0"],
+      ["yt", "4l8zhHUBeyI", "Retrieval Augmented Generation (RAG) and Vector Databases [Pt 15]", 661, "https://www.youtube.com/watch?v=4l8zhHUBeyI"]],
+    md4: [["yt", "DgUdCLX8qYQ", "Integrating External Applications with Function Calling [Pt 11]", 561, "https://www.youtube.com/watch?v=DgUdCLX8qYQ"]],
+    md5: [["yt", "3zgm60bXmQk", "What are AI agents?", 357, "https://www.youtube.com/watch?v=3zgm60bXmQk"],
+      ["yt", "vieRiPRx-gI", "What Is the Agent Tool Use Design Pattern?", 374, "https://www.youtube.com/watch?v=vieRiPRx-gI"]],
+    md6: [["yt", "X-Dh9R3Opn8", "Using Agentic Protocols (MCP, A2A, and NLWeb)", 909, "https://www.youtube.com/watch?v=X-Dh9R3Opn8"]],
+    md7: [["yt", "m0vXwsx5DNg", "Securing Your Generative AI Applications [Pt 13]", 500, "https://www.youtube.com/watch?v=m0vXwsx5DNg"],
+      ["yt", "iZKkMEGBCUQ", "How to build effective AI agents", 355, "https://www.youtube.com/watch?v=iZKkMEGBCUQ"]],
+    wb2: [["yt", "NQwUDLMOrHo", "What is directory traversal? (file path traversal) - Web Security Academy", 309, "https://www.youtube.com/watch?v=NQwUDLMOrHo"],
+      ["yt", "8PDDjCW5XWw", "What is command injection? - Web Security Academy", 466, "https://www.youtube.com/watch?v=8PDDjCW5XWw"],
+      ["yt", "wX6tszfgYp4", "What is SQL injection? - Web Security Academy", 621, "https://www.youtube.com/watch?v=wX6tszfgYp4"]],
+    wb6: [["yt", "zPYfT9azdK8", "Hacker101 - Introduction", 410, "https://www.youtube.com/watch?v=zPYfT9azdK8"],
+      ["yt", "DWBUQiaN5ZM", "Hacker101 - The Web In Depth", 1702, "https://www.youtube.com/watch?v=DWBUQiaN5ZM"],
+      ["yt", "z60CFFFyZWE", "Hacker101- Writing Good Reports", 354, "https://www.youtube.com/watch?v=z60CFFFyZWE"]],
+    gt1: [["yt", "pBy1zgt0XPc", "What is GitHub?", 163, "https://www.youtube.com/watch?v=pBy1zgt0XPc"]],
+    c50: [["yt", "JP7ITIXGpHk", "CS50P - Lecture 0 - Functions, Variables", 6338, "https://www.youtube.com/watch?v=JP7ITIXGpHk"],
+      ["yt", "_b6NgY_pMdw", "CS50P - Lecture 1 - Conditionals", 3368, "https://www.youtube.com/watch?v=_b6NgY_pMdw"],
+      ["yt", "-7xg8pGcP6w", "CS50P - Lecture 2 - Loops", 4847, "https://www.youtube.com/watch?v=-7xg8pGcP6w"],
+      ["yt", "LW7g1169v7w", "CS50P - Lecture 3 - Exceptions", 2676, "https://www.youtube.com/watch?v=LW7g1169v7w"],
+      ["yt", "MztLZWibctI", "CS50P - Lecture 4 - Libraries", 4648, "https://www.youtube.com/watch?v=MztLZWibctI"],
+      ["yt", "tIrcxwLqzjQ", "CS50P - Lecture 5 - Unit Tests", 3054, "https://www.youtube.com/watch?v=tIrcxwLqzjQ"],
+      ["yt", "KD-Yoel6EVQ", "CS50P - Lecture 6 - File I/O", 5545, "https://www.youtube.com/watch?v=KD-Yoel6EVQ"],
+      ["yt", "hy3sd9MOAcc", "CS50P - Lecture 7 - Regular Expressions", 7500, "https://www.youtube.com/watch?v=hy3sd9MOAcc"],
+      ["yt", "e4fwY9ZsxPw", "CS50P - Lecture 8 - Object-Oriented Programming", 10061, "https://www.youtube.com/watch?v=e4fwY9ZsxPw"],
+      ["yt", "6pgodt1mezg", "CS50P - Lecture 9 - Et Cetera", 8944, "https://www.youtube.com/watch?v=6pgodt1mezg"],
+      ["yt", "OvKCESUCWII", "CS50P - Introduction", 257, "https://www.youtube.com/watch?v=OvKCESUCWII"]]
+  };
+  function embedUrl(host, id) {
+    return host === "yt" ? "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&playsinline=1&rel=0" : "https://learn-video.azurefd.net/vod/player?id=" + id;
+  }
+  // The box's videos: a list of buttons. Nothing loads until one is tapped; then only that one plays, in the same frame the
+  // episodes use (id "player"), so a redraw of the screen leaves it playing.
+  function lessonVideos(it) {
+    var list = h("div", { class: "player-box", id: "vid-list" });
+    var vids = LESSON_VIDS[it.id];
+    var mins = Math.round(vids.reduce(function (a, x) { return a + x[3]; }, 0) / 60);
+    list.appendChild(h("p", { class: "small", text: vids.length === 1 ? "One video, " + mins + " min, from the course itself." : vids.length + " videos, " + mins + " min in all, from the course itself." }));
+    function draw(open) {
+      Array.prototype.slice.call(list.querySelectorAll(".vid")).forEach(function (n) { list.removeChild(n); });
+      vids.forEach(function (x, i) {
+        var row = h("div", { class: "vid", id: "vid-" + i });
+        var label = x[2] + " (" + Math.max(1, Math.round(x[3] / 60)) + " min)";
+        if (i === open) {
+          row.appendChild(h("p", { class: "small", text: label }));
+          row.appendChild(h("iframe", { id: "player", src: embedUrl(x[0], x[1]), title: x[2], allowfullscreen: "",
+            allow: "autoplay *; encrypted-media *; picture-in-picture *; fullscreen *", referrerpolicy: "strict-origin-when-cross-origin" }));
+          row.appendChild(h("p", { class: "linkline" }, ["Not playing? ", (x[0] === "yt" && x[4] ? link("Open it on YouTube ↗", x[4], "", "player-fallback") : link("Open the lesson page ↗", it.url, "", "player-fallback"))]));
+        } else {
+          var b = h("button", { type: "button", class: "wide", id: "vid-btn-" + i, text: "▶ Watch it here: " + label });
+          b.addEventListener("click", function () { playing = it.id; draw(i); });
+          row.appendChild(b);
+        }
+        list.appendChild(row);
+      });
+    }
+    draw(-1);
+    return list;
+  }
   function videoScreen(v, it) {
     if (it.why) { v.appendChild(h("p", { text: it.why })); }
     // Microsoft's player hands over to a second Microsoft address, so the frame's permissions are given to any address (*).
@@ -3160,6 +3263,7 @@
     }
     if (WORDS_AT[it.id]) { v.appendChild(wordsFold(WORDS_AT[it.id])); }
     if (it.kind === "writeup") { v.appendChild(noteEditor(it, false)); v.appendChild(templateFold()); }
+    if (LESSON_VIDS[it.id]) { v.appendChild(part("Videos", [lessonVideos(it)])); }
     if (it.url) { v.appendChild(link((it.openLabel || OPEN_LABEL[it.kind]) + " ↗", it.url, "big open", "open-link")); }
     if (it.proof === "github") { v.appendChild(part("Proof on GitHub", [githubBox(it)])); }
     if (it.proof === "link") { v.appendChild(part("Proof: your link", [linkBox(it)])); }

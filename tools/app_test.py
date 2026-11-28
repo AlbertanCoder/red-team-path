@@ -1320,6 +1320,26 @@ with sync_playwright() as p:
     check(not dup, "Scope 3: no word is listed twice (found: %s)" % dup)
     check("In a lab on your own computer: nothing." not in src and "grows with each accepted report" not in src and "A model swears when asked a certain way" not in src,
           "Scope 3: lessons t13, t26 and t37 no longer say the untrue lines")
+    # Scope 3, fix 20 (audit H, Shad's change): the official lesson videos play inside the app.
+    vctx, vp = new_page(b, None, start=False)
+    screen(vp, "py1")
+    check(vp.locator("#vid-list .vid button").count() == 5 and vp.locator("#player").count() == 0, "Scope 3: box py1 lists its 5 videos, and none loads before a tap")
+    vp.click("#vid-btn-0")
+    vp.wait_for_selector("#player")
+    src = vp.get_attribute("#player", "src") or ""
+    check(src.startswith("https://learn-video.azurefd.net/vod/player?id=") and vp.locator("#player-fallback").count() == 1, "Scope 3: tapping one plays it on Microsoft's player, with a link to the lesson page")
+    vp.evaluate("window.dispatchEvent(new HashChangeEvent('hashchange'))")
+    vp.wait_for_timeout(400)
+    check(vp.locator("#player").count() == 1 and vp.get_attribute("#player", "src") == src, "Scope 3: a redraw of the screen leaves the video playing")
+    if vp.locator("#quiz-start").count():
+        vp.click("#quiz-start")
+        check(vp.locator("#quiz-q").count() == 1 and vp.get_attribute("#player", "src") == src, "Scope 3: the quiz below still works, and starting it leaves the video playing")
+    screen(vp, "md3")
+    check(vp.locator("#vid-list .vid button").count() == 2, "Scope 3: box md3 lists its two lesson videos")
+    vp.click("#vid-btn-1")
+    vp.wait_for_selector("#player")
+    check((vp.get_attribute("#player", "src") or "").startswith("https://www.youtube-nocookie.com/embed/") and vp.locator("#player").count() == 1, "Scope 3: a YouTube lesson video plays through the no-cookie address, one at a time")
+    vctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")

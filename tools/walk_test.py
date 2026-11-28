@@ -62,6 +62,31 @@ with sync_playwright() as p:
         else:
             check(page.locator("#how-fold").count() == 1, "%s: no Open button, and it has its how-to steps" % page.inner_text("#top-title")[:50])
     print("boxes with an Open button: %d" % opened)
+    # Scope 3, fix 20: every lesson video plays inside the app at phone size, and its box's quiz still opens below it.
+    VID_BOXES = ["py%d" % k for k in range(1, 9)] + ["md%d" % k for k in range(1, 8)] + ["wb2", "wb6", "gt1", "c50"]
+    played = 0
+    for box in VID_BOXES:
+        page.evaluate("location.hash = '#i-%s'" % box)
+        page.wait_for_function("document.getElementById('view-now').getAttribute('data-id') === '%s'" % box)
+        n = page.locator("#vid-list .vid button").count()
+        check(n > 0, "%s: lists its lesson videos" % box)
+        for k in range(n):
+            page.click("#vid-btn-%d" % k)
+            page.wait_for_selector("#player")
+            frame = page.frame_locator("#player")
+            try:
+                frame.locator("video, .html5-video-player, [class*='player']").first.wait_for(state="attached", timeout=30000)
+                ok = frame.locator(".ytp-error").count() == 0
+            except Exception:
+                ok = False
+            src = page.get_attribute("#player", "src") or ""
+            page.evaluate("window.dispatchEvent(new HashChangeEvent('hashchange'))")
+            page.wait_for_timeout(300)
+            kept = page.get_attribute("#player", "src") == src
+            check(ok and kept, "%s video %d: plays inside the app and stays playing through a redraw (%s)" % (box, k + 1, src[:60]))
+            played += 1
+        check(page.locator("#quiz-start, #quiz-box").count() > 0 or box in ("c50",), "%s: its quiz is still on the screen below the videos" % box)
+    print("lesson videos played: %d" % played)
     ctx.close()
     b.close()
 
