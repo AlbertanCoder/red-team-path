@@ -1296,6 +1296,30 @@ with sync_playwright() as p:
         tags[k] = tp.inner_text("#top-tag")
     check(all("NEEDS YOUR PC" in v or "SHIFT WEEK OK" in v for v in tags.values()) and "HOURS" in tags["pd7"], "Scope 3: ag1, tl2, tl3, tl4, pd6 and pd7 carry a PC or shift label, and pd7 a time (%s)" % tags)
     tctx.close()
+    # Scope 3, fix 19 (audit C7, C8): Library lessons and the word list.
+    lctx2, lp2 = new_page(b, None, start=False)
+    lp2.evaluate("location.hash = '#tutor'")
+    lp2.wait_for_selector("#tutor-tab-words")
+    lp2.click("#tutor-tab-words")
+    lp2.wait_for_timeout(300)
+    words = lp2.text_content("#view-tutor") if lp2.locator("#view-tutor").count() else lp2.text_content("body")
+    check("by using it the way normal users would" in words, "Scope 3: the word AI red teaming agrees with video 1 and quiz ep1 Q4 (normal users too)")
+    check("Improper output handling" in words and "Unsafe output handling" not in words, "Scope 3: the output-handling flaw has OWASP's one name in the word list")
+    missing = [w for w in ("Spotlighting", "Base64", "API key", "Skeleton Key", "orchestrator", "Converter", "Scorer", "Target (PyRIT)", "fabrication", "Virtual environment", "pip", "Docker", "Endpoint", "Classifier", "Instruction hierarchy", "Impact") if w not in words]
+    check(not missing, "Scope 3: the words the videos and boxes use are in the list (missing: %s)" % missing)
+    lctx2.close()
+    if base.startswith("file:"):
+        from urllib.parse import urlparse, unquote
+        src = pathlib.Path(unquote(urlparse(base).path).lstrip("/")).parent.joinpath("app.js").read_text(encoding="utf-8")
+    else:
+        import urllib.request
+        src = urllib.request.urlopen(base.rstrip("/") + "/app.js?nocache=" + str(uuid.uuid4())).read().decode("utf-8")
+    i = src.index("var WORDS = [")
+    names = re.findall(r'^      \["([^"]+)", "', src[i:src.index("\n  ];", i)], re.M)
+    dup = sorted(set(n for n in names if names.count(n) > 1))
+    check(not dup, "Scope 3: no word is listed twice (found: %s)" % dup)
+    check("In a lab on your own computer: nothing." not in src and "grows with each accepted report" not in src and "A model swears when asked a certain way" not in src,
+          "Scope 3: lessons t13, t26 and t37 no longer say the untrue lines")
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
