@@ -365,7 +365,7 @@ window.RTP_QUIZ = {
   {
    "q": "According to the video, why do encoding tricks like spacing out letters, leetspeak or base64 get past guardrails?",
    "options": [
-    "They confuse the model so it forgets its safety rules",
+    "They make the model reply faster, so the checks are skipped",
     "They dodge the filters, but the model still gets it",
     "They make the prompt too long for the filter to read",
     "They switch the model into a special developer mode"
@@ -373,7 +373,7 @@ window.RTP_QUIZ = {
    "answer": 1,
    "kind": "recall",
    "at": "6:07",
-   "hint": "Around 5:07, during the example with a blocked word, and the summary that follows it."
+   "hint": "Around 6:00, during the example with a blocked word, and the summary that follows it."
   },
   {
    "q": "You're testing a chatbot that guards a file of passwords. Asking for a general story about the file just gets a vague tale with no secrets. Based on the lab demo, which change made the story attack work?",
@@ -828,17 +828,17 @@ window.RTP_QUIZ = {
    "hint": "Around 5:50 to 6:30, when they look at the image attack's results."
   },
   {
-   "q": "In the crescendo orchestrator, what does the \"backtrack\" setting control?",
+   "q": "According to the video, what does the crescendo orchestrator's \"backtrack\" setting count?",
    "options": [
     "How many turns the whole attack may take",
-    "How many refusals before it gives up",
+    "How many refusals it backs off from before giving up",
     "How many earlier messages the model is allowed to see",
     "How many converters are stacked on each prompt"
    ],
    "answer": 1,
    "kind": "recall",
    "at": "8:32",
-   "hint": "Around 8:24 to 8:48, when the crescendo orchestrator is set up."
+   "hint": "Around 8:24 to 8:48, when the crescendo attack is set up. Today's PyRIT erases a refused turn and asks again, and carries on when its backtracks run out."
   },
   {
    "q": "You're about to run an automated crescendo attack on a new chatbot. Why send the harmful request plainly first, as the demo did?",

@@ -1452,6 +1452,29 @@ with sync_playwright() as p:
     screen(mp, "m8")
     check(mp.locator("#moved-btn").count() == 1, "Scope 3: after 45 minutes on a required lab, Moving on, not solved appears")
     mctx.close()
+    # Scope 3, item 26 (Shad's answer to Q6): Steps 1 to 6 hints point at the idea; the orchestrator note; ep5 Q7 and ep10 Q8.
+    hctx2, hp2 = new_page(b, blank({"m0": T, "ha2": T, "hb2": T, "ha8": T, "hb8": T, "ha11": T, "hb11": T, "ha12": T, "hb12": T}), start=False)
+    gone = []
+    for n, phrase in ((2, "another language"), (2, "not the story"), (2, "Base64 and backwards"), (8, "honest answer would contain the word"), (8, "famous very long English words"),
+                      (11, "seem to have ended"), (11, "Fake the end of the page"), (12, "who gets to write it"), (12, "Tell it how the job is done here")):
+        screen(hp2, "m%d" % n)
+        if phrase in hp2.text_content("#view-now"):
+            gone.append("lab %d: %s" % (n, phrase))
+    check(not gone, "Scope 3: the thinking notes and first two hints of labs 2, 8, 11 and 12 no longer hand over the move (still there: %s)" % gone)
+    q10 = hp2.evaluate("window.RTP_QUIZ[10]")
+    q5 = hp2.evaluate("window.RTP_QUIZ[5]")
+    check(not any("confuse the model" in o for x in q5 for o in x["options"]) and any("backs off from" in o for x in q10 for o in x["options"])
+          and any("erases a refused turn" in x["hint"] for x in q10), "Scope 3: ep5 Q7 has no wrong option that research shows is partly true, and ep10 Q8 says what PyRIT's backtrack does today")
+    screen(hp2, "v10")
+    hp2.click("#quiz-start")
+    seen_note = False
+    for k in range(len(q10)):
+        if "orchestrator" in hp2.inner_text("#quiz-q").lower():
+            seen_note = hp2.locator("#orch-note").count() == 1 and "attack" in hp2.inner_text("#orch-note")
+            break
+        answer(hp2, True)
+    check(seen_note, "Scope 3: a video question that says orchestrator carries a note that today's PyRIT calls it an attack")
+    hctx2.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
