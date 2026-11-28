@@ -16,7 +16,7 @@ Steps 1 to 6 are built around one name, Microsoft, so you can say where you stud
 6. **Proof and bounties** (not Microsoft): a Microsoft Learn transcript, then Mozilla 0DIN and an application to Anthropic's model safety bug bounty.
 7. **Python, part 1** (freeCodeCamp): the first half of freeCodeCamp's free Python Certification, from basics to object-oriented code, with 3 of its 5 certificate projects.
 8. **Git, Linux, and Python that talks to an AI model**: GitHub's own starter exercise, OverTheWire's Bandit levels 0 to 10, then your own `red-team-tools` repository: a first call to Google's Gemini API (free tier, open in Canada), a list of test prompts with every reply logged, and a scorer.
-9. **How AI models work**: seven short lessons from Microsoft's free Generative AI for Beginners and AI Agents for Beginners: tokens, embeddings and RAG, function calling, agents, MCP, and why prompt injection works.
+9. **How AI models work**: seven boxes holding 11 short lessons from Microsoft's free Generative AI for Beginners and AI Agents for Beginners: tokens, embeddings and RAG, function calling, agents, MCP, and why prompt injection works.
 10. **Web security basics**: MDN on HTTP; PortSwigger's free labs (server-side flaws, XSS, API testing); OWASP's Top 10 for LLM applications; Hacker101's CTF on your HackerOne account.
 11. **Attacking AI agents**: a threat model, PortSwigger's AI and MCP labs, then two real red-team tools, NVIDIA's garak and Microsoft's current PyRIT.
 12. **Your own red-team tool and portfolio**: `probe.py`, a report in the shape bounty programs pay for, three public write-ups, and a GitHub profile that points to them.
@@ -25,7 +25,7 @@ Steps 1 to 6 are built around one name, Microsoft, so you can say where you stud
 
 107 boxes count toward the path. 12 more are optional and never block the next step: 5 write-ups, the 4 labs whose goal is harmful on purpose (labs 3, 4, 9 and 10), applying to contract platforms, a first real bounty report, and CS50P.
 
-Time: about 460 hours from Step 2 (an estimate; freeCodeCamp labels its certificate 300 hours). The order puts the skills that pay before the second half of Python, so bounty and contract skills come about 2 months before the certificate.
+Time: about 450 hours from Step 2, adding up the boxes that carry a time (Steps 3, 5 and 6 carry none), plus about 156 optional hours, most of them Harvard's CS50P. An estimate; freeCodeCamp labels its certificate 300 hours. The order puts the skills that pay before the second half of Python, so bounty and contract skills come about 2 months before the certificate.
 
 ## How the app works
 
@@ -57,7 +57,7 @@ Each page is labelled **verified** or **unverified**. Verified means the lab fac
 ### Library, Jobs, Settings
 
 - **Library**: 36 short lessons with sources and one question each (8 added in Scope 2: tokens, RAG, agents, MCP, excessive agency and output handling, data leaks through an agent, web basics, what bounty programs pay for), 84 words in plain English with search, seven thinking steps for when you are stuck, and your notes.
-- **Jobs**: real ads. A daily check hides an ad when it closes. A weekly scan reads the public job boards of about 20 AI companies for new ads with titles like "red team" and "jailbreak", and lists them marked as not yet read by a person.
+- **Jobs**: real ads. A daily check hides an ad when it closes. A weekly scan reads 32 public job boards (AI labs, contract platforms and two bug-bounty platforms) for new ads with titles like "red team" and "jailbreak", and lists them marked as not yet read by a person.
 - **Settings**: link your devices, your rotation, dark or light, a backup code, your GitHub username for the proof checks (this device only), and a button per lab to hide its hints again.
 
 ## Saving and linking devices
@@ -83,13 +83,13 @@ Works, each with a check that passed on the live site:
 - No course box ticks before its quiz; no GitHub box before its check (tested against a pretend GitHub the test serves: a good repository passes, a missing one fails, one with a key in a file fails, a garak report from the test generator fails, a thin threat model fails); no link box before an address of the right shape.
 - 428 quiz questions (64 on the videos, 364 on the new boxes): every quote found word for word in the saved subtitles or course text, every Python and shell question run (`tools/build_quizzes.py`).
 - Review questions, the on-track card, Explain it back and the practice answers work at phone width (`tools/app_test.py`).
-- Phone and computer stay in step once linked, including the new marks; a device still on the older app cannot make the new marks disappear from the store (`tools/sync_test.py`).
+- Phone and computer stay in step once linked, including the new marks. A device still on an app from before 19 Nov can drop the new marks from the store when it sends; the linked devices that know them send them back (`tools/sync_test.py`). Since 27 Nov the app keeps marks it does not know instead of dropping them.
 - All 12 lab tutor pages; 8 answers run in the real labs on 18 and 19 Nov 2026 (`PROOF.md`). Step 5's Lab 1 notebook runs to the end with PyRIT 0.9.0 (27 Nov 2026). garak 0.17.1 and PyRIT 1.2.1 were run on Shad's PC before their boxes went live (`PROOF.md`).
 - Jobs: daily link check and weekly scan for new ads, both running on GitHub.
 
 Unfinished, or not proven:
 - The app cannot see your freeCodeCamp, PortSwigger, Bandit or Hacker101 progress; it checks you with its own quizzes. Link checks are shape only. The GitHub check reads files, not who wrote them, and GitHub limits checks to about 60 an hour per network.
-- garak and PyRIT were not run against a real model (no key on the PC that built this). Whether garak's litellm option reaches Gemini is untested.
+- garak and PyRIT were run for real on 27 Nov 2026 against small free models on the PC that built this, with no key (`PROOF.md`). Microsoft's labs and the Step 5 notebook check used an OpenAI key on the same PC. garak and PyRIT were not run against a paid or Gemini model.
 - Hours per box are estimates. Program rules, prices and job ads change; they were read on 27 Nov 2026.
 - Pay forms and tax: the boxes quote the IRS, CRA, HackerOne and Bugcrowd pages; they are not tax advice.
 - Lab 10 has no known answer. Labs 3 and 9 show Microsoft's published example, which was not run for this app. Step 5's Lab 5 notebook only loaded (its attack makes many paid calls).
@@ -107,4 +107,4 @@ Unfinished, or not proven:
 - `PROOF.md`: what was run. `AUDIT.md`: every claim, whether it was checked against its source, and what was corrected.
 - `SCOPE.md`, `SCOPE-2-PLAN.md`, `SCOPE-2-GAPS.md`, `FIXUP-NOTES.md`, `IDEAS.md`, `TIMELOG.md`: the record of the 19 Nov rebuild and the 27 Nov Scope 2.
 
-Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. Scope 2 built and checked: 27 Nov 2026.
+Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. Scope 2 built and checked: 27 Nov 2026. Full audit of the whole app: 27 Nov 2026 (`AUDIT-FULL.md`), fixed one at a time the same day (Scope 3). The commits that cite "the 23 Nov audit" refer to a check whose notes were kept outside this repository.

@@ -1,6 +1,6 @@
 # Audit record
 
-Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. This is what was checked in the Red Team Path app, what was corrected, and what nobody can check or promise.
+Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. A full audit of the whole app followed on 27 Nov 2026: `AUDIT-FULL.md`, which corrects the lines below where they were wrong. This is what was checked in the Red Team Path app, what was corrected, and what nobody can check or promise.
 
 ## Changed on 19 Nov 2026 (the rebuild)
 
@@ -11,8 +11,8 @@ Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. This is what was
 - **Lab 12 was solved on 19 Nov 2026.** Thirty tries had failed on 18 Nov. A summariser setting placed after a fake page ending won 9 of 9 in the real lab. Three lessons had said labs 11 and 12 use spotlighting; Microsoft's lab file shows they rely on the system prompt alone, and the lessons were corrected.
 - **Lab 10's printed key is not blocked on a set-up with an OpenAI key.** Tested 19 Nov 2026 with a harmless question: answered 3 of 3. So the Azure safety filter that Microsoft's page describes for labs 9 and 10 is not present on that set-up.
 - **The order changed.** Write-ups and labs 3, 4, 9 and 10 are optional. Labs 7, 8, 11 and 12 are grouped after Episode 7. Episodes 8 to 10 moved to step 5, each before the task it shows. 49 boxes count.
-- **Opened hints and lab results follow a linked device.** Tested 19 Nov 2026 with two browsers on the live site. The online store still refuses anything that is not a number.
-- **Jobs has a weekly scan for new ads.** It reads the public job feeds of 22 companies. Ads it finds are marked as not yet read by a person. First run 19 Nov 2026: 10 ads.
+- **Opened hints and lab results follow a linked device.** Tested 19 Nov 2026 with two browsers on the live site. The store's rules refuse text in place of a number and odd shapes, but the full audit (27 Nov 2026) found a whole record can be replaced by free text, a 33-letter code is accepted and 20,000 made-up marks go in at once: fixing that needs the store's rules changed in the Firebase console (`AUDIT-FULL.md`, B5).
+- **Jobs has a weekly scan for new ads.** It reads the public job feeds of 22 companies (32 boards on 27 Nov 2026). Ads it finds are marked as not yet read by a person. First run 19 Nov 2026: 10 ads.
 - **Every link in the learning material was opened by script on 19 Nov 2026:** 86 links, none dead, 3 that refuse scripts (Indeed, OpenAI's platform page, aitraining.jobs).
 
 ## Checked against its source (24)
@@ -39,7 +39,7 @@ Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. This is what was
 - **Every link in the app opens the right page.** Opened on 18 Nov 2026: the Microsoft training page and lab pages, all 11 Microsoft Learn modules, the Gray Swan pages, the 0DIN and Anthropic pages, the job sites and the job searches.
 - **The job titles, pay and asks on the Jobs tab come from real ads.** Each ad was read on its own page on 17 Nov 2026. Pay is copied as the ad posted it. Ads close and pay changes, so they are examples, not offers.
 - **An ad on the Jobs tab has a working link.** A free automatic check opens every ad's page once a day. If the page is gone, leads somewhere else or says it is closed, the ad is hidden. Each ad shows the date its link was last checked. A site that blocks the check keeps its older date.
-- **Linked devices store ticks and streak days only, under a private code that is never shown.** Tested on 17 and 18 Nov 2026: reading the whole store, listing other people's codes, and saving anything except numbers were all refused.
+- **Linked devices store ticks and streak days only, under a private code that is never shown.** Tested on 17 and 18 Nov 2026: reading the whole store and listing other people's codes were refused; saving free text in place of a whole record was not (full audit, 27 Nov 2026, B5).
 - **The short code used to link a device works once and runs out in 10 minutes.** Tested on 18 Nov 2026: a used code, a made-up code, a backdated code and a list of all codes were all refused.
 
 ## Corrected (7)
@@ -79,7 +79,7 @@ Each page was opened on its own official site on 27 Nov 2026 (Alberta), by scrip
 - **OverTheWire Bandit**: "aimed at absolute beginners". **Hacker101**: "Hacker101 is a free class for web security", by HackerOne; HackerOne's help page: "Once you have earned 26 points in the CTF, you'll be eligible to receive invitations to private programs."
 - **GitHub Skills, Introduction to GitHub**: a template exercise, "less than an hour". **GitHub Models was retired on 30 Jul 2026** (GitHub's docs), so it is not used.
 - **Gemini API**: Canada is on Google's list of available regions; the pricing page lists Flash models as "Free of charge" on the free tier.
-- **PyRIT**: github.com/Azure/PyRIT "was archived by the owner on Mar 27, 2026"; github.com/microsoft/PyRIT is live; the newest release is 1.2.1 (16 Nov 2026, Python 3.11 or newer). `pyrit/orchestrator` no longer exists in PyRIT's code, but Microsoft's lab notebooks import it. Not yet run.
+- **PyRIT**: github.com/Azure/PyRIT "was archived by the owner on Mar 27, 2026"; github.com/microsoft/PyRIT is live; the newest release is 1.2.1 (16 Nov 2026, Python 3.11 or newer). `pyrit/orchestrator` no longer exists in PyRIT's code, but Microsoft's lab notebooks import it. Run on 27 Nov 2026: `PROOF.md`.
 - **NVIDIA garak**: "garak's a free tool"; newest release 0.17.1 (Python 3.11 or newer).
 - **Bounty programs**: OpenAI Safety Bug Bounty (launched 25 Mar 2026): "jailbreaks are out of scope"; agent hijacking and data exfiltration are in scope. Google AI VRP: jailbreaks out of scope; "rogue actions" and "sensitive data exfiltration" are paid. Microsoft Copilot bounty: US$100 to US$30,000, "qualifying reports must demonstrate a qualifying security impact"; not eligible only if "a resident of any countries under U.S. sanctions" (Microsoft's bounty guidelines). Mozilla 0DIN (updated 2 Oct 2026): US$500 to US$15,000; excludes only people on a US sanctions list or in a sanctioned country.
 - **Getting paid**: Bugcrowd: non-US individuals "must submit the W-8BEN substitute tax form to receive payouts". CRA: no GST/HST registration needed while you "do not exceed the $30,000 threshold over four consecutive calendar quarters"; form T2125 reports "business or professional income and expenses". HackerOne's safe harbor page lists a Gold Standard Safe Harbor and an AI Research Safe Harbor statement.
