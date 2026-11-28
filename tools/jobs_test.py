@@ -9,6 +9,7 @@ from find_jobs import canada_from  # noqa: E402
 
 CASES = [
     ("Remote - US or Canada", "yes"), ("United States or Canada", "yes"), ("Canada", "yes"), ("Remote - CAN", "yes"), ("Edmonton, AB", "check"),
+    ("Edmonton", "check"), ("Moncton, New Brunswick", "check"), ("Saskatoon", "check"), ("Ontario", "check"), ("British Columbia", "check"),
     ("Hybrid - Vancouver", "check"), ("Toronto or Remote US", "check"), ("Montréal, QC", "check"), ("Waterloo, ON", "check"),
     ("North America", "check"), ("Remote (Americas)", "check"), ("Remote", "check"), ("", "check"), ("San Francisco; Remote", "check"),
     ("Remote (International)", "anywhere"), ("Global Remote", "anywhere"), ("Worldwide", "anywhere"),

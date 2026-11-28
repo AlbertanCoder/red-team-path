@@ -32,9 +32,11 @@ def canada_from(where):
         return hidden
     if re.search(r"(?i)canada|canadian", w) or re.search(r"\bCAN\b", w):
         return {"canada": "yes", "where": "Location as posted: %s." % w}
-    if re.search(r"(?i)toronto|vancouver|montr[eé]al|calgary|ottawa|waterloo|winnipeg|halifax|qu[eé]bec|victoria", w) or \
+    if re.search(r"(?i)toronto|vancouver|montr[eé]al|calgary|edmonton|ottawa|waterloo|winnipeg|halifax|qu[eé]bec|victoria|"
+                 r"\b(saskatoon|regina|mississauga|burnaby|kelowna|kitchener|gatineau)\b|"
+                 r"\b(alberta|ontario|british columbia|manitoba|saskatchewan|nova scotia|new brunswick|newfoundland|prince edward island)\b", w) or \
             re.search(r"(^|[\s,(/-])(ON|BC|AB|QC|MB|SK|NS|NB|NL|PE)($|[\s,)/-])", w):
-        return check("That is a Canadian city: check whether the job can be done from where you live.")
+        return check("That is in Canada: check whether the job can be done from where you live.")
     if re.search(r"(?i)north america|americas|\bNA\b", w):
         return check("That may include Canada: read the ad to be sure.")
     if re.search(r"(?i)anywhere in the (us|u\.s\.|usa|united states)|\b(us|u\.s\.|usa) only|united states only", w):
