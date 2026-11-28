@@ -130,7 +130,15 @@ Checked on Shad's PC (Windows 11, Python 3.12) in two fresh virtual environments
 - Not run: the Lab 5 notebook to the end (its Crescendo attack makes many paid calls to OpenAI). Its first cell loads with 0.9.0.
 - Step 5's install line now names PyRIT 0.9.0 (box a1, step 4), and box a1 has one more step for `use_tls=False` (approved by Shad on 27 Nov 2026). Check script: `~/redteam/pyrit-check/run_lab1.py` (outside the repo; it reads the lab sign-in key from the labs' settings file and never prints it).
 
-## Step 11: garak and today's PyRIT, run before their boxes went live (27 Nov 2026)
+## Step 11: garak and PyRIT run for real on free models on this PC (27 Nov 2026, Shad's decision 1)
+
+No key, no account, no money. Windows 11, Python 3.12.10, PowerShell 5.1. Boxes ag4 and ag5 were rewritten from these runs (Scope 3, fix 17). Full notes: the audit folder `helpers/real-runs.md`, outside this repository.
+
+- **garak 0.17.1 against GPT-2**: `python -m garak --target_type huggingface --target_name gpt2 --spec probes.encoding.InjectBase64 --generations 1`. It finished in 898 seconds (256 prompts, 523 MB model download, about 1.1 GB of memory). The report had 512 `attempt` entries, 2 `eval` entries and a `completion` entry, and passes box ag4's GitHub check. GPT-2 let nothing through, so garak wrote no hit log. The report holds the Windows user folder path, so the box says to change the user name before pushing. `--probes` still works but is deprecated; the box uses `--spec`.
+- **PyRIT 1.2.1 against SmolLM2-135M-Instruct**: `pip install "pyrit[huggingface]==1.2.1"`, the model downloaded with `hf download ... --exclude "onnx/*"` (272 MB, no token), then `HuggingFaceChatTarget(model_path=...)`, a `PromptSendingAttack`, the system instruction through `prepended_conversation=[Message.from_system_prompt(...)]`, `initialize_pyrit_async(memory_db_type=IN_MEMORY)` and `asyncio.run(main())`. 13 to 37 seconds; the model gave up the made-up word in 2 of 5 replies; `attack.py` and its `results.txt` pass box ag5's GitHub check. PyRIT's own `model_id=` example stops without a Hugging Face token. PyRIT does not crash on emoji, but `> results.txt` in PowerShell 5.1 writes an unreadable UTF-16 file, so the script writes the file itself.
+- **Virtual environment**: on a fresh Windows PC `Activate.ps1` is refused ("running scripts is disabled on this system") until `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. Seen in a PowerShell started with the Restricted policy; this PC's own setting was not changed.
+
+## Step 11: garak and today's PyRIT, run before their boxes went live (27 Nov 2026) (superseded by the section above)
 
 On Shad's PC (Windows 11, Python 3.12), each in its own virtual environment:
 

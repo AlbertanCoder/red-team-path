@@ -512,18 +512,21 @@
       item("ag4", "build", "Scan a model with NVIDIA's garak",
         "garak is a free scanner that sends hundreds of known attack prompts and records what got through: what Clera's safety-testing ad lists by name.",
         "https://github.com/NVIDIA/garak", { mins: 240, pc: true, proof: "github", openLabel: "Open garak", how: [
-          "In a new folder on your PC, make a Python virtual environment and install garak (python -m pip install -U garak). It is large: it brings PyTorch.",
-          "Run one small probe against a model you are allowed to test, once each: --target_type openai --target_name <model> --probes encoding.InjectBase64 --generations 1 (the OpenAI form from garak's README; about 256 prompts, cents on your OpenAI key). Without --generations 1 garak asks 5 times each. Its litellm option may reach Gemini; this app has not tested that.",
-          "garak prints where it saved the run's report (a .report.jsonl file). Read its hit log: which prompts got through?",
-          "Copy the report into red-team-tools/scans/, commit and push. Press Check my GitHub below, then take the quiz."
+          "Make a virtual environment, a private Python folder for one project: in PowerShell type mkdir $HOME\\garak-scan, then cd $HOME\\garak-scan, then python -m venv .venv, then .venv\\Scripts\\Activate.ps1. If Windows says running scripts is disabled, run Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser once (Python's own advice), then switch it on again. The line now starts with (.venv): anything you install goes into this folder only.",
+          "Install garak, version 0.17.1 (it needs Python 3.11 or newer): python -m pip install garak==0.17.1. It is large, about 1.5 GB, because it brings PyTorch.",
+          "Scan GPT-2, a small free model that runs on your own PC, so no key, no account and no money: python -m garak --target_type huggingface --target_name gpt2 --spec probes.encoding.InjectBase64 --generations 1. The first run downloads GPT-2 (about 520 MB). On this app's test PC the scan sent 256 prompts in 15 minutes and used about 1 GB of memory (27 Nov 2026).",
+          "garak prints where it saved the report: a .report.jsonl file in .local\\share\\garak\\garak_runs in your user folder. If any prompt got through, it also writes a .hitlog.jsonl beside it: read that. GPT-2 let nothing through in the app's test, so there was no hit log.",
+          "The report holds your Windows user folder's path. Open it in a text editor, change your Windows user name in that path to me, and save. Then copy only the .report.jsonl into red-team-tools/scans/, commit and push. Press Check my GitHub below, then take the quiz."
         ] }),
       item("ag5", "build", "One attack with today's PyRIT",
-        "Step 5 used an old PyRIT for Microsoft's notebooks. Here you use the current one (1.2.1) the way its own docs do: an attack with an objective, against your own guarded-secret target.",
+        "Step 5 used an old PyRIT for Microsoft's notebooks. Here you use the current one (1.2.1) the way its own docs do: an attack against your own guarded-secret target, on a small free model that runs on your PC.",
         "https://github.com/microsoft/PyRIT", { mins: 240, pc: true, proof: "github", openLabel: "Open PyRIT", how: [
-          "In a new virtual environment (Python 3.11 or newer), pip install pyrit. Keep it apart from Step 5's PyRIT 0.9.0.",
-          "Put your model's settings in ~/.pyrit/.env, never in your repository: OPENAI_CHAT_ENDPOINT, OPENAI_CHAT_KEY and OPENAI_CHAT_MODEL (PyRIT's own setup page).",
-          "Write red-team-tools/pyrit/attack.py from PyRIT's single-turn example: a PromptSendingAttack with an objective against OpenAIChatTarget, with your secret-word system instruction from Step 8.",
-          "Run it and save what it prints to red-team-tools/pyrit/results.txt. Commit and push both. Press Check my GitHub below, then take the quiz."
+          "Make a new virtual environment, apart from Step 5's PyRIT 0.9.0: in PowerShell type mkdir $HOME\\pyrit-new, then cd $HOME\\pyrit-new, then python -m venv .venv, then .venv\\Scripts\\Activate.ps1. If Windows says running scripts is disabled, run Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser once (Python's own advice), then switch it on again. The line now starts with (.venv): anything you install goes into this folder only.",
+          "Type python --version. PyRIT 1.2.1 installs on Python 3.11 to 3.14, not 3.15. Then install it with its local-model part: python -m pip install \"pyrit[huggingface]==1.2.1\" (it brings PyTorch).",
+          "Download a small free chat model, no account needed, into a folder outside your repository: hf download HuggingFaceTB/SmolLM2-135M-Instruct --exclude \"onnx/*\" --local-dir $HOME\\models\\SmolLM2-135M-Instruct (about 270 MB).",
+          "Write red-team-tools/pyrit/attack.py from PyRIT's single-turn attack page and its Hugging Face target page. Use HuggingFaceChatTarget with model_path= set to that folder: the docs' model_id= asks for a Hugging Face token. Give the model your secret-word system instruction from Step 8 through prepended_conversation, and send a few prompts with a PromptSendingAttack.",
+          "Put the code in an async def main() and end the file with asyncio.run(main()): the docs' bare await does not run in a file. Have the script write results.txt itself, with encoding=\"utf-8\". Do not use > results.txt in PowerShell: it makes an unreadable file.",
+          "Read PyRIT's page on attacks and executors too: the quiz asks about it. Run python attack.py from the pyrit folder (on this app's test PC: under a minute). Commit and push attack.py and results.txt, not the model folder. Press Check my GitHub below, then take the quiz."
         ] })
     ];
 

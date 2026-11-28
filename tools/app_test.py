@@ -1260,6 +1260,19 @@ with sync_playwright() as p:
     check("ABOUT 16 HOURS" in pp.inner_text("#top-tag"), "Scope 3: box ag2's hours are raised for 8 labs (%s)" % pp.inner_text("#top-tag"))
     check(any("AI-powered scanners" in x["q"] for x in pp.evaluate("window.RTP_QUIZ.ag2")), "Scope 3: ag2's quiz asks about the new AI-powered scanner labs")
     pctx.close()
+    # Scope 3, fix 17 (audit A6, A7, A5; decision 1): ag4 and ag5 rewritten from the real free runs on the PC.
+    rctx2, rp2 = new_page(b, None, start=False)
+    ag4 = box_text(rp2, "ag4")
+    check("--target_type huggingface --target_name gpt2 --spec probes.encoding.InjectBase64 --generations 1" in ag4 and "--target_type openai" not in ag4 and "--probes" not in ag4,
+          "Scope 3: box ag4 gives the whole free command that worked, with --spec, not a paid key")
+    check("garak==0.17.1" in ag4 and "Set-ExecutionPolicy" in ag4 and r"$HOME\garak-scan" in ag4 and "user name" in ag4, "Scope 3: box ag4 pins garak, teaches the virtual environment, and says to take the user folder out of the report")
+    ag5 = box_text(rp2, "ag5")
+    check("pyrit[huggingface]==1.2.1" in ag5 and "model_path=" in ag5 and "asyncio.run(main())" in ag5 and "OPENAI_CHAT_KEY" not in ag5 and "3.11 to 3.14" in ag5,
+          "Scope 3: box ag5 gives the free local route that worked, the Python limit and asyncio.run")
+    check('encoding="utf-8"' in ag5 and "> results.txt" in ag5, "Scope 3: box ag5 says to write results.txt from the script, not with >")
+    q1 = rp2.evaluate("window.RTP_QUIZ.ag5")[0]
+    check(q1["options"][q1["answer"]] == "3.11 to 3.14", "Scope 3: ag5's quiz gives the Python versions of PyRIT 1.2.1, the version the box installs")
+    rctx2.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")

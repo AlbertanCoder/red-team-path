@@ -1313,18 +1313,18 @@ window.RTP_QUIZ = {
  ],
  "ag5": [
   {
-   "q": "Which Python versions does PyRIT's install page list?",
+   "q": "Which Python versions does the install page of PyRIT 1.2.1, the version this box installs, list?",
    "options": [
+    "3.11 to 3.14",
+    "3.10 to 3.13",
     "3.11 to 3.15",
-    "2.7 only",
-    "3.6 to 3.8",
-    "Any version at all"
+    "3.9 or newer"
    ],
    "answer": 0,
    "kind": "recall",
-   "hint": "Look again at PyRIT's install page: Prerequisites.",
+   "hint": "Look again at PyRIT 1.2.1's install page: Prerequisites.",
    "where": "PyRIT: Install locally",
-   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/getting_started/install_local.md"
+   "url": "https://github.com/microsoft/PyRIT/blob/releases/v1.2.1/doc/getting_started/install_local.md"
   },
   {
    "q": "What does PyRIT's install page say about notebooks and your installed PyRIT?",
@@ -1336,9 +1336,9 @@ window.RTP_QUIZ = {
    ],
    "answer": 0,
    "kind": "recall",
-   "hint": "Look again at PyRIT's install page: Matching Notebooks to Your Version. Step 5 taught you why.",
+   "hint": "Look again at PyRIT's install page: the part about notebooks.",
    "where": "PyRIT: Install locally",
-   "url": "https://github.com/microsoft/PyRIT/blob/main/doc/getting_started/install_local.md"
+   "url": "https://github.com/microsoft/PyRIT/blob/releases/v1.2.1/doc/getting_started/install_local.md"
   },
   {
    "q": "In PyRIT, what is an executor?",
