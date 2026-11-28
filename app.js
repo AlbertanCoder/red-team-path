@@ -2722,6 +2722,9 @@
     var box = h("div", { class: "block", id: "quiz-box", tabindex: "-1" });
     if (!quizRun || quizRun.n !== n) {
       box.appendChild(h("p", { class: "small", text: qs.length + " questions " + (videoNo(it) ? "about this video" : "from the course's own pages") + ". Get " + need + " right in one round to tick it. A miss shows what you picked and " + (videoNo(it) ? "where in the video to look" : "which page to read again") + ". The retry opens 2 minutes later and asks every question again, in a new order; the right answers show once you pass." }));
+      if (qs.some(function (q) { return /orchestrator/i.test(q.q + " " + q.options.join(" ")); })) {
+        box.appendChild(h("p", { class: "small", id: "orch-note", text: "The video says orchestrator. Today's PyRIT, used in Step 11, calls the same thing an attack." }));
+      }
       var startBtn = h("button", { type: "button", class: "wide", id: "quiz-start", text: "Start the quiz" });
       var startAt = quizWaitUntil(n);
       startBtn.addEventListener("click", function () {
@@ -2740,9 +2743,6 @@
       var q = qs[qi];
       box.appendChild(h("div", { class: "tag", id: "quiz-count", text: "QUESTION " + (run.at + 1) + " OF " + run.ask.length + (run.retry ? " (EVERY QUESTION AGAIN, NEW ORDER)" : "") }));
       box.appendChild(h("p", { id: "quiz-q", text: q.q }));
-      if (/orchestrator/i.test(q.q + " " + q.options.join(" "))) {
-        box.appendChild(h("p", { class: "small", id: "orch-note", text: "The video says orchestrator. Today's PyRIT, used in Step 11, calls it an attack, such as PromptSendingAttack or CrescendoAttack." }));
-      }
       if (q.code) { box.appendChild(h("pre", { class: "msg qcode", id: "quiz-code", text: q.code })); }
       var opts = h("div", { class: "opts", id: "quiz-opts" });
       run.order[run.at].forEach(function (oi) {

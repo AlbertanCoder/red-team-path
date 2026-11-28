@@ -1470,14 +1470,17 @@ with sync_playwright() as p:
     check(not any("confuse the model" in o for x in q5 for o in x["options"]) and any("backs off from" in o for x in q10 for o in x["options"])
           and any("erases a refused turn" in x["hint"] for x in q10), "Scope 3: ep5 Q7 has no wrong option that research shows is partly true, and ep10 Q8 says what PyRIT's backtrack does today")
     screen(hp2, "v10")
+    # After-fixes audit, finding 4: under a question the note named the answer (ep8 Q3, ep9 Q5), so it shows once, before the quiz starts.
+    note = hp2.inner_text("#orch-note") if hp2.locator("#orch-note").count() == 1 else ""
+    check("attack" in note and "CrescendoAttack" not in note and "PromptSendingAttack" not in note,
+          "Scope 3: a quiz whose questions say orchestrator has a note before it starts that today's PyRIT calls it an attack (naming no attack)")
     hp2.click("#quiz-start")
-    seen_note = False
+    under = []
     for k in range(len(q10)):
-        if "orchestrator" in hp2.inner_text("#quiz-q").lower():
-            seen_note = hp2.locator("#orch-note").count() == 1 and "attack" in hp2.inner_text("#orch-note")
-            break
+        if hp2.locator("#orch-note").count():
+            under.append(k + 1)
         answer(hp2, True)
-    check(seen_note, "Scope 3: a video question that says orchestrator carries a note that today's PyRIT calls it an attack")
+    check(not under, "After-fixes audit: the orchestrator note is not under any question (under questions %s)" % under)
     hctx2.close()
     b.close()
 
