@@ -139,6 +139,8 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 24. F: records made true. Proof: e3ecd68; records only (no app change): each corrected line checked against the app and the audit's findings, 27 Nov 2026. Hours from the boxes' own labels read in the app (about 450 required from Step 2, about 156 optional).
 - [x] 25. Every test local and live; tag `audit-fixes-done`; fix log at the end of `AUDIT-FULL.md`. Proof, 27 Nov 2026 about 9:15 pm: `tools/proof_test.js` 109 cases, `tools/jobs_test.py` 47, `tools/build_quizzes.py --check` matches, `tools/app_test.py` 480 checks local and live, `tools/walk_test.py` live ALL PASSED (68 lesson videos played), `tools/sync_test.py` live ALL PASSED, `tools/linkcheck.py` 295 links, 0 dead, 5 sites refuse scripts (after teaching it that `^https://...` is a pattern, not a link); the audit's lab-proof attack set: 43 wrong of 132, the same as after fix 5. All ALL PASSED.
 
+- [ ] 26. Shad's answers of 27 Nov 2026 (`AUDIT-FULL.md` section 7): Q2 store rules (written and tested; Shad pastes them), Q3 no-reply email for new commits (needs Shad's GitHub setting first), Q4 personal details trimmed from the public records, Q5 "Moving on, not solved" after a real try, Q6 lab hints 2, 8, 11, 12 + the orchestrator note + ep5 Q7 and ep10 Q8, Q8 g6 to a free Gray Swan set. January (reminder set for 5 Jan 2027): Q1 re-test on the newer model, Q7 Lab 5 notebook run.
+
 ### Out of scope
 
 - Any change to the meaning or order of Steps 1 to 6 beyond proven errors of fact, without Shad's answer. Removing a box. Anything that could reset saved progress. Spending money or using his keys or accounts. Any other project.

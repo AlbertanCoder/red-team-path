@@ -449,6 +449,19 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 - **Q9.** Have you set up a free Gemini key yourself? If not, garak and PyRIT are run on a small free model on your PC only.
 - **Q10.** Hours on the freeCodeCamp boxes may be 3 times high. Leave them, or lower them now?
 
+**Shad's answers (27 Nov 2026, about 9:25 pm Alberta), asked one at a time:**
+
+- **Q1** Re-test the 8 lab answers on OpenAI's newer model in early January, not now. A Google Calendar reminder is set for 5 Jan 2027.
+- **Q2** Yes: write the three rule lines for the store and test them first; Shad pastes them into Firebase.
+- **Q3** Yes, future commits only: Shad turns on GitHub's private email setting and gives the no-reply address; old commits are not rewritten.
+- **Q4** Trim personal details from the public records, now and from here on; `AUDIT-FULL-PROMPT.md` stays private.
+- **Q5** Yes: a "Moving on, not solved" button on the 8 required labs, shown only after a real try (all hints opened, or 45 minutes on the lab).
+- **Q6** All three: reword the hints on labs 2, 8, 11 and 12; add a note on "orchestrator" (now "attack") under the 5 video questions; fix ep5 Q7 and ep10 Q8.
+- **Q7** Run box a3's Lab 5 notebook to the end once, in January, with the Q1 re-test (same reminder).
+- **Q8** Point box g6 at a free Gray Swan practice set of about the same level (the id stays).
+- **Q9** No Gemini key: keep the free local models.
+- **Q10** Leave the hours; compare with Shad's real time after fc1 and md3 and adjust then.
+
 ---
 
 ## 8. Fix log (all 25 done, 27 Nov 2026)
