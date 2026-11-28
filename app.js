@@ -1831,6 +1831,19 @@
   // a review answer or "I studied today"). It never ticks a box.
   function studied() { mark("ac" + new Date().getDay(), true); }
   function hintsOpen(n) { return !isDone("ha" + n) ? 0 : !isDone("hb" + n) ? 1 : !isDone("hc" + n) ? 2 : 3; }
+  // A required lab offers "Moving on, not solved" only after a real try: every hint open, or 45 minutes since you first
+  // opened that lab on this device (Shad's answer to Q5, 27 Nov 2026). The lab then waits on the come-back list, not beaten.
+  var LAB_START_KEY = "redTeamPath.labStart", TRY_MS = 45 * 60000;
+  function labStart(n, set) {
+    var all = {};
+    try { all = JSON.parse(window.localStorage.getItem(LAB_START_KEY) || "{}") || {}; } catch (e) { all = {}; }
+    if (set && !all[n]) {
+      all[n] = Date.now();
+      try { window.localStorage.setItem(LAB_START_KEY, JSON.stringify(all)); } catch (e) { /* the 45 minutes then count from this visit */ }
+    }
+    return Number(all[n]) || Date.now();
+  }
+  function realTry(n) { return hintsOpen(n) >= 3 || Date.now() - labStart(n) >= TRY_MS; }
   function clearAll() {
     // The clear must be newer than every tick it wipes, even one stamped by a device whose clock runs fast.
     var newest = state.r;
@@ -2586,12 +2599,18 @@
       file, paste, check, out]);
   }
   function labScreen(v, it, n) {
+    labStart(n, true);
     var pg = labPage(n);
     var open = hintsOpen(n);
     var verified = pg.label === "verified";
     function badge() { return h("span", { class: "badge" + (verified ? "" : " un"), text: verified ? "VERIFIED" : "UNVERIFIED" }); }
     v.appendChild(part("What this lab is", [h("p", { text: pg.what + " To open it: double-click Start labs on your computer if they are not running, then press Launch next to Lab " + n + " on the labs page." })]));
     v.appendChild(part("The objective", [h("p", { text: pg.objective })]));
+    if (needsProof(n) && !isDone("pf" + n) && !isDone(it.id)) {
+      v.appendChild(h("p", { class: "small", id: "moving-note", text: realTry(n)
+        ? "You can move on without solving it: the button is at the bottom. The lab waits on your come-back list, and a winning chat file later makes it beaten."
+        : "Stuck? Once every hint is open, or after 45 minutes on this lab, you can move on without solving it. It then waits on your come-back list." }));
+    }
     var think = [];
     if (pg.think) { think.push(h("p", { text: pg.think })); }
     if (pg.ask && pg.ask.length) {
@@ -3370,7 +3389,11 @@
         var proved = isDone("pf" + n);
         var beat = dockBtn(proved ? "I beat it ✓" : "Add your chat file above to finish", proved ? "ok" : "", "beat-btn", function () { if (isDone("pf" + n)) { finish(it, false); } });
         beat.disabled = !proved;
-        d.appendChild(beat);
+        if (!proved && realTry(n)) {
+          d.appendChild(h("div", { class: "two" }, [beat, dockBtn("Moving on, not solved", "", "moved-btn", function () { finish(it, true); })]));
+        } else {
+          d.appendChild(beat);
+        }
       } else if (n) {
         d.appendChild(h("div", { class: "two" }, [
           dockBtn("I beat it", "ok", "beat-btn", function () { finish(it, false); }),
@@ -3861,7 +3884,7 @@
     var v = document.getElementById("view-jobs");
     v.textContent = "";
     var live = JOBS.ads.filter(function (a) { return a.open !== false && /^https:\/\//.test(a.url || ""); });
-    // Shad lives in Canada and cannot work in the US: hide ads that need you in the US or UK, and list Canada-named ads first.
+    // The app is for someone working from Canada: hide ads that need you in the US or UK, and list Canada-named ads first.
     var rank = { yes: 0, anywhere: 1, check: 2 };
     var open = live.filter(function (a) { return a.canada !== "no"; })
       .map(function (a, i) { return [a, i]; })
