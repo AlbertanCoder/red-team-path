@@ -2688,7 +2688,7 @@
     var qs = QUIZ[n];
     var need = passMark(qs.length);
     if (isDone("qz" + n)) {
-      var done = h("div", { class: "answer", id: "quiz-box" }, [h("p", null, [h("b", { text: "Quiz passed. " }), "You can tick this " + (videoNo(it) ? "video." : "box.")])]);
+      var done = h("div", { class: "answer", id: "quiz-box", tabindex: "-1" }, [h("p", null, [h("b", { text: "Quiz passed. " }), "You can tick this " + (videoNo(it) ? "video." : "box.")])]);
       var rev = quizReview(n);
       if (rev.length) {
         done.appendChild(h("p", { class: "small", text: "The ones you got wrong on the way, now with the right answers:" }));
@@ -2698,7 +2698,7 @@
       }
       return done;
     }
-    var box = h("div", { class: "block", id: "quiz-box" });
+    var box = h("div", { class: "block", id: "quiz-box", tabindex: "-1" });
     if (!quizRun || quizRun.n !== n) {
       box.appendChild(h("p", { class: "small", text: qs.length + " questions " + (videoNo(it) ? "about this video" : "from the course's own pages") + ". Get " + need + " right in one round to tick it. A miss shows what you picked and " + (videoNo(it) ? "where in the video to look" : "which page to read again") + ". The retry opens 2 minutes later and asks every question again, in a new order; the right answers show once you pass." }));
       var startBtn = h("button", { type: "button", class: "wide", id: "quiz-start", text: "Start the quiz" });
@@ -3052,6 +3052,7 @@
     var userIn = h("input", { type: "text", id: "gh-user", "aria-label": "Your GitHub username", placeholder: "Your GitHub username", autocomplete: "off", autocapitalize: "none", spellcheck: "false" });
     userIn.value = state.gh || "";
     var go1 = h("button", { type: "button", class: "primary", id: "gh-check", text: run && run.busy ? "Checking…" : "Check my GitHub" });
+    userIn.addEventListener("keydown", function (e) { if (e.key === "Enter") { go1.click(); } });
     go1.disabled = !!(run && run.busy);
     var status = h("span", { class: "status-line", role: "status", id: "gh-status" });
     go1.addEventListener("click", function () {
@@ -3089,6 +3090,7 @@
     });
     var status = h("span", { class: "status-line", role: "status", id: "proof-link-status", text: isDone("pf" + it.id) ? "Saved ✓" : "" });
     var btn = h("button", { type: "button", class: "primary", id: "proof-link-save", text: it.links.length > 1 ? "Save my links" : "Save my link" });
+    inputs.forEach(function (x) { x.addEventListener("keydown", function (e) { if (e.key === "Enter") { btn.click(); } }); });
     btn.addEventListener("click", function () {
       var bad = it.links.filter(function (l, i) { return !new RegExp(l[2]).test(inputs[i].value.trim()); });
       if (bad.length) { status.textContent = "That does not look like " + bad[0][1] + " with your own name in it. Open your own profile page and copy the address from the address bar."; return; }
@@ -3695,13 +3697,17 @@
     $("sheet").setAttribute("aria-hidden", tocShown ? "false" : "true");
     $("nav").inert = !navShown;
     $("sheet").inert = !tocShown;
+    var cover = !wide && drawerOpen();
+    ["main", "dock"].forEach(function (id) { if ($(id)) { $(id).inert = cover; } });
     $("nav-btn").setAttribute("aria-expanded", navShown ? "true" : "false");
     $("toc-btn").setAttribute("aria-expanded", tocShown ? "true" : "false");
     $("scrim").hidden = wide || !drawerOpen();
     if ($("sheet-close")) { $("sheet-close").textContent = wide ? "Hide" : "Close"; }
   }
   function measureTop() { document.querySelector(".app").style.setProperty("--toph", $("top").offsetHeight + "px"); }
+  var opener = null; // the button that opened a side panel, to give focus back to
   function openDrawer(which) {
+    opener = document.activeElement;
     var c = document.documentElement.classList;
     c.remove(which === "nav" ? "toc-open" : "nav-open");
     c.add(which + "-open");
@@ -4519,11 +4525,19 @@
       if (again) { again.focus({ preventScroll: true }); }
     }
   }
+  var routedOnce = false;
   function route() {
     var m = /^#i-(.+)$/.exec(window.location.hash || "");
     shown = m && KNOWN[m[1]] && KNOWN[m[1]].kind ? m[1] : "";
     render();
     showScreen();
+    // A screen reader and the keyboard follow the move: the screen's heading takes focus, and the tab title names the screen.
+    var t = $("top-title");
+    if (t) {
+      document.title = t.textContent ? t.textContent + " | Red Team Path" : "Red Team Path";
+      if (routedOnce && !drawerOpen() && !(playing && $("player"))) { t.focus({ preventScroll: true }); }
+    }
+    routedOnce = true;
   }
   function takeLink() {
     // An older version linked devices with a long link (…#sync=code). Such a link no longer links by itself: a link from
@@ -4564,7 +4578,7 @@
   $("nav-btn").addEventListener("click", toggleNav);
   $("toc-btn").addEventListener("click", toggleToc);
   $("scrim").addEventListener("click", closeDrawers);
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && drawerOpen()) { closeDrawers(); $("nav-btn").focus(); } });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && drawerOpen()) { closeDrawers(); (opener && document.body.contains(opener) ? opener : $("nav-btn")).focus(); } });
   if (WIDE.addEventListener) { WIDE.addEventListener("change", applyLayout); } else { WIDE.addListener(applyLayout); }
   window.addEventListener("resize", measureTop);
   // Safari on iPhone and iPad reports a pinch as a "gesture". Cancelling it keeps the page from zooming and

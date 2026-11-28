@@ -1340,6 +1340,48 @@ with sync_playwright() as p:
     vp.wait_for_selector("#player")
     check((vp.get_attribute("#player", "src") or "").startswith("https://www.youtube-nocookie.com/embed/") and vp.locator("#player").count() == 1, "Scope 3: a YouTube lesson video plays through the no-cookie address, one at a time")
     vctx.close()
+    # Scope 3, fix 22 (audit G): ease of use.
+    ectx, ep = new_page(b, None, start=False)
+    screen(ep, "fc1")
+    ep.evaluate("document.documentElement.style.fontSize = '200%'")
+    big = ep.evaluate("parseFloat(getComputedStyle(document.querySelector('#view-now p')).fontSize)")
+    ep.evaluate("document.documentElement.style.fontSize = ''")
+    check(big >= 30, "Scope 3: text grows with the phone's own text-size setting (a paragraph at 200%%: %.0f px)" % big)
+    ep.evaluate("location.hash = '#i-fc2'")
+    ep.wait_for_timeout(300)
+    check(ep.evaluate("document.activeElement && document.activeElement.id") == "top-title" and ep.title().endswith("| Red Team Path") and len(ep.title()) > 16,
+          "Scope 3: after a move the screen's heading takes focus and the tab title names the screen (%s)" % ep.title())
+    screen(ep, "fc1")
+    ep.click("#quiz-start")
+    ep.wait_for_timeout(200)
+    check(ep.evaluate("document.activeElement && document.activeElement.id") == "quiz-box", "Scope 3: the quiz box takes focus, so the question is read out")
+    ep.click("#nav-btn")
+    ep.wait_for_timeout(300)
+    inert = ep.evaluate("document.getElementById('main').inert && document.getElementById('dock').inert")
+    ep.keyboard.press("Escape")
+    ep.wait_for_timeout(300)
+    check(inert and ep.evaluate("document.activeElement && document.activeElement.id") == "nav-btn", "Scope 3: an open side panel on a phone closes off the page behind it, and Escape gives focus back to its button")
+    screen(ep, "ap1")
+    ep.fill("#gh-user", "")
+    ep.focus("#gh-user")
+    ep.keyboard.press("Enter")
+    ep.wait_for_timeout(200)
+    check("Type your GitHub username first" in ep.inner_text("#gh-status"), "Scope 3: Enter in the GitHub username box does what the button does")
+    look = ep.evaluate("""(function () {
+      var b = document.querySelector('#done-btn'); var cs = getComputedStyle(b);
+      var small = Array.prototype.slice.call(document.querySelectorAll('#view-now button, #view-now summary, #dock button')).filter(function (x) { return x.offsetParent && x.getBoundingClientRect().height < 43.5; }).length;
+      return { disabledOpacity: b.disabled ? cs.opacity : '1', pad: getComputedStyle(document.documentElement).scrollPaddingTop, small: small,
+               ph: getComputedStyle(document.querySelector('#gh-user'), '::placeholder').opacity };
+    })()""")
+    check(look["disabledOpacity"] == "1" and look["pad"] == "170px" and look["small"] == 0 and look["ph"] == "1",
+          "Scope 3: greyed buttons and placeholders stay readable, nothing hides under the bars, and no button is under 44 px (%s)" % look)
+    ectx.close()
+    rctx3 = b.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, reduced_motion="reduce")
+    rp3 = rctx3.new_page()
+    rp3.goto(base)
+    rp3.wait_for_selector("#top-title")
+    check(rp3.evaluate("getComputedStyle(document.getElementById('nav')).transitionDuration") in ("0s", "0s, 0s"), "Scope 3: the phone's reduce-motion setting is kept")
+    rctx3.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
