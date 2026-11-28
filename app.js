@@ -3076,7 +3076,8 @@
     var userIn = h("input", { type: "text", id: "gh-user", "aria-label": "Your GitHub username", placeholder: "Your GitHub username", autocomplete: "off", autocapitalize: "none", spellcheck: "false" });
     userIn.value = state.gh || "";
     var go1 = h("button", { type: "button", class: "primary", id: "gh-check", text: run && run.busy ? "Checking…" : "Check my GitHub" });
-    userIn.addEventListener("keydown", function (e) { if (e.key === "Enter") { go1.click(); } });
+    // Out of the box first: the screen is not redrawn while the cursor is in a box, so the result would never show.
+    userIn.addEventListener("keydown", function (e) { if (e.key === "Enter") { userIn.blur(); go1.click(); } });
     go1.disabled = !!(run && run.busy);
     var status = h("span", { class: "status-line", role: "status", id: "gh-status" });
     go1.addEventListener("click", function () {
@@ -3114,7 +3115,7 @@
     });
     var status = h("span", { class: "status-line", role: "status", id: "proof-link-status", text: isDone("pf" + it.id) ? "Saved ✓" : "" });
     var btn = h("button", { type: "button", class: "primary", id: "proof-link-save", text: it.links.length > 1 ? "Save my links" : "Save my link" });
-    inputs.forEach(function (x) { x.addEventListener("keydown", function (e) { if (e.key === "Enter") { btn.click(); } }); });
+    inputs.forEach(function (x) { x.addEventListener("keydown", function (e) { if (e.key === "Enter") { x.blur(); btn.click(); } }); });
     btn.addEventListener("click", function () {
       var bad = it.links.filter(function (l, i) { return !new RegExp(l[2]).test(inputs[i].value.trim()); });
       if (bad.length) { status.textContent = "That does not look like " + bad[0][1] + " with your own name in it. Open your own profile page and copy the address from the address bar."; return; }

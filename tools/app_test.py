@@ -1376,6 +1376,25 @@ with sync_playwright() as p:
     ep.keyboard.press("Enter")
     ep.wait_for_timeout(200)
     check("Type your GitHub username first" in ep.inner_text("#gh-status"), "Scope 3: Enter in the GitHub username box does what the button does")
+    # After-fixes audit, finding 6: with a name typed, Enter (a phone keyboard's Go key) ran the check but the cursor stayed in the box,
+    # the screen is never redrawn while you type, so no result showed. GitHub here is pretend: every address answers "not found".
+    nctx, np_ = new_page(b, blank({"v1": T}), start=False)
+    nctx.route("https://api.github.com/**", lambda r: r.fulfill(status=404, content_type="application/json", headers={"Access-Control-Allow-Origin": "*"}, body='{"message": "Not Found"}'))
+    nctx.route("https://raw.githubusercontent.com/**", lambda r: r.fulfill(status=404, content_type="text/plain", headers={"Access-Control-Allow-Origin": "*"}, body="404"))
+    screen(np_, "ap1")
+    np_.fill("#gh-user", "someone-honest")
+    np_.focus("#gh-user")
+    np_.keyboard.press("Enter")
+    np_.wait_for_timeout(1500)
+    check(np_.locator("#gh-result").count() == 1 and "no public repository" in np_.inner_text("#gh-result"), "After-fixes audit: Enter with a name in the GitHub box shows the check's result")
+    screen(np_, "pd2")
+    np_.fill("#proof-link", "https://hackerone.com/someone_honest")
+    np_.fill("#proof-link2", "https://bugcrowd.com/h/someone_honest")
+    np_.focus("#proof-link2")
+    np_.keyboard.press("Enter")
+    np_.wait_for_timeout(800)
+    check(ticks(np_).get("pfpd2", 0) > 0 and "Saved" in np_.inner_text("#proof-link-status"), "After-fixes audit: Enter in a link box saves the links and says Saved")
+    nctx.close()
     look = ep.evaluate("""(function () {
       var b = document.querySelector('#done-btn'); var cs = getComputedStyle(b);
       var small = Array.prototype.slice.call(document.querySelectorAll('#view-now button, #view-now summary, #dock button')).filter(function (x) { return x.offsetParent && x.getBoundingClientRect().height < 43.5; }).length;
