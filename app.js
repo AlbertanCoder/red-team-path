@@ -411,7 +411,7 @@
         "https://aistudio.google.com/docs/get-started", { mins: 240, pc: true, proof: "github", openLabel: "Open Google's guide", how: [
           "Make a free Gemini API key on Google AI Studio's API keys page (aistudio.google.com/apikey). Google's terms say people at Google may read free-tier prompts and replies: send nothing private. You must be 18 or older.",
           "Store the key as an environment variable called GEMINI_API_KEY: Google's Windows steps are on aistudio.google.com/docs/api-key, on its Windows tab. Then close and reopen Visual Studio Code, or its terminal will not see the key. Never paste the key into a file you will push.",
-          "On GitHub, make a new public repository called red-team-tools.",
+          "On GitHub, make a new public repository called red-team-tools, and turn on Add README (older pages say: tick Add a README file). An empty repository has no Code button for the next step.",
           "Put it on your PC with GitHub Desktop, GitHub's free app: on desktop.github.com press Download for Windows, run the setup file, and sign in with your GitHub account. On your repository's GitHub page press Code, then Open with GitHub Desktop. Press Choose... to pick the folder it goes in, then Clone.",
           "In that folder, add a file called .gitignore with the line .env in it, as a safety net.",
           "Install Google's library (pip install -U google-genai) and write hello_model.py: call the model once and print its reply. Run it.",

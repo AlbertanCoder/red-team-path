@@ -1166,6 +1166,8 @@ with sync_playwright() as p:
     gctx, gp = new_page(b, None, start=False)
     ap1 = box_text(gp, "ap1")
     check("GitHub Desktop" in ap1 and "Open with GitHub Desktop" in ap1 and "Commit to main" in ap1 and "Push origin" in ap1, "Scope 3: box ap1 teaches copying, saving and sending with GitHub Desktop")
+    # After-fixes audit, finding 2: an empty repository has no Code button, so ap1 must say to add a README.
+    check("Add README" in ap1, "After-fixes audit: box ap1 says to turn on Add README, so the new repository is not empty")
     ap2 = box_text(gp, "ap2")
     check("git clone" in ap2 and "git commit" in ap2 and "git push" in ap2, "Scope 3: box ap2 shows the typed git commands once")
     gctx.close()
