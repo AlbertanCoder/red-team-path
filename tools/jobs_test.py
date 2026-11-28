@@ -8,7 +8,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from find_jobs import canada_from  # noqa: E402
 
 CASES = [
-    ("Remote - US or Canada", "yes"), ("United States or Canada", "yes"), ("Canada", "yes"), ("Remote - CAN", "yes"), ("Edmonton, AB", "yes"),
+    ("Remote - US or Canada", "yes"), ("United States or Canada", "yes"), ("Canada", "yes"), ("Remote - CAN", "yes"), ("Edmonton, AB", "check"),
     ("Hybrid - Vancouver", "check"), ("Toronto or Remote US", "check"), ("Montréal, QC", "check"), ("Waterloo, ON", "check"),
     ("North America", "check"), ("Remote (Americas)", "check"), ("Remote", "check"), ("", "check"), ("San Francisco; Remote", "check"),
     ("Remote (International)", "anywhere"), ("Global Remote", "anywhere"), ("Worldwide", "anywhere"),

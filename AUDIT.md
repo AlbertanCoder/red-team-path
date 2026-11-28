@@ -56,7 +56,7 @@ Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. A full audit of 
 ## Not checked, or cannot be promised (11)
 
 - **About US$5 covers all 12 labs.** An estimate from OpenAI's price list on 18 Nov 2026 (under one US cent a message on the default model), not a measured cost. OpenAI shows the real minimum top-up before you pay.
-- **The labs run well on any computer.** Tested on one laptop only. Building them pushed its processor to 94 C, so the build was slowed down and done in turns.
+- **The labs run well on any computer.** Tested on one laptop only. Building them ran its processor hot, so the build was slowed down and done in turns.
 - **The Tutor's lessons and thinking steps get you through every lab.** They were written for this app. The lessons are summaries of published techniques, each with its source and year. Most were published from 2023 to 2025 and AI companies have trained against them since, so expect the ideas to hold better than the exact wording.
 - **Every lab has a tested answer.** Eight do (1, 2, 5, 6, 7, 8, 11, 12). Labs 3 and 9 show Microsoft's published example, not run for this app. Lab 4 has none on purpose: its goal is toxin instructions. Microsoft first said lab 10 had no solution, then noted it has since had a few solves, so it is doable but very hard.
 - **These courses give you a Microsoft certificate.** They give badges, trophies and a transcript. A Microsoft certification is a separate, paid exam and is not part of this path.
@@ -69,7 +69,7 @@ Last audited: 18 Nov 2026. Rebuilt and re-checked: 19 Nov 2026. A full audit of 
 
 ## Scope 2 research checks (27 Nov 2026)
 
-Each page was opened on its own official site on 27 Nov 2026 (Alberta), by script or in Chrome. Search results were used only to find pages.
+Each page was opened on its own official site on 27 Nov 2026, by script or in Chrome. Search results were used only to find pages.
 
 - **freeCodeCamp Python Certification**: freeCodeCamp's curriculum feed (`curriculum-data/v2/python-v9.json`) lists 17 modules, then Python Review and the exam: 21 lectures, 20 workshops, 22 labs, 12 quizzes. Intro: "Complete the five required projects to qualify for the certification exam." Its announcement post: a 50-question exam in an open-source desktop exam app, and "We manually review each passing exam". Its code (`certification-settings.ts`) names the certificate `python-v9` and labels it 300 hours. Free.
 - **Harvard CS50P**: free; "a score of at least 70% on each of this course's problems as well as its final project" earns a free CS50 Certificate (cs50.harvard.edu/python/certificate).

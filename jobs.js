@@ -22,7 +22,7 @@ window.RTP_JOBS = {
       "checked": "2026-11-27",
       "open": true,
       "canada": "check",
-      "where": "Alignerr says it welcomes people from around the world, but its FAQ lists only US ID cards for the identity check. Your application from Canada went through on 17 Nov; ask them before you count on it."
+      "where": "Alignerr says it welcomes people from around the world, but its FAQ lists only US ID cards for the identity check. Ask them before you count on it."
     },
     {
       "id": "clera-safety-testing-associate",

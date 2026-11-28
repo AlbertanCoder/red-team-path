@@ -1,13 +1,13 @@
 # Scope 2 plan: from the end of the path to paid AI red-team work
 
-Written 27 Nov 2026 (Alberta) for Shad. **Nothing in the app changes until Shad says "I agree".** Gap check and your 5 picks: `SCOPE-2-GAPS.md`. Safety tag `before-scope-2` = commit 0c60528, pushed.
+Written 27 Nov 2026 for Shad. **Nothing in the app changes until Shad says "I agree".** Gap check and your 5 picks: `SCOPE-2-GAPS.md`. Safety tag `before-scope-2` = commit 0c60528, pushed.
 
 ## In short
 
 - 8 new steps after Step 6 (Steps 7 to 14), 58 new boxes that count and 3 optional ones. Steps 1 to 6 stay exactly as they are, apart from the one Step 5 install line you agreed to fix once it is proven broken.
 - The app stays your coach: every box links to the real course, says what to do now, how long it takes, the numbered steps, and what proof ticks it. Nothing is copied into the app.
 - Proof is real: a quiz written from the source's own words (with "what does this code print?" questions that were run), code in your public GitHub that the app reads by itself, or a certificate link. A link the app cannot open is labelled as such.
-- New coaching: review questions on a 1 day / 1 week / 1 month ladder, an on-track card for your 14-on / 7-off rotation, and an "Explain it back" note at the end of each step.
+- New coaching: review questions on a 1 day / 1 week / 1 month ladder, an on-track card for a 14-on / 7-off rotation, and an "Explain it back" note at the end of each step.
 - Time: about 460 hours from today (my estimate). At about 17 hours a week: skills for bounties and contract gigs by about late March 2027, ready to apply and hunt by mid-April, the Python certificate by about early June 2027.
 - Build: 4 parts, each shipped and checked live before the next. About 16 hours of build time over several days.
 
@@ -196,7 +196,7 @@ New lessons in the existing format (idea, why, when, what stops it, one question
 
 ## Weekly plan for your rotation
 
-A 3-week cycle: two on-shift weeks of about 10 hours (1 to 2 hours a night), one off week of about 30 hours (4 to 5 hours a day). Average about 17 hours a week, inside your 15 to 20.
+A 3-week cycle: two on-shift weeks of about 10 hours (1 to 2 hours a night), one off week of about 30 hours (4 to 5 hours a day). Average about 17 hours a week.
 - **On-shift weeks:** freeCodeCamp lectures and workshops in a browser, Step 9 reading, the OWASP list, Step 13 rules and tax pages, review questions. Boxes marked "Shift week OK".
 - **Off weeks:** anything marked PC: installing Python, labs with Burp, your GitHub code, garak and PyRIT, certificate projects, the exam.
 
@@ -231,7 +231,7 @@ Four parts, one at a time. Each part: build, test, ship with `tools/ship.sh`, ch
 3. **Part 3 (about 4 hours):** Steps 10 and 11.
 4. **Part 4 (about 3 hours):** Steps 12 to 14, README, AUDIT.md, link check, tag `scope-2-done`, then the audit prompt and a fresh audit session.
 
-Hour budget: 16 hours of build time over several days. That is more than the 8-hour normal of Scope 1; your "I agree" approves it, or tell me to cut it (for example, build Part 1 now and the rest later, since you reach Step 8 in about 10 weeks). Weekly usage: full stop at 75%; nothing after 10 pm Alberta; check-ins every 60 minutes.
+Hour budget: 16 hours of build time over several days. That is more than the 8-hour normal of Scope 1; your "I agree" approves it, or tell me to cut it (for example, build Part 1 now and the rest later, since you reach Step 8 in about 10 weeks). The usage limit applies; check-ins every 60 minutes.
 
 Tests that change: `app_test.py` (49 -> 107 boxes, and the walk through every box, now also trying to tick each new box without its proof), `walk_test.py`, `linkcheck.py`, `sync_test.py` (review and rotation marks across two devices), a new old-progress test, `build_quizzes.py` (source quotes and code runs).
 
@@ -245,4 +245,4 @@ None recommended. The free path ends with two free certificates (freeCodeCamp, a
 
 ## Go-ahead
 
-Type **"I agree"** to approve this plan, its order (including the Python split) and the 16-hour budget. I will also need your weekly usage percentage when you next look: Chrome can no longer open the Claude usage page for me.
+Type **"I agree"** to approve this plan, its order (including the Python split) and the 16-hour budget.

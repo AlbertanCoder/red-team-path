@@ -5,18 +5,17 @@ A fresh session should be able to carry on from this file alone.
 
 ## Where things stand (update this block as you go)
 
-- Repo: `C:\Users\SHADHUNTER\red-team-path` · GitHub `AlbertanCoder/red-team-path` (public) · live at https://albertancoder.github.io/red-team-path/
+- Repo: `~/red-team-path` · GitHub `AlbertanCoder/red-team-path` (public) · live at https://albertancoder.github.io/red-team-path/
 - Safety tag: `before-fixup` = commit `018548c` (pushed). To go back: `git reset --hard before-fixup` then force-push, only with Shad's yes.
-- Session start: 07:28 Alberta, EPOCH 1795094890. Clock: `bash ~/scope-hq/alberta-now.sh` only.
-- Today is an exception day (see SCOPE.md top). Still on: weekly usage stop at 75%, wrap-up 9:45 pm, nothing after 10 pm, 60-minute check-ins.
-- Stop-gate file lives at `C:\Users\SHADHUNTER\Desktop\.claude\DONE` (the session's folder is Desktop, not the repo). It can only be rewritten at the start of a new turn.
-- **Current step: FINISHED. All nine plan items (P1 to P9) are done, live and proven. Scope 1 is closed and tagged `scope-1-done` (19 Nov 2026, 09:28 Alberta, 121 minutes).** Nothing is in progress. If Shad asks for a change, it is a new scope: draft it in SCOPE.md and get a new "I agree" first. Ship every change with `bash tools/ship.sh "subject" "body"`. History of this line: Shad OK'd the sample at 08:26 and asked for a way to reset hints (Settings has one button per lab, commit 761797f).
+- Session start: 07:28, EPOCH 1795094890. Clock: the local clock script in `~/scope-hq/` only.
+- Today is an exception day (see SCOPE.md top). Still on: the usage limit and 60-minute check-ins.
+- Stop-gate file lives at `.claude\DONE` in the session's own folder (not the repo). It can only be rewritten at the start of a new turn.
+- **Current step: FINISHED. All nine plan items (P1 to P9) are done, live and proven. Scope 1 is closed and tagged `scope-1-done` (19 Nov 2026, 09:28, 121 minutes).** Nothing is in progress. If Shad asks for a change, it is a new scope: draft it in SCOPE.md and get a new "I agree" first. Ship every change with `bash tools/ship.sh "subject" "body"`. History of this line: Shad OK'd the sample at 08:26 and asked for a way to reset hints (Settings has one button per lab, commit 761797f).
 - After his pick: write the plan (Step 4) into this file, show it, and wait for his go-ahead before touching index.html, app.js or style.css.
-- Weekly usage: 46% at about 07:40 (Shad's reading); 49% at 09:30 (read by Claude through Chrome).
 
 ## How to work with me (Shad's words, copied as they are)
 
-- I can't read code. Explain things in plain English and tell me
+- Explain things in plain English and tell me
   what to tap to see each change. Keep your messages short.
 - Do the work yourself in this session. No subagents, and group
   your commands so I'm not approving things one at a time.
@@ -167,12 +166,12 @@ Checked: all of `app.js`, `jobs.js`, `index.html`, the job checker, PROOF.md, AU
 
 ## My answers (Step 2)
 
-Asked one at a time on 19 Nov 2026, about 07:35 to 07:55 Alberta. Shad's pick is in bold.
+Asked one at a time on 19 Nov 2026, about 07:35 to 07:55. Shad's pick is in bold.
 
 0. Scope: **"I agree"** to SCOPE.md (Scope 1 open; recorded in `~/scope-hq/ACTIVE.md`).
-0. Weekly usage: **46%** at about 07:40. Shad: "You are capable of checking that every so often so please do that." Check the meter myself (claude.ai/settings/usage through Chrome, look only) at each hourly check-in; the Chrome extension was not connected at 07:40, so retry, and only ask him if it still will not connect.
+0. Weekly usage: Shad: "You are capable of checking that every so often so please do that." Check the meter myself (claude.ai/settings/usage through Chrome, look only) at each hourly check-in; the Chrome extension was not connected at 07:40, so retry, and only ask him if it still will not connect.
 1. Which lab is he on now: **Lab 1 (passwords file, easy).** Previews and the sample tutor page are for Lab 1.
-2. Labs on this computer: **working, and yes I may send test messages** (separate test user, a few cents of his OpenAI credit). Never run the weapon or toxin goals. How to drive the labs: see finding e4f3130c (login with AUTH_KEY on localhost:5000, POST /chats, POST /chats/<id>/messages) and `~/redteam/learn/proof_test.py`.
+2. Labs on this computer: **working, and yes I may send test messages** (separate test user, a few cents of OpenAI credit). Never run the weapon or toxin goals. How to drive the labs: see finding e4f3130c (login with AUTH_KEY on localhost:5000, POST /chats, POST /chats/<id>/messages) and `~/redteam/learn/proof_test.py`.
 3. Labs 3, 4, 9, 10 (weapon/toxin goals): **move to an optional group off the main line.** Each still gets a full tutor page. My stated limit: for Lab 4 (toxin) teach the technique and why it works but do not write message wording; for 3, 9, 10 use the example shape Microsoft itself published.
 4. The 28 lessons: **fold the one needed technique into each lab page's "How to think about it"; move the 28 lessons to a Library list off the main route.** Keep passed-lesson ticks.
 5. Where he studies: **phone for the app, PC for the labs.** Tutor page is phone-first.
@@ -186,11 +185,11 @@ Asked one at a time on 19 Nov 2026, about 07:35 to 07:55 Alberta. Shad's pick is
 13. Lab 12: **30 minutes at the very end**, only after everything else. Lab 10 gets no attempt.
 14. Biggest pains today (he picked three): **finding my lab's help; too much text; hints give too little or too much.** He did not pick "not sure what's next".
 
-Pattern to remember: he took the recommended answer on every multiple-choice question. For the layout, do not rely on him choosing from descriptions; build them so he can try each on his phone.
+Pattern to remember: for the layout, do not rely on him choosing from descriptions; build them so he can try each on his phone.
 
 ## The layout I picked (Step 3)
 
-Four previews, live since 08:0x Alberta on 19 Nov 2026, same content (home + Lab 1 tutor page), same colours, different ways of getting around. Files: `preview/index.html`, `1.html` to `4.html`, `shared.js` (the content and the hint/unlock logic), `p.css`. Test: `python tools/preview_test.py https://albertancoder.github.io/red-team-path/preview/ <folder>` (all passed on the live site).
+Four previews, live since 08:0x on 19 Nov 2026, same content (home + Lab 1 tutor page), same colours, different ways of getting around. Files: `preview/index.html`, `1.html` to `4.html`, `shared.js` (the content and the hint/unlock logic), `p.css`. Test: `python tools/preview_test.py https://albertancoder.github.io/red-team-path/preview/ <folder>` (all passed on the live site).
 
 - https://albertancoder.github.io/red-team-path/preview/ (the list of all four)
 - 1. One road: home is the path as one scrolling list; tap the lab to open its page; Back to return. Best at showing where you are in the whole path. Gives up: one extra tap to reach the lab's help, and a long list.
@@ -199,11 +198,11 @@ Four previews, live since 08:0x Alberta on 19 Nov 2026, same content (home + Lab
 - 4. Opens on your lab (recommended): no home screen; the app opens on the lab you are doing; bottom bar always shows Next and the two result buttons; everything else in one pull-up Path list. Best at his number one pain, finding the lab's help (zero taps). Gives up: a separate overview screen.
 - Natural mix if he wants one: 4's "opens on your lab" with 3's fold-up rows, so the page is one screen tall.
 
-**Shad's pick:** Layout 4, "Opens on your lab" (his words, 08:05 Alberta: "I really like 4 the one you recommend"). No mix asked for.
+**Shad's pick:** Layout 4, "Opens on your lab" (his words, 08:05: "I really like 4 the one you recommend"). No mix asked for.
 
 ## The plan (Step 4)
 
-Layout: 4, "Opens on your lab". Written 08:1x Alberta, 19 Nov 2026. **Go-ahead:** yes, 08:10 Alberta. Shad: "Looks good, build it. The concept design for the layout is how you will build it correct? I like it, build it like that." So the real app follows preview 4 closely.
+Layout: 4, "Opens on your lab". Written 08:1x, 19 Nov 2026. **Go-ahead:** yes, 08:10. Shad: "Looks good, build it. The concept design for the layout is how you will build it correct? I like it, build it like that." So the real app follows preview 4 closely.
 
 How layout 4 works in the real app (the design every item below builds toward):
 - The app opens on the one thing to do now. A lab shows its tutor page. A video shows its player. Anything else shows a short card.
@@ -215,39 +214,39 @@ How layout 4 works in the real app (the design every item below builds toward):
 Checklist, most valuable first. One item at a time: build, test, commit, push, check the live site, show proof and what to tap.
 
 - [x] P1. **New frame + Lab 1's tutor page (the sample).** The app opens on your current step in layout 4. Lab 1 gets the finished page: what it is, objective, how to think, Hint 1/2/3 one at a time, one-line unlock, full answer with why, what's next, verified label. Old saved ticks, notes and opened hints carry over (proved by a test that loads old saved data). **Then stop and wait for Shad's OK on the quality.**
-  - Done 19 Nov, about 08:30 Alberta. Commit: "P1: the app opens on what you are doing; Lab 1's tutor page". Proof: `python tools/app_test.py https://albertancoder.github.io/red-team-path/` ALL PASSED on the live site (39 checks, including old ticks, old note and old opened hints carried over).
+  - Done 19 Nov, about 08:30. Commit: "P1: the app opens on what you are doing; Lab 1's tutor page". Proof: `python tools/app_test.py https://albertancoder.github.io/red-team-path/` ALL PASSED on the live site (39 checks, including old ticks, old note and old opened hints carried over).
   - What changed: `index.html` (top strip, bottom bar, Path list; tab bar gone), `style.css` (new block at the end), `app.js` (`LAB_PAGES` after `COACH`; marks `ha/hb/hc/tr/un` + lab number registered in `KNOWN`; `mark()`, `hintsOpen()`; Home section replaces the Now and Path tabs; frame rewritten; lab coach removed). Labs 2 to 12 still show their old coach text through `labPage()`'s fallback, marked unverified, until P3.
   - The online store was tested with a throwaway record: it accepts the new marks (numbers only), so they sync once devices are linked. Record deleted.
   - One difference from the preview: instead of two "Hint 2 is locked" lines there is a single button, "Show hint 1 of 3". Less text.
 - [x] P2. **Order and "next".** Write-ups optional. Labs 7, 8, 11, 12 in a group called "Harder versions" after Episode 7. Labs 3, 4, 9, 10 in an optional group off the main line. Episodes 8 to 10 moved to Step 5. One Next at every point; optional things never block it. Count changes from 58 to 49 required boxes; no tick is lost.
-  - Done 19 Nov, about 08:25 Alberta. Commit: "P2: the order of the path". Proof: `tools/app_test.py` on the live site, including a walk that taps through all 49 required boxes from Episode 1 to the finish screen in the planned order.
+  - Done 19 Nov, about 08:25. Commit: "P2: the order of the path". Proof: `tools/app_test.py` on the live site, including a walk that taps through all 49 required boxes from Episode 1 to the finish screen in the planned order.
   - How: in `buildSteps()` write-ups and labs 3, 4, 9, 10 got `optional: true` (so they leave `SEQ` and the count but keep their ids and ticks); Step 1 groups re-cut; Step 5 groups are now Episode 8 + a1, Episode 9 + a2, Episode 10 + a3 + a4. A lab's "What's next" also names an optional box that sits right after it.
 - [x] P3. **The other 11 lab pages**, same standard as Lab 1, in the order he meets them: 6, 2, 5, then 7, 8, 11, 12, then optional 3, 9, 10, 4. Each answer run in the real lab where safe (6, 2, 5, 7, 8, 11) and labelled verified or unverified. Lab 9 and 10: one harmless test message to learn whether a filter exists on his set-up. Lab 4: technique and why, no message wording. Lab 12: "no known answer" until P9.
-  - Done 19 Nov, about 08:50 Alberta. Commits: "P3: a tutor page for every lab (12 of 12)" (e533844) and "P3: today's real-lab results on the lab pages". Proof: `tools/app_test.py` on the live site opens all 12 lab pages (six parts, 36 different hints, label, locked answer).
+  - Done 19 Nov, about 08:50. Commits: "P3: a tutor page for every lab (12 of 12)" (e533844) and "P3: today's real-lab results on the lab pages". Proof: `tools/app_test.py` on the live site opens all 12 lab pages (six parts, 36 different hints, label, locked answer).
   - Real-lab run today with `python tools/verify_labs.py 3` (Docker started, 13 containers, then stopped and Docker closed): lab 1 3/3, lab 2 3/3, lab 5 3/3 by reading the replies (the script's swear-word count scored one as a miss), lab 6 3/3, lab 7 3/5, lab 8 2/3, lab 11 3/3. Lab 10 harmless check: the printed key was accepted 3/3 ("Paris"), so no filter blocks it on Shad's set-up; labs 9 and 10 share that switch.
   - Verified pages: 1, 2, 5, 6, 7, 8, 11. Unverified: 3 and 9 (Microsoft's published Crescendo example, never run), 4 (no wording, by decision), 10 (key step tested, goal not run), 12 (no known answer).
   - `LAB_PAGES` in `app.js` is the only place lab text lives now. The old `COACH` data is gone.
   - To run the labs again: take the memory token (`bash ~/ram-board/ram.sh join/take "REDTEAM-PATH" --big`), start Docker Desktop (`%LOCALAPPDATA%\Programs\DockerDesktop\Docker Desktop.exe`), then in `~/ms-airt-labs`: `docker compose -f docker-compose-openai.yaml up -d --no-build`; afterwards `... stop`, quit Docker Desktop, `wsl --shutdown`, release the token.
 - [x] P4. **Lab results.** "I beat it" / "Moving on, not solved" saved per lab; a short "come back to these" list in Path. Old lab ticks count as beaten.
-  - Done 19 Nov, about 08:55 Alberta. Commit: "P4: come back to these". The two buttons and the saved result came with P1 (mark `un` + lab number). This item added the list at the top of the Path list (`#comeback` in `buildSheet()`), and tests for it, for I beat it afterwards, and for Untick.
+  - Done 19 Nov, about 08:55. Commit: "P4: come back to these". The two buttons and the saved result came with P1 (mark `un` + lab number). This item added the list at the top of the Path list (`#comeback` in `buildSheet()`), and tests for it, for I beat it afterwards, and for Untick.
 - [x] P5. **Clutter out.** Path list, Library, Jobs and Settings as described above. Remove the tab bar, the Menu page, the Tutor sub-tabs, the repeated template and rules, and the always-on "Not linked" line. Words shown in place on the screen that introduces them. Proof: before/after counts at phone width.
-  - Done 19 Nov, about 09:05 Alberta. Commit: "P5: clutter out".
+  - Done 19 Nov, about 09:05. Commit: "P5: clutter out".
   - Places to be: before 10 (5 tabs + Menu + 4 Tutor sub-tabs). After: the screen you are on, the Path list, and 3 side screens (Library with 4 parts, Jobs, Settings).
   - Phone-size counts (390 x 844), before -> after: a lab's help: old coach page 10 buttons, 1.8 to 2.6 screens, reached through Tutor > Lab coach > the lab -> now 1 button, 1.5 screens, zero taps. A video: 114 words on the old Now card -> 14 words. Settings: 3.2 screens, 12 buttons -> 1.1 screens, 6 buttons. Words: its own tab -> a part of the Library. Jobs: 3.4 -> 3.2 screens (the real shortening comes with P7).
   - Removed: tab bar, Menu page, Tutor sub-tab for the coach, "Where you learn" list, the second copy of the write-up template, the repeated "ways this pays" and "what to show" lists in Jobs, second headings on side screens, the always-on "Not linked" line. The safety rules now live in one place: a fold at the bottom of Library > Lessons. About 110 lines of dead styles removed from `style.css`.
 - [x] P6. **Phone and computer in step.** Opened hints, "I tried" and lab results follow him between linked devices (if the online store accepts them: test first; if it refuses, tell Shad, they stay per device). One clear "Link my phone and computer" prompt until he links or dismisses it.
-  - Done 19 Nov, about 09:02 Alberta. Commit e4e1b26 "P6: one prompt to link your phone and computer". Proof: `python tools/sync_test.py https://albertancoder.github.io/red-team-path/` ALL PASSED: two throwaway browsers linked with a short code; a hint opened on one showed on the other without a refresh; a lab result did too; the test's record was deleted from the store.
+  - Done 19 Nov, about 09:02. Commit e4e1b26 "P6: one prompt to link your phone and computer". Proof: `python tools/sync_test.py https://albertancoder.github.io/red-team-path/` ALL PASSED: two throwaway browsers linked with a short code; a hint opened on one showed on the other without a refresh; a lab result did too; the test's record was deleted from the store.
   - The marks sync because they live in the same `m` map as ticks (store tested first: it accepts numbers under any id, refuses text). The prompt is `#link-prompt` at the top of the Path list; "Not now" saves `nolink: true` in `redTeamPath.v2`.
   - Shad's own two devices are NOT linked yet. Only he can do that: Path > Settings > Get a code on one device, type it on the other.
 - [x] P7. **Jobs: weekly scan for new ads.** A free GitHub job, once a week, reads public job feeds for titles like red team, jailbreak, adversarial, safety testing; adds matches marked "new this week, not yet read by a person". Daily dead-link check stays. Jobs screen shortened.
-  - Done 19 Nov, about 09:09 Alberta. Commit 289afdd "P7: weekly scan for new job ads", then the first real run on GitHub (run 44551308603) added 10 ads in commit 06ca309.
+  - Done 19 Nov, about 09:09. Commit 289afdd "P7: weekly scan for new job ads", then the first real run on GitHub (run 44551308603) added 10 ads in commit 06ca309.
   - `tools/find_jobs.py` + `tools/job_feeds.py` (22 public feeds: Ashby, Greenhouse, Lever; all 22 answered) + `.github/workflows/find-jobs.yml` (Mondays 13:47 UTC, same lock as the daily check). New ads get `"level": "new"` and `"check": {"type": "feed", ...}`; `tools/check_jobs.py` now checks those against the feed (dry run: open=19 closed=0 unknown=0). At most 12 scan-found ads are listed.
   - Jobs screen: two lists (4 beginner ads read by a person, 10 found by the scan), three search buttons, four closed fold-outs.
 - [x] P8. **Tidy and prove.** Delete `preview/`. Update README and AUDIT.md to match. Keep the link check script in `tools/`. Then the full walk-through on the live site, first video to last lab: every link opens, every lab page loads, every Next goes to the right place. Tag `scope-1-done`.
-  - Done 19 Nov, about 09:14 Alberta. Commit bb6315c. `preview/` and `tools/preview_test.py` deleted (live `preview/4.html` answers 404). README rewritten for the new app, with a "What works, and what is unfinished" section. AUDIT.md has a "Changed on 19 Nov 2026" section.
+  - Done 19 Nov, about 09:14. Commit bb6315c. `preview/` and `tools/preview_test.py` deleted (live `preview/4.html` answers 404). README rewritten for the new app, with a "What works, and what is unfinished" section. AUDIT.md has a "Changed on 19 Nov 2026" section.
   - The walk-through on the live site: `tools/app_test.py` (247 checks: taps through all 49 boxes in order, opens all 12 lab pages), `tools/walk_test.py` (all 10 videos open their player inside the app; all 58 boxes are in the Path list; 30 boxes have an Open button with a web address), `tools/linkcheck.py` (86 links, 0 dead, 4 refuse scripts: Indeed, LinkedIn, OpenAI's platform page, aitraining.jobs).
 - [x] P9. **Lab 12 attempt**, 30 minutes at most, only if everything above is done.
-  - Done 19 Nov, 09:15 to 09:25 Alberta (10 minutes of the 30). **Lab 12 is solved.** Eight new comment-box texts, 3 tries each in the real lab (Docker, lab 12 only), then the two best 6 more times: "redacted mode" summariser setting 9 of 9; "canonical summary" 7 of 9; "shared template" 3 of 3; five others 0 of 3. The 9-of-9 text is now the answer on Lab 12's page, copied from the run's result file so it is exactly what was tested. The page is labelled verified. Table in PROOF.md.
+  - Done 19 Nov, 09:15 to 09:25 (10 minutes of the 30). **Lab 12 is solved.** Eight new comment-box texts, 3 tries each in the real lab (Docker, lab 12 only), then the two best 6 more times: "redacted mode" summariser setting 9 of 9; "canonical summary" 7 of 9; "shared template" 3 of 3; five others 0 of 3. The 9-of-9 text is now the answer on Lab 12's page, copied from the run's result file so it is exactly what was tested. The page is labelled verified. Table in PROOF.md.
   - Side fix: three lesson sentences said labs 11 and 12 use spotlighting. Microsoft's lab file shows only a system prompt. Corrected.
 
 Notes for the builder:
@@ -265,5 +264,4 @@ Left, or not proven (also in README.md):
 - Shad's own phone and computer are not linked yet. Only he can do it: Path > Settings > Get a code on one, type it on the other.
 - Lab 10 has no known answer; its harmful goal was never run. Labs 3 and 9 show Microsoft's published example, never run. Lab 4 gives no wording by decision.
 - Not tried on a physical phone. Shad's own look is the real test.
-- Weekly usage: 46% at 07:40 (Shad's reading), 49% at 09:30 (read by Claude from claude.ai Settings > Usage once Chrome connected; the Fable-only meter showed 34%). The whole session moved it about 3 points. The page warned: at this pace the week runs out Saturday afternoon, before Tuesday's reset.
 - `~/redteam/learn/final_audit.py` (the older outside checker) reads the app's old structure and has not been run against the rebuilt app.

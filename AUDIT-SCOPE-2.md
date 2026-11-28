@@ -1,6 +1,6 @@
 # Audit of Scope 2 (Steps 7 to 14)
 
-Done 27 Nov 2026, Alberta, by a fresh session (Claude Fable 5.2) that did not build it. Nothing in the app was changed. This file is the only new file.
+Done 27 Nov 2026, by a fresh session (Claude Fable 5.2) that did not build it. Nothing in the app was changed. This file is the only new file.
 
 ## In 5 lines (read this on your phone)
 
@@ -147,7 +147,7 @@ Checked and true in Steps 12 and 13: every link opens the right page. Microsoft'
 
 - AUDIT.md, PyRIT line: ends "Not yet run", but four lines later says it was run. Stale.
 - AUDIT.md: "the 2025 list ... is still the current one" (see A5).
-- SCOPE.md and the plan: "confirmed by running it before the box goes live" (see A4). SCOPE.md's Part 4 line also has a garbled time ("about 27 Nov 2026 about 12:54 Alberta Alberta").
+- SCOPE.md and the plan: "confirmed by running it before the box goes live" (see A4). SCOPE.md's Part 4 line also has a garbled time ("about 27 Nov 2026 about 12:54", with a place name doubled after it).
 - SCOPE.md item 6: "it also refuses guess-by-length". True for the exact test it runs; see B3 for how the later boxes got under it.
 - Everything else I checked in README, PROOF.md and SCOPE.md matched what I found: test counts (344, 118, 14), 428 questions, 232 links with 0 dead, the live files equal to the pushed ones.
 

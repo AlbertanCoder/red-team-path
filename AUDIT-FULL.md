@@ -1,8 +1,8 @@
 # Full audit of Red Team Path (the whole app)
 
-Done 27 Nov 2026, Alberta, by a fresh session (Claude Fable 5.2) that did not build the app and did not write the earlier audit. Nothing in the app, its tests, its question files or its records was changed while auditing. This file is the only new file in the repository.
+Done 27 Nov 2026, by a fresh session (Claude Fable 5.2) that did not build the app and did not write the earlier audit. Nothing in the app, its tests, its question files or its records was changed while auditing. This file is the only new file in the repository.
 
-"Box" means one item on your path. Ids like `ap1` are the names the app uses for boxes. "The audit folder" means `C:\Users\SHADHUNTER\redteam\learn\audit\full-2026-11-27\` : every script, output and saved page behind this report is there.
+"Box" means one item on your path. Ids like `ap1` are the names the app uses for boxes. "The audit folder" means `~\redteam\learn\audit\full-2026-11-27\` : every script, output and saved page behind this report is there.
 
 ## 1. Five lines for a phone
 
@@ -91,7 +91,7 @@ Each one: what is wrong, where, how it was proven, the smallest fix, and whether
 - Smallest fix: rewrite the three steps to match the form.
 
 **A13. The GitHub check can be shut out for an hour at a time on a shared network.** New. Lower.
-- What: GitHub allows about 60 checks an hour per network without an account. On shared camp Wi-Fi others can use them up. The app's message does say so and says to try later.
+- What: GitHub allows about 60 checks an hour per network without an account. On shared Wi-Fi others can use them up. The app's message does say so and says to try later.
 - Proof: by reading the code (`app.js` 2666, 2868). GitHub's own counter for this PC's network showed 60 an hour, 52 left after my few checks.
 - Smallest fix: add "or switch to your phone's data" to the message.
 
@@ -373,7 +373,7 @@ The inventory, box by box, is in `helpers/videos.md` and `helpers/videos.json` (
 4. **A Python virtual environment is used but never taught**, and no box says which Python to keep (3.12 or 3.13 today). Fix now (A5, A6).
 5. **Box b4 comes before HackerOne is taught.** Fix now by text (A12).
 6. **Privacy of free-tier prompts** (Google may read them): one line. Fix now (C9).
-7. **Is 144 hours of Python before any new security work wise?** My view: no, not for 17 hours a week. Step 9 (how models work) needs no code and suits shift nights, and Step 10's reading boxes need none either. Mixing them into the Python weeks would keep security in view and bring the skills that pay forward. This changes the order of Steps 7 to 14. New idea.
+7. **Is 144 hours of Python before any new security work wise?** My view: no. Step 9 (how models work) needs no code and suits shift nights, and Step 10's reading boxes need none either. Mixing them into the Python weeks would keep security in view and bring the skills that pay forward. This changes the order of Steps 7 to 14. New idea.
 8. **Hours you can trust.** The app's Python hours may be 3 times high. After fc1 and fc2 the app could measure your own pace and re-date the plan. New idea.
 9. **Gray Swan's new free Training page with certificates** fits your rule on real certificates. New idea.
 10. **A way to keep the path current.** OWASP, PortSwigger, PyRIT, garak and OpenAI's model list all moved within weeks. A monthly re-check of the sources that move, like the daily job check. New idea (a weekly link check is already in `IDEAS.md`).
@@ -449,7 +449,7 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 - **Q9.** Have you set up a free Gemini key yourself? If not, garak and PyRIT are run on a small free model on your PC only.
 - **Q10.** Hours on the freeCodeCamp boxes may be 3 times high. Leave them, or lower them now?
 
-**Shad's answers (27 Nov 2026, about 9:25 pm Alberta), asked one at a time:**
+**Shad's answers (27 Nov 2026, about 9:25 pm), asked one at a time:**
 
 - **Q1** Re-test the 8 lab answers on OpenAI's newer model in early January, not now. A Google Calendar reminder is set for 5 Jan 2027.
 - **Q2** Yes: write the three rule lines for the store and test them first; Shad pastes them into Firebase.
@@ -462,7 +462,7 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 - **Q9** No Gemini key: keep the free local models.
 - **Q10** Leave the hours; compare with Shad's real time after fc1 and md3 and adjust then.
 
-**Follow-ups, answered the same evening:** Q4 removes everything personal but the first name (place, rotation, degree, work permit, usage numbers, job applied to). Q5's button shows once every hint is open or after 45 minutes, whichever comes first. Q2's rules cap one code at 2,000 marks. Q8: if Gray Swan has no free set at g6's level, g6 points at Gray Swan's free Training page and its quiz is rewritten. Q6: earlier hints point at the idea only; the last hint may still nearly give the move. Item 26 starts next session.
+**Follow-ups, answered the same evening:** Q4 removes everything personal but the first name. Q5's button shows once every hint is open or after 45 minutes, whichever comes first. Q2's rules cap one code at 2,000 marks. Q8: if Gray Swan has no free set at g6's level, g6 points at Gray Swan's free Training page and its quiz is rewritten. Q6: earlier hints point at the idea only; the last hint may still nearly give the move. Item 26 starts next session.
 
 ---
 

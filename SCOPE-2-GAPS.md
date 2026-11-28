@@ -1,6 +1,6 @@
 # Scope 2 gap check (27 Nov 2026)
 
-Gaps between what Red Team Path teaches today (Steps 1-6) and what real AI bug bounty programs, contract red-team platforms open to Canada, and junior AI security ads ask for. Each page below was opened on 27 Nov 2026 (Alberta). Nothing in the app has changed.
+Gaps between what Red Team Path teaches today (Steps 1-6) and what real AI bug bounty programs, contract red-team platforms open to Canada, and junior AI security ads ask for. Each page below was opened on 27 Nov 2026. Nothing in the app has changed.
 
 ## What the app covers today
 

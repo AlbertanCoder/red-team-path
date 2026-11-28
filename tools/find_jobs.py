@@ -21,20 +21,20 @@ MAX_NEW = 12  # at most this many scan-found ads are listed at a time, so the sc
 
 
 def canada_from(where):
-    """Shad lives in Canada and cannot work in the US. Judge the posted location: ads that need you
+    """The app is for someone working from Canada. Judge the posted location: ads that need you
     somewhere else are kept in the file (so the scan does not add them again) but the app hides them.
-    Anything unclear is "check" (shown, marked check first), never hidden: hiding an ad Shad could do costs more than showing one he can't."""
+    Anything unclear is "check" (shown, marked check first), never hidden: hiding an ad that could be done costs more than showing one that can't."""
     w = (where or "").strip()
     hidden = {"canada": "no", "where": "Hidden by the scan: location as posted is %s, which is not open to someone working from Canada." % w}
     check = lambda why: {"canada": "check", "where": "Location as posted: %s. %s" % (w or "not given", why)}
     if re.search(r"(?i)\b(except|excluding|excl\.?|not( available)?( in)?|outside( of)?|no)\s+canada", w) or \
             re.search(r"(?i)canada\s*(\)\s*)?(excluded|not (eligible|included|available)|ineligible)", w):
         return hidden
-    if re.search(r"(?i)canada|canadian|edmonton", w) or re.search(r"\bCAN\b", w):
+    if re.search(r"(?i)canada|canadian", w) or re.search(r"\bCAN\b", w):
         return {"canada": "yes", "where": "Location as posted: %s." % w}
     if re.search(r"(?i)toronto|vancouver|montr[eé]al|calgary|ottawa|waterloo|winnipeg|halifax|qu[eé]bec|victoria", w) or \
             re.search(r"(^|[\s,(/-])(ON|BC|AB|QC|MB|SK|NS|NB|NL|PE)($|[\s,)/-])", w):
-        return check("That is a Canadian city: check whether the job can be done from Edmonton.")
+        return check("That is a Canadian city: check whether the job can be done from where you live.")
     if re.search(r"(?i)north america|americas|\bNA\b", w):
         return check("That may include Canada: read the ad to be sure.")
     if re.search(r"(?i)anywhere in the (us|u\.s\.|usa|united states)|\b(us|u\.s\.|usa) only|united states only", w):

@@ -1,17 +1,17 @@
 # Audit prompt: Red Team Path, Scope 2
 
-You are auditing Scope 2 of Red Team Path, a study app built for Shad (Alberta, Canada). You did not build it. Read and test first; **change nothing** until Shad says OK.
+You are auditing Scope 2 of Red Team Path, a study app built for Shad. You did not build it. Read and test first; **change nothing** until Shad says OK.
 
-- Repository: `C:\Users\SHADHUNTER\red-team-path` (this folder). GitHub: AlbertanCoder/red-team-path. Live: https://albertancoder.github.io/red-team-path/
+- Repository: `~/red-team-path` (this folder). GitHub: AlbertanCoder/red-team-path. Live: https://albertancoder.github.io/red-team-path/
 - What changed: `git diff before-scope-2..scope-2-done` (and anything after the tag). Steps 1 to 6 existed before; Steps 7 to 14 are new.
 - Saved course text the quizzes were checked against: `~/redteam/learn/sources` (one `<box>.txt` per box, lessons marked `@@@ <title> | <address>`). Question files: `~/redteam/learn/quizzes`. Build: `python tools/build_quizzes.py`.
 - Tests: `tools/app_test.py`, `tools/walk_test.py`, `tools/sync_test.py`, `tools/linkcheck.py`, `node tools/proof_test.js`, `tools/jobs_test.py`. Shipping: `tools/ship.sh`.
 
 ## Who it is for, and what he asked for (his words and answers, 27 Nov 2026)
 
-- No degree, self-taught, cannot read code yet; builds with AI tools. Wants to red team properly and understand the code he runs. Camp rotation: 14 days on (1-3 h a day), 7 off (2-8 h a day), about 15-20 h a week. Canadian citizen, no US work permit: everything paid must be open to someone in Canada.
+- Builds with AI tools. Wants to red team properly and understand the code he runs. Everything paid must be open to someone in Canada.
 - His 7 answers: (1) far enough for AI bug bounties and small contract red-team gigs; junior AI security jobs later. (2) Free first; a paid course only if it is a real, respected, self-paced, certified one, shown with its price first. (3) How models work plus Python that calls a model to test it at scale; no heavy maths, no model training. (4) New steps after Step 6; Steps 1-6 stay exactly as they are. (5) Done means real proof: a quiz from the source's own words, a public certificate/badge/profile link, public GitHub code he wrote, or a proof file the app can read; no plain honest-tick boxes for required steps. (6) Security basics bounty programs expect: web security, OWASP Top 10 for LLMs, Git and GitHub, a little Linux, report writing; not a full Security+ track. (7) freeCodeCamp's Python Certification as the main Python step; Harvard's CS50P after it as an optional box that never blocks.
-- Keep him on track: the app is the coach, not the course (link the real course, never copy it); its own quiz before a box ticks (80%, a miss shows where to look, retry after a wait; Python questions include "what does this print?" and "spot the bug"); older topics come back on a 1 day / 1 week / 1 month ladder; an on-track card for his rotation that says plainly it cannot message him; "explain it back" at the end of each step, saying it cannot be graded.
+- Keep him on track: the app is the coach, not the course (link the real course, never copy it); its own quiz before a box ticks (80%, a miss shows where to look, retry after a wait; Python questions include "what does this print?" and "spot the bug"); older topics come back on a 1 day / 1 week / 1 month ladder; an on-track card for a shift rotation that says plainly it cannot message him; "explain it back" at the end of each step, saying it cannot be graded.
 - His picks from the gap check (`SCOPE-2-GAPS.md`): agent attacks with real impact as their own step; public proof = HackerOne and Bugcrowd profiles and a CTF/lab record; getting paid = platform screening practice, rules/safe harbor/NDAs, US pay and Canadian tax; one threat-model box; Step 5's PyRIT install fixed once proven broken (he later approved a second Step 5 line, `use_tls=False`).
 - The approved plan is `SCOPE-2-PLAN.md`. Judge the app against his answers and the plan, not against anyone's summary.
 
@@ -28,6 +28,6 @@ You are auditing Scope 2 of Red Team Path, a study app built for Shad (Alberta, 
 ## How to report
 
 - Write `AUDIT-SCOPE-2.md` in this folder: a 5-line summary for a phone first, then findings, most serious first. Each finding: what is wrong, where (file:line or box id), how you proved it (command and output, or page and date), and the smallest fix.
-- Plain English, short sentences, no jargon without a one-line meaning. Shad cannot read code.
+- Plain English, short sentences, no jargon without a one-line meaning.
 - Fix nothing until Shad says OK. Then: tag the commit first (`before-audit-fixes`), ship with `tools/ship.sh`, check the live site, one fix at a time.
-- Usage: Shad stops all building at 75% weekly usage and nothing after 10 pm Alberta (UTC-6). If the audit would go past either, say so and stop at a clean point.
+- Usage: if the audit would go past the usage limit, say so and stop at a clean point.
