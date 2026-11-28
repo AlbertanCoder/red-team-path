@@ -128,7 +128,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 13. A4: Git on the PC with GitHub Desktop (decision 5). Proof: 305961e; 2 new checks, both failing before; `tools/ship.sh` local and live ALL PASSED (411 checks), 27 Nov 2026. Button names from GitHub's own help pages.
 - [x] 14. E1, A7: tighter GitHub checks, each with a nonsense repository that fails and an honest one that passes (decision 4). Proof: c90124e; 26 new checks (a nonsense repository that fails and an honest one that passes for each rule), 13 failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (432 checks), 27 Nov 2026. Checks already passed stay passed.
 - [x] 15. C1: OWASP 2026 (decision 2). Proof: 97e8b61; 4 new checks, all failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (436 checks), 27 Nov 2026. New wb5 source from OWASP's 2026 pages (old source and questions kept in ~/redteam/learn/sources-archive/). A wb5 pass already earned stays.
-- [ ] 16. C2: PortSwigger's 8 labs (decision 2).
+- [x] 16. C2: PortSwigger's 8 labs (decision 2). Proof: 2f71503; 3 new checks, all failing on the app before the change; `tools/ship.sh` local and live ALL PASSED (439 checks), 27 Nov 2026. An ag2 pass already earned stays.
 - [ ] 17. A6, A7: garak and PyRIT run for real on a free model; steps rewritten from what worked; `PROOF.md` (decision 1).
 - [ ] 18. C4, C9 (Steps 7 to 14 rows), D2: box text.
 - [ ] 19. C7, C8: Library lessons and words.
