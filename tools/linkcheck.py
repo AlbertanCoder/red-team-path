@@ -29,6 +29,8 @@ def urls_from(repo):
             continue
         text = p.read_text(encoding="utf-8")
         for m in re.finditer(r"https?://[^\s\"'<>)\\`]+", text):
+            if text[max(0, m.start() - 1):m.start()] == "^" or text[m.end():m.end() + 1] == "\\":
+                continue  # a pattern that checks the shape of an address the learner pastes (^https://hackerone\\.com/...), not a link
             found.setdefault(m.group(0).rstrip(".,;:"), name)
         if name == "app.js":
             for m in re.finditer(r"\"(/training/modules/[^\"]+)\"", text):

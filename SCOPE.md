@@ -108,7 +108,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 ### Where things stand (update as you go)
 
 - Tag `before-audit-fixes` on bf3d93e before any change.
-- **Paused 27 Nov 2026, 4:16 pm Alberta, at a clean point**: fixes 1, 2, 3, 4, 5, 6, 8 and 9 are live and proven (387 checks local and live). Resumed 4:25 pm at Shad's 73%: fixes 10 and 7 live (400 checks). Shad then lifted the 75% stop (change request below); fix 11 onward under way. Usage could not be read; by the lead's own estimate it was close to the 75% line, so work stopped to ask Shad for the number. Next in order: 11 onward. Fix 6 still waits on Q1, Q5 and Q6 for its last parts. The real garak and PyRIT runs for fix 17 are done (audit folder, `helpers/real-runs.md`); the boxes are not rewritten yet.
+- **Done 27 Nov 2026, about 9:15 pm Alberta.** All 25 fixes are live and proven; tag `audit-fixes-done`. What is left on purpose, and why, is in the fix log at the end of `AUDIT-FULL.md`. Waiting on Shad: Q1 to Q10 in `AUDIT-FULL.md` section 7.
 - `AUDIT-FULL-PROMPT.md` is held back from the repository on this PC (`.git/info/exclude`) until Shad says whether to publish it (question Q4 in `AUDIT-FULL.md`).
 
 ### Done checklist (each one needs proof: the commit, the test that fails without it, the live check)
@@ -137,7 +137,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 22. G: ease-of-use fixes. Proof: 8dd8cb6; 7 new checks, 6 failing on the app before the change (reduce motion was already kept for the side panels); `tools/ship.sh` local and live ALL PASSED (474 checks), 27 Nov 2026.
 - [x] 23. E5: tests that can fail for what the records claim. Proof: 302d28c; 7 new checks and 1 tightened; a copy of the app broken 7 ways failed 8 checks, each naming its break, a copy with only the review timing broken failed the one-month check, and a hand-edited `quizzes.js` is refused by the new build check in `tools/ship.sh`; local and live ALL PASSED (480 checks), 27 Nov 2026.
 - [x] 24. F: records made true. Proof: e3ecd68; records only (no app change): each corrected line checked against the app and the audit's findings, 27 Nov 2026. Hours from the boxes' own labels read in the app (about 450 required from Step 2, about 156 optional).
-- [ ] 25. Every test local and live; tag `audit-fixes-done`; fix log at the end of `AUDIT-FULL.md`.
+- [x] 25. Every test local and live; tag `audit-fixes-done`; fix log at the end of `AUDIT-FULL.md`. Proof, 27 Nov 2026 about 9:15 pm: `tools/proof_test.js` 109 cases, `tools/jobs_test.py` 47, `tools/build_quizzes.py --check` matches, `tools/app_test.py` 480 checks local and live, `tools/walk_test.py` live ALL PASSED (68 lesson videos played), `tools/sync_test.py` live ALL PASSED, `tools/linkcheck.py` 295 links, 0 dead, 5 sites refuse scripts (after teaching it that `^https://...` is a pattern, not a link); the audit's lab-proof attack set: 43 wrong of 132, the same as after fix 5. All ALL PASSED.
 
 ### Out of scope
 
