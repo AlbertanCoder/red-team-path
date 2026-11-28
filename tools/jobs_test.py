@@ -12,7 +12,8 @@ CASES = [
     ("Hybrid - Vancouver", "check"), ("Toronto or Remote US", "check"), ("Montréal, QC", "check"), ("Waterloo, ON", "check"),
     ("North America", "check"), ("Remote (Americas)", "check"), ("Remote", "check"), ("", "check"), ("San Francisco; Remote", "check"),
     ("Remote (International)", "anywhere"), ("Global Remote", "anywhere"), ("Worldwide", "anywhere"),
-    ("Remote, Worldwide (except Canada)", "no"), ("Remote - Anywhere in the US", "no"), ("Remote (US only)", "no"), ("Remote (USA)", "no"),
+    ("Remote, Worldwide (except Canada)", "no"), ("Remote (Canada excluded)", "no"), ("Remote - not available in Canada", "no"),
+    ("Worldwide, excl. Canada", "no"), ("Remote, no Canada", "no"), ("Remote - Anywhere in the US", "no"), ("Remote (US only)", "no"), ("Remote (USA)", "no"),
     ("Remote - US", "no"), ("San Francisco, CA", "no"), ("London, UK", "no"), ("EMEA", "no"), ("Washington DC", "no"),
     ("New York City, NY (Hybrid); San Francisco, CA (Hybrid); United States (Remote)", "no"),
 ]
@@ -42,5 +43,52 @@ untagged = [a["id"] for a in load()["ads"] if a.get("open", True) and (a.get("ca
 print(("ok   " if not untagged else "FAIL ") + "every open ad in jobs.js has a Canada tag and a where line" + ("" if not untagged else ": missing on " + ", ".join(untagged)))
 fails += bool(untagged)
 CASES.append("tags")
+# 4. Scope 3, fix 21 (audit D3): the tools around the ads. Each case is one the audit broke or found wrong.
+import check_jobs  # noqa: E402
+import find_jobs  # noqa: E402
+import job_feeds  # noqa: E402
+
+
+def case(what, ok):
+    global fails
+    print(("ok   " if ok else "FAIL ") + what)
+    fails += not ok
+    CASES.append(what)
+
+
+boards = {b for _, b, _ in job_feeds.BOARDS}
+case("the two feeds that belong to other companies (cais, patronus) are gone", not ({"cais", "patronus"} & boards))
+for text, closed in (("We are no longer accepting applications.", True), ("This position has been filled.", True), ("This job has expired", True),
+                     ("We are no longer accepting applicants from California.", False), ("Apply now: the ad comes down once a position is filled.", False)):
+    case("the daily check reads %r as %s" % (text, "closed" if closed else "open"), bool(check_jobs.CLOSED.search(text)) == closed)
+case("a move from www. to the bare address is the same site", check_jobs.host("https://www.example.com/jobs/1") == check_jobs.host("https://example.com/jobs/1"))
+case("a title edited a little is the same ad", check_jobs.same_title("AI Red Teamer - Contract", "AI red teamer (contract)") and not check_jobs.same_title("AI Red Teamer", "Data Annotator"))
+case("an odd feed shape gives plain text, not a crash", job_feeds.text({"name": "Remote"}, "name") == "Remote" and job_feeds.text(None) == "" and job_feeds.text(42) == "42")
+case("an ad that asks for a fee or a chat app is never listed", bool(find_jobs.SCAM.search("Pay a $50 starter-kit fee by Telegram")) and not find_jobs.SCAM.search("AI Red Teamer $40 to $60 an hour"))
+saved = (check_jobs.load, check_jobs.check_page, sys.argv)
+calls = []
+
+
+def fake_page(ad):
+    calls.append(ad["id"])
+    if ad["id"] == "bad":
+        raise ValueError("a page in a shape nobody expected")
+    return "open", "fine"
+
+
+check_jobs.load = lambda: {"ads": [{"id": "bad", "check": {"type": "page"}, "url": "https://a.example"}, {"id": "good", "check": {"type": "page"}, "url": "https://b.example"}]}
+check_jobs.check_page = fake_page
+sys.argv = ["check_jobs.py", "--dry"]
+try:
+    check_jobs.main()
+    went_on = calls == ["bad", "good"]
+except Exception:
+    went_on = False
+finally:
+    check_jobs.load, check_jobs.check_page, sys.argv = saved
+case("one ad that cannot be checked does not stop the daily check: the next ad is still checked", went_on)
+jobs = check_jobs.load()["ads"]
+uk = [a for a in jobs if a["id"] == "uk-ai-security-institute-research-residency-red-team"]
+case("the UK residency closes 13 December", bool(uk) and "13 December" in uk[0]["ask"])
 print("%d FAILED" % fails if fails else "ALL PASSED (%d cases)" % len(CASES))
 sys.exit(1 if fails else 0)

@@ -27,7 +27,9 @@ HEAD = ("// Job ads for the Jobs tab. tools/check_jobs.py re-checks every link a
         "window.RTP_JOBS = ")
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
       "Accept": "text/html,application/json"}
-CLOSED = re.compile(r"(?i)no longer (?:accepting|available|open)|position (?:has been |is )?(?:filled|closed)"
+# "no longer accepting applicants from California" and "once a position is filled" are not closed ads.
+CLOSED = re.compile(r"(?i)no longer (?:accepting (?:applications|applicants)(?! from| in| for)|available|open)"
+                    r"|(?<!once )(?<!once a )(?<!once the )(?<!until )(?<!until a )(?<!when )(?<!when a )(?<!when the )(?<!after )(?<!after a )(?:this )?position (?:has been |is now |is )(?:filled|closed)"
                     r"|job (?:not found|has expired|is closed|is no longer)|posting (?:has |is )?(?:closed|expired)|this job has expired")
 
 
@@ -71,11 +73,21 @@ def check_feed(ad):
     if jobs is None:
         return "unknown", "could not read the %s job board" % board
     for job in jobs:
-        if job["title"] == ad["check"]["title"]:
+        if same_title(job["title"], ad["check"]["title"]):
             if job["url"]:
                 ad["url"] = job["url"]
             return "open", "listed on the %s job board" % board
     return "closed", "no longer listed on the %s job board" % board
+
+
+def same_title(a, b):
+    """A title edited a little (capitals, spaces, dashes, brackets) is the same ad."""
+    norm = lambda t: re.sub(r"[^a-z0-9]+", " ", str(t).lower()).strip()
+    return norm(a) == norm(b)
+
+
+def host(url):
+    return re.sub(r"^https?://(www\.)?([^/]+).*", r"\2", url).lower()
 
 
 def check_page(ad):
@@ -84,8 +96,7 @@ def check_page(ad):
         return "closed", "page answered %d" % code
     if code != 200:
         return "unknown", "page answered %d" % code
-    want_host = re.sub(r"^https?://([^/]+).*", r"\1", ad["url"])
-    if want_host not in final:
+    if host(ad["url"]) != host(final):  # a move from www. to the bare address is the same site
         return "closed", "link now leads to %s" % final[:60]
     text = plain(body) + " " + html.unescape(" ".join(re.findall(r"(?is)<title[^>]*>(.*?)</title>", body)))
     hit = CLOSED.search(text)
@@ -103,7 +114,10 @@ def main():
     data = load()
     counts = {"open": 0, "closed": 0, "unknown": 0}
     for ad in data["ads"]:
-        result, why = (check_feed if ad["check"]["type"] in ("ashby", "feed") else check_page)(ad)
+        try:
+            result, why = (check_feed if ad["check"]["type"] in ("ashby", "feed") else check_page)(ad)
+        except Exception as err:  # an ad or a feed in a shape nobody expected: leave that ad as it was, check the rest
+            result, why = "unknown", "could not be checked (%s)" % type(err).__name__
         counts[result] += 1
         if result == "open":
             ad["open"] = True

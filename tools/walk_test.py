@@ -85,7 +85,8 @@ with sync_playwright() as p:
             kept = page.get_attribute("#player", "src") == src
             check(ok and kept, "%s video %d: plays inside the app and stays playing through a redraw (%s)" % (box, k + 1, src[:60]))
             played += 1
-        check(page.locator("#quiz-start, #quiz-box").count() > 0 or box in ("c50",), "%s: its quiz is still on the screen below the videos" % box)
+        if page.evaluate("!!(window.RTP_QUIZ && window.RTP_QUIZ['%s'])" % box):
+            check(page.locator("#quiz-start, #quiz-box").count() > 0, "%s: its quiz is still on the screen below the videos" % box)
     print("lesson videos played: %d" % played)
     ctx.close()
     b.close()

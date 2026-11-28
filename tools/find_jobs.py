@@ -27,7 +27,8 @@ def canada_from(where):
     w = (where or "").strip()
     hidden = {"canada": "no", "where": "Hidden by the scan: location as posted is %s, which is not open to someone working from Canada." % w}
     check = lambda why: {"canada": "check", "where": "Location as posted: %s. %s" % (w or "not given", why)}
-    if re.search(r"(?i)\b(except|excluding|not( in)?|outside( of)?)\s+canada", w):
+    if re.search(r"(?i)\b(except|excluding|excl\.?|not( available)?( in)?|outside( of)?|no)\s+canada", w) or \
+            re.search(r"(?i)canada\s*(\)\s*)?(excluded|not (eligible|included|available)|ineligible)", w):
         return hidden
     if re.search(r"(?i)canada|canadian|edmonton", w) or re.search(r"\bCAN\b", w):
         return {"canada": "yes", "where": "Location as posted: %s." % w}
@@ -44,6 +45,10 @@ def canada_from(where):
     if not w or (re.search(r"(?i)remote", w) and not re.search(named, w)):
         return check("The feed names no country: read the ad to be sure.")
     return hidden
+
+
+# Real platforms never ask for money or move you to a chat app. An ad whose title or pay says so is never listed.
+SCAM = re.compile(r"(?i)\b(fee|deposit|starter[\s-]?kit|telegram|whatsapp|signal app|crypto|bitcoin|usdt|gift card|pay to (join|apply))\b")
 
 
 def room_left(ads):
@@ -67,12 +72,16 @@ def main():
     room = room_left(ads)
     found, read = [], 0
     for kind, board, name in BOARDS:
-        jobs = feed(kind, board)
+        try:
+            jobs = feed(kind, board)
+        except Exception as err:  # a feed in a shape nobody expected: skip that board, scan the rest
+            print("could not read  %-22s (%s: %s)" % (name, kind, type(err).__name__))
+            continue
         if jobs is None:
             print("could not read  %-22s (%s)" % (name, kind))
             continue
         read += 1
-        hits = [j for j in jobs if WANT.search(j["title"]) and j["url"].startswith("https://")]
+        hits = [j for j in jobs if WANT.search(j["title"]) and j["url"].startswith("https://") and not SCAM.search(j["title"] + " " + j["pay"])]
         print("read            %-22s %4d open jobs, %d with a matching title" % (name, len(jobs), len(hits)))
         for j in hits:
             key = (name.split(" (")[0].lower(), j["title"].lower())

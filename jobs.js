@@ -290,7 +290,7 @@ window.RTP_JOBS = {
       "level": "new",
       "title": "Expert Talent Pool, Safety Testing (Expert, 5+ Years)",
       "who": "Clera",
-      "pay": "Pay not stated in the job feed",
+      "pay": "$75 to $175 an hour (the ad, read 27 Nov 2026)",
       "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: remote.",
       "url": "https://jobs.ashbyhq.com/Clera/81a11271-c32b-4155-80a2-46e20fe7c71e",
       "check": {
@@ -498,7 +498,7 @@ window.RTP_JOBS = {
       "title": "Research Residency – Red Team",
       "who": "UK AI Security Institute",
       "pay": "£65,000 to £145,000 a year as posted",
-      "ask": "Read 23 Nov: UK government lab in London. For PhD students or recent PhDs, and you need the right to work in the UK. Applications close 8 December.",
+      "ask": "Read 23 Nov: UK government lab in London. For PhD students or recent PhDs, and you need the right to work in the UK. Applications close 13 December.",
       "url": "https://job-boards.eu.greenhouse.io/aisi/jobs/5043106101",
       "check": {
         "type": "feed",
@@ -518,7 +518,7 @@ window.RTP_JOBS = {
       "level": "new",
       "title": "Expert Talent Pool, Safety Testing (Associate)",
       "who": "Clera",
-      "pay": "Pay not stated in the job feed",
+      "pay": "$30 to $60 an hour (the ad, read 27 Nov 2026)",
       "ask": "Found by the weekly scan. Nobody has read this ad for you yet: open it and judge it yourself. Location as posted: remote.",
       "url": "https://jobs.ashbyhq.com/Clera/998994f7-8a58-44b6-a0fc-9c3a46640ab8",
       "check": {

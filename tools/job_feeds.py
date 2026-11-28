@@ -36,7 +36,6 @@ BOARDS = [
     ("greenhouse", "snorkelai", "Snorkel AI"),
     ("ashby", "far.ai", "FAR.AI"),
     ("ashby", "irregular", "Irregular"),
-    ("ashby", "patronus", "Patronus AI"),
     ("greenhouse", "hiddenlayer", "HiddenLayer"),
     ("greenhouse", "bugcrowd", "Bugcrowd"),
     # Added 23 Nov 2026: companies that sell AI red teaming or test AI for governments. Every one answered that day.
@@ -51,7 +50,6 @@ BOARDS = [
     ("lever", "apolloresearch", "Apollo Research"),
     ("lever", "metr", "METR"),
     ("ashby", "redwoodresearch", "Redwood Research"),
-    ("greenhouse", "cais", "Center for AI Safety"),
 ]
 
 # A title must match this to be listed. Narrow on purpose: better to miss an ad than to list the wrong kind of job.
@@ -72,6 +70,15 @@ def get_json(url):
         return 0, None
 
 
+def text(value, key=None):
+    """A feed field as plain text, whatever shape it came in: a string, a number, or an object holding the string under key."""
+    if key and isinstance(value, dict):
+        value = value.get(key)
+    if isinstance(value, (str, int, float)) and not isinstance(value, bool):
+        return str(value).strip()
+    return ""
+
+
 def feed(kind, board):
     """Open jobs on one board as a list of {title, url, where, pay}, or None when the feed could not be read."""
     if kind == "ashby":
@@ -80,20 +87,22 @@ def feed(kind, board):
             return None
         out = []
         for j in data["jobs"]:
-            comp = j.get("compensation") or {}
-            out.append({"title": (j.get("title") or "").strip(), "url": j.get("jobUrl") or "", "where": (j.get("location") or "").strip(),
-                        "pay": (comp.get("compensationTierSummary") or comp.get("scrapeableCompensationSalarySummary") or "").strip()})
+            if not isinstance(j, dict):
+                continue
+            comp = j.get("compensation") if isinstance(j.get("compensation"), dict) else {}
+            out.append({"title": text(j.get("title")), "url": text(j.get("jobUrl")), "where": text(j.get("location")),
+                        "pay": text(comp.get("compensationTierSummary")) or text(comp.get("scrapeableCompensationSalarySummary"))})
         return out
     if kind == "greenhouse":
         code, data = get_json("https://boards-api.greenhouse.io/v1/boards/%s/jobs" % board)
         if code != 200 or not isinstance(data, dict) or "jobs" not in data:
             return None
-        return [{"title": (j.get("title") or "").strip(), "url": j.get("absolute_url") or "", "where": ((j.get("location") or {}).get("name") or "").strip(), "pay": ""}
-                for j in data["jobs"]]
+        return [{"title": text(j.get("title")), "url": text(j.get("absolute_url")), "where": text(j.get("location"), "name"), "pay": ""}
+                for j in data["jobs"] if isinstance(j, dict)]
     if kind == "lever":
         code, data = get_json("https://api.lever.co/v0/postings/%s?mode=json" % board)
         if code != 200 or not isinstance(data, list):
             return None
-        return [{"title": (j.get("text") or "").strip(), "url": j.get("hostedUrl") or "", "where": ((j.get("categories") or {}).get("location") or "").strip(), "pay": ""}
-                for j in data]
+        return [{"title": text(j.get("text")), "url": text(j.get("hostedUrl")), "where": text(j.get("categories"), "location"), "pay": ""}
+                for j in data if isinstance(j, dict)]
     return None
