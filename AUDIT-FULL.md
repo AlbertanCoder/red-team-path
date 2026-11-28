@@ -451,7 +451,7 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 
 ---
 
-## 8. Fix log (in progress: 13 of 25 done, 27 Nov 2026)
+## 8. Fix log (in progress: 14 of 25 done, 27 Nov 2026)
 
 Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/ship.sh` (local test, push, live file compared, live test). "Failed before" means the new checks were run against the live site before the change went out.
 
@@ -469,7 +469,8 @@ Each fix: the finding, the commit, the proof. Every fix was shipped with `tools/
 12 (part 1). **C5, E3, wrong answers, give-away hints, project solution lines.** Commit 81a77f6. 21 questions in 14 quiz files rewritten and rebuilt (428 kept). 7 new checks, all failed before. Live: 409. Passes already earned stay; anyone who passed fc8, fc10, fc12 or fc15 before saw the old questions. Left for part 2: guessable options and tighter builder guards; video questions wait on Q6.
 13. **A4, Git on the PC with GitHub Desktop.** Commit 305961e. 2 new checks, both failed before. Live: 411. Box ap1 now teaches GitHub Desktop: download, sign in, Code then Open with GitHub Desktop, Choose... then Clone, Summary, Commit to main, Push origin (GitHub's help pages, 27 Nov 2026). Box ap2 adds one line of the typed commands (git clone, add, commit, push). Left: the sign-in step is not spelled out on GitHub's install page, so the box says only to sign in with your GitHub account.
 14. **E1, A7, GitHub checks look inside the files.** Commit c90124e. 26 new checks, 13 failed before. Live: 432. Code lines only, not comments (ap1, ap2, ag5, tl1); score.py must name results.jsonl and summary.json (ap3); 15 words under each threat-model heading (ag1); words under each report and write-up part (tl2: 3 for the title, 10 for the rest; tl3 the same); garak's report file, not its hit log, and a finished run of 10 or more attempts with garak's completion line (ag4); commits that change probe.py (tl1); a real link (tl4). Each box's own list of what is checked says so, and still says the app cannot tell who typed the code. Left: a determined person can still type files that pass; proof marks earned before stay. The lab-proof hand-typed file (E1's second part) is unchanged.
+15. **C1, OWASP 2026.** Commit 97e8b61. 4 new checks, all failed before. Live: 436. Box wb5 names and links the 2026 list; its source is rebuilt from OWASP's 2026 pages saved today; its 8 questions use the 2026 names and numbers, no hint names the answer, and the scenario questions point at the list, not their own entry. Library sources owasp01, owasp05 and owasp06 point at the 2026 entries. `AUDIT.md`'s OWASP line corrected. Left: `SCOPE-2-GAPS.md` still says 2025 (a dated record of Scope 2; fix 24). Lesson t34's words did not need a change.
 
 Also done, not a fix yet: garak and PyRIT were run for real on free local models on this PC (decision 1). Both worked with no key. The exact steps are in `helpers/real-runs.md` in the audit folder and go into boxes ag4 and ag5 at fix 17. One line of finding A6 was corrected from that run.
 
-Not started: fixes 12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
+Not started: fixes 12, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 (section 7). Nothing in this list has been left unfixed on purpose except where "Left" says so.
