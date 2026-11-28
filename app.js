@@ -474,9 +474,9 @@
       item("wb4", "practice", "PortSwigger: API testing",
         "Agents act through APIs. This path teaches how to find an API's endpoints and the parameters it never meant to accept.",
         "https://portswigger.net/web-security/learning-paths/api-testing", { mins: 360, pc: true, openLabel: "Open PortSwigger's path", how: PS_HOW }),
-      item("wb5", "read", "OWASP Top 10 for LLM applications (the 2025 list)",
+      item("wb5", "read", "OWASP Top 10 for LLM applications (the 2026 list)",
         "The ten risks every AI security ad and bounty program refers to. One job ad you read asks for it by name.",
-        "https://genai.owasp.org/llm-top-10/", { mins: 180, shift: true, openLabel: "Open OWASP's list", how: [
+        "https://genai.owasp.org/top-10-for-llm-applications-2026/", { mins: 180, shift: true, openLabel: "Open OWASP's list", how: [
           "Open the list and read all ten entries: the description, the examples and how to prevent it.",
           "For each one, write one line: how would I test for this in a chatbot or agent?",
           "Take the quiz here."
@@ -903,7 +903,7 @@
 
   // The Tutor's lessons: published techniques, each with its source. Examples use a pretend chatbot, never a lab.
   var SRC = {
-    owasp01: ["OWASP: prompt injection (2025)", "https://genai.owasp.org/llmrisk/llm01-prompt-injection/"],
+    owasp01: ["OWASP LLM01:2026 Prompt Injection", "https://genai.owasp.org/llm2026/llm012026-prompt-injection/"],
     msJailbreaks: ["Microsoft: AI jailbreaks, what they are (2024)", "https://www.microsoft.com/en-us/security/blog/2024/06/04/ai-jailbreaks-what-they-are-and-how-they-can-be-mitigated/"],
     msFilters: ["Microsoft: content filtering", "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter"],
     ms100: ["Microsoft: lessons from red teaming 100 AI products (2025)", "https://arxiv.org/abs/2501.07238"],
@@ -926,7 +926,7 @@
     hierarchy: ["OpenAI: the instruction hierarchy (2024)", "https://arxiv.org/abs/2404.13208"],
     ibmRed: ["IBM: what is red teaming", "https://www.ibm.com/think/topics/red-teaming"],
     willison: ["Simon Willison: prompt injection, the worst that can happen (2023)", "https://simonwillison.net/2023/Apr/14/worst-that-can-happen/"],
-    owasp06: ["OWASP: excessive agency (2025)", "https://genai.owasp.org/llmrisk/llm062025-excessive-agency/"],
+    owasp06: ["OWASP LLM03:2026 Excessive Agency", "https://genai.owasp.org/llm2026/llm032026-excessive-agency/"],
     trifecta: ["Simon Willison: the lethal trifecta for AI agents (2025)", "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"],
     owaspAgentic: ["OWASP: agentic AI threats and mitigations", "https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/"],
     injecAgent: ["InjecAgent: testing injection into tool-using agents (2024)", "https://arxiv.org/abs/2403.02691"],
@@ -952,8 +952,8 @@
     openaiSafety: ["OpenAI: Safety Bug Bounty (2026)", "https://openai.com/index/safety-bug-bounty/"],
     msCopilot: ["Microsoft: Copilot bounty", "https://www.microsoft.com/en-us/msrc/bounty-ai"],
     odinPolicy: ["Mozilla 0DIN: bug bounty terms", "https://0din.ai/policy"],
-    owasp05: ["OWASP LLM05:2025 Improper Output Handling", "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM05_ImproperOutputHandling.md"],
-    owasp06: ["OWASP LLM06:2025 Excessive Agency", "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM06_ExcessiveAgency.md"]
+    owasp05: ["OWASP LLM10:2026 Improper Output Handling", "https://genai.owasp.org/llm2026/llm102026-improper-output-handling/"],
+    owasp06: ["OWASP LLM03:2026 Excessive Agency", "https://genai.owasp.org/llm2026/llm032026-excessive-agency/"]
   };
   var LESSONS = [
     { id: "t1", group: "Start here", title: "What you are actually attacking",

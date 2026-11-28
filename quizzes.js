@@ -5922,116 +5922,116 @@ window.RTP_QUIZ = {
  ],
  "wb5": [
   {
-   "q": "According to OWASP, can a prompt injection work even if a human cannot see it?",
+   "q": "According to OWASP's 2026 entry, does a prompt injection have to be visible on the page to work?",
    "options": [
-    "Yes: it only has to be parsed by the model",
-    "No: it must be visible on the screen",
-    "Only if it is in English",
-    "Only if it is in an image"
+    "No: it can be hidden from view and still change what the model does",
+    "Yes: the model only acts on text the user can see on the screen",
+    "Only when it arrives in an image or an audio file the user uploads",
+    "Only when the user types it into the chat box themselves"
    ],
    "answer": 0,
    "kind": "recall",
-   "hint": "Look again at OWASP LLM01: Description.",
-   "where": "OWASP LLM01: PromptInjection",
-   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM01_PromptInjection.md"
+   "hint": "Look again at OWASP's 2026 entry on prompt injection: its first paragraph.",
+   "where": "OWASP LLM01:2026 Prompt Injection",
+   "url": "https://genai.owasp.org/llm2026/llm012026-prompt-injection/"
   },
   {
-   "q": "A chatbot's hidden instructions include an internal discount code, and a user gets the bot to reveal them. Which OWASP risk is that?",
+   "q": "A user gets a chatbot to print its hidden system instructions, which describe its tools and its refund rules. Which 2026 OWASP risk is that?",
    "options": [
-    "LLM07: System Prompt Leakage",
-    "LLM10: Unbounded Consumption",
-    "LLM03: Supply Chain",
-    "LLM09: Misinformation"
+    "LLM08: Hidden Context Exposure",
+    "LLM09: Vector and Embedding Weaknesses",
+    "LLM04: Supply Chain",
+    "LLM06: Unbounded Consumption"
    ],
    "answer": 0,
    "kind": "apply",
-   "hint": "Look again at OWASP LLM07: Description.",
-   "where": "OWASP LLM07: SystemPromptLeakage",
-   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM07_SystemPromptLeakage.md"
+   "hint": "Look again at OWASP's 2026 list: the ten names, and the first line of each entry.",
+   "where": "OWASP Top 10 for LLM Applications 2026",
+   "url": "https://genai.owasp.org/top-10-for-llm-applications-2026/"
   },
   {
-   "q": "A model's reply goes straight into a web page as HTML and runs a script. Which OWASP risk is that?",
+   "q": "A model's reply goes straight into a web page as HTML and runs a script in the visitor's browser. Which 2026 OWASP risk is that?",
    "options": [
-    "LLM05: Improper Output Handling",
-    "LLM04: Data and Model Poisoning",
+    "LLM10: Improper Output Handling",
     "LLM02: Sensitive Information Disclosure",
-    "LLM08: Vector and Embedding Weaknesses"
+    "LLM07: Misinformation",
+    "LLM05: Data and Model Poisoning"
    ],
    "answer": 0,
    "kind": "apply",
-   "hint": "Look again at OWASP LLM05: Description.",
-   "where": "OWASP LLM05: ImproperOutputHandling",
-   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM05_ImproperOutputHandling.md"
+   "hint": "Look again at OWASP's 2026 list: the ten names, and the first line of each entry.",
+   "where": "OWASP Top 10 for LLM Applications 2026",
+   "url": "https://genai.owasp.org/top-10-for-llm-applications-2026/"
   },
   {
-   "q": "An email assistant can send, delete and forward mail, though it only needs to read. Which OWASP risk does that point to?",
+   "q": "An email assistant can send, delete and forward mail, though its job only needs it to read mail. Which 2026 OWASP risk is that?",
    "options": [
-    "LLM06: Excessive Agency",
-    "LLM01: Prompt Injection",
-    "LLM09: Misinformation",
-    "LLM03: Supply Chain"
-   ],
-   "answer": 0,
-   "kind": "apply",
-   "hint": "Look again at OWASP LLM06: Description, and its causes.",
-   "where": "OWASP LLM06: ExcessiveAgency",
-   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM06_ExcessiveAgency.md"
-  },
-  {
-   "q": "Which OWASP risk covers attacks on how a RAG system's vectors and embeddings are made, stored or retrieved?",
-   "options": [
-    "LLM08: Vector and Embedding Weaknesses",
-    "LLM07: System Prompt Leakage",
-    "LLM10: Unbounded Consumption",
-    "LLM05: Improper Output Handling"
-   ],
-   "answer": 0,
-   "kind": "recall",
-   "hint": "Look again at OWASP LLM08: Description.",
-   "where": "OWASP LLM08: VectorAndEmbeddingWeaknesses",
-   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM08_VectorAndEmbeddingWeaknesses.md"
-  },
-  {
-   "q": "Training or fine-tuning data is changed on purpose to add a backdoor. Which OWASP risk is that?",
-   "options": [
-    "LLM04: Data and Model Poisoning",
+    "LLM03: Excessive Agency",
+    "LLM10: Improper Output Handling",
     "LLM02: Sensitive Information Disclosure",
-    "LLM06: Excessive Agency",
-    "LLM01: Prompt Injection"
+    "LLM05: Data and Model Poisoning"
    ],
    "answer": 0,
    "kind": "apply",
-   "hint": "Look again at OWASP LLM04: Description.",
-   "where": "OWASP LLM04: DataModelPoisoning",
-   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM04_DataModelPoisoning.md"
+   "hint": "Look again at OWASP's 2026 list: the ten names, and the first line of each entry.",
+   "where": "OWASP Top 10 for LLM Applications 2026",
+   "url": "https://genai.owasp.org/top-10-for-llm-applications-2026/"
   },
   {
-   "q": "A model repeats a customer's health record to a different user. Which OWASP risk is that?",
+   "q": "An attacker writes a page whose embedding sits close to many common questions, so the similarity search keeps handing it to the model, though it holds no instructions. Which 2026 OWASP risk is that?",
+   "options": [
+    "LLM09: Vector and Embedding Weaknesses",
+    "LLM06: Unbounded Consumption",
+    "LLM04: Supply Chain",
+    "LLM08: Hidden Context Exposure"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP's 2026 list: the ten names, and the first line of each entry.",
+   "where": "OWASP Top 10 for LLM Applications 2026",
+   "url": "https://genai.owasp.org/top-10-for-llm-applications-2026/"
+  },
+  {
+   "q": "Someone with access to a company's own fine-tuning data adds examples that plant a hidden backdoor in the model. Which 2026 OWASP risk is that?",
+   "options": [
+    "LLM05: Data and Model Poisoning",
+    "LLM02: Sensitive Information Disclosure",
+    "LLM09: Vector and Embedding Weaknesses",
+    "LLM07: Misinformation"
+   ],
+   "answer": 0,
+   "kind": "apply",
+   "hint": "Look again at OWASP's 2026 list: the ten names, and the first line of each entry.",
+   "where": "OWASP Top 10 for LLM Applications 2026",
+   "url": "https://genai.owasp.org/top-10-for-llm-applications-2026/"
+  },
+  {
+   "q": "A model repeats one customer's health record to a different customer. Which 2026 OWASP risk is that?",
    "options": [
     "LLM02: Sensitive Information Disclosure",
-    "LLM09: Misinformation",
-    "LLM10: Unbounded Consumption",
-    "LLM03: Supply Chain"
+    "LLM09: Vector and Embedding Weaknesses",
+    "LLM07: Misinformation",
+    "LLM10: Improper Output Handling"
    ],
    "answer": 0,
    "kind": "apply",
-   "hint": "Look again at OWASP LLM02: Description.",
-   "where": "OWASP LLM02: SensitiveInformationDisclosure",
-   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM02_SensitiveInformationDisclosure.md"
+   "hint": "Look again at OWASP's 2026 list: the ten names, and the first line of each entry.",
+   "where": "OWASP Top 10 for LLM Applications 2026",
+   "url": "https://genai.owasp.org/top-10-for-llm-applications-2026/"
   },
   {
-   "q": "Someone floods a chatbot with huge requests to run up its costs. Which OWASP risk is that?",
+   "q": "Someone floods a pay-per-token chatbot with huge requests to run up its owner's bill. Which 2026 OWASP risk is that?",
    "options": [
-    "LLM10: Unbounded Consumption",
-    "LLM07: System Prompt Leakage",
-    "LLM05: Improper Output Handling",
-    "LLM08: Vector and Embedding Weaknesses"
+    "LLM06: Unbounded Consumption",
+    "LLM03: Excessive Agency",
+    "LLM04: Supply Chain",
+    "LLM09: Vector and Embedding Weaknesses"
    ],
    "answer": 0,
    "kind": "apply",
-   "hint": "Look again at OWASP LLM10: Description.",
-   "where": "OWASP LLM10: UnboundedConsumption",
-   "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/2_0_vulns/LLM10_UnboundedConsumption.md"
+   "hint": "Look again at OWASP's 2026 list: the ten names, and the first line of each entry.",
+   "where": "OWASP Top 10 for LLM Applications 2026",
+   "url": "https://genai.owasp.org/top-10-for-llm-applications-2026/"
   }
  ],
  "wb6": [

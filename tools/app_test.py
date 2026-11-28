@@ -22,6 +22,7 @@ What it proves:
 """
 import json
 import pathlib
+import re
 import sys
 import uuid
 
@@ -1237,6 +1238,21 @@ with sync_playwright() as p:
     ok, res = gh2("tl4", {"README.md": "# Hi\nSoon I will make red-team-tools.\n"})
     check(not ok and "does not link" in res, "Scope 3: a profile README that only mentions red-team-tools, with no link, fails")
     check(gh2("tl4", {"README.md": "# Hi\nMy work: [red-team-tools](https://github.com/testuser/red-team-tools)\n"})[0], "Scope 3: a profile README with a real link still passes")
+    # Scope 3, fix 15 (audit C1, decision 2): box wb5 and the Library's OWASP sources move to OWASP's 2026 list.
+    octx, op = new_page(b, None, start=False)
+    wb5 = box_text(op, "wb5")
+    check("2026 list" in op.inner_text("#top-title") and op.get_attribute("#open-link", "href") == "https://genai.owasp.org/top-10-for-llm-applications-2026/", "Scope 3: box wb5 names and links OWASP's 2026 list")
+    QW = op.evaluate("window.RTP_QUIZ.wb5")
+    N2026 = {"LLM01: Prompt Injection", "LLM02: Sensitive Information Disclosure", "LLM03: Excessive Agency", "LLM04: Supply Chain", "LLM05: Data and Model Poisoning",
+             "LLM06: Unbounded Consumption", "LLM07: Misinformation", "LLM08: Hidden Context Exposure", "LLM09: Vector and Embedding Weaknesses", "LLM10: Improper Output Handling"}
+    named = [o for x in QW for o in x["options"] if o.startswith("LLM")]
+    check(named and all(o in N2026 for o in named), "Scope 3: every OWASP risk in wb5's quiz has its 2026 name and number (off: %s)" % sorted(set(named) - N2026))
+    check(not any(re.search(r"LLM\d", x["hint"]) or "/llm" in (x.get("url") or "") and "2026" not in x["url"] for x in QW), "Scope 3: no wb5 hint names a risk number, and no lesson link is an old entry")
+    op.evaluate("location.hash = '#tutor'")
+    op.wait_for_selector("#tutor-sources")
+    srcs = op.text_content("#tutor-sources")
+    check("OWASP" in srcs and not re.search(r"OWASP[^\n]{0,60}2025", srcs), "Scope 3: the Library's OWASP sources are the 2026 entries")
+    octx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
