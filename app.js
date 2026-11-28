@@ -501,9 +501,11 @@
           "In red-team-tools, write threat-model.md with six headings: What it is; What it can do; Who might attack it; What could go wrong; What would hurt most; What I test first. At least 150 words.",
           "Commit and push it. Press Check my GitHub below, then take the quiz."
         ] }),
-      item("ag2", "practice", "PortSwigger: Web LLM attacks, all 4 labs",
-        "Attacks on a chatbot that can call APIs: excessive agency, API flaws, indirect prompt injection, insecure output handling. What OpenAI, Google and Microsoft pay for.",
-        "https://portswigger.net/web-security/llm-attacks", { mins: 480, pc: true, openLabel: "Open PortSwigger's LLM topic", how: PS_HOW }),
+      item("ag2", "practice", "PortSwigger: Web LLM attacks, all 8 labs",
+        "Attacks on a chatbot that can call APIs: excessive agency, API flaws, indirect prompt injection, insecure output handling. Then four newer labs on AI-powered scanners: an AI agent that reads the site and can be turned against it. What OpenAI, Google and Microsoft pay for.",
+        "https://portswigger.net/web-security/llm-attacks", { mins: 960, pc: true, openLabel: "Open PortSwigger's LLM topic", how: PS_HOW.concat([
+          "The four labs under AI-powered scanner vulnerabilities have no published solution yet (\"will be published shortly\", 27 Nov 2026), so for those, reread the topic page instead. They use a live AI that can be unpredictable: rephrase and scan again. PortSwigger says these labs collect AI interaction logs, so type nothing private."
+        ]) }),
       item("ag3", "practice", "PortSwigger: MCP server vulnerabilities, all 6 labs",
         "Agents reach tools through MCP servers. These labs attack the server side: hidden tools, broken access control, and sign-in that fails open.",
         "https://portswigger.net/web-security/mcp", { mins: 480, pc: true, openLabel: "Open PortSwigger's MCP topic", how: PS_HOW }),

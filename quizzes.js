@@ -998,18 +998,18 @@ window.RTP_QUIZ = {
    "url": "https://portswigger.net/web-security/llm-attacks"
   },
   {
-   "q": "What is the first stage of using an LLM to attack APIs?",
+   "q": "In PortSwigger's newer labs on AI-powered scanners, how does your attack reach the scanner?",
    "options": [
-    "Work out which APIs and plugins the LLM can use",
-    "Guess the admin password from the names of the site's staff",
-    "Overload the server",
-    "Read the site's privacy policy"
+    "Through site content it reads, such as a blog post",
+    "By typing straight into the scanner's own chat box",
+    "Through an email attachment sent to the scanner",
+    "By changing the scanner's settings in your account"
    ],
    "answer": 0,
    "kind": "recall",
-   "hint": "Look again at PortSwigger's page: Mapping LLM API attack surface.",
-   "where": "PortSwigger: Web LLM attacks",
-   "url": "https://portswigger.net/web-security/llm-attacks"
+   "hint": "Look again at the lab page on destructive actions: its first sentence, and what the scanner is given.",
+   "where": "PortSwigger lab: Exploiting AI agents to perform destructive actions",
+   "url": "https://portswigger.net/web-security/llm-attacks/ai-powered-scanner-vulnerabilities/lab-indirect-prompt-injection-via-ai-powered-scan"
   },
   {
    "q": "A chatbot's reply is shown on a page without escaping, and you get it to include HTML. Which flaw from PortSwigger's page is that?",
@@ -1040,18 +1040,18 @@ window.RTP_QUIZ = {
    "url": "https://portswigger.net/web-security/llm-attacks"
   },
   {
-   "q": "Why is indirect prompt injection especially dangerous, according to PortSwigger?",
+   "q": "In the lab on secondary vulnerabilities, what second flaw must the AI scanner be pushed into using?",
    "options": [
-    "It often enables attacks on other users",
-    "It is always visible to the user, who can stop it in time",
-    "It only works on old models",
-    "It needs the admin's password"
+    "A routing-based SSRF inside the network",
+    "A stored XSS in the blog's comment form",
+    "A SQL injection in the site's login page",
+    "A clickjacking flaw on the account page"
    ],
    "answer": 0,
    "kind": "recall",
-   "hint": "Look again at PortSwigger's page: Indirect prompt injection.",
-   "where": "PortSwigger: Web LLM attacks",
-   "url": "https://portswigger.net/web-security/llm-attacks"
+   "hint": "Look again at that lab's page: its first two sentences and its Required knowledge part.",
+   "where": "PortSwigger lab: Exploiting AI agents to trigger secondary vulnerabilities",
+   "url": "https://portswigger.net/web-security/llm-attacks/ai-powered-scanner-vulnerabilities/lab-exploiting-target-website-vulnerabilities-to-bypass-restrictions"
   },
   {
    "q": "What does PortSwigger say about any API an LLM can call?",

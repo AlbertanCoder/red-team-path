@@ -1253,6 +1253,13 @@ with sync_playwright() as p:
     srcs = op.text_content("#tutor-sources")
     check("OWASP" in srcs and not re.search(r"OWASP[^\n]{0,60}2025", srcs), "Scope 3: the Library's OWASP sources are the 2026 entries")
     octx.close()
+    # Scope 3, fix 16 (audit C2, decision 2): PortSwigger's Web LLM topic has 8 labs, 4 of them without a published solution.
+    pctx, pp = new_page(b, None, start=False)
+    ag2 = box_text(pp, "ag2")
+    check("all 8 labs" in pp.inner_text("#top-title") and "no published solution" in ag2 and "AI interaction logs" in ag2, "Scope 3: box ag2 covers all 8 labs and says the 4 new ones have no solution yet and log your AI chats")
+    check("ABOUT 16 HOURS" in pp.inner_text("#top-tag"), "Scope 3: box ag2's hours are raised for 8 labs (%s)" % pp.inner_text("#top-tag"))
+    check(any("AI-powered scanners" in x["q"] for x in pp.evaluate("window.RTP_QUIZ.ag2")), "Scope 3: ag2's quiz asks about the new AI-powered scanner labs")
+    pctx.close()
     b.close()
 
 print("FAILED: %d" % len(fails) if fails else "ALL PASSED")
