@@ -135,7 +135,7 @@ Full plan: `SCOPE-2-PLAN.md`. Gap check and Shad's picks: `SCOPE-2-GAPS.md`. Res
 - [x] 20. H: videos inside the app for py1 to py8, md1 to md7, wb2, wb6, gt1 and c50; `tools/walk_test.py` plays each one on the live site. Proof: 49219e4; 6 new checks in `tools/app_test.py` (the first fails on the app before the change and the run then stops); `tools/ship.sh` local and live ALL PASSED (467 checks); `tools/walk_test.py` on the live site at phone size played all 68 lesson videos inside the app, each staying on through a redraw, ALL PASSED, 27 Nov 2026.
 - [x] 21. D3: Jobs tools. Proof: 369264f; 17 new cases in `tools/jobs_test.py` (7 fail and the run then stops on the tools before the change); `tools/ship.sh` ALL PASSED; a dry run of the daily check on today's 28 ads found 27 open and 1 really gone (DataAnnotation, 410), 27 Nov 2026.
 - [x] 22. G: ease-of-use fixes. Proof: 8dd8cb6; 7 new checks, 6 failing on the app before the change (reduce motion was already kept for the side panels); `tools/ship.sh` local and live ALL PASSED (474 checks), 27 Nov 2026.
-- [ ] 23. E5: tests that can fail for what the records claim.
+- [x] 23. E5: tests that can fail for what the records claim. Proof: 302d28c; 7 new checks and 1 tightened; a copy of the app broken 7 ways failed 8 checks, each naming its break, a copy with only the review timing broken failed the one-month check, and a hand-edited `quizzes.js` is refused by the new build check in `tools/ship.sh`; local and live ALL PASSED (480 checks), 27 Nov 2026.
 - [ ] 24. F: records made true.
 - [ ] 25. Every test local and live; tag `audit-fixes-done`; fix log at the end of `AUDIT-FULL.md`.
 
