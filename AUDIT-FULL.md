@@ -462,6 +462,8 @@ New ideas go to `IDEAS.md` (section 5, items 7 to 14), built by nobody until you
 - **Q9** No Gemini key: keep the free local models.
 - **Q10** Leave the hours; compare with Shad's real time after fc1 and md3 and adjust then.
 
+**Follow-ups, answered the same evening:** Q4 removes everything personal but the first name (place, rotation, degree, work permit, usage numbers, job applied to). Q5's button shows once every hint is open or after 45 minutes, whichever comes first. Q2's rules cap one code at 2,000 marks. Q8: if Gray Swan has no free set at g6's level, g6 points at Gray Swan's free Training page and its quiz is rewritten. Q6: earlier hints point at the idea only; the last hint may still nearly give the move. Item 26 starts next session.
+
 ---
 
 ## 8. Fix log (all 25 done, 27 Nov 2026)
